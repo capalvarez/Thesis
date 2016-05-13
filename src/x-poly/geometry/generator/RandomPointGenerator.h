@@ -1,0 +1,10 @@
+#ifndef THESIS_RANDOMPOINTGENERATOR_H
+#define THESIS_RANDOMPOINTGENERATOR_H
+
+
+class RandomPointGenerator {
+
+};
+
+
+#endif //THESIS_RANDOMPOINTGENERATOR_H
