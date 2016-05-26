@@ -1,6 +1,3 @@
-#ifndef THESIS_SEGMENT_H
-#define THESIS_SEGMENT_H
-
 #include <vector>
 #include "Point.h"
 
@@ -14,9 +11,8 @@ public:
 
     int getFirst();
     int getSecond();
-    bool collinear(std::vector<Point> points, Point p);
     bool operator==(Segment& other);
 };
 
 
-#endif //THESIS_SEGMENT_H
+

@@ -15,10 +15,6 @@ int Segment::getSecond() {
     return this->p2;
 }
 
-bool Segment::collinear(std::vector<Point> points, Point p) {
-    return false;
-}
-
 bool Segment::operator==(Segment &other) {
     return this->p1==other.getFirst() && this->p2==other.getSecond() ||
             this->p2==other.getSecond() && this->p1==other.getFirst();

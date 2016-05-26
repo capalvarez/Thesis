@@ -6,13 +6,12 @@
 
 class Polygon {
 private:
-
+    std::vector<int> points;
+    double signedArea(std::vector<Point> p)
 public:
-    double diameter();
-    double area();
-    Point getCircumcircle();
-    Point getCentroid();
-
+    double diameter(std::vector<Point> p);
+    double area(std::vector<Point> p);
+    Point getCentroid(std::vector<Point> p);
 };
 
 
