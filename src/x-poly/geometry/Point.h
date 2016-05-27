@@ -1,8 +1,5 @@
-#ifndef THESIS_POINT_H
-#define THESIS_POINT_H
-
-
 #include <bits/stringfwd.h>
+#include "Point3D.h"
 
 class Point {
 private:
@@ -21,7 +18,7 @@ public:
     double squareNorm();
     std::string getString();
     bool operator==(const Point& other);
+
+    Point3D get3DPoint();
 };
 
-
-#endif

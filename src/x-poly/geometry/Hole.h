@@ -1,6 +1,3 @@
-#ifndef THESIS_HOLE_H
-#define THESIS_HOLE_H
-
 #include "Point.h"
 
 class Hole {
@@ -13,5 +10,3 @@ public:
     Point getCenter();
 };
 
-
-#endif //THESIS_HOLE_H

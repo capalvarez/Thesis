@@ -12,6 +12,9 @@ public:
     int getFirst();
     int getSecond();
     bool operator==(Segment& other);
+
+    bool contains(std::vector<Point> p, Point point);
+    Point middlePoint(std::vector<Point> p);
 };
 
 

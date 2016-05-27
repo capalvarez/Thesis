@@ -1,6 +1,8 @@
+#include <geometry/Point.h>
+#include <geometry/Segment.h>
 #include "gtest/gtest.h"
 
-class SegmentTest: public ::testing::TEST{
+class SegmentTest: public ::testing::Test{
 protected:
     virtual void SetUp(){
         Point* p1 = new Point(0,0);
@@ -12,5 +14,5 @@ protected:
 
     std::vector<Point> segment_points;
     Segment segment;
-}
+};
 

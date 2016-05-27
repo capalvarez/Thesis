@@ -5,7 +5,6 @@
 #include "Segment.h"
 #include "Hole.h"
 
-
 class Region {
 private:
     std::vector<Segment> segments;
@@ -17,9 +16,6 @@ public:
 
     std::vector<Segment> getSegments();
     std::vector<Hole> getHoles();
-
-
-
 };
 
 

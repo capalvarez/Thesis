@@ -39,3 +39,7 @@ double Point::squareNorm() {
 bool Point::operator==(const Point &other) {
     return false;
 }
+
+Point3D Point::get3DPoint() {
+    return Point3D(this->x, this->y, 0);
+}

@@ -1,5 +1,6 @@
 #include "TriangleDelaunayGenerator.h"
 #include <iostream>
+#include <malloc.h>
 #include "lib/triangle.h"
 #include "../geometry/Region.h"
 #include "../geometry/Segment.h"
