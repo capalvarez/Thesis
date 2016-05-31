@@ -1,3 +1,6 @@
+#ifndef THESIS_SEGMENT_H
+#define THESIS_SEGMENT_H
+
 #include <vector>
 #include "Point.h"
 
@@ -16,6 +19,8 @@ public:
     bool contains(std::vector<Point> p, Point point);
     Point middlePoint(std::vector<Point> p);
 };
+
+#endif
 
 
 

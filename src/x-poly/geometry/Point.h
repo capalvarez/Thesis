@@ -1,3 +1,6 @@
+#ifndef THESIS_POINT_H
+#define THESIS_POINT_H
+
 #include <bits/stringfwd.h>
 #include "Point3D.h"
 
@@ -7,6 +10,7 @@ private:
     double y;
 public:
     Point(double x, double y);
+    Point();
     ~Point();
 
     double getX();
@@ -22,3 +26,4 @@ public:
     Point3D get3DPoint();
 };
 
+#endif

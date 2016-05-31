@@ -1,4 +1,8 @@
+#ifndef THESIS_POINT3D_H
+#define THESIS_POINT3D_H
 #include "Vector.h"
+
+class Vector;
 
 class Point3D {
 private:
@@ -17,4 +21,5 @@ public:
     Vector operator-(Point3D p);
 };
 
+#endif
 

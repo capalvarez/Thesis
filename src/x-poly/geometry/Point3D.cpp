@@ -28,5 +28,5 @@ Point3D::~Point3D() {}
 
 
 Vector Point3D::operator-(Point3D p) {
-    return Vector(*new Point3D(this->x - p.getX(), this->y - p.getY(), this->z - p.getZ()));
+    return Vector(new Point3D(this->x - p.getX(), this->y - p.getY(), this->z - p.getZ()));
 }

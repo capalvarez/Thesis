@@ -1,22 +1,25 @@
-#include "Point.h"
-#include "Vector.h"
+#include <geometry/Point.h>
 
 namespace geometry_functions{
-    bool collinear(Point p1, Point p2, Point p3){
-		
+    double area2(Point p1, Point p2, Point p3){
+        Vector v1 = p2.get3DPoint() - p1.get3DPoint();
+        Vector v2 = p3.get3DPoint() - p1.get3DPoint();
 
+        return (v1^v2).norm();
+    }
+
+    bool collinear(Point p1, Point p2, Point p3){
+        //TODO: Check for precision errors here
+        return area2(p1,p2,p3)==0;
     }
 
     double triangleArea(Point p1, Point p2){
-		Point3D origin = *new Point3D();
-        Point3D a = p1.get3DPoint();
-		Point3D b = p2.get3DPoint();
+        Point origin = *new Point();
 
-    	Vector v1 = b - a;
-    	Vector v2 = origin - a;
-
-    	return (v1^v2).norm();
+        return area2(p1,p2,origin);
     }
+
+
 
 }
 

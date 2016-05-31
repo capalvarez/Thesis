@@ -1,5 +1,5 @@
 #include <geometry/Point.h>
-#include <geometry/geometryFunctions.cpp>
+#include <utilities/geometryFunctions.cpp>
 #include "gtest/gtest.h"
 
 TEST(GeometryFunctionsTest, CollinearTest){

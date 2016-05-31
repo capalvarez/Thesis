@@ -1,9 +1,15 @@
 #include "Point.h"
 #include <string>
+#include <utilities/utilities.cpp>
 
 Point::Point(double x, double y) {
     this->x = x;
     this->y = y;
+}
+
+Point::Point() {
+    this->x = 0;
+    this->y = 0;
 }
 
 Point::~Point() {}
@@ -25,7 +31,7 @@ void Point::setY(double y) {
 }
 
 std::string Point::getString() {
-    return std::to_string(this->getX()) + " " + std::to_string(this->getY());
+   return utilities::ToString(this->getX()) + " " + utilities::ToString(this->getY());
 }
 
 double Point::getBoundaryMarker() {

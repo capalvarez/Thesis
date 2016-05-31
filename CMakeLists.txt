@@ -5,4 +5,6 @@ enable_testing()
 
 add_subdirectory(main)
 add_subdirectory(test)
+add_subdirectory(src/vem)
 add_subdirectory(src/x-poly)
+
