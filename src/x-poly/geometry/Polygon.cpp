@@ -1,6 +1,12 @@
 #include "Polygon.h"
 #include "utilities/geometryFunctions.cpp"
 
+Polygon::Polygon(std::vector<int> points) {
+    this->points = points;
+}
+
+Polygon::~Polygon() {}
+
 double Polygon::area(std::vector<Point> p){
     double area = 0.0;
     int n = this->points.size(); 

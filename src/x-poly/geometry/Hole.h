@@ -1,12 +1,9 @@
 #include "Point.h"
+#include <vector>
 
 class Hole {
-private:
-    Point center;
 public:
-    Hole(Point center);
-    ~Hole();
-
-    Point getCenter();
+    virtual Point getCenter() = 0;
+    virtual std::vector<Segment*> getSegments() = 0;
 };
 

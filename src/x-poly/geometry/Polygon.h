@@ -7,6 +7,7 @@ private:
     double signedArea(std::vector<Point> p);
 public:
     Polygon(std::vector<int> points);
+    ~Polygon();
 
     double diameter(std::vector<Point> p);
     double area(std::vector<Point> p);
