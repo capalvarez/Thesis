@@ -5,7 +5,9 @@ Vector::Vector(Point3D* p) {
     this->p = p;
 }
 
-Vector::~Vector() {}
+Vector::~Vector() {
+    delete(p);
+}
 
 double Vector::norm() {
     return sqrt(pow(this->p->getX(),2) + pow(this->p->getY(),2) + pow(this->p->getZ(),2));

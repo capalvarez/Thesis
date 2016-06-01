@@ -8,16 +8,14 @@
 
 class Region: public Polygon {
 private:
-    std::vector<Hole> holes;
+    std::vector<Hole*> holes;
     std::vector<Point> points;
 public:
     Region(std::vector<Point> points);
     ~Region();
 
-    std::vector<Segment> getSegments();
-    std::vector<Hole> getHoles();
-
-    void addHole(Hole h);
+    std::vector<Hole*> getHoles();
+    void addHole(Hole* h);
 };
 
 

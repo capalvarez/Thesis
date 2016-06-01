@@ -5,18 +5,17 @@
 #include "Point.h"
 #include "Hole.h"
 #include "Segment.h"
+#include "Circle.h"
 
-class CircularHole: public Hole {
+class CircularHole: public Hole, public Circle {
 private:
-    Point center;
-    double radius;
+    std::vector<Point> discrete_points;
 public:
     CircularHole(Point p, double r);
-    ~CircularHole();
 
     Point getCenter();
-    std::vector<Segment*> getSegments();
+    void getSegments(std::vector<Segment> segments);
 };
 
 
-#endif //THESIS_CIRCULARHOLE_H
+#endif

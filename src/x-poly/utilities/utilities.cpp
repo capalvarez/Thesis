@@ -18,5 +18,13 @@ namespace utilities {
         return index_vector;
     }
 
+    template<class T>
+    class DeleteVector{
+    public:
+        bool operator()(T x) const {
+            delete x;
+            return true;
+        }
+    };
 }
 

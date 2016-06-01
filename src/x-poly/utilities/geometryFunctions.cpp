@@ -19,7 +19,8 @@ namespace geometry_functions{
         return area2(p1,p2,origin);
     }
 
-
-
+    double radian(double angle){
+        return angle*3.14159265/180;
+    }
 }
 

@@ -1,6 +1,7 @@
 #include "Point.h"
 #include <string>
 #include <utilities/utilities.cpp>
+#include <math.h>
 
 Point::Point(double x, double y) {
     this->x = x;
@@ -8,11 +9,8 @@ Point::Point(double x, double y) {
 }
 
 Point::Point() {
-    this->x = 0;
-    this->y = 0;
+    Point(0,0);
 }
-
-Point::~Point() {}
 
 double Point::getX() {
     return this->x;
@@ -22,28 +20,16 @@ double Point::getY() {
     return this->y;
 }
 
-void Point::setX(double x) {
-    this->x = x;
-}
-
-void Point::setY(double y) {
-    this->y = y;
-}
-
 std::string Point::getString() {
    return utilities::ToString(this->getX()) + " " + utilities::ToString(this->getY());
 }
 
-double Point::getBoundaryMarker() {
-    return 0;
-}
-
 double Point::squareNorm() {
-    return 0;
+    return pow(this->getX(),2) + pow(this->getY(),2);
 }
 
 bool Point::operator==(const Point &other) {
-    return false;
+    return this->x==other.x && this->y==other.y;
 }
 
 Point3D Point::get3DPoint() {
