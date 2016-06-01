@@ -12,7 +12,6 @@ private:
 public:
     Point3D(double x, double y, double z);
     Point3D();
-    ~Point3D();
 
     double getX();
     double getY();

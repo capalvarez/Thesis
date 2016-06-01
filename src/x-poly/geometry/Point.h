@@ -11,13 +11,9 @@ private:
 public:
     Point(double x, double y);
     Point();
-    ~Point();
 
     double getX();
     double getY();
-    double getBoundaryMarker();
-    void setX(double x);
-    void setY(double y);
 
     double squareNorm();
     std::string getString();

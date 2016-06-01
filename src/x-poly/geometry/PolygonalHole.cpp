@@ -6,10 +6,10 @@ PolygonalHole::PolygonalHole(std::vector<Point> p) : Polygon(utilities::TrivialI
 }
 
 Point PolygonalHole::getCenter() {
-    return getCentroid(this->points);
+    return Polygon::getCentroid(this->points);
 }
 
-
-std::vector<Segment *> PolygonalHole::getSegments() {
-    return std::vector<Segment*>();
+void PolygonalHole::getSegments(std::vector<Segment> segments) {
+    Polygon::getSegments(segments);
 }
+

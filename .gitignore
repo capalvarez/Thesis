@@ -1,4 +1,5 @@
 .idea/
 src/x-poly/delaunay/lib/triangle.o
-
+test/vem-test/
+src/vem/lib/
 

@@ -6,16 +6,15 @@
 #include "Polygon.h"
 #include "Segment.h"
 
-class PolygonalHole: public Hole, public Polygon {
+class PolygonalHole: public Hole{
 private:
     std::vector<Point> points;
 public:
     PolygonalHole(std::vector<Point> p);
-    ~PolygonalHole();
 
     Point getCenter();
-    virtual std::vector<Segment*> getSegments();
+    void getSegments(std::vector<Segment> segments);
 };
 
 
-#endif //THESIS_POLYGONALHOLE_H
+#endif

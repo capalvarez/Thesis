@@ -20,7 +20,9 @@ TriangleDelaunayGenerator::TriangleDelaunayGenerator(std::vector<Point> point_li
 
     in.numberofpointattributes = 0;
 
-    std::vector<Segment> segments = region.getSegments();
+    std::vector<Segment> segments;
+    region.getSegments(segments);
+
     in.numberofsegments = segments.size();
     in.segmentlist = (int*)malloc(in.numberofsegments*2*sizeof(int));
     for(int i=0;i<2*segments.size();i+=2){
