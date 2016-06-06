@@ -55,7 +55,14 @@ Point Polygon::getCentroid() {
 }
 
 double Polygon::signedArea(std::vector<Point> p) {
-    return 0;
+    double area = 0;
+    int n = this->points.size();
+
+    for(int i=0;i<n;i++){
+        area += p[points[i]].getX()*p[points[(i+1)%n]].getY() - p[points[(i+1)%n]].getX()*p[points[i]].getY();
+    }
+
+    return 0.5*area;
 }
 
 void Polygon::getSegments(std::vector<Segment> segments) {
@@ -67,7 +74,23 @@ void Polygon::getSegments(std::vector<Segment> segments) {
 }
 
 Point Polygon::calculateCentroid(std::vector<Point> p) {
+    int n = this->points.size();
+    double partial_x = 0;
+    double partial_y = 0;
 
+    for(int i=0;i<n;i++){
+        Point pi = p[points[i]];
+        Point pi1 = p[points[(i+1)%n]];
+
+        partial_x += (pi.getX() + pi1.getX())*(pi.getX()*pi1.getY() - pi1.getX()*pi.getY());
+        partial_y += (pi.getY() + pi1.getY())*(pi.getX()*pi1.getY() - pi1.getX()*pi.getY());
+    }
+
+    double A = this->signedArea(p);
+    double cX = partial_x/((n-1)*A);
+    double cY = partial_y/((n-1)*A);
+
+    return Point (cX,cY);
 }
 
 bool Polygon::containsPoint(std::vector<Point> p, Point point) {
