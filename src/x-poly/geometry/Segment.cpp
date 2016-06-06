@@ -31,6 +31,6 @@ bool Segment::contains(std::vector<Point> p, Point point) {
 }
 
 Point Segment::middlePoint(std::vector<Point> p) {
-    return Point(p[this->p1].getX() + p[this->p2].getX(), p[this->p1].getY() + p[this->p2].getY());
+    return Point((p[this->p1].getX() + p[this->p2].getX())/2, (p[this->p1].getY() + p[this->p2].getY())/2);
 }
 

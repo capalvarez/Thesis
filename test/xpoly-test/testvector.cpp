@@ -1,12 +1,8 @@
 #include <math.h>
-#include <gtest/gtest.h>
-#include <geometry/Point3D.h>
+#include "testvector.h"
 
-TEST(VectorTest, normTest){
-    Point3D* p = new Point3D (1,1,1);
-    Point3D* p2 = new Point3D (0,-1,0);
-    Point3D* p3 = new Point3D(-3,-4,0);
-    Vector vector1 (p);
+TEST_F(VectorTest, normTest){
+    Vector vector1 (p1);
     Vector vector2 (p2);
     Vector vector3 (p3);
 
@@ -15,9 +11,10 @@ TEST(VectorTest, normTest){
     ASSERT_EQ(vector3.norm(), 5);
 }
 
-TEST(VectorTest, crossTest){
+TEST_F(VectorTest, crossTest){
+    Vector* vectorI = new Vector(p4);
+    Vector* vectorK = new Vector(p6);
 
-
-
+    ASSERT_EQ(*vectorI^*vectorJ,*vectorK);
 }
 

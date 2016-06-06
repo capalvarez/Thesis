@@ -7,7 +7,7 @@ TEST_F(SegmentTest, ContainsPointTest){
 }
 
 TEST_F(SegmentTest, MiddlePointTest){
-	ASSERT_EQ(segment->middlePoint(segment_points), Point(0.5,0.5));
+	ASSERT_EQ(segment->middlePoint(segment_points), *new Point(0.5,0.5));
 }
 
 

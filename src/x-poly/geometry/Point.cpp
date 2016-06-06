@@ -12,11 +12,11 @@ Point::Point() {
     Point(0,0);
 }
 
-double Point::getX() {
+double Point::getX() const{
     return this->x;
 }
 
-double Point::getY() {
+double Point::getY() const{
     return this->y;
 }
 

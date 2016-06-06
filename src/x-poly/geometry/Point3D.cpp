@@ -1,14 +1,14 @@
 #include "Point3D.h"
 
-double Point3D::getX() {
+double Point3D::getX() const {
     return this->x;
 }
 
-double Point3D::getY() {
+double Point3D::getY() const {
     return this->y;
 }
 
-double Point3D::getZ() {
+double Point3D::getZ() const {
     return this->z;
 }
 
@@ -27,3 +27,9 @@ Point3D::Point3D() {
 Vector Point3D::operator-(Point3D p) {
     return Vector(new Point3D(this->x - p.getX(), this->y - p.getY(), this->z - p.getZ()));
 }
+
+
+bool Point3D::operator==(const Point3D &other) const {
+    return this->x == other.getX() && this->y == other.getY() && this->z == other.getZ();
+}
+

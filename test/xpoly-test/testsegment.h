@@ -1,6 +1,6 @@
 #include <geometry/Point.h>
 #include <geometry/Segment.h>
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 class SegmentTest: public ::testing::Test{
 protected:

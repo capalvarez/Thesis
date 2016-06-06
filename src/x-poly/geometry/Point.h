@@ -12,8 +12,8 @@ public:
     Point(double x, double y);
     Point();
 
-    double getX();
-    double getY();
+    double getX() const;
+    double getY() const;
 
     double squareNorm();
     std::string getString();

@@ -12,9 +12,10 @@ public:
     Vector(Point3D* p);
     ~Vector();
 
-    Point3D* getPoint();
+    Point3D* getPoint() const;
     double norm();
     Vector operator^(Vector v);
+    bool operator==(const Vector& other) const;
 };
 
 #endif

@@ -6,14 +6,15 @@ Vector::Vector(Point3D* p) {
 }
 
 Vector::~Vector() {
-    delete(p);
+    //TODO: Check what happens here
+    //delete(p);
 }
 
 double Vector::norm() {
     return sqrt(pow(this->p->getX(),2) + pow(this->p->getY(),2) + pow(this->p->getZ(),2));
 }
 
-Point3D* Vector::getPoint() {
+Point3D* Vector::getPoint() const{
     return this->p;
 }
 
@@ -24,4 +25,9 @@ Vector Vector::operator^(Vector v) {
 
     return Vector(newPoint);
 }
+
+bool Vector::operator==(const Vector &other) const {
+    return *this->p == *other.getPoint();
+}
+
 

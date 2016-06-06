@@ -13,11 +13,12 @@ public:
     Point3D(double x, double y, double z);
     Point3D();
 
-    double getX();
-    double getY();
-    double getZ();
+    double getX() const;
+    double getY() const;
+    double getZ() const;
 
     Vector operator-(Point3D p);
+    bool operator==(const Point3D& other) const;
 };
 
 #endif

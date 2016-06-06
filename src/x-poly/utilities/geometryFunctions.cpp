@@ -16,7 +16,7 @@ namespace geometry_functions{
     double triangleArea(Point p1, Point p2){
         Point origin = *new Point();
 
-        return area2(p1,p2,origin);
+        return area2(p1,p2,origin)/2.0;
     }
 
     double radian(double angle){
