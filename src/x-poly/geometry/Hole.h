@@ -1,4 +1,5 @@
 #include "Point.h"
+#include "Segment.h"
 #include <vector>
 
 class Hole {

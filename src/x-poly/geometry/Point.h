@@ -17,7 +17,7 @@ public:
 
     double squareNorm();
     std::string getString();
-    bool operator==(const Point& other);
+    bool operator==(const Point& other) const;
     Vector operator-(Point& other);
 
     Point3D get3DPoint();

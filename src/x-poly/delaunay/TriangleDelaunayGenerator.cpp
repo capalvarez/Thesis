@@ -6,10 +6,10 @@
 #include "../geometry/Segment.h"
 #include "../geometry/Polygon.h"
 
-TriangleDelaunayGenerator::TriangleDelaunayGenerator(std::vector<Point> point_list, Region region) {
-    struct triangulateio in, out;
+TriangleDelaunayGenerator::TriangleDelaunayGenerator(std::vector<Point> point_list, Region region) {}
+    //struct triangulateio in, out;
 
-    in.numberofpoints = point_list.size();
+    /*in.numberofpoints = point_list.size();
     in.pointlist = (REAL*)malloc(in.numberofpoints*2*sizeof(REAL));
     in.pointmarkerlist = (int *)malloc(in.numberofpoints*sizeof(int));
     for(int i=0;i<point_list.size();i++){
@@ -51,7 +51,7 @@ TriangleDelaunayGenerator::TriangleDelaunayGenerator(std::vector<Point> point_li
     Mesh* m = new Mesh();
     std::vector<Point_Data> points;
     std::vector<Edge_Data> edges;
-    std::vector<Polygon> triangles;
+    std::vector<Polygon> triangles;*/
 //    std::unordered_map<Segment,int,struct {
 //        std::size_t operator()(Segment& s) {
 //            return std::hash<int>()(s.getFirst()) ^
@@ -64,7 +64,7 @@ TriangleDelaunayGenerator::TriangleDelaunayGenerator(std::vector<Point> point_li
 //        }
 //    }> segment_index;
 
-    for(int i=0;i<out.numberofpoints;i++){
+    /*for(int i=0;i<out.numberofpoints;i++){
         struct Point_Data data;
         data.point = *new Point(out.pointlist[i*2], out.pointlist[i*2+1]);
         data.edge = -1;
@@ -82,18 +82,18 @@ TriangleDelaunayGenerator::TriangleDelaunayGenerator(std::vector<Point> point_li
 
         if(points[out.edgelist[i*2]].edge == -1 || out.edgemarkerlist[i*2]==1){
             points[out.edgelist[i*2]].edge = edges.size()-1;
-        }
+        }*/
 
         //segment_index.insert({data.edge,edges.size() - 1});
-    }
 
-    for(int i=0;i<out.numberoftriangles;i++){
+
+  /*  for(int i=0;i<out.numberoftriangles;i++){
         //Polygon* newPolygon = new Polygon();
 
         //triangles.push_back(*newPolygon);
     }
+*/
 
-}
 
 Mesh TriangleDelaunayGenerator::getDelaunayTriangulation() {
     return this->delaunay;

@@ -1,3 +1,6 @@
+#ifndef THESIS_POLYGON_H
+#define THESIS_POLYGON_H
+
 #include <vector>
 #include "Point.h"
 #include "Segment.h"
@@ -29,3 +32,4 @@ public:
     bool isConvex(std::vector<Point> p);
 };
 
+#endif

@@ -1,6 +1,7 @@
 #include "Triangle.h"
+#include <vector>
 
-Triangle::Triangle(std::vector<int> points) : Polygon(points) {}
+Triangle::Triangle(std::vector<int> points, std::vector<Point> p) : Polygon(points, p) {}
 
 Point Triangle::getCircumcenter(std::vector<Point> p) {
     Point A = p[this->points[0]];

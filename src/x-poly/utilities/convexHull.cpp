@@ -1,6 +1,5 @@
-#include <bits/stl_bvector.h>
+#include <vector>
 #include <geometry/Point.h>
-#include <geometry/Polygon.h>
 #include <algorithm>
 
 namespace convex {
@@ -51,12 +50,12 @@ namespace convex {
         return data;
     }
 
-    std::vector<std::pair<Point,Point>> rotatingCalipers(std::vector<Point> points) {
+    std::vector<std::pair<Point,Point> > rotatingCalipers(std::vector<Point> points) {
         convexHullData data = convexHull(points);
         std::vector<Point> u = data.upper;
         std::vector<Point> l = data.lower;
 
-        std::vector<std::pair<Point, Point>> pairs;
+        std::vector<std::pair<Point, Point> > pairs;
 
         int i = 0, j = l.size() - 1;
         while (i < l.size() || j > 0) {

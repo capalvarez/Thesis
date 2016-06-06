@@ -14,7 +14,7 @@ void CircularHole::getSegments(std::vector<Segment> segments) {
         discrete_points = discretizeCircle(10);
     }
 
-    Polygon discretePolygon(utilities::TrivialIndexVector(discrete_points.size()));
+    Polygon discretePolygon (utilities::TrivialIndexVector(discrete_points.size()), this->discrete_points);
     discretePolygon.getSegments(segments);
 }
 

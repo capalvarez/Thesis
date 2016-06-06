@@ -18,7 +18,7 @@ Polygon::Polygon(std::vector<int> points, std::vector<Point> p) {
 Polygon::~Polygon() {}
 
 double Polygon::calculateDiameter(std::vector<Point> p) {
-    std::vector<std::pair<Point,Point>> rotatingCalipers = convex::rotatingCalipers(p);
+    std::vector<std::pair<Point,Point> > rotatingCalipers = convex::rotatingCalipers(p);
     double max = -1;
 
     for(int i=0;i<rotatingCalipers.size();i++){
