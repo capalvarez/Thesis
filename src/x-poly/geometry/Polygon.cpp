@@ -5,17 +5,30 @@
 Polygon::Polygon(std::vector<int> points, std::vector<Point> p) {
     this->points = points;
 
-    this->diameter = this->calculateDiameter(p);
+    std::vector<Point> this_points;
+    for(int i=0;i<points.size();i++){
+        this_points.push_back(p[points[i]]);
+    }
+
+    this->diameter = this->calculateDiameter(this_points);
     this->area = this->calculateArea(p);
     this->centroid = this->calculateCentroid(p);
-
-    this->convex = this->isConvex(p);
 }
 
 Polygon::~Polygon() {}
 
 double Polygon::calculateDiameter(std::vector<Point> p) {
-    return 0;
+    std::vector<std::pair<Point,Point>> rotatingCalipers = convex::rotatingCalipers(p);
+    double max = -1;
+
+    for(int i=0;i<rotatingCalipers.size();i++){
+        double distance = (rotatingCalipers[i].first - rotatingCalipers[i].second).norm();
+        if(distance>max){
+            max = distance;
+        }
+    }
+
+    return max;
 }
 
 double Polygon::calculateArea(std::vector<Point> p) {
@@ -54,9 +67,7 @@ void Polygon::getSegments(std::vector<Segment> segments) {
 }
 
 Point Polygon::calculateCentroid(std::vector<Point> p) {
-    if(this->convex){
 
-    }
 }
 
 bool Polygon::containsPoint(std::vector<Point> p, Point point) {

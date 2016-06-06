@@ -4,17 +4,30 @@
 #include <algorithm>
 
 namespace convex {
-   struct PointComparator{
-       bool operator()(Point p1, Point p2){
-           if(p1.getX()== p2.getX()){
-               return p1.getY() < p2.getY();
-           }
+    struct PointComparator{
+        bool operator()(Point p1, Point p2){
+            if(p1.getX()== p2.getX()){
+                return p1.getY() < p2.getY();
+            }
 
-           return p1.getX() < p2.getX();
-       }
-   } comparator;
+            return p1.getX() < p2.getX();
+        }
+    } comparator;
+    struct convexHullData {
+        std::vector<Point> upper;
+        std::vector<Point> lower;
 
-    Polygon convexHull(std::vector<Point> points){
+        convexHullData(std::vector<Point> u, std::vector<Point> l){
+            upper = u;
+            lower = l;
+        }
+    };
+
+    double orientation(Point p, Point q, Point r){
+        return ((q-p)^(r-p)).getPoint()->getZ();
+    }
+
+    convexHullData convexHull(std::vector<Point> points){
         std::vector<Point> upper;
         std::vector<Point> lower;
 
@@ -33,27 +46,35 @@ namespace convex {
             lower.push_back(points[i]);
         }
 
-        return
+        convexHullData data (upper,lower);
+
+        return data;
     }
 
-    double rotatingCalipers(){
+    std::vector<std::pair<Point,Point>> rotatingCalipers(std::vector<Point> points) {
+        convexHullData data = convexHull(points);
+        std::vector<Point> u = data.upper;
+        std::vector<Point> l = data.lower;
 
+        std::vector<std::pair<Point, Point>> pairs;
+
+        int i = 0, j = l.size() - 1;
+        while (i < l.size() || j > 0) {
+            pairs.push_back(std::make_pair(u[i], l[j]));
+
+            if (i == u.size())
+                j--;
+            else if (j == 0)
+                i++;
+            else if ((u[i + 1].getY() - u[i].getY()) * (l[j].getX() - l[j - 1].getX()) >
+                     (l[j].getY() - l[j - 1].getY()) * (u[i + 1].getX() - u[i].getX()))
+                i++;
+            else
+                j--;
+
+        }
+
+        return pairs;
     }
-
-    double orientation(Point p, Point q, Point r){
-        return ((q-p)^(r-p)).getPoint()->getZ();
-    }
-
-    def hulls(Points):
-    '''Graham scan to find upper and lower convex hulls of a set of 2d points.'''
-        U = []
-        L = []
-            Points.sort()
-            for p in Points:
-            while len(U) > 1 and orientation(U[-2],U[-1],p) <= 0: U.pop()
-            while len(L) > 1 and orientation(L[-2],L[-1],p) >= 0: L.pop()
-            U.append(p)
-            L.append(p)
-            return U,L
 }
 

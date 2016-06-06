@@ -9,7 +9,6 @@ private:
     double diameter;
     double area;
     Point centroid;
-    bool convex;
 
     double signedArea(std::vector<Point> p);
     double calculateDiameter(std::vector<Point> p);
