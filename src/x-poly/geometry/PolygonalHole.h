@@ -6,7 +6,7 @@
 #include "Polygon.h"
 #include "Segment.h"
 
-class PolygonalHole: public Hole{
+class PolygonalHole: public Hole, public Polygon{
 private:
     std::vector<Point> points;
 public:

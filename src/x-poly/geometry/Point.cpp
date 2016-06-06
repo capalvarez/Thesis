@@ -35,3 +35,8 @@ bool Point::operator==(const Point &other) {
 Point3D Point::get3DPoint() {
     return Point3D(this->x, this->y, 0);
 }
+
+Vector Point::operator-(Point &other) {
+    Point3D* newPoint = new Point3D(this->x - other.getX(), this->y - other.getY(),0);
+    return Vector(newPoint);
+}
