@@ -1,3 +1,6 @@
+#ifndef THESIS_TRIANGLE_H
+#define THESIS_TRIANGLE_H
+
 #include "Polygon.h"
 
 class Triangle : public Polygon{
@@ -6,5 +9,6 @@ public:
     Point getCircumcenter(std::vector<Point> p);
 };
 
+#endif
 
 

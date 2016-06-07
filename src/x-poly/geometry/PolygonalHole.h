@@ -5,6 +5,7 @@
 #include "Hole.h"
 #include "Polygon.h"
 #include "Segment.h"
+#include <utilities/utilities.cpp>
 
 class PolygonalHole: public Hole, public Polygon{
 private:
@@ -13,7 +14,6 @@ public:
     PolygonalHole(std::vector<Point> p);
 
     Point getCenter();
-    void getSegments(std::vector<Segment> segments);
 };
 
 

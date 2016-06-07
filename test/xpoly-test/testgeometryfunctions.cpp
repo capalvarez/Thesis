@@ -1,6 +1,6 @@
 #include <geometry/Point.h>
-#include <utilities/geometryFunctions.cpp>
-#include "gtest/gtest.h"
+#include <utilities/geometryFunctions.h>
+#include <gtest/gtest.h>
 #include <math.h>
 
 TEST(GeometryFunctionsTest, CollinearTest){

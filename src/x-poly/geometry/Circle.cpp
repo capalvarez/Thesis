@@ -1,7 +1,5 @@
 #include "Circle.h"
-#include <cstdlib>
-#include <cmath>
-#include <utilities/geometryFunctions.cpp>
+
 
 Circle::Circle(double r, Point c) {
     this->radius = r;

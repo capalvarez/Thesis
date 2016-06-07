@@ -1,5 +1,4 @@
 #include "Vector.h"
-#include <math.h>
 
 Vector::Vector(Point3D* p) {
     this->p = p;

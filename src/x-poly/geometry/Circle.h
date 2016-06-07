@@ -3,6 +3,9 @@
 
 #include <vector>
 #include "Point.h"
+#include <cstdlib>
+#include <cmath>
+#include <utilities/geometryFunctions.h>
 
 class Circle {
 protected:

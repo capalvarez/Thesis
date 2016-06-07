@@ -4,6 +4,8 @@
 #include <vector>
 #include "Point.h"
 #include "Segment.h"
+#include <utilities/geometryFunctions.h>
+#include <utilities/convexHull.h>
 
 class Polygon {
 protected:

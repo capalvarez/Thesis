@@ -1,6 +1,4 @@
 #include "Polygon.h"
-#include "utilities/geometryFunctions.cpp"
-#include <utilities/convexHull.cpp>
 
 Polygon::Polygon(std::vector<int> points, std::vector<Point> p) {
     this->points = points;

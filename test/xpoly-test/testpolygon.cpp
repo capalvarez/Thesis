@@ -17,3 +17,14 @@ TEST_F(PolygonTest, SignedAreaTest){
 }
 
 
+TEST_F(PolygonTest, IsConvexTest){
+
+}
+
+TEST_F(PolygonTest, InsidePolygonTest){
+
+}
+
+TEST_F(PolygonTest, InEdgesTest){
+
+}

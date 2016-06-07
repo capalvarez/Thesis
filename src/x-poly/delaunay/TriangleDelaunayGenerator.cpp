@@ -1,10 +1,6 @@
 #include "TriangleDelaunayGenerator.h"
 #include <iostream>
-#include <malloc.h>
-#include "lib/triangle.h"
-#include "../geometry/Region.h"
-#include "../geometry/Segment.h"
-#include "../geometry/Polygon.h"
+
 
 TriangleDelaunayGenerator::TriangleDelaunayGenerator(std::vector<Point> point_list, Region region) {}
     //struct triangulateio in, out;

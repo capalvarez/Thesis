@@ -23,4 +23,3 @@ namespace geometry_functions{
         return angle*3.14159265/180;
     }
 }
-

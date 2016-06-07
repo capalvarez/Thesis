@@ -1,5 +1,4 @@
 #include "Triangle.h"
-#include <vector>
 
 Triangle::Triangle(std::vector<int> points, std::vector<Point> p) : Polygon(points, p) {}
 

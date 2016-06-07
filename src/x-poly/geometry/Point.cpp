@@ -1,7 +1,4 @@
 #include "Point.h"
-#include <string>
-#include <utilities/utilities.cpp>
-#include <math.h>
 
 Point::Point(double x, double y) {
     this->x = x;
@@ -21,7 +18,7 @@ double Point::getY() const{
 }
 
 std::string Point::getString() {
-   return utilities::ToString(this->getX()) + " " + utilities::ToString(this->getY());
+   return std::to_string(this->getX()) + " " + std::to_string(this->getY());
 }
 
 double Point::squareNorm() {

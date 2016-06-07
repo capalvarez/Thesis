@@ -1,5 +1,4 @@
 #include "Segment.h"
-#include <cstdlib>
 
 Segment::Segment(int p1, int p2) {
     this->p1 = p1;

@@ -1,7 +1,5 @@
 #include "CircularHole.h"
 #include "Polygon.h"
-#include <utilities/utilities.cpp>
-
 
 CircularHole::CircularHole(Point p, double r) : Circle(r,p){}
 

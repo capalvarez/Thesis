@@ -5,6 +5,8 @@
 #include "Segment.h"
 #include "Hole.h"
 #include "Polygon.h"
+#include <algorithm>
+#include <utilities/utilities.cpp>
 
 class Region: public Polygon {
 private:
@@ -17,6 +19,5 @@ public:
     std::vector<Hole*> getHoles();
     void addHole(Hole* h);
 };
-
 
 #endif

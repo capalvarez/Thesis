@@ -6,6 +6,7 @@
 #include "Hole.h"
 #include "Segment.h"
 #include "Circle.h"
+#include <utilities/utilities.cpp>
 
 class CircularHole: public Hole, public Circle {
 private:

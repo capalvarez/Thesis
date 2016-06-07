@@ -1,8 +1,9 @@
 #ifndef THESIS_POINT_H
 #define THESIS_POINT_H
 
-#include <bits/stringfwd.h>
+#include <string>
 #include "Point3D.h"
+#include <math.h>
 
 class Point {
 private:

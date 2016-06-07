@@ -2,6 +2,7 @@
 #define THESIS_VECTOR_H
 
 #include "Point3D.h"
+#include <math.h>
 
 class Point3D;
 
