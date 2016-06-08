@@ -13,7 +13,7 @@ private:
     std::vector<Hole*> holes;
     std::vector<Point> points;
 public:
-    Region(std::vector<Point> points);
+    Region(std::vector<Point>& points);
     ~Region();
 
     std::vector<Hole*> getHoles();

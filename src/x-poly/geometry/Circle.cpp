@@ -8,7 +8,7 @@ Circle::Circle(double r, Point c) {
 
 std::vector<Point> Circle::discretizeCircle(int grade) {
     std::vector<Point> points;
-    double delta = 360 / (grade - 1);
+    double delta = 360 / grade;
 
     double angle = 0;
     while (angle < 360) {

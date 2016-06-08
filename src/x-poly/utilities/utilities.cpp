@@ -9,13 +9,10 @@ namespace utilities {
         return stream.str();
     }
 
-    std::vector<int> TrivialIndexVector(int n){
-        std::vector<int> index_vector;
+    void TrivialIndexVector(std::vector<int> index_vector, int n){
         for(int i=0;i<n; i++){
             index_vector.push_back(i);
         }
-
-        return index_vector;
     }
 
     template<class T>

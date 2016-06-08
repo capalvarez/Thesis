@@ -20,7 +20,7 @@ bool Segment::operator==(Segment &other) {
             this->p2==other.getSecond() && this->p1==other.getFirst();
 }
 
-bool Segment::contains(std::vector<Point> p, Point point) {
+bool Segment::contains(std::vector<Point>& p, Point point) {
     Point p1 = p[this->p1];
     Point p2 = p[this->p2];
 

@@ -11,7 +11,7 @@ class PolygonalHole: public Hole, public Polygon{
 private:
     std::vector<Point> points;
 public:
-    PolygonalHole(std::vector<Point> p);
+    PolygonalHole(std::vector<Point>& p);
 
     Point getCenter();
 };

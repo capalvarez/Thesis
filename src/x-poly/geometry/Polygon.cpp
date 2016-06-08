@@ -1,21 +1,32 @@
 #include "Polygon.h"
 
-Polygon::Polygon(std::vector<int> points, std::vector<Point> p) {
-    this->points = points;
+Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
+   for(int i=0;i<points.size();i++){
+       this->points.push_back(points.at(i));
+   }
 
     std::vector<Point> this_points;
     for(int i=0;i<points.size();i++){
         this_points.push_back(p[points[i]]);
     }
 
-    this->diameter = this->calculateDiameter(this_points);
+    //this->diameter = this->calculateDiameter(this_points);
     this->area = this->calculateArea(p);
     this->centroid = this->calculateCentroid(p);
 }
 
+
+Polygon::Polygon(std::vector<Point> &p) {
+    std::vector<int> index (p.size());
+    utilities::TrivialIndexVector(index,p.size());
+
+    Polygon(index,p);
+}
+
+
 Polygon::~Polygon() {}
 
-double Polygon::calculateDiameter(std::vector<Point> p) {
+double Polygon::calculateDiameter(std::vector<Point>& p) {
     std::vector<std::pair<Point,Point> > rotatingCalipers = convex::rotatingCalipers(p);
     double max = -1;
 
@@ -29,11 +40,11 @@ double Polygon::calculateDiameter(std::vector<Point> p) {
     return max;
 }
 
-double Polygon::calculateArea(std::vector<Point> p) {
+double Polygon::calculateArea(std::vector<Point>& p) {
     double area = 0.0;
     int n = this->points.size();
 
-    for(int i=0; i !=n; i++) {
+    for(int i=0; i<n; i++) {
         area += geometry_functions::triangleArea(p[this->points[i%n]],p[this->points[(i+1)%n]]);
     }
 
@@ -52,7 +63,7 @@ Point Polygon::getCentroid() {
    return this->centroid;
 }
 
-double Polygon::signedArea(std::vector<Point> p) {
+double Polygon::signedArea(std::vector<Point>& p) {
     double area = 0;
     int n = this->points.size();
 
@@ -71,7 +82,7 @@ void Polygon::getSegments(std::vector<Segment> segments) {
     }
 }
 
-Point Polygon::calculateCentroid(std::vector<Point> p) {
+Point Polygon::calculateCentroid(std::vector<Point>& p) {
     int n = this->points.size();
     double partial_x = 0;
     double partial_y = 0;
@@ -91,7 +102,7 @@ Point Polygon::calculateCentroid(std::vector<Point> p) {
     return Point (cX,cY);
 }
 
-bool Polygon::containsPoint(std::vector<Point> p, Point point) {
+bool Polygon::containsPoint(std::vector<Point>& p, Point point) {
     int j = points.size() - 1 ;
     bool oddNodes = false;
 
@@ -112,7 +123,7 @@ bool Polygon::containsPoint(std::vector<Point> p, Point point) {
     return oddNodes || inEdges(p,point);
 }
 
-bool Polygon::inEdges(std::vector<Point> p, Point point) {
+bool Polygon::inEdges(std::vector<Point>& p, Point point) {
     std::vector<Segment> segments;
     this->getSegments(segments);
 
@@ -124,8 +135,8 @@ bool Polygon::inEdges(std::vector<Point> p, Point point) {
     return inEdge;
 }
 
-bool Polygon::isConvex(std::vector<Point> p) {
-    int n = p.size();
+bool Polygon::isConvex(std::vector<Point>& p) {
+    int n = this->points.size();
 
     double determinant = convex::orientation(p[0],p[1],p[2]);
 

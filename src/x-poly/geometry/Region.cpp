@@ -1,6 +1,6 @@
 #include "Region.h"
 
-Region::Region(std::vector<Point> points) : Polygon(utilities::TrivialIndexVector(points.size()), points){
+Region::Region(std::vector<Point>& points) : Polygon(points){
     this->points = points;
 }
 

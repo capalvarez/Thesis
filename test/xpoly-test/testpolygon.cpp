@@ -1,30 +1,14 @@
 #include "testpolygon.h"
 
 TEST_F(PolygonTest, AreaTest){
-    std::vector<Point> points = {};
-
-
+    EXPECT_EQ(triangle->getArea(),0.5);
+    EXPECT_EQ(square->getArea(),1);
+    EXPECT_EQ(nonconvex->getArea(),1.5);
 }
-
-TEST_F(PolygonTest, CentroidTest){
-}
-
-TEST_F(PolygonTest, DiameterTest){
-}
-
-TEST_F(PolygonTest, SignedAreaTest){
-
-}
-
 
 TEST_F(PolygonTest, IsConvexTest){
-
+    EXPECT_TRUE(triangle->isConvex(points));
+    EXPECT_EQ(square->isConvex(points), true);
+    EXPECT_EQ(nonconvex->isConvex(points), false);
 }
 
-TEST_F(PolygonTest, InsidePolygonTest){
-
-}
-
-TEST_F(PolygonTest, InEdgesTest){
-
-}

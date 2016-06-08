@@ -4,6 +4,7 @@
 #include <string>
 #include "Point3D.h"
 #include <math.h>
+#include <cmath>
 
 class Point {
 private:
