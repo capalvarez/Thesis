@@ -3,7 +3,7 @@
 
 namespace convex {
     extern double orientation(Point p, Point q, Point r);
-    extern struct convexHullData convexHull(std::vector<Point> points);
+    extern void convexHull(std::vector<Point> points, std::vector<Point>& u, std::vector<Point>& l);
     extern std::vector<std::pair<Point,Point> > rotatingCalipers(std::vector<Point> points);
 }
-#endif //THESIS_CONVEXHULL_H
+#endif

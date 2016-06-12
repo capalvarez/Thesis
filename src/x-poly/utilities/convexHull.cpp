@@ -12,48 +12,32 @@ namespace convex {
             return p1.getX() < p2.getX();
         }
     } comparator;
-    struct convexHullData {
-        std::vector<Point> upper;
-        std::vector<Point> lower;
-
-        convexHullData(std::vector<Point> u, std::vector<Point> l){
-            upper = u;
-            lower = l;
-        }
-    };
 
     double orientation(Point p, Point q, Point r){
         return ((q-p)^(r-p)).getPoint()->getZ();
     }
 
-    convexHullData convexHull(std::vector<Point> points){
-        std::vector<Point> upper;
-        std::vector<Point> lower;
-
+    void convexHull(std::vector<Point> points, std::vector<Point>& upper, std::vector<Point>& lower){
         std::sort(points.begin(), points.end(), comparator);
         for(int i=0;i<points.size();i++){
 
-            while(upper.size()>1 && orientation(upper[points.size()-1], upper[points.size()-2],points[i])<=0){
+            while(upper.size()>1 && orientation(upper[upper.size()-2], upper[upper.size()-1],points[i])>=0){
                 upper.pop_back();
             }
 
-            while(lower.size()>1 && orientation(lower[points.size()-1], lower[points.size()-2],points[i])<=0){
+            while(lower.size()>1 && orientation(lower[lower.size()-2], lower[lower.size()-1],points[i])<=0){
                 lower.pop_back();
             }
 
             upper.push_back(points[i]);
             lower.push_back(points[i]);
         }
-
-        convexHullData data (upper,lower);
-
-        return data;
     }
 
     std::vector<std::pair<Point,Point> > rotatingCalipers(std::vector<Point> points) {
-        convexHullData data = convexHull(points);
-        std::vector<Point> u = data.upper;
-        std::vector<Point> l = data.lower;
+        std::vector<Point> u;
+        std::vector<Point> l;
+        convexHull(points,u,l);
 
         std::vector<std::pair<Point, Point> > pairs;
 
