@@ -74,11 +74,11 @@ double Polygon::signedArea(std::vector<Point>& p) {
     return 0.5*area;
 }
 
-void Polygon::getSegments(std::vector<Segment> segments) {
+void Polygon::getSegments(std::vector<Segment>& segments) {
     int n = this->points.size();
 
     for(int i=0;i<n; i++){
-        segments.push_back(*new Segment(i%n, (i+1)%n));
+        segments.push_back(Segment(this->points[i%n], this->points[(i+1)%n]));
     }
 }
 
@@ -96,8 +96,8 @@ Point Polygon::calculateCentroid(std::vector<Point>& p) {
     }
 
     double A = this->signedArea(p);
-    double cX = partial_x/((n-1)*A);
-    double cY = partial_y/((n-1)*A);
+    double cX = partial_x/(6*A);
+    double cY = partial_y/(6*A);
 
     return Point (cX,cY);
 }
@@ -141,7 +141,7 @@ bool Polygon::isConvex(std::vector<Point>& p) {
     double determinant = convex::orientation(p[0],p[1],p[2]);
 
     for(int i=1;i<n; i++){
-        double newResult = convex::orientation(p[i],p[(i+1)%n],p[(i+2)%n]);
+        double newResult = convex::orientation(p[this->points[i]],p[this->points[(i+1)%n]],p[this->points[(i+2)%n]]);
 
         if(determinant*newResult<0){
             return false;

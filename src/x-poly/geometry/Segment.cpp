@@ -7,17 +7,17 @@ Segment::Segment(int p1, int p2) {
 
 Segment::~Segment() {}
 
-int Segment::getFirst() {
+int Segment::getFirst() const{
     return this->p1;
 }
 
-int Segment::getSecond() {
+int Segment::getSecond() const{
     return this->p2;
 }
 
-bool Segment::operator==(Segment &other) {
-    return this->p1==other.getFirst() && this->p2==other.getSecond() ||
-            this->p2==other.getSecond() && this->p1==other.getFirst();
+bool Segment::operator==(const Segment other) const{
+    return getFirst()==other.getFirst() && getSecond()==other.getSecond() ||
+           getSecond()==other.getSecond() && getFirst()==other.getFirst();
 }
 
 bool Segment::contains(std::vector<Point>& p, Point point) {
@@ -26,7 +26,7 @@ bool Segment::contains(std::vector<Point>& p, Point point) {
 
     return  ((point.getX()>=p1.getX() && point.getX()<=p2.getX()) || (point.getX()>=p2.getX() && point.getX()<=p1.getX())) &&
             ((point.getY()>=p1.getY() && point.getY()<=p2.getY()) || (point.getY()>=p2.getY() && point.getY()<=p1.getY())) &&
-            abs(p1.getX()*(p2.getY()-point.getY()) + p2.getX()*(point.getY()-p1.getY()) + point.getX()*(p1.getY()-p2.getY()))<0.0001;
+            std::abs(p1.getX()*(p2.getY()-point.getY()) + p2.getX()*(point.getY()-p1.getY()) + point.getX()*(p1.getY()-p2.getY()))<0.0001;
 }
 
 Point Segment::middlePoint(std::vector<Point> p) {
