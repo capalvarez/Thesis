@@ -2,9 +2,9 @@
 #define THESIS_TRIANGLEDELAUNAYGENERATOR_H
 
 #include "DelaunayGenerator.h"
-#include "../geometry/Mesh.h"
-#include "../geometry/Point.h"
-#include "../geometry/Region.h"
+#include "../models/Mesh.h"
+#include "../models/Point.h"
+#include "../models/Region.h"
 #include <fstream>
 #include <vector>
 

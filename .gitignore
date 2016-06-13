@@ -1,5 +1,5 @@
 .idea/
-src/x-poly/delaunay/lib/triangle.o
+src/x-poly/delaunay/lib/
 test/vem-test/
 src/vem/lib/
 

@@ -2,7 +2,7 @@
 #define THESIS_TESTCONVEXHULL_H
 
 #include <gtest/gtest.h>
-#include <geometry/Point.h>
+#include <models/Point.h>
 #include <utilities/convexHull.h>
 #include <vector>
 
@@ -17,7 +17,6 @@ protected:
     std::vector<Point> diamond;
     std::vector<Point> triangle;
     std::vector<Point> nonconvex;
-
 };
 
 

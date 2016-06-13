@@ -2,9 +2,9 @@
 #define THESIS_DELAUNAYVORONOICONVERTER_H
 
 #include <vector>
-#include "../geometry/Mesh.h"
-#include "../geometry/Segment.h"
-#include "../geometry/Polygon.h"
+#include "../models/Mesh.h"
+#include "../models/Segment.h"
+#include "../models/Polygon.h"
 
 class DelaunayVoronoiConverter {
 private:

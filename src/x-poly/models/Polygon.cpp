@@ -10,7 +10,7 @@ Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
         this_points.push_back(p[points[i]]);
     }
 
-    //this->diameter = this->calculateDiameter(this_points);
+    this->diameter = this->calculateDiameter(this_points);
     this->area = this->calculateArea(p);
     this->centroid = this->calculateCentroid(p);
 }

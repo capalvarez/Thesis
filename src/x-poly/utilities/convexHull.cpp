@@ -1,5 +1,5 @@
 #include <vector>
-#include <geometry/Point.h>
+#include <models/Point.h>
 #include <algorithm>
 
 namespace convex {
@@ -42,10 +42,10 @@ namespace convex {
         std::vector<std::pair<Point, Point> > pairs;
 
         int i = 0, j = l.size() - 1;
-        while (i < l.size() || j > 0) {
+        while (i < u.size()-1 || j > 0) {
             pairs.push_back(std::make_pair(u[i], l[j]));
 
-            if (i == u.size())
+            if (i == u.size()-1)
                 j--;
             else if (j == 0)
                 i++;

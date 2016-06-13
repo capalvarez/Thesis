@@ -1,7 +1,7 @@
 #ifndef THESIS_TESTVECTOR_H
 #define THESIS_TESTVECTOR_H
 
-#include <geometry/Point3D.h>
+#include <models/Point3D.h>
 #include <gtest/gtest.h>
 
 class VectorTest : public ::testing::Test{

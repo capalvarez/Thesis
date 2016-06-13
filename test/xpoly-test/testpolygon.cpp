@@ -75,3 +75,9 @@ TEST_F(PolygonTest, CentroidTest){
     EXPECT_EQ(square->getCentroid(), Point(0.5,0.5));
     EXPECT_EQ(nonconvex->getCentroid(), Point(4.5/9,7.0/9));
 }
+
+TEST_F(PolygonTest, DiameterTest){
+    EXPECT_EQ(triangle->getDiameter(),sqrt(2));
+    EXPECT_EQ(square->getDiameter(),sqrt(2));
+    EXPECT_EQ(nonconvex->getDiameter(),sqrt(5));
+}

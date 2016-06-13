@@ -1,4 +1,4 @@
-#include <geometry/Point.h>
+#include <models/Point.h>
 
 namespace geometry_functions{
     double area2(Point p1, Point p2, Point p3){

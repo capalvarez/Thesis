@@ -51,10 +51,27 @@ TEST_F(ConvexHullTest, ConvexHullFunctionTest){
 
 TEST_F(ConvexHullTest, RotatingCalipersTest){
     std::vector<std::pair<Point,Point> > diamondRot = convex::rotatingCalipers(diamond);
-    std::vector<std::pair<Point,Point> > diamondRes;
-    diamondRes.push_back(std::make_pair(Point(0,2),Point(6,2)));
-    diamondRes.push_back(std::make_pair(Point(3,4),Point(3,0)));
+    std::vector<std::pair<Point,Point> > diamondRes = {std::make_pair(Point(0,2),Point(6,2)),
+                                                       std::make_pair(Point(0,2), Point(3,0)),
+                                                       std::make_pair(Point(3,4),Point(3,0)),
+                                                       std::make_pair(Point(3,4), Point(0,2))};
 
     EXPECT_EQ(diamondRot,diamondRes);
+
+    std::vector<std::pair<Point,Point> > triangleRot = convex::rotatingCalipers(triangle);
+    std::vector<std::pair<Point,Point> > triangleRes = {std::make_pair(Point(0,0),Point(1,0)),
+                                                       std::make_pair(Point(0,1), Point(1,0)),
+                                                       std::make_pair(Point(0,1),Point(0,0))};
+
+    EXPECT_EQ(triangleRot,triangleRes);
+
+    std::vector<std::pair<Point,Point> > nonconvexRot = convex::rotatingCalipers(nonconvex);
+    std::vector<std::pair<Point,Point> > nonconvexRes = {std::make_pair(Point(0,0),Point(2,0)),
+                                                         std::make_pair(Point(1,2),Point(2,0)),
+                                                         std::make_pair(Point(1,2),Point(0,0))};
+
+    EXPECT_EQ(nonconvexRot,nonconvexRes);
+
+
 }
 
