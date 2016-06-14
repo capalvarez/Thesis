@@ -1,4 +1,4 @@
-file(GLOB SRCS *.cpp)
+file(GLOB_RECURSE SRCS *.cpp)
 
 ADD_EXECUTABLE(testxpoly ${SRCS})
 TARGET_LINK_LIBRARIES(testxpoly

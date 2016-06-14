@@ -1,7 +1,6 @@
 #include <models/basic/Point.h>
 #include <utilities/geometryFunctions.h>
 #include <gtest/gtest.h>
-#include <math.h>
 
 TEST(GeometryFunctionsTest, CollinearTest){
     Point p1(0,0);
