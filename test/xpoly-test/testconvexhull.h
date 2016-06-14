@@ -2,7 +2,7 @@
 #define THESIS_TESTCONVEXHULL_H
 
 #include <gtest/gtest.h>
-#include <models/Point.h>
+#include <models/basic/Point.h>
 #include <utilities/convexHull.h>
 #include <vector>
 

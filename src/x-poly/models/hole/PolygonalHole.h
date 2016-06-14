@@ -2,9 +2,9 @@
 #define THESIS_POLYGONALHOLE_H
 
 #include <vector>
-#include "Hole.h"
-#include "Polygon.h"
-#include "Segment.h"
+#include "models/hole/Hole.h"
+#include "models/polygon/Polygon.h"
+#include "models/basic/Segment.h"
 #include <utilities/utilities.cpp>
 
 class PolygonalHole: public Hole, public Polygon{

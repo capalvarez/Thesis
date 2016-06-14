@@ -1,4 +1,4 @@
-#include <models/Point.h>
+#include <models/basic/Point.h>
 #include <utilities/geometryFunctions.h>
 #include <gtest/gtest.h>
 #include <math.h>

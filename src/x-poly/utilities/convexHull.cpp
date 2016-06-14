@@ -1,5 +1,5 @@
 #include <vector>
-#include <models/Point.h>
+#include <models/basic/Point.h>
 #include <algorithm>
 
 namespace convex {

@@ -1,7 +1,7 @@
-#include <models/Point.h>
-#include <models/Segment.h>
+#include <models/basic/Point.h>
+#include <models/basic/Segment.h>
 #include <gtest/gtest.h>
-#include <models/Polygon.h>
+#include <models/polygon/Polygon.h>
 #include <vector>
 
 class PolygonTest: public ::testing::Test{

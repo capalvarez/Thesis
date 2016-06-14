@@ -2,7 +2,7 @@
 #define THESIS_CIRCLE_H
 
 #include <vector>
-#include "Point.h"
+#include "models/basic/Point.h"
 #include <cstdlib>
 #include <cmath>
 #include <utilities/geometryFunctions.h>

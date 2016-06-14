@@ -2,8 +2,8 @@
 #define THESIS_POLYGON_H
 
 #include <vector>
-#include "Point.h"
-#include "Segment.h"
+#include "models/basic/Point.h"
+#include "models/basic/Segment.h"
 #include <utilities/geometryFunctions.h>
 #include <utilities/convexHull.h>
 #include <utilities/utilities.h>
@@ -22,7 +22,6 @@ private:
 public:
     Polygon(std::vector<int>& points, std::vector<Point>& p);
     Polygon(std::vector<Point>& p);
-    ~Polygon();
 
     double getDiameter();
     double getArea();

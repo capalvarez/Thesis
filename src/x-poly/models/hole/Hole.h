@@ -1,5 +1,5 @@
-#include "Point.h"
-#include "Segment.h"
+#include "models/basic/Point.h"
+#include "models/basic/Segment.h"
 #include <vector>
 
 class Hole {

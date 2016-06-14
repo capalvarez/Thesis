@@ -3,7 +3,7 @@
 
 #include "DelaunayGenerator.h"
 #include "../models/Mesh.h"
-#include "../models/Point.h"
+#include "models/basic/Point.h"
 #include "../models/Region.h"
 #include <fstream>
 #include <vector>

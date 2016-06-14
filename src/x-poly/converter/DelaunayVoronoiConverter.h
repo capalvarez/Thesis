@@ -3,8 +3,8 @@
 
 #include <vector>
 #include "../models/Mesh.h"
-#include "../models/Segment.h"
-#include "../models/Polygon.h"
+#include "models/basic/Segment.h"
+#include "models/polygon/Polygon.h"
 
 class DelaunayVoronoiConverter {
 private:

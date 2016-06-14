@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <models/Circle.h>
+#include <models/polygon/Circle.h>
 
 TEST(CircleTest, DiscretizeTest){
     Circle c (1, Point(0,0));

@@ -1,7 +1,7 @@
 #ifndef THESIS_VECTOR_H
 #define THESIS_VECTOR_H
 
-#include "Point3D.h"
+#include "models/basic/Point3D.h"
 #include <math.h>
 
 class Point3D;

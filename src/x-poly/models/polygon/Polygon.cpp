@@ -23,9 +23,6 @@ Polygon::Polygon(std::vector<Point> &p) {
     Polygon(index,p);
 }
 
-
-Polygon::~Polygon() {}
-
 double Polygon::calculateDiameter(std::vector<Point>& p) {
     std::vector<std::pair<Point,Point> > rotatingCalipers = convex::rotatingCalipers(p);
     double max = -1;
