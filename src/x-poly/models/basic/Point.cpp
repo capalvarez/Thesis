@@ -6,7 +6,8 @@ Point::Point(double x, double y) {
 }
 
 Point::Point() {
-    Point(0,0);
+    this->x = 0;
+    this->y = 0;
 }
 
 double Point::getX() const{
