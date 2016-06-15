@@ -15,7 +15,7 @@ void PointGenerator::generate(std::vector <Point> &vector, Rectangle box, int nX
             double x = box.xMin() + j*dX;
             double y = box.yMin() + i*dY;
 
-            vector.push_back(Point(lX(x), lY(y)));
+            vector.push_back(Point(this->lX(x), this->lY(y)));
         }
     }
 }

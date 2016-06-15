@@ -1,14 +1,8 @@
 #include <sstream>
 #include <vector>
+#include <math.h>
 
 namespace utilities {
-    template <typename T>
-    std::string ToString(T val){
-        std::stringstream stream;
-        stream << val;
-        return stream.str();
-    }
-
     void TrivialIndexVector(std::vector<int> index_vector, int n){
         for(int i=0;i<n; i++){
             index_vector.push_back(i);
@@ -23,5 +17,9 @@ namespace utilities {
             return true;
         }
     };
+
+    double radian(double angle){
+        return angle*M_PI/180;
+    }
 }
 
