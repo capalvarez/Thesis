@@ -3,15 +3,15 @@
 
 #include "models/basic/Point.h"
 #include "models/polygon/Rectangle.h"
-#include <functional>
+#include "Functor.h"
 #include <vector>
 
 class PointGenerator {
 private:
-    std::function<double(double)> lX;
-    std::function<double(double)> lY;
+    Functor* lX;
+    Functor* lY;
 public:
-    PointGenerator(std::function<double(double)> lX, std::function<double(double)> lY);
+    PointGenerator(Functor* lX, Functor* lY);
 
     void generate(std::vector<Point>& vector, Rectangle box, int nX, int nY);
 };

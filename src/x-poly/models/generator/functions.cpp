@@ -1,42 +1,31 @@
-#include <functional>
-#include <random>
-#include <iostream>
-#include <utilities/utilities.h>
+#include "Functor.h"
+#include "FunctorClasses.cpp"
 
 namespace functions {
-    /*std::function<double(double)> constant(){
-        return static_cast<std::function<double(double)> >();
+    Functor *constant() {
+        return new Constant();
     }
 
-    std::function<double(double)> uniform(double delta){
-        return ;
+    Functor *uniform(double delta) {
+        return new Uniform(delta);
     }
 
-    std::function<double(double)> random_double(double min, double max){
-        srand(time(NULL));
-        return [min, max](double x) {
-            double f = (double)rand() / RAND_MAX;
-            return min + f * (max - min);
-        };
+    Functor *sine(double amplitude, double frecuency, double phase) {
+        return new Sine(amplitude, frecuency, phase);
     }
 
-    std::function<double(double)> random_integer(double min, double max){
-        srand(time(NULL));
-        return [min, max](double x) {
-            return rand()%((int)max-(int)min + 1) + min;
-        };
+    Functor *cosine(double amplitude, double frecuency, double phase) {
+        return new Cosine(amplitude, frecuency, phase);
     }
 
-    std::function<double(double)> sine(double amplitude, double frecuency, double phase){
-        return [amplitude,frecuency,phase](double x){
-            return amplitude*std::sin(frecuency*utilities::radian(x) + utilities::radian(phase));
-        };
+    Functor *random_integer(double min, double max){
+        return new Random_Integer(min, max);
     }
 
-    std::function<double(double)> cosine(double amplitude, double frecuency, double phase){
-        return [amplitude, frecuency, phase](double x){
-            return amplitude * std::cos(frecuency*utilities::radian(x) + utilities::radian(phase));
-        };
-    }*/
+    Functor *random_double(double min, double max){
+        return new Random_Double(min, max);
+    }
 }
+
+
 
