@@ -10,10 +10,15 @@ private:
 public:
     Rectangle(Point p1, Point p2);
 
+    Point getFirst() const;
+    Point getSecond() const;
+
     double getWidth();
     double getHeight();
     double xMin();
     double yMin();
+
+    bool operator==(const Rectangle& other) const;
 };
 
 

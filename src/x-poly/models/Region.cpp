@@ -1,7 +1,7 @@
 #include "Region.h"
 
 Region::Region(std::vector<Point>& points) : Polygon(points){
-    this->points = points;
+    this->p = points;
 }
 
 Region::~Region() {
@@ -10,6 +10,11 @@ Region::~Region() {
 
 std::vector<Hole*> Region::getHoles() {
     return this->holes;
+}
+
+
+std::vector<Point> Region::getSeedPoints() {
+    return this->seedPoints;
 }
 
 void Region::addHole(Hole* h) {
@@ -28,7 +33,7 @@ Rectangle Region::getBox() {
     double yMin = LLONG_MAX;
     double yMax = LLONG_MIN;
 
-    for(auto& v: points){
+    for(auto& v: p){
         xMin = v.getX()<xMin? v.getX(): xMin;
         xMax = v.getX()>xMax? v.getX(): xMax;
         yMin = v.getY()<yMin? v.getY(): yMin;
@@ -40,9 +45,18 @@ Rectangle Region::getBox() {
 
 
 void Region::clean() {
+    std::vector<int> toKeep;
+    std::vector<Point> newSeeds;
+
     for(int i = 0; i<seedPoints.size(); i++){
-        if(!containsPoint(points,seedPoints[i])) seedPoints.erase(seedPoints.begin() + i);
+        if(containsPoint(p,seedPoints[i])) toKeep.push_back(i);
     }
+
+    for(int i=0; i<toKeep.size(); i++){
+        newSeeds.push_back(seedPoints[toKeep[i]]);
+    }
+
+    this->seedPoints = newSeeds;
 }
 
 

@@ -4,11 +4,16 @@
 #include <vector>
 
 namespace utilities {
-
-    extern void TrivialIndexVector(std::vector<int> index_vector, int n);
+    extern void TrivialIndexVector(std::vector<int>& index_vector, int n);
 
     template<class T>
-    class DeleteVector;
+    class DeleteVector {
+    public:
+        bool operator()(T x) const {
+            delete x;
+            return true;
+        };
+    };
 
     extern double radian(double angle);
 }

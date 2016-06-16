@@ -1,4 +1,5 @@
 #include "utilities/utilities.h"
+#include "Functor.h"
 #include <cmath>
 #include <random>
 

@@ -12,7 +12,6 @@ private:
     Functor* lY;
 public:
     PointGenerator(Functor* lX, Functor* lY);
-
     void generate(std::vector<Point>& vector, Rectangle box, int nX, int nY);
 };
 
