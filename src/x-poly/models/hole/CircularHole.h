@@ -6,7 +6,7 @@
 #include "Hole.h"
 #include "models/basic/Segment.h"
 #include "models/polygon/Circle.h"
-#include <utilities/utilities.cpp>
+#include <utilities/utilities.h>
 
 class CircularHole: public Hole, public Circle {
 private:

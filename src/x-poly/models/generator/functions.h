@@ -1,7 +1,7 @@
 #ifndef THESIS_FUNCTIONS_H
 #define THESIS_FUNCTIONS_H
 
-#include <functional>
+#include "Functor.h"
 
 namespace functions {
     Functor* constant();

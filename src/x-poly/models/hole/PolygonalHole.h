@@ -5,7 +5,7 @@
 #include "models/hole/Hole.h"
 #include "models/polygon/Polygon.h"
 #include "models/basic/Segment.h"
-#include <utilities/utilities.cpp>
+#include <utilities/utilities.h>
 
 class PolygonalHole: public Hole, public Polygon{
 private:

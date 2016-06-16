@@ -17,10 +17,21 @@ Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
 
 
 Polygon::Polygon(std::vector<Point> &p) {
-    std::vector<int> index (p.size());
+    std::vector<int> index;
     utilities::TrivialIndexVector(index,p.size());
 
-    Polygon(index,p);
+    for(int i=0;i<index.size();i++){
+        this->points.push_back(index.at(i));
+    }
+
+    std::vector<Point> this_points;
+    for(int i=0;i<points.size();i++){
+        this_points.push_back(p[points[i]]);
+    }
+
+    this->diameter = this->calculateDiameter(this_points);
+    this->area = this->calculateArea(p);
+    this->centroid = this->calculateCentroid(p);
 }
 
 double Polygon::calculateDiameter(std::vector<Point>& p) {
@@ -107,8 +118,8 @@ bool Polygon::containsPoint(std::vector<Point>& p, Point point) {
         Point pI = p[points[i]];
         Point pJ = p[points[j]];
 
-        if (pI.getY()<=point.getY() && pJ.getY()>=point.getY()
-            || pJ.getY()<=point.getY() && pI.getY()>=point.getY()) {
+        if (pI.getY()<=point.getY() && pJ.getY()>point.getY()
+            || pJ.getY()<=point.getY() && pI.getY()>point.getY()) {
 
             if (pI.getX() + (point.getY()-pI.getY())/(pJ.getY()-pI.getY())*(pJ.getX()-pI.getX())<point.getX()){
                 oddNodes=!oddNodes;
