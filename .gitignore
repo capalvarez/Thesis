@@ -1,5 +1,6 @@
 .idea/
-src/x-poly/delaunay/lib
+src/x-poly/delaunay/lib/triangle.c
+src/x-poly/delaunay/lib/triangle.h
 test/vem-test/
 src/vem/lib
 
