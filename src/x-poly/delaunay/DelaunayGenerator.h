@@ -1,7 +1,7 @@
 #ifndef THESIS_DELAUNAYGENERATOR_H
 #define THESIS_DELAUNAYGENERATOR_H
 
-#include "../models/Mesh.h"
+#include "models/Mesh.h"
 
 class DelaunayGenerator {
 public:

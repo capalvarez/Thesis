@@ -60,3 +60,10 @@ void Region::clean() {
 }
 
 
+std::vector<Point> Region::getRegionPoints() {
+    return this->p;
+}
+
+
+
+

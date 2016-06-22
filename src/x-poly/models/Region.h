@@ -23,6 +23,7 @@ public:
 
     std::vector<Point> getSeedPoints();
     std::vector<Hole*> getHoles();
+    std::vector<Point> getRegionPoints();
     void addHole(Hole* h);
     void generatePoints(PointGenerator p, int nX, int nY);
     Rectangle getBox();

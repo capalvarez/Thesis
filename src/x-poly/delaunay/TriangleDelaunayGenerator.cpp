@@ -1,51 +1,74 @@
 #include "TriangleDelaunayGenerator.h"
-#include <iostream>
+#include <stdlib.h>
+#include "lib/triangle.h"
 
+TriangleDelaunayGenerator::TriangleDelaunayGenerator(std::vector<Point>& point_list, Region region) {
+    struct triangulateio in, out;
 
-TriangleDelaunayGenerator::TriangleDelaunayGenerator(std::vector<Point> point_list, Region region) {}
-    //struct triangulateio in, out;
-
-    /*in.numberofpoints = point_list.size();
+    std::vector<Point> regionPoints = region.getRegionPoints();
+    in.numberofpoints = (int) point_list.size() + (int) regionPoints.size();
     in.pointlist = (REAL*)malloc(in.numberofpoints*2*sizeof(REAL));
-    in.pointmarkerlist = (int *)malloc(in.numberofpoints*sizeof(int));
+    int points = 0;
+
     for(int i=0;i<point_list.size();i++){
-        in.pointlist[i] = point_list[i].getX();
-        in.pointlist[i+1] = point_list[i].getY();
-        in.pointmarkerlist[i] = point_list[i].getBoundaryMarker();
+        in.pointlist[points] = point_list[i].getX();
+        in.pointlist[points+1] = point_list[i].getY();
+        points+=2;
     }
 
-    in.numberofpointattributes = 0;
+    for(int i=0;i<regionPoints.size(); ++i) {
+        in.pointlist[points] = regionPoints[i].getX();
+        in.pointlist[points+1] = regionPoints[i].getY();
+        points+=2;
+    }
+
+    in.numberofpointattributes = 1;
+    in.pointattributelist = (REAL *) malloc(in.numberofpoints*in.numberofpointattributes*sizeof(REAL));
+    for (int i=0;i<in.numberofpoints;i++){
+        in.pointattributelist[i] = 0.0;
+    }
+
+    in.pointmarkerlist = (int *)NULL;
 
     std::vector<Segment> segments;
     region.getSegments(segments);
 
-    in.numberofsegments = segments.size();
+    in.numberofsegments = (int) segments.size();
     in.segmentlist = (int*)malloc(in.numberofsegments*2*sizeof(int));
-    for(int i=0;i<2*segments.size();i+=2){
-        in.segmentlist[i] = segments[i].getFirst();
-        in.segmentlist[i+1] = segments[i].getSecond();
+    in.segmentmarkerlist = (int*) NULL;
+     for(int i=0;i<segments.size();i++){
+        in.segmentlist[2*i] = segments[i].getFirst() + (int) point_list.size();
+        in.segmentlist[2*i+1] = segments[i].getSecond() + (int) point_list.size();
     }
 
-    std::vector<Hole> holes = region.getHoles();
-    in.numberofholes = holes.size();
+    std::vector<Hole*> holes = region.getHoles();
+    in.numberofholes = (int) holes.size();
     in.holelist = (REAL*)malloc(in.numberofholes*2*sizeof(REAL));
-    for(int i=0;i<2*holes.size();i+=2){
-        in.holelist[i] = holes[i].getCenter().getX();
-        in.holelist[i+1] = holes[i].getCenter().getY();
+    for(int i=0;i<holes.size();i++){
+        in.holelist[2*i] = holes[i]->getCenter().getX();
+        in.holelist[2*i+1] = holes[i]->getCenter().getY();
     }
+
+    in.numberofregions = 0;
 
     out.pointlist = (REAL *) NULL;
+    out.pointattributelist = (REAL *) NULL;
+    out.pointmarkerlist = (int *) NULL;
     out.trianglelist = (int *) NULL;
+    out.triangleattributelist = (REAL *) NULL;
     out.neighborlist = (int *) NULL;
     out.segmentmarkerlist = (int *) NULL;
-
+    out.segmentlist = (int *) NULL;
     out.edgelist = (int *) NULL;
     out.edgemarkerlist = (int *) NULL;
 
-    triangulate("pneD", &in, &out, (struct triangulateio *)NULL);
+    char switches[5];
+    sprintf(switches,"pzneD");
+
+    triangulate(switches, &in, &out, (struct triangulateio *)NULL);
 
     Mesh* m = new Mesh();
-    std::vector<Point_Data> points;
+    /*std::vector<Point_Data> points;
     std::vector<Edge_Data> edges;
     std::vector<Polygon> triangles;*/
 //    std::unordered_map<Segment,int,struct {
@@ -80,16 +103,16 @@ TriangleDelaunayGenerator::TriangleDelaunayGenerator(std::vector<Point> point_li
             points[out.edgelist[i*2]].edge = edges.size()-1;
         }*/
 
-        //segment_index.insert({data.edge,edges.size() - 1});
+    //segment_index.insert({data.edge,edges.size() - 1});
 
 
-  /*  for(int i=0;i<out.numberoftriangles;i++){
-        //Polygon* newPolygon = new Polygon();
+    /*  for(int i=0;i<out.numberoftriangles;i++){
+          //Polygon* newPolygon = new Polygon();
 
-        //triangles.push_back(*newPolygon);
-    }
-*/
-
+          //triangles.push_back(*newPolygon);
+      }
+  */
+}
 
 Mesh TriangleDelaunayGenerator::getDelaunayTriangulation() {
     return this->delaunay;
