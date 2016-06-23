@@ -7,11 +7,11 @@ TEST(TriangleTest, CircumcenterTest){
 
     std::vector<int> p = {0,1,2};
     Triangle t1 (p,points);
-    ASSERT_EQ(t1.getCircumcenter(points), Point(0.5,0.5));
+    ASSERT_EQ(t1.getCircumcenter(), Point(0.5,0.5));
 
     std::vector<int> p2 = {0,1,3};
     Triangle t2 (p2,points);
-    ASSERT_EQ(t2.getCircumcenter(points), Point(0.5,3.0/8.0));
+    ASSERT_EQ(t2.getCircumcenter(), Point(0.5,3.0/8.0));
  }
 
 

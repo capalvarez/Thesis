@@ -1,6 +1,25 @@
+#include <unordered_map>
 #include "TriangleDelaunayGenerator.h"
-#include <stdlib.h>
-#include "lib/triangle.h"
+struct Key {
+    int first;
+    int second;
+
+    Key(int f, int s){first=f; second=s;}
+
+    bool operator==(const Key &other) const{
+        return first == other.first && second == other.second ||
+               first == other.second && second == other.first;
+    }
+};
+
+struct KeyHasher {
+    std::size_t operator()(const Key &k) const {
+        using std::size_t;
+        using std::hash;
+
+        return hash<int>()(k.first) + hash<int>()(k.second);
+    }
+};
 
 TriangleDelaunayGenerator::TriangleDelaunayGenerator(std::vector<Point>& point_list, Region region) {
     struct triangulateio in, out;
@@ -64,54 +83,50 @@ TriangleDelaunayGenerator::TriangleDelaunayGenerator(std::vector<Point>& point_l
 
     char switches[5];
     sprintf(switches,"pzneD");
-
     triangulate(switches, &in, &out, (struct triangulateio *)NULL);
 
-    Mesh* m = new Mesh();
-    /*std::vector<Point_Data> points;
-    std::vector<Edge_Data> edges;
-    std::vector<Polygon> triangles;*/
-//    std::unordered_map<Segment,int,struct {
-//        std::size_t operator()(Segment& s) {
-//            return std::hash<int>()(s.getFirst()) ^
-//                    (std::hash<int>()(s.getSecond()) << 1);
-//        }
-//    }, struct {
-//        bool operator()(Segment& s1, Segment& s2) {
-//            return s1.getFirst() == s2.getFirst() && s1.getFirst() == s2.getSecond() ||
-//                   s1.getSecond() == s2.getFirst() && s1.getFirst() == s2.getFirst();
-//        }
-//    }> segment_index;
+    std::vector<PointData> delaunay_points;
+    std::vector<Point> meshPoints;
+    std::vector<Triangle*> meshTriangles;
+    std::vector<EdgeData> edges;
+    std::unordered_map<Key, int, KeyHasher> edgeMap;
 
-    /*for(int i=0;i<out.numberofpoints;i++){
-        struct Point_Data data;
-        data.point = *new Point(out.pointlist[i*2], out.pointlist[i*2+1]);
-        data.edge = -1;
-
-        points.push_back(data);
+    for(int i=0;i<out.numberofpoints;i++){
+        PointData data (i);
+        delaunay_points.push_back(data);
+        meshPoints.push_back(Point(out.pointlist[i*2], out.pointlist[i*2+1]));
     }
 
-    for(int i=0;i<out.numberofedges;i++){
-        Edge_Data data;
-        data.edge = *new Segment(out.edgelist[i*2], out.edgelist[i*2+1]);
-        data.polygon1 = -1;
-        data.polygon2 = -1;
-
+    for(int i=0;i<out.numberofedges;i++) {
+        EdgeData data(out.edgelist[2*i], out.edgelist[2*i+1]);
         edges.push_back(data);
+        edgeMap.insert(std::make_pair(Key(out.edgelist[2*i], out.edgelist[2*i+1]),i));
+        delaunay_points[out.edgelist[2*i]].setEdge(i, out.edgemarkerlist[i]);
+        delaunay_points[out.edgelist[2*i+1]].setEdge(i, out.edgemarkerlist[i]);
+    }
 
-        if(points[out.edgelist[i*2]].edge == -1 || out.edgemarkerlist[i*2]==1){
-            points[out.edgelist[i*2]].edge = edges.size()-1;
-        }*/
+    for(int i=0;i<out.numberoftriangles;i++){
+        std::vector<int> triangle_points = {out.trianglelist[3*i], out.trianglelist[3*i+1],
+                                            out.trianglelist[3*i+2]};
+        Triangle* triangle = new Triangle(triangle_points, meshPoints);
+        int i1 = edgeMap[Key(out.trianglelist[3*i], out.trianglelist[3*i+1])];
+        int i2 = edgeMap[Key(out.trianglelist[3*i+1], out.trianglelist[3*i+2])];
+        int i3 = edgeMap[Key(out.trianglelist[3*i+2], out.trianglelist[3*i])];
 
-    //segment_index.insert({data.edge,edges.size() - 1});
+        edges[i1].setTriangle(i);
+        edges[i2].setTriangle(i);
+        edges[i3].setTriangle(i);
+
+        meshTriangles.push_back(triangle);
+    }
+
+    Mesh* m = new Mesh();
 
 
-    /*  for(int i=0;i<out.numberoftriangles;i++){
-          //Polygon* newPolygon = new Polygon();
 
-          //triangles.push_back(*newPolygon);
-      }
-  */
+
+
+
 }
 
 Mesh TriangleDelaunayGenerator::getDelaunayTriangulation() {
