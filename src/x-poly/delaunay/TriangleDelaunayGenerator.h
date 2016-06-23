@@ -6,7 +6,10 @@
 #include "models/basic/Point.h"
 #include "models/Region.h"
 #include <vector>
-
+#include "lib/triangle.h"
+#include "models/polygon/Triangle.h"
+#include "delaunay/structures/PointData.h"
+#include "delaunay/structures/EdgeData.h"
 
 class TriangleDelaunayGenerator : public DelaunayGenerator{
 private:
