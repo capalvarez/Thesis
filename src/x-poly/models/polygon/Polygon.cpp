@@ -1,9 +1,7 @@
 #include "Polygon.h"
 
 Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
-   for(int i=0;i<points.size();i++){
-       this->points.push_back(points.at(i));
-   }
+   this->points.assign(points.begin(), points.end());
 
     std::vector<Point> this_points;
     for(int i=0;i<points.size();i++){
