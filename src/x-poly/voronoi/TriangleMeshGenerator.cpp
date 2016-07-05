@@ -126,7 +126,7 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, Region 
 }
 
 Mesh TriangleMeshGenerator::delaunayToVoronoi() {
-    for(int i=0;i<this->meshPoints.size(); i++) {
+    /*for(int i=0;i<this->meshPoints.size(); i++) {
         std::vector<int> cellPoints;
         Point regionCenter = this->meshPoints[i];
         EdgeData init_edge = this->edges[this->points[i].edge];
@@ -159,7 +159,7 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
 
         this->voronoiCells.push_back(Polygon(cellPoints, this->voronoiPoints));
     }
-
+*/
     return Mesh();
 }
 

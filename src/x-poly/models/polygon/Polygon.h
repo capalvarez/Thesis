@@ -33,6 +33,8 @@ public:
     double signedArea(std::vector<Point>& p);
 
     bool isConvex(std::vector<Point>& p);
+    std::vector<int> getPoints();
+    int numberOfSides();
 };
 
 #endif

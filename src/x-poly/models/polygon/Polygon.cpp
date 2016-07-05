@@ -156,3 +156,16 @@ bool Polygon::isConvex(std::vector<Point>& p) {
 
     return true;
 }
+
+std::vector<int> Polygon::getPoints() {
+    return this->points;
+}
+
+
+int Polygon::numberOfSides() {
+    return (int) points.size();
+}
+
+
+
+
