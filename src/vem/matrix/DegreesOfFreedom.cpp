@@ -1,3 +1,4 @@
+#include <utilities/operations.h>
 #include "DegreesOfFreedom.h"
 #include "lobattoQuadrature.cpp"
 
@@ -43,17 +44,22 @@ std::pair<double, double> DegreesOfFreedom::normal(int i, std::vector<Point> poi
 
         Point next = points[(i+1)%vertex.size()];
 
-        return std::pair<double,double>(std::make_pair((next.getX()-previous.getX())/2, (next.getY()-previous.getY())/2));
+        std::pair<double,double> prev_vector = operations::normal(points[i], previous);
+        std::pair<double,double> next_vector = operations::normal(next, points[i]);
+
+        return std::make_pair((prev_vector.first+next_vector.first)/2,
+                              (prev_vector.second+next_vector.second)/2);
+
     }else{
         if(i<(this->vertex.size()+this->edges.size())){
             int edge = i/(this->order+1);
             Point p1 = points[edge];
             Point p2 = points[(edge+1)%vertex.size()];
 
-            return std::pair<double, double>(std::make_pair(-(p2.getY()-p1.getY()), p2.getX()-p1.getX()));
+            return operations::normal(p1,p2);
         }else{
             //TODO: Fix this patch!
-            return std::pair<double,double>(std::make_pair(0,0));
+            return std::make_pair(0,0);
         }
     }
 

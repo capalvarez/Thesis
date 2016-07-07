@@ -1,3 +1,4 @@
+#include <utilities/operations.h>
 #include "BMatrix.h"
 
 BMatrix::BMatrix(Polygon p, int k, std::vector<Point> points) {
@@ -21,7 +22,8 @@ BMatrix::BMatrix(Polygon p, int k, std::vector<Point> points) {
         for(int dof_id=0;dof_id<d.numberOfDOF();dof_id++){
             Point vertex = points[index[dof_id]];
 
-            this->B(poly_id,dof_id) = -laplacian(poly,p,vertex) + dot(gradient(poly,p,vertex), d.normal(dof_id,points));
+            this->B(poly_id,dof_id) = -operations::laplacian(poly,p,vertex) +
+                    operations::dot(operations::gradient(poly,p,vertex), d.normal(dof_id,points));
        }
     }
 
@@ -32,26 +34,5 @@ Eigen::MatrixXf BMatrix::getBMatrix() {
 }
 
 
-std::pair<double, double> BMatrix::gradient(std::pair<int, int> polinomial, Polygon p, Point point) {
-    double xFactor = (point.getX()-p.getCentroid().getX())/p.getDiameter();
-    double yFactor = (point.getY()-p.getCentroid().getY())/p.getDiameter();
-
-    return std::pair<double, double>(
-            std::make_pair((polinomial.first)*pow(xFactor, polinomial.first-1)*pow(yFactor,polinomial.second) ,
-                           (polinomial.second)*pow(xFactor,polinomial.first) *pow(yFactor, polinomial.second-1)));
-}
-
-double BMatrix::laplacian(std::pair<int, int> polinomial, Polygon p, Point point) {
-    double xFactor = (point.getX()-p.getCentroid().getX())/p.getDiameter();
-    double yFactor = (point.getY()-p.getCentroid().getY())/p.getDiameter();
-
-    return (polinomial.first)*(polinomial.first-1)*pow(xFactor, polinomial.first-2)*pow(yFactor,polinomial.second) +
-           (polinomial.second)*(polinomial.second-1)*pow(xFactor,polinomial.first) *pow(yFactor, polinomial.second-2);
-}
-
-
-double BMatrix::dot(std::pair<double, double> v1, std::pair<double, double> v2) {
-    return v1.first*v2.first + v1.second*v2.second;
-}
 
 
