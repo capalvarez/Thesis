@@ -33,7 +33,7 @@ int DegreesOfFreedom::numberOfDOF() {
     return (int) this->vertex.size() + (int) this->edges.size() + (int) this->inner.size();
 }
 
-std::pair<double, double> DegreesOfFreedom::normal(int i, std::vector<Point> points) {
+Pair<double> DegreesOfFreedom::normal(int i, std::vector<Point> points) {
     if(i<this->vertex.size()){
         Point previous;
         if(i==0){
@@ -44,11 +44,11 @@ std::pair<double, double> DegreesOfFreedom::normal(int i, std::vector<Point> poi
 
         Point next = points[(i+1)%vertex.size()];
 
-        std::pair<double,double> prev_vector = operations::normal(points[i], previous);
-        std::pair<double,double> next_vector = operations::normal(next, points[i]);
+        Pair<double> prev_vector = operations::normal(points[i], previous);
+        Pair<double> next_vector = operations::normal(next, points[i]);
 
-        return std::make_pair((prev_vector.first+next_vector.first)/2,
-                              (prev_vector.second+next_vector.second)/2);
+        return Pair<double>((prev_vector.first+next_vector.first)/2,
+                            (prev_vector.second+next_vector.second)/2);
 
     }else{
         if(i<(this->vertex.size()+this->edges.size())){
@@ -59,7 +59,7 @@ std::pair<double, double> DegreesOfFreedom::normal(int i, std::vector<Point> poi
             return operations::normal(p1,p2);
         }else{
             //TODO: Fix this patch!
-            return std::make_pair(0,0);
+            return Pair<double>(0,0);
         }
     }
 

@@ -17,7 +17,7 @@ DMatrix::DMatrix(Polygon p, int k, std::vector<Point> points) {
         double yPol = (vertex.getY()-centroid.getY())/diameter;
 
         for(int poly_id=1; poly_id<b.nOfPolinomials(); poly_id++){
-            std::pair<int,int> coefficients = b.getPolinomial(poly_id);
+            Pair<int> coefficients = b.getPolinomial(poly_id);
 
             this->D(dof_id,poly_id) = pow(xPol, coefficients.first)* pow(yPol,coefficients.second);
         }
