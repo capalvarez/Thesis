@@ -4,7 +4,7 @@
 #include <vector>
 #include <models/basic/Point.h>
 #include <models/polygon/Polygon.h>
-
+#include "utilities/Pair.h"
 
 class DegreesOfFreedom {
 private:
@@ -16,7 +16,7 @@ private:
 public:
     DegreesOfFreedom(Polygon p, int k, std::vector<Point>& points);
     int numberOfDOF();
-    std::pair<double,double> normal(int k, std::vector<Point> points);
+    Pair<double> normal(int k, std::vector<Point> points);
 };
 
 

@@ -17,13 +17,13 @@ BMatrix::BMatrix(Polygon p, int k, std::vector<Point> points) {
     std::vector<int> index = p.getPoints();
 
     for(int poly_id=1;poly_id<b.nOfPolinomials();poly_id++){
-        std::pair<int,int> poly = b.getPolinomial(poly_id);
+        Pair<int> poly = b.getPolinomial(poly_id);
 
         for(int dof_id=0;dof_id<d.numberOfDOF();dof_id++){
             Point vertex = points[index[dof_id]];
 
             this->B(poly_id,dof_id) = -operations::laplacian(poly,p,vertex) +
-                    operations::dot(operations::gradient(poly,p,vertex), d.normal(dof_id,points));
+                    operations::gradient(poly,p,vertex).dot(d.normal(dof_id,points));
        }
     }
 

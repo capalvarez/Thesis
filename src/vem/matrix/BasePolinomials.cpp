@@ -2,21 +2,21 @@
 
 
 BasePolinomials::BasePolinomials(int k) {
-    this->polinomials.push_back(std::make_pair(0,0));
+    this->polinomials.push_back(Pair<int>(0,0));
 
     for(int i=1;i<=k; i++){
         for(int j=0; j<=i; j++){
-            this->polinomials.push_back(std::make_pair(i-j, j));
+            this->polinomials.push_back(Pair<int>(i-j, j));
         }
     }
 }
 
-std::vector<std::pair<int, int> > BasePolinomials::getPolinomials() {
+std::vector<Pair<int>> BasePolinomials::getPolinomials() {
     return this->polinomials;
 }
 
 
-std::pair<int, int> BasePolinomials::getPolinomial(int i) {
+Pair<int> BasePolinomials::getPolinomial(int i) {
     return this->polinomials[i];
 }
 
