@@ -2,11 +2,11 @@
 #define THESIS_POLYGON_H
 
 #include <vector>
-#include "models/basic/Point.h"
-#include "models/basic/Segment.h"
-#include <utilities/geometryFunctions.h>
-#include <utilities/convexHull.h>
-#include <utilities/utilities.h>
+#include <x-poly/models/basic/Point.h>
+#include <x-poly/models/basic/Segment.h>
+#include <x-poly/utilities/geometryFunctions.h>
+#include <x-poly/utilities/convexHull.h>
+#include <x-poly/utilities/utilities.h>
 
 class Polygon {
 protected:

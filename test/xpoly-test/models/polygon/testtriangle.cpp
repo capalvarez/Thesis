@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <models/polygon/Triangle.h>
+#include <models/polygon/VEMTriangle.h>
 
 TEST(TriangleTest, CircumcenterTest){
     std::vector<Point> points = {Point(0,0), Point(1,0), Point(0,1), Point(0.5,1), Point(0.5,0.3),

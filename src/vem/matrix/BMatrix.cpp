@@ -1,8 +1,8 @@
 #include <utilities/operations.h>
 #include "BMatrix.h"
 
-BMatrix::BMatrix(Polygon p, int k, std::vector<Point> points) {
-    DegreesOfFreedom d (p,k,points);
+BMatrix::BMatrix(Polygon p, int k, std::vector<Point>& points) {
+     DegreesOfFreedom d (p,k,points);
     BasePolinomials b (k);
 
     this->B = Eigen::MatrixXf::Zero(b.nOfPolinomials(), d.numberOfDOF());
@@ -14,16 +14,19 @@ BMatrix::BMatrix(Polygon p, int k, std::vector<Point> points) {
 
     }
 
-    std::vector<int> index = p.getPoints();
+    std::vector<int> dof = d.getDOF();
 
     for(int poly_id=1;poly_id<b.nOfPolinomials();poly_id++){
         Pair<int> poly = b.getPolinomial(poly_id);
 
         for(int dof_id=0;dof_id<d.numberOfDOF();dof_id++){
-            Point vertex = points[index[dof_id]];
+            Point vertex = points[dof[dof_id]];
 
-            this->B(poly_id,dof_id) = -operations::laplacian(poly,p,vertex) +
-                    operations::gradient(poly,p,vertex).dot(d.normal(dof_id,points));
+            double lap = -operations::laplacian(poly,p,vertex);
+            double grad = operations::gradient(poly,p,vertex).dot(d.normal(dof_id,points));
+
+            double result =  lap + grad;
+            this->B(poly_id,dof_id) = result;
        }
     }
 

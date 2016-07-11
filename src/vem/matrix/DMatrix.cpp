@@ -9,10 +9,10 @@ DMatrix::DMatrix(Polygon p, int k, std::vector<Point> points) {
 
     Point centroid = p.getCentroid();
     double diameter = p.getDiameter();
-    std::vector<int> index = p.getPoints();
+    std::vector<int> dof = d.getDOF();
 
     for(int dof_id=0; dof_id<d.numberOfDOF(); dof_id++){
-        Point vertex = points[index[dof_id]];
+        Point vertex = points[dof[dof_id]];
         double xPol = (vertex.getX()-centroid.getX())/diameter;
         double yPol = (vertex.getY()-centroid.getY())/diameter;
 
