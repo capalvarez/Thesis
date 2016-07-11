@@ -2,7 +2,7 @@
 #define THESIS_DMATRIX_H
 
 #include "lib/Eigen/Dense"
-#include <models/polygon/Polygon.h>
+#include <x-poly/models/polygon/Polygon.h>
 #include "DegreesOfFreedom.h"
 #include "BasePolinomials.h"
 

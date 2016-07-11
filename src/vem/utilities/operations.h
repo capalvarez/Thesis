@@ -1,6 +1,7 @@
 #ifndef THESIS_OPERATIONS_H
 #define THESIS_OPERATIONS_H
-#include <models/polygon/Polygon.h>
+#include <x-poly/models/polygon/Polygon.h>
+#include <x-poly/models/basic/Point.h>
 #include "Pair.h"
 
 namespace operations{
