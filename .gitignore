@@ -2,6 +2,5 @@
 src/x-poly/voronoi/lib/triangle.c
 src/x-poly/voronoi/lib/triangle.h
 src/x-poly/voronoi/lib/triangle.o
-test/vem-test/
 src/vem/lib
 
