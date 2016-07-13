@@ -2,10 +2,10 @@
 #define THESIS_CIRCLE_H
 
 #include <vector>
-#include "models/basic/Point.h"
+#include <x-poly/models/basic/Point.h>
 #include <cstdlib>
 #include <cmath>
-#include <utilities/geometryFunctions.h>
+#include <x-poly/utilities/geometryFunctions.h>
 
 class Circle {
 protected:
