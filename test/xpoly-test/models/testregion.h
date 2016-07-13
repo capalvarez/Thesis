@@ -2,7 +2,7 @@
 #define THESIS_TESTREGION_H
 
 #include <gtest/gtest.h>
-#include <models/Region.h>
+#include <x-poly/models/Region.h>
 
 class RegionTest: public ::testing::Test {
 protected:

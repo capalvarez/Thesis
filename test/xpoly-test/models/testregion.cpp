@@ -1,4 +1,7 @@
-#include <models/generator/functions.h>
+#include <x-poly/models/generator/functions.h>
+#include <x-poly/models/basic/Point.h>
+#include <x-poly/models/polygon/Rectangle.h>
+#include <x-poly/models/generator/PointGenerator.h>
 #include "testregion.h"
 
 TEST_F(RegionTest, BoxTest){

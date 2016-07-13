@@ -2,8 +2,8 @@
 #define THESIS_TESTCONVEXHULL_H
 
 #include <gtest/gtest.h>
-#include <models/basic/Point.h>
-#include <utilities/convexHull.h>
+#include <x-poly/models/basic/Point.h>
+#include <x-poly/utilities/convexHull.h>
 #include <vector>
 
 class ConvexHullTest : public ::testing::Test{
