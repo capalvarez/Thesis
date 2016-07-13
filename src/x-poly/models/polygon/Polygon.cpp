@@ -1,9 +1,7 @@
 #include "Polygon.h"
 
 Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
-   for(int i=0;i<points.size();i++){
-       this->points.push_back(points.at(i));
-   }
+   this->points.assign(points.begin(), points.end());
 
     std::vector<Point> this_points;
     for(int i=0;i<points.size();i++){
@@ -73,7 +71,7 @@ Point Polygon::getCentroid() {
 
 double Polygon::signedArea(std::vector<Point>& p) {
     double area = 0;
-    int n = this->points.size();
+    int n = (int) this->points.size();
 
     for(int i=0;i<n;i++){
         area += p[points[i]].getX()*p[points[(i+1)%n]].getY() - p[points[(i+1)%n]].getX()*p[points[i]].getY();
@@ -83,7 +81,7 @@ double Polygon::signedArea(std::vector<Point>& p) {
 }
 
 void Polygon::getSegments(std::vector<Segment>& segments) {
-    int n = this->points.size();
+    int n = (int) this->points.size();
 
     for(int i=0;i<n; i++){
         segments.push_back(Segment(this->points[i%n], this->points[(i+1)%n]));
@@ -144,7 +142,7 @@ bool Polygon::inEdges(std::vector<Point>& p, Point point) {
 }
 
 bool Polygon::isConvex(std::vector<Point>& p) {
-    int n = this->points.size();
+    int n = (int) this->points.size();
 
     double determinant = convex::orientation(p[0],p[1],p[2]);
 
@@ -158,3 +156,37 @@ bool Polygon::isConvex(std::vector<Point>& p) {
 
     return true;
 }
+
+std::vector<int> Polygon::getPoints() {
+    return this->points;
+}
+
+
+int Polygon::numberOfSides() {
+    return (int) points.size();
+}
+
+
+bool Polygon::isClockwise(std::vector<Point> &p) {
+    int n = (int) points.size();
+
+    Point pI = p[points[0]];
+    Point pI1 = p[points[n-1]];
+
+    double sum = (pI.getX() - pI1.getX())*(pI.getY() + pI1.getY());
+
+    for(int i=0; i<n; i++){
+        pI1 = p[points[(i+1)%n]];
+        pI = p[points[i]];
+
+        sum += (pI1.getX() - pI.getX())*(pI1.getY() + pI.getY());
+    }
+
+    return sum>0;
+}
+
+
+
+
+
+

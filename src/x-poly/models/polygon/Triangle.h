@@ -1,7 +1,7 @@
 #ifndef THESIS_TRIANGLE_H
 #define THESIS_TRIANGLE_H
 
-#include "models/polygon/Polygon.h"
+#include <x-poly/models/polygon/Polygon.h>
 
 class Triangle : public Polygon{
 private:

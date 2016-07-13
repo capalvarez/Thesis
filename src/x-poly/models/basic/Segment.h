@@ -2,7 +2,7 @@
 #define THESIS_SEGMENT_H
 
 #include <vector>
-#include "models/basic/Point.h"
+#include <x-poly/models/basic/Point.h>
 
 class Segment {
 private:

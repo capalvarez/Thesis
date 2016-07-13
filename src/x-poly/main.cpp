@@ -1,9 +1,10 @@
 #include <iostream>
 #include "models/basic/Point.h"
 #include "models/Region.h"
-#include "delaunay/DelaunayGenerator.h"
 #include <vector>
-#include "delaunay/TriangleDelaunayGenerator.h"
+#include <voronoi/MeshGenerator.h>
+#include <voronoi/TriangleMeshGenerator.h>
+
 
 using namespace std;
 
@@ -14,5 +15,5 @@ int main() {
     vector<Point> test_points = {Point(0.5,0), Point(0,0.5), Point(1,0.5), Point(0.5,1)};
     Region region(region_points);
 
-    DelaunayGenerator* d = new TriangleDelaunayGenerator(test_points, region);
+    MeshGenerator* d = new TriangleMeshGenerator(test_points, region);
 }
