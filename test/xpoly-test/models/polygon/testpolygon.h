@@ -1,7 +1,7 @@
-#include <models/basic/Point.h>
-#include <models/basic/Segment.h>
+#include <x-poly/models/basic/Point.h>
+#include <x-poly/models/basic/Segment.h>
 #include <gtest/gtest.h>
-#include <models/polygon/Polygon.h>
+#include <x-poly/models/polygon/Polygon.h>
 #include <vector>
 
 class PolygonTest: public ::testing::Test{
@@ -18,6 +18,9 @@ protected:
 
         std::vector<int> n = {0,1,6,3,5};
         nonconvex = new Polygon(n,points);
+
+        std::vector<int> ncw = {0,2,1};
+        nonclockwise = new Polygon(ncw,points);
     }
 
     std::vector<Point> points;
@@ -25,4 +28,5 @@ protected:
     Polygon* triangle;
     Polygon* square;
     Polygon* nonconvex;
+    Polygon* nonclockwise;
 };

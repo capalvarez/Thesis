@@ -9,14 +9,20 @@ typedef double(*func_t)(double, double);
 
 class VEMTriangle {
 private:
-    Point p1;
-    Point p2;
-    Point p3;
+    int p1;
+    int p2;
+    int p3;
 
-    double jacobian();
+    double jacobian(std::vector<Point> points);
 public:
-    VEMTriangle(Point p1, Point p2, Point p3);
-    double integrate(func_t f);
+    VEMTriangle(int p1, int p2, int p3);
+
+    int getFirst() const;
+    int getSecond() const;
+    int getThird() const;
+
+    double integrate(func_t f, std::vector<Point> points);
+    bool operator==(const VEMTriangle& other) const;
 };
 
 
