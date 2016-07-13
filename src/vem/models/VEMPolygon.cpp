@@ -1,6 +1,5 @@
 #include "VEMPolygon.h"
 
-
 VEMPolygon::VEMPolygon(std::vector<int> index, std::vector<Point> points) : Polygon(index,points){
 
 }
@@ -20,5 +19,10 @@ double VEMPolygon::getAverage(func_t f, std::vector<Point> points) {
     }
 
     return result;
+}
+
+
+VEMTriangle VEMPolygon::getEar(std::vector<Point> points) {
+    return VEMTriangle(0, 0, 0);
 }
 
