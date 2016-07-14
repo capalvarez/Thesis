@@ -14,6 +14,7 @@ public:
     int size();
 
     std::vector<Point> getList();
+    T operator[](int i);
 };
 
 
