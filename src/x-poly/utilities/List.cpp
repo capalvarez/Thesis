@@ -27,5 +27,14 @@ std::vector<Point> List::getList() {
     return this->list;
 }
 
+template <typename T>
+
+T List::operator[](int i) {
+    return list[i];
+}
+
+
+
+
 
 
