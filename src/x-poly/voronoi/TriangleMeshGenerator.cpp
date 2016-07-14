@@ -113,13 +113,13 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
         int t1 = init_edge.t1;
         int t2 = init_edge.t2;
 
-        voronoiPoints.push_back(getCircumcenter(t1,this->points[i].edge,meshPoints));
-        voronoiPoints.push_back(getCircumcenter(t2,this->points[i].edge,meshPoints));
+        int index1 = voronoiPoints.push_back(getCircumcenter(t1,this->points[i].edge,meshPoints));
+        int index2 = voronoiPoints.push_back(getCircumcenter(t2,this->points[i].edge,meshPoints));
 
-        voronoiEdges.push_back(Segment(voronoiPoints.size()-1, voronoiPoints.size()-2));
+        voronoiEdges.push_back(Segment(index1,index2));
 
-        cellPoints.push_back(voronoiPoints.size()-2);
-        cellPoints.push_back(voronoiPoints.size()-1);
+        cellPoints.push_back(index1);
+        cellPoints.push_back(index2);
 
         EdgeData edge = this->edges[triangles[t1]->nextEdge(i, init_edge, edgeMap)];
 
@@ -127,23 +127,30 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
             t1 = edge.t1;
             t2 = edge.t2;
 
-            voronoiPoints.push_back(getCircumcenter(t1,this->points[i].edge,meshPoints));
-            voronoiPoints.push_back(getCircumcenter(t2,this->points[i].edge,meshPoints));
+            index1 = voronoiPoints.push_back(getCircumcenter(t1,this->points[i].edge,meshPoints));
+            index2 = voronoiPoints.push_back(getCircumcenter(t2,this->points[i].edge,meshPoints));
 
-            voronoiEdges.push_back(Segment(voronoiPoints.size()-1, voronoiPoints.size()-2));
+            voronoiEdges.push_back(Segment(index1, index2));
 
-            cellPoints.push_back(voronoiPoints.size()-2);
-            cellPoints.push_back(voronoiPoints.size()-1);
+            cellPoints.push_back(index1);
+            cellPoints.push_back(index2);
 
             edge = this->edges[triangles[t1]->nextEdge(i, edge, edgeMap)];
         }
 
-        //Condicion de borde
         if(t1==-1){
-            //Reviso si el primer punto, ultimo punto y regionCenter son colineales
-            //si lo son, agrego el segmento (ultimo, primero)
-            //si no lo son, agrego regionCenter a la region y agrego los segmentos
-            //(ultimo, centro) y (centro, primero)
+            int firstPoint = cellPoints[0];
+            int lastPoint = cellPoints[cellPoints.size()-1];
+
+            if(geometry_functions::collinear(voronoiPoints[firstPoint],regionCenter,voronoiPoints[lastPoint])){
+                voronoiEdges.push_back(Segment(lastPoint, firstPoint));
+            } else{
+                int regionIndex = voronoiPoints.push_back(regionCenter);
+                cellPoints.push_back(regionIndex);
+
+                voronoiEdges.push_back(Segment(lastPoint, regionIndex));
+                voronoiEdges.push_back(Segment(regionIndex, firstPoint));
+            }
         }
 
         std::vector<Point> pointList = voronoiPoints.getList();
