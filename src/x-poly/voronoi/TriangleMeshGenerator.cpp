@@ -113,9 +113,6 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
         int t1 = init_edge.t1;
         int t2 = init_edge.t2;
 
-        //Tomo ambos circumcentros, los meto en el vector
-        //Uno los circumcentros y guardo este segmento en el vector
-        //Pongo los indices de los circumcentros en el vector de cellPoints
         voronoiPoints.push_back(getCircumcenter(t1,this->points[i].edge,meshPoints));
         voronoiPoints.push_back(getCircumcenter(t2,this->points[i].edge,meshPoints));
 
@@ -155,7 +152,6 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
 
     return Mesh();
 }
-
 
 Point TriangleMeshGenerator::getCircumcenter(int triangle, int edge, std::vector<Point> &points) {
     if(triangle!=-1){
