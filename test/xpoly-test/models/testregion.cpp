@@ -1,4 +1,3 @@
-#include <models/generator/functions.h>
 #include "testregion.h"
 
 TEST_F(RegionTest, BoxTest){

@@ -1,5 +1,5 @@
-#include <models/basic/Point.h>
-#include <utilities/geometryFunctions.h>
+#include <x-poly/models/basic/Point.h>
+#include <x-poly/utilities/geometryFunctions.h>
 #include <gtest/gtest.h>
 
 TEST(GeometryFunctionsTest, CollinearTest){
