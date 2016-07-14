@@ -11,6 +11,8 @@
 #include <unordered_map>
 #include <voronoi/structures/EdgeData.h>
 #include <voronoi/structures/PointData.h>
+#include <utilities/List.h>
+#include "voronoi/structures/mapdata.h"
 
 class TriangleMeshGenerator : public MeshGenerator{
 private:
@@ -20,9 +22,11 @@ private:
     std::vector<Triangle*> triangles;
     std::vector<Point> meshPoints;
 
-    std::vector<Point> voronoiPoints;
-    std::vector<Segment> voronoiEdges;
-    std::vector<Polygon> voronoiCells;
+    std::unordered_map<Key, int, KeyHasher> edgeMap;
+
+    List<Point> voronoiPoints;
+    List<Segment> voronoiEdges;
+    List<Polygon> voronoiCells;
 
     void callTriangle(std::vector<Point>& point_list, Region region);
     Mesh delaunayToVoronoi();
