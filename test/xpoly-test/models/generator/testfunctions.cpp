@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include <models/generator/Functor.h>
-#include "models/generator/functions.h"
+#include <x-poly/models/generator/Functor.h>
+#include <x-poly/models/generator/functions.h>
 
 TEST(FunctionsTest, FunctionListTest){
     EXPECT_EQ((*functions::constant())(3), 3);
