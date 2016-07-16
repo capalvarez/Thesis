@@ -10,7 +10,7 @@ public:
 
     EdgeData(int p1, int p2);
     void setTriangle(int t);
-    bool equals(EdgeData& other);
+    bool equals(EdgeData other);
 };
 
 #endif
