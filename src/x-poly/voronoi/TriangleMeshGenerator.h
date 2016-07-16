@@ -2,17 +2,15 @@
 #define THESIS_TRIANGLEMESHGENERATOR_H
 
 #include "MeshGenerator.h"
-#include "models/Mesh.h"
-#include "models/basic/Point.h"
-#include "models/Region.h"
 #include <vector>
 #include "lib/triangle.h"
-#include "models/polygon/Triangle.h"
+#include <x-poly/models/polygon/Triangle.h>
 #include <unordered_map>
-#include <voronoi/structures/EdgeData.h>
-#include <voronoi/structures/PointData.h>
-#include <utilities/List.h>
-#include "voronoi/structures/mapdata.h"
+#include <x-poly/voronoi/structures/EdgeData.h>
+#include <x-poly/voronoi/structures/PointData.h>
+#include <x-poly/utilities/List.h>
+#include <x-poly/models/Region.h>
+#include <x-poly/voronoi/structures/mapdata.h>
 
 class TriangleMeshGenerator : public MeshGenerator{
 private:
@@ -28,10 +26,9 @@ private:
     List<Segment> voronoiEdges;
     List<Polygon> voronoiCells;
 
+    Point getCircumcenter(int triangle, int edge, std::vector<Point>& points);
     void callTriangle(std::vector<Point>& point_list, Region region);
     Mesh delaunayToVoronoi();
-
-    Point getCircumcenter(int triangle, int edge, std::vector<Point>& points);
 public:
     TriangleMeshGenerator(std::vector<Point>& point_list, Region region);
     Mesh getMesh();

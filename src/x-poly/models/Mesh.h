@@ -1,19 +1,22 @@
 #ifndef THESIS_MESH_H
 #define THESIS_MESH_H
 
-#include <models/polygon/Polygon.h>
-#include "models/basic/Point.h"
-#include "models/basic/Segment.h"
+#include <x-poly/models/polygon/Polygon.h>
+#include <x-poly/models/basic/Point.h>
+#include <x-poly/models/basic/Segment.h>
 #include <algorithm>
 
 class Mesh {
 private:
     std::vector<Point> points;
-    std::vector<Polygon*> elements;
+    std::vector<Polygon> elements;
+    std::vector<Segment> edges;
 public:
-    Mesh(std::vector<Point>& p, std::vector<Polygon*>& e);
+    Mesh(std::vector<Point>& p, std::vector<Polygon>& e, std::vector<Segment>& s);
     Mesh();
     ~Mesh();
+
+    std::vector<Point> getPoints();
 };
 
 
