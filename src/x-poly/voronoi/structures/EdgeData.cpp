@@ -16,7 +16,7 @@ void EdgeData::setTriangle(int t) {
     }
 }
 
-bool EdgeData::equals(EdgeData &other) {
+bool EdgeData::equals(EdgeData other) {
    return this->p1 == other.p1 && this->p2 == other.p2 ||
           this->p2 == other.p1 && this->p1 == other.p1;
 }

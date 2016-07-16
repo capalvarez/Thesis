@@ -13,8 +13,9 @@ public:
     int push_back(T item);
     int size();
 
-    std::vector<Point> getList();
-    T operator[](int i);
+    std::vector<T> getList() const;
+    T get(int i);
+    bool operator==(const List<T>& other);
 };
 
 
