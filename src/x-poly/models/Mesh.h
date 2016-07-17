@@ -17,6 +17,8 @@ public:
     ~Mesh();
 
     std::vector<Point> getPoints();
+    std::vector<Segment> getEdges();
+    std::vector<Polygon> getElements();
 };
 
 
