@@ -17,7 +17,7 @@ int Segment::getSecond() const{
 
 bool Segment::operator==(const Segment other) const{
     return getFirst()==other.getFirst() && getSecond()==other.getSecond() ||
-           getSecond()==other.getSecond() && getFirst()==other.getFirst();
+           getFirst()==other.getSecond() && getSecond()==other.getFirst();
 }
 
 bool Segment::contains(std::vector<Point>& p, Point point) {

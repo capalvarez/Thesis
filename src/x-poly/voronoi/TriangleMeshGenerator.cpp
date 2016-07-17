@@ -116,7 +116,10 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
         int index1 = voronoiPoints.push_back(getCircumcenter(t1,this->points[i].edge,meshPoints));
         int index2 = voronoiPoints.push_back(getCircumcenter(t2,this->points[i].edge,meshPoints));
 
-        voronoiEdges.push_back(Segment(index1,index2));
+        //TODO: Fix this!
+        if(index1!=index2){
+            voronoiEdges.push_back(Segment(index1,index2));
+        }
 
         cellPoints.push_back(index2);
         cellPoints.push_back(index1);
@@ -130,7 +133,7 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
             index1 = voronoiPoints.push_back(getCircumcenter(t1,this->points[i].edge,meshPoints));
             index2 = voronoiPoints.push_back(getCircumcenter(t2,this->points[i].edge,meshPoints));
 
-            voronoiEdges.push_back(Segment(index1, index2));
+            voronoiEdges.push_back(Segment(index2, index1));
 
             cellPoints.push_back(index2);
             cellPoints.push_back(index1);
