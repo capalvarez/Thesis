@@ -1,8 +1,8 @@
 #include <x-poly/models/Mesh.h>
 #include "testtrianglemeshgenerator.h"
 
-TEST_F(TriangleMeshGeneratorTest, VoronoiTest){
-    Mesh m = generator->getMesh();
+TEST_F(TriangleMeshGeneratorTest, Square1Test){
+    /*Mesh m = square_gen->getMesh();
 
     std::vector<Point> expectedPoints = {Point(0,0.5), Point(0.5,0), Point(0.5,1), Point(1,0.5),
                                          Point(0,0), Point(1,0), Point(1,1),Point(0,1)};
@@ -23,5 +23,19 @@ TEST_F(TriangleMeshGeneratorTest, VoronoiTest){
                                              Polygon(index2,expectedPoints),Polygon(index3,expectedPoints),
                                              Polygon(index4,expectedPoints)};
     EXPECT_EQ(m.getElements(), expectedElements);
+
+    m.printInFile("example1.txt");*/
+}
+
+TEST_F(TriangleMeshGeneratorTest, Square2Test){
+    //Mesh m = square_gen2->getMesh();
+    //m.printInFile("example2.txt");
+}
+
+TEST_F(TriangleMeshGeneratorTest, PentagonTest){
+    //Mesh m = pentagon_gen->getMesh();
+    //m.printInFile("example3.txt");
+
+    std::vector<Point> expectedPoints = {};
 
 }

@@ -118,27 +118,34 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
 
         //TODO: Fix this!
         if(index1!=index2){
-            voronoiEdges.push_back(Segment(index1,index2));
+            voronoiEdges.push_back(Segment(index2,index1));
+            cellPoints.push_back(index2);
         }
 
-        cellPoints.push_back(index2);
         cellPoints.push_back(index1);
 
         EdgeData edge = this->edges[triangles[t1]->nextEdge(i, init_edge, edgeMap)];
 
-        while(edge.t2!=-1 && !edge.equals(init_edge)){
+        while(!edge.equals(init_edge)){
             t2 = t1;
             t1 = edge.t1!=t2? edge.t1 : edge.t2;
 
-            index1 = voronoiPoints.push_back(getCircumcenter(t1,this->points[i].edge,meshPoints));
-            index2 = voronoiPoints.push_back(getCircumcenter(t2,this->points[i].edge,meshPoints));
+            int currentEdge = edgeMap[Key(edge.p1, edge.p2)];
+            index1 = voronoiPoints.push_back(getCircumcenter(t1,currentEdge,meshPoints));
+            index2 = voronoiPoints.push_back(getCircumcenter(t2,currentEdge,meshPoints));
 
-            voronoiEdges.push_back(Segment(index2, index1));
+            if(index1!=index2){
+                voronoiEdges.push_back(Segment(index2, index1));
+                cellPoints.push_back(index2);
+            }
 
-            cellPoints.push_back(index2);
             cellPoints.push_back(index1);
 
-            edge = this->edges[triangles[t1]->nextEdge(i, edge, edgeMap)];
+            if(t1!=-1){
+                edge = this->edges[triangles[t1]->nextEdge(i, edge, edgeMap)];
+            }else{
+                break;
+            }
         }
 
         if(edge.t2==-1){

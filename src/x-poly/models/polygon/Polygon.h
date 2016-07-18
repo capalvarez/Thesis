@@ -38,6 +38,7 @@ public:
     int numberOfSides();
 
     bool operator==(const Polygon& other) const;
+    std::string getString();
 };
 
 #endif

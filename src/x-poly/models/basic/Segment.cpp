@@ -33,3 +33,9 @@ Point Segment::middlePoint(std::vector<Point> p) {
     return Point((p[this->p1].getX() + p[this->p2].getX())/2, (p[this->p1].getY() + p[this->p2].getY())/2);
 }
 
+
+std::string Segment::getString() {
+    return std::to_string(this->p1) + " " + std::to_string(this->p2);
+}
+
+

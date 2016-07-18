@@ -4,4 +4,5 @@ src/x-poly/delaunay/lib/triangle.h
 src/x-poly/delaunay/lib/triangle.o
 test/vem-test/
 src/vem/lib
-
+visualizer/.idea/
+visualizer/__pycache__
