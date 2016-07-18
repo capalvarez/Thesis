@@ -191,6 +191,17 @@ bool Polygon::operator==(const Polygon &other) const{
     return std::is_permutation(this->points.begin(), this->points.end(), other.getPoints().begin());
 }
 
+std::string Polygon::getString() {
+    std::string base = std::to_string(this->points[0]);
+
+    for(int i=1;i<this->points.size();i++){
+        base += " " + std::to_string(this->points[i]);
+    }
+
+    return base;
+}
+
+
 
 
 
