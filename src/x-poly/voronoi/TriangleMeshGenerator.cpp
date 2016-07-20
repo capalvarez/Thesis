@@ -1,3 +1,4 @@
+#include <models/Triangulation.h>
 #include "TriangleMeshGenerator.h"
 
 
@@ -10,23 +11,25 @@ Mesh TriangleMeshGenerator::getMesh() {
     return this->mesh;
 }
 
+Triangulation TriangleMeshGenerator::getDelaunayTriangulation() {
+    return Triangulation(this->meshPoints, this->triangles);
+}
+
 void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, Region region) {
     struct triangulateio in, out;
 
     std::vector<Point> regionPoints = region.getRegionPoints();
-    in.numberofpoints = (int) point_list.size() + (int) regionPoints.size();
+    List<Point> pointList;
+    pointList.push_list(point_list);
+    std::vector<int> regionIndex = pointList.push_list(regionPoints);
+
+    in.numberofpoints = pointList.size();
     in.pointlist = (REAL*)malloc(in.numberofpoints*2*sizeof(REAL));
     int points = 0;
 
-    for(int i=0;i<point_list.size();i++){
-        in.pointlist[points] = point_list[i].getX();
-        in.pointlist[points+1] = point_list[i].getY();
-        points+=2;
-    }
-
-    for(int i=0;i<regionPoints.size(); ++i) {
-        in.pointlist[points] = regionPoints[i].getX();
-        in.pointlist[points+1] = regionPoints[i].getY();
+    for(int i=0;i<pointList.size();i++){
+        in.pointlist[points] = pointList.get(i).getX();
+        in.pointlist[points+1] = pointList.get(i).getY();
         points+=2;
     }
 
@@ -45,8 +48,8 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, Region 
     in.segmentlist = (int*)malloc(in.numberofsegments*2*sizeof(int));
     in.segmentmarkerlist = (int*) NULL;
     for(int i=0;i<segments.size();i++){
-        in.segmentlist[2*i] = segments[i].getFirst() + (int) point_list.size();
-        in.segmentlist[2*i+1] = segments[i].getSecond() + (int) point_list.size();
+        in.segmentlist[2*i] = regionIndex[segments[i].getFirst()];
+        in.segmentlist[2*i+1] = regionIndex[segments[i].getSecond()];
     }
 
     std::vector<Hole*> holes = region.getHoles();
@@ -91,7 +94,7 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, Region 
     for(int i=0;i<out.numberoftriangles;i++){
         std::vector<int> triangle_points = {out.trianglelist[3*i], out.trianglelist[3*i+1],
                                             out.trianglelist[3*i+2]};
-        Triangle* triangle = new Triangle(triangle_points, this->meshPoints);
+        Triangle triangle (triangle_points, this->meshPoints);
         int i1 = edgeMap[Key(out.trianglelist[3*i], out.trianglelist[3*i+1])];
         int i2 = edgeMap[Key(out.trianglelist[3*i+1], out.trianglelist[3*i+2])];
         int i3 = edgeMap[Key(out.trianglelist[3*i+2], out.trianglelist[3*i])];
@@ -124,7 +127,7 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
 
         cellPoints.push_back(index1);
 
-        EdgeData edge = this->edges[triangles[t1]->nextEdge(i, init_edge, edgeMap)];
+        EdgeData edge = this->edges[triangles[t1].nextEdge(i, init_edge, edgeMap)];
 
         while(!edge.equals(init_edge)){
             t2 = t1;
@@ -142,7 +145,7 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
             cellPoints.push_back(index1);
 
             if(t1!=-1){
-                edge = this->edges[triangles[t1]->nextEdge(i, edge, edgeMap)];
+                edge = this->edges[triangles[t1].nextEdge(i, edge, edgeMap)];
             }else{
                 break;
             }
@@ -178,7 +181,7 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
 
 Point TriangleMeshGenerator::getCircumcenter(int triangle, int edge, std::vector<Point> &points) {
     if(triangle!=-1){
-        return this->triangles[triangle]->getCircumcenter();
+        return this->triangles[triangle].getCircumcenter();
     }else{
         return Segment(this->edges[edge].p1, this->edges[edge].p2).middlePoint(points);
     }

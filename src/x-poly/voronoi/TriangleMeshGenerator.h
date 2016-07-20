@@ -11,13 +11,14 @@
 #include <x-poly/utilities/List.h>
 #include <x-poly/models/Region.h>
 #include <x-poly/voronoi/structures/mapdata.h>
+#include <x-poly/models/Triangulation.h>
 
 class TriangleMeshGenerator : public MeshGenerator{
 private:
     Mesh mesh;
     std::vector<PointData> points;
     std::vector<EdgeData> edges;
-    std::vector<Triangle*> triangles;
+    std::vector<Triangle> triangles;
     std::vector<Point> meshPoints;
 
     std::unordered_map<Key, int, KeyHasher> edgeMap;
@@ -32,6 +33,7 @@ private:
 public:
     TriangleMeshGenerator(std::vector<Point>& point_list, Region region);
     Mesh getMesh();
+    Triangulation getDelaunayTriangulation();
 };
 
 
