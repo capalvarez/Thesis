@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <models/polygon/Triangle.h>
+#include <x-poly/models/polygon/Triangle.h>
 
 TEST(TriangleTest, CircumcenterTest){
     std::vector<Point> points = {Point(0,0), Point(1,0), Point(0,1), Point(0.5,1), Point(0.5,0.3),
@@ -7,11 +7,19 @@ TEST(TriangleTest, CircumcenterTest){
 
     std::vector<int> p = {0,1,2};
     Triangle t1 (p,points);
-    ASSERT_EQ(t1.getCircumcenter(points), Point(0.5,0.5));
+    EXPECT_EQ(t1.getCircumcenter(), Point(0.5,0.5));
 
     std::vector<int> p2 = {0,1,3};
     Triangle t2 (p2,points);
-    ASSERT_EQ(t2.getCircumcenter(points), Point(0.5,3.0/8.0));
- }
+    EXPECT_EQ(t2.getCircumcenter(), Point(0.5,3.0/8.0));
+}
 
+TEST(TriangleTest, ThirdPointTest){
+    std::vector<Point> points = {Point(0,0), Point(1,0), Point(1,1), Point(0,1)};
+    std::vector<int> index = {1,2,3};
+    Triangle t(index,points);
+
+    EdgeData edge(1,3);
+    EXPECT_EQ(t.thirdPoint(edge), 2);
+}
 

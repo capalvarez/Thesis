@@ -2,7 +2,7 @@
 #define THESIS_SEGMENT_H
 
 #include <vector>
-#include "models/basic/Point.h"
+#include <x-poly/models/basic/Point.h>
 
 class Segment {
 private:
@@ -15,6 +15,7 @@ public:
     int getFirst() const;
     int getSecond() const;
     bool operator==(const Segment other) const;
+    std::string getString();
 
     bool contains(std::vector<Point>& p, Point point);
     Point middlePoint(std::vector<Point> p);

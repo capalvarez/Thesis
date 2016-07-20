@@ -1,7 +1,7 @@
 #ifndef THESIS_RECTANGLE_H
 #define THESIS_RECTANGLE_H
 
-#include "models/basic/Point.h"
+#include <x-poly/models/basic/Point.h>
 
 class Rectangle {
 private:
