@@ -26,11 +26,14 @@ protected:
         }
 
         points_border = {Point(0.5,0), Point(1,0.5), Point(0.5,1), Point(0,0.5)};
+        random_points = {Point(0.117326,0.141106), Point(0.176638,0.850197), Point(0.496491,0.226596),
+                         Point(0.732736,0.344643), Point(0.529896,0.128436), Point(0.988603,0.802724),
+                         Point(0.892638,0.491170), Point(0.244295,0.942909), Point(0.555867,0.072324)};
 
         pentagonPoints = {Point(6,4)};
 
         //square_gen = new TriangleMeshGenerator(points1,*square);
-        square_gen2 = new TriangleMeshGenerator(points2,*square);
+        square_gen2 = new TriangleMeshGenerator(random_points,*square);
         //square_gen_borders = new TriangleMeshGenerator(points_border,*square);
         //pentagon_gen = new TriangleMeshGenerator(pentagonPoints,*pentagon);
     }
@@ -42,6 +45,7 @@ protected:
     std::vector<Point> points2;
     std::vector<Point> points_border;
     std::vector<Point> pentagon_points;
+    std::vector<Point> random_points;
 
     TriangleMeshGenerator* square_gen;
     TriangleMeshGenerator* square_gen2;
