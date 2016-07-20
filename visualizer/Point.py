@@ -3,6 +3,6 @@ class Point:
         self.x = x
         self.y = y
 
-    def draw(self, canvas, limits):
-        canvas.create_oval(self.x, self.y, self.x + 3, self.y + 3, fill="black")
+    def draw(self, canvas, limits, color):
+        canvas.create_oval(self.x, self.y, self.x + 3, self.y + 3, fill=color)
 

@@ -12,6 +12,7 @@ public:
     List();
     int push_back(T item);
     int size();
+    std::vector<int> push_list(std::vector<T> list);
 
     std::vector<T> getList() const;
     T get(int i);

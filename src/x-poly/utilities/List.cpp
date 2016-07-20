@@ -40,6 +40,18 @@ T List<T>::get(int i) {
     return list[i];
 }
 
+template <typename T>
+std::vector<int> List<T>::push_list(std::vector<T> list) {
+    std::vector<int> index;
+
+    for(int i=0;i<list.size();i++){
+        index.push_back(this->push_back(list[i]));
+    }
+
+    return index;
+}
+
+
 template class List<Point>;
 template class List<Segment>;
 template class List<Polygon>;
