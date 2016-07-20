@@ -1,4 +1,3 @@
-#include <x-poly/models/Mesh.h>
 #include "testtrianglemeshgenerator.h"
 
 TEST_F(TriangleMeshGeneratorTest, Square1Test){
@@ -28,14 +27,27 @@ TEST_F(TriangleMeshGeneratorTest, Square1Test){
 }
 
 TEST_F(TriangleMeshGeneratorTest, Square2Test){
-    //Mesh m = square_gen2->getMesh();
-    //m.printInFile("example2.txt");
+    Mesh m = square_gen2->getMesh();
+    m.printInFile("example2.txt");
+
+    Triangulation t = square_gen2->getDelaunayTriangulation();
+    t.writeInFile("triangles2.txt");
 }
 
 TEST_F(TriangleMeshGeneratorTest, PentagonTest){
-    //Mesh m = pentagon_gen->getMesh();
-    //m.printInFile("example3.txt");
+  /*  Mesh m = pentagon_gen->getMesh();
+    m.printInFile("example3.txt");
 
-    std::vector<Point> expectedPoints = {};
+    Triangulation t = pentagon_gen->getDelaunayTriangulation();
+    t.writeInFile("triangles3.txt");
+    std::vector<Point> expectedPoints = {};*/
 
+}
+
+TEST_F(TriangleMeshGeneratorTest, BorderTest){
+//    Mesh m = square_gen_borders->getMesh();
+//    m.printInFile("example_borders.txt");
+//
+//    Triangulation t = square_gen_borders->getDelaunayTriangulation();
+//    t.writeInFile("triangles_borders.txt");
 }

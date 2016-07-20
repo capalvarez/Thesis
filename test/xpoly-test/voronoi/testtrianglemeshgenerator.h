@@ -5,6 +5,8 @@
 #include <x-poly/models/basic/Point.h>
 #include <x-poly/models/Region.h>
 #include <x-poly/voronoi/TriangleMeshGenerator.h>
+#include <x-poly/models/Mesh.h>
+#include <x-poly/models/Triangulation.h>
 
 class TriangleMeshGeneratorTest : public ::testing::Test{
 protected:
@@ -17,16 +19,19 @@ protected:
 
         points1 = {Point(0.5, 0.5)};
 
-        for(int i=1;i<4;i++){
-            for(int j=1;j<4;j++){
+        for(int i=0;i<5;i++){
+            for(int j=0;j<5;j++){
                 points2.push_back(Point(0.25*i,0.25*j));
             }
         }
+
+        points_border = {Point(0.5,0), Point(1,0.5), Point(0.5,1), Point(0,0.5)};
 
         pentagonPoints = {Point(6,4)};
 
         //square_gen = new TriangleMeshGenerator(points1,*square);
         square_gen2 = new TriangleMeshGenerator(points2,*square);
+        //square_gen_borders = new TriangleMeshGenerator(points_border,*square);
         //pentagon_gen = new TriangleMeshGenerator(pentagonPoints,*pentagon);
     }
 
@@ -35,10 +40,12 @@ protected:
 
     std::vector<Point> points1;
     std::vector<Point> points2;
+    std::vector<Point> points_border;
     std::vector<Point> pentagon_points;
 
     TriangleMeshGenerator* square_gen;
     TriangleMeshGenerator* square_gen2;
+    TriangleMeshGenerator* square_gen_borders;
     TriangleMeshGenerator* pentagon_gen;
 };
 
