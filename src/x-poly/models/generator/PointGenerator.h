@@ -1,8 +1,8 @@
 #ifndef THESIS_POINTGENERATOR_H
 #define THESIS_POINTGENERATOR_H
 
-#include "models/basic/Point.h"
-#include "models/polygon/Rectangle.h"
+#include <x-poly/models/basic/Point.h>
+#include <x-poly/models/polygon/Rectangle.h>
 #include "Functor.h"
 #include <vector>
 

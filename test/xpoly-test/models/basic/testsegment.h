@@ -1,5 +1,5 @@
-#include <models/basic/Point.h>
-#include <models/basic/Segment.h>
+#include <x-poly/models/basic/Point.h>
+#include <x-poly/models/basic/Segment.h>
 #include <gtest/gtest.h>
 
 class SegmentTest: public ::testing::Test{
