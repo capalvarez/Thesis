@@ -89,6 +89,15 @@ void Polygon::getSegments(std::vector<Segment>& segments) {
     }
 }
 
+
+void Polygon::getSegments(std::vector<Segment> &segments, int offset) {
+    int n = (int) this->points.size();
+
+    for(int i=0;i<n; i++){
+        segments.push_back(Segment(this->points[i%n] + offset , this->points[(i+1)%n] + offset));
+    }
+}
+
 Point Polygon::calculateCentroid(std::vector<Point>& p) {
     int n = this->points.size();
     double partial_x = 0;

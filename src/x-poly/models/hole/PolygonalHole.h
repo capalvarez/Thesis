@@ -2,19 +2,18 @@
 #define THESIS_POLYGONALHOLE_H
 
 #include <vector>
-#include "models/hole/Hole.h"
-#include "models/polygon/Polygon.h"
-#include "models/basic/Segment.h"
-#include <utilities/utilities.h>
+#include <x-poly/models/hole/Hole.h>
+#include <x-poly/models/polygon/Polygon.h>
+#include <x-poly/models/basic/Segment.h>
+#include <x-poly/utilities/utilities.h>
 
 class PolygonalHole: public Hole, public Polygon{
-private:
-    std::vector<Point> points;
 public:
     PolygonalHole(std::vector<Point>& p);
 
+    void getSegments(std::vector<Segment>& s, int offset);
     Point getCenter();
+    std::vector<Point> getPoints();
 };
-
 
 #endif

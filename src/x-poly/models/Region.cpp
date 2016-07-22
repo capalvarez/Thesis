@@ -12,7 +12,6 @@ std::vector<Hole*> Region::getHoles() {
     return this->holes;
 }
 
-
 std::vector<Point> Region::getSeedPoints() {
     return this->seedPoints;
 }
@@ -61,8 +60,28 @@ void Region::clean() {
 
 
 std::vector<Point> Region::getRegionPoints() {
-    return this->p;
+    std::vector<Point> points;
+    points.assign(this->p.begin(), this->p.end());
+
+    for(int i=0;i<holes.size();i++){
+        std::vector<Point> p = holes[i]->getPoints();
+        points.insert(points.end(), p.begin(), p.end());
+    }
+
+    return points;
 }
+
+void Region::getSegments(std::vector<Segment> &s) {
+    //TODO: Manage border cases here!
+
+    Polygon::getSegments(s);
+    int offset = (int) this->p.size();
+
+    for(int i=0;i<holes.size();i++){
+        holes[i]->getSegments(s, offset);
+    }
+}
+
 
 
 

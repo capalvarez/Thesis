@@ -9,6 +9,7 @@
 #include <x-poly/utilities/utilities.h>
 #include <x-poly/models/generator/PointGenerator.h>
 #include <climits>
+#include <x-poly/models/hole/PolygonalHole.h>
 
 class Region: public Polygon {
 private:
@@ -22,11 +23,12 @@ public:
     ~Region();
 
     std::vector<Point> getSeedPoints();
-    std::vector<Hole*> getHoles();
     std::vector<Point> getRegionPoints();
+    std::vector<Hole*> getHoles();
     void addHole(Hole* h);
     void generatePoints(PointGenerator p, int nX, int nY);
     Rectangle getBox();
+    void getSegments(std::vector<Segment>& s);
 };
 
 #endif
