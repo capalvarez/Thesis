@@ -27,11 +27,11 @@ TEST_F(TriangleMeshGeneratorTest, Square1Test){
 }
 
 TEST_F(TriangleMeshGeneratorTest, Square2Test){
-    Mesh m = square_gen2->getMesh();
+  /*  Mesh m = square_gen2->getMesh();
     m.printInFile("example2.txt");
 
     Triangulation t = square_gen2->getDelaunayTriangulation();
-    t.writeInFile("triangles2.txt");
+    t.writeInFile("triangles2.txt");*/
 }
 
 TEST_F(TriangleMeshGeneratorTest, PentagonTest){

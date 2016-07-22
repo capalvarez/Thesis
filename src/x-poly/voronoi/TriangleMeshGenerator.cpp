@@ -23,6 +23,7 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, Region 
     pointList.push_list(point_list);
     std::vector<int> regionIndex = pointList.push_list(regionPoints);
 
+
     in.numberofpoints = pointList.size();
     in.pointlist = (REAL*)malloc(in.numberofpoints*2*sizeof(REAL));
     int points = 0;

@@ -28,6 +28,7 @@ public:
     Point getCentroid();
 
     void getSegments(std::vector<Segment>& segments);
+    void getSegments(std::vector<Segment>& segments, int offset);
     bool containsPoint(std::vector<Point>& p, Point point);
     bool inEdges(std::vector<Point>& p, Point point);
     double signedArea(std::vector<Point>& p);

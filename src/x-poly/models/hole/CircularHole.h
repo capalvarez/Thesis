@@ -9,13 +9,11 @@
 #include <utilities/utilities.h>
 
 class CircularHole: public Hole, public Circle {
-private:
-    std::vector<Point> discrete_points;
 public:
     CircularHole(Point p, double r);
 
     Point getCenter();
-    void getSegments(std::vector<Segment> segments);
+    void getSegments(std::vector<Segment>& segments, int offset);
 };
 
 
