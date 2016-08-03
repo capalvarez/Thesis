@@ -18,5 +18,12 @@ void CircularHole::getSegments(std::vector<Segment>& segments, int offset) {
 }
 
 
+std::vector<Point> CircularHole::getPoints() {
+    return std::vector<Point>();
+}
+
+
+
+
 
 

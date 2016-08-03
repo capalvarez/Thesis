@@ -95,6 +95,10 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, Region 
     for(int i=0;i<out.numberoftriangles;i++){
         std::vector<int> triangle_points = {out.trianglelist[3*i], out.trianglelist[3*i+1],
                                             out.trianglelist[3*i+2]};
+        realPoints.push_back(out.trianglelist[3*i]);
+        realPoints.push_back(out.trianglelist[3*i+1]);
+        realPoints.push_back(out.trianglelist[3*i+2]);
+
         Triangle triangle (triangle_points, this->meshPoints);
         int i1 = edgeMap[Key(out.trianglelist[3*i], out.trianglelist[3*i+1])];
         int i2 = edgeMap[Key(out.trianglelist[3*i+1], out.trianglelist[3*i+2])];
@@ -109,16 +113,17 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, Region 
 }
 
 Mesh TriangleMeshGenerator::delaunayToVoronoi() {
-    for(int i=0;i<this->meshPoints.size(); i++) {
+    for(int i=0;i<this->realPoints.size(); i++) {
+        int index = this->realPoints.get(i);
         List<int> cellPoints;
-        Point regionCenter = this->meshPoints[i];
-        EdgeData init_edge = this->edges[this->points[i].edge];
+        Point regionCenter = this->meshPoints[index];
+        EdgeData init_edge = this->edges[this->points[index].edge];
 
         int t1 = init_edge.t1;
         int t2 = init_edge.t2;
 
-        int index1 = voronoiPoints.push_back(getCircumcenter(t1,this->points[i].edge,meshPoints));
-        int index2 = voronoiPoints.push_back(getCircumcenter(t2,this->points[i].edge,meshPoints));
+        int index1 = voronoiPoints.push_back(getCircumcenter(t1,this->points[index].edge,meshPoints));
+        int index2 = voronoiPoints.push_back(getCircumcenter(t2,this->points[index].edge,meshPoints));
 
         //TODO: Fix this!
         if(index1!=index2){
@@ -128,7 +133,7 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
 
         cellPoints.push_back(index1);
 
-        EdgeData edge = this->edges[triangles[t1].nextEdge(i, init_edge, edgeMap)];
+        EdgeData edge = this->edges[triangles[t1].nextEdge(index, init_edge, edgeMap)];
 
         while(!edge.equals(init_edge)){
             t2 = t1;
@@ -146,7 +151,7 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
             cellPoints.push_back(index1);
 
             if(t1!=-1){
-                edge = this->edges[triangles[t1].nextEdge(i, edge, edgeMap)];
+                edge = this->edges[triangles[t1].nextEdge(index, edge, edgeMap)];
             }else{
                 break;
             }

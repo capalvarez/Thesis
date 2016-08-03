@@ -20,6 +20,7 @@ private:
     std::vector<EdgeData> edges;
     std::vector<Triangle> triangles;
     std::vector<Point> meshPoints;
+    List<int> realPoints;
 
     std::unordered_map<Key, int, KeyHasher> edgeMap;
 

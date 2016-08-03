@@ -5,7 +5,7 @@ Region::Region(std::vector<Point>& points) : Polygon(points){
 }
 
 Region::~Region() {
-    std::for_each(holes.begin(), holes.end(), utilities::DeleteVector<Hole*>());
+   // std::for_each(holes.begin(), holes.end(), utilities::DeleteVector<Hole*>());
 }
 
 std::vector<Hole*> Region::getHoles() {
