@@ -51,3 +51,14 @@ TEST_F(TriangleMeshGeneratorTest, BorderTest){
 //    Triangulation t = square_gen_borders->getDelaunayTriangulation();
 //    t.writeInFile("triangles_borders.txt");
 }
+
+TEST_F(TriangleMeshGeneratorTest, NoPointsTest){
+    std::vector<Point> empty;
+    TriangleMeshGenerator g (empty, *this->square);
+
+    Triangulation t = g.getDelaunayTriangulation();
+    t.writeInFile("nopoints.txt");
+    Mesh m = g.getMesh();
+    m.printInFile("noPoints.txt");
+
+}
