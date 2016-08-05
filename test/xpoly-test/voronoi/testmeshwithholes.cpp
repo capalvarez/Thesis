@@ -64,7 +64,7 @@ TEST(MeshWithHolesTest, PolygonalHoleCompletelyInBorderTest){
 }
 
 TEST(MeshWithHolesTest, PolygonalHoleBiggerTest){
-    std::vector<Point> rPoints = {Point(0,0), Point(1,0), Point(1,1), Point(0,1)};
+    /*std::vector<Point> rPoints = {Point(0,0), Point(1,0), Point(1,1), Point(0,1)};
     Region square(rPoints);
 
     std::vector<Point> hPoints = {Point(0,0), Point(2,0), Point(2,2), Point(0,2)};
@@ -78,5 +78,42 @@ TEST(MeshWithHolesTest, PolygonalHoleBiggerTest){
     t.writeInFile("hole.txt");
 
     Mesh m = g.getMesh();
+    m.printInFile("h.txt");*/
+}
+
+TEST(MeshWithHolesTest, PolygonalHoleHalfTest){
+    /*std::vector<Point> rPoints = {Point(0,0), Point(1,0), Point(1,1), Point(0,1)};
+    Region square(rPoints);
+
+    std::vector<Point> hPoints = {Point(0.5,0), Point(1,0), Point(1,1), Point(0.5,1)};
+    Hole* h = new PolygonalHole(hPoints);
+
+    square.addHole(h);
+    std::vector<Point> points;
+
+    TriangleMeshGenerator g(points, square);
+    Triangulation t = g.getDelaunayTriangulation();
+    t.writeInFile("hole.txt");
+
+    Mesh m = g.getMesh();
+    m.printInFile("h.txt");*/
+}
+
+TEST(MeshWithHolesTest, CircularHoleInsideTest){
+    std::vector<Point> rPoints = {Point(0,0), Point(1,0), Point(1,1), Point(0,1)};
+    Region square(rPoints);
+
+    std::vector<Point> hPoints = {Point(0.5,0), Point(1,0), Point(1,1), Point(0.5,1)};
+    Hole* h = new PolygonalHole(hPoints);
+
+    square.addHole(h);
+    std::vector<Point> points;
+
+    TriangleMeshGenerator g(points, square);
+    Triangulation t = g.getDelaunayTriangulation();
+    t.writeInFile("hole.txt");
+
+    Mesh m = g.getMesh();
     m.printInFile("h.txt");
 }
+
