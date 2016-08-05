@@ -5,7 +5,7 @@ import sys
 
 
 def read_file(file_name):
-    file = open("/u/a/2013/caalvare/" + file_name, "r")
+    file = open("/home/cata/" + file_name, "r")
     number_points = int(file.readline())
     points = []
     segments = []
@@ -51,7 +51,7 @@ def read_file(file_name):
 
 
 def read_triangulation(file_name):
-    file = open("/u/a/2013/caalvare/" + file_name, "r")
+    file = open("/home/cata/" + file_name, "r")
     number_points = int(file.readline())
     points = []
     triangles = []

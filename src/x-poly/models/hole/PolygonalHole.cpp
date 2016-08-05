@@ -15,9 +15,5 @@ void PolygonalHole::getSegments(std::vector<Segment> &s, int offset) {
     Polygon::getSegments(s, offset);
 }
 
-std::vector<Point> PolygonalHole::getPoints() {
-    return this->HolePoints;
-}
-
 
 

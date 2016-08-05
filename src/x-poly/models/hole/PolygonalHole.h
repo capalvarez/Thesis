@@ -13,7 +13,7 @@ public:
 
     void getSegments(std::vector<Segment>& s, int offset);
     Point getCenter();
-    std::vector<Point> getPoints();
+
 };
 
 #endif
