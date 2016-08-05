@@ -1,7 +1,7 @@
 .idea/
-src/x-poly/delaunay/lib/triangle.c
-src/x-poly/delaunay/lib/triangle.h
-src/x-poly/delaunay/lib/triangle.o
+src/x-poly/voronoi/lib/triangle.c
+src/x-poly/voronoi/lib/triangle.h
+src/x-poly/voronoi/lib/triangle.o
 test/vem-test/
 src/vem/lib
 visualizer/.idea/
