@@ -6,3 +6,5 @@ test/vem-test/
 src/vem/lib
 visualizer/.idea/
 visualizer/__pycache__
+src/x-poly/models/hole/lib/clipper.hpp
+src/x-poly/models/hole/lib/clipper.cpp

@@ -11,6 +11,7 @@ protected:
     virtual void SetUp(){
         square = new Region(squarePoints);
         hole = new PolygonalHole(holePoints);
+
         square->addHole(hole);
     }
 

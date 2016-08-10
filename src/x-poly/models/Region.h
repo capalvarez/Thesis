@@ -10,18 +10,21 @@
 #include <x-poly/models/generator/PointGenerator.h>
 #include <climits>
 #include <x-poly/models/hole/PolygonalHole.h>
+#include <x-poly/models/hole/lib/clipper.hpp>
 
 class Region: public Polygon {
 private:
     std::vector<Hole*> holes;
     std::vector<Point> p;
     std::vector<Point> seedPoints;
+    int maxScale;
 
     void clean();
 public:
     Region(std::vector<Point>& points);
     ~Region();
 
+    void mutate(std::vector<Point>& points);
     std::vector<Point> getSeedPoints();
     std::vector<Point> getRegionPoints();
     std::vector<Hole*> getHoles();
