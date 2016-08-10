@@ -2,24 +2,59 @@
 
 Region::Region(std::vector<Point>& points) : Polygon(points){
     this->p = points;
+    this->maxScale = 1000000;
+}
+
+void Region::mutate(std::vector<Point> &points) {
+    this->p = points;
+    Polygon::mutate(points);
 }
 
 Region::~Region() {
-    std::for_each(holes.begin(), holes.end(), utilities::DeleteVector<Hole*>());
+   // std::for_each(holes.begin(), holes.end(), utilities::DeleteVector<Hole*>());
 }
 
 std::vector<Hole*> Region::getHoles() {
     return this->holes;
 }
 
-
 std::vector<Point> Region::getSeedPoints() {
     return this->seedPoints;
 }
 
 void Region::addHole(Hole* h) {
-    //TODO: What to do if hole is not inside or intersects region?
-    this->holes.push_back(h);
+    //When we receive a hole we check whether the difference between the region and the hole is just
+    //one path (according to the used library)
+    ClipperLib::Path region, hole;
+    ClipperLib::Paths solution;
+
+    for(int i=0;i<this->p.size(); i++){
+        region << ClipperLib::IntPoint((int)(maxScale*this->p[i].getX()), (int)(maxScale*this->p[i].getY()));
+    }
+
+    std::vector<Point> holePoints = h->getPoints();
+    for(int i=0;i<holePoints.size();i++){
+        hole << ClipperLib::IntPoint((int)(maxScale*holePoints[i].getX()), (int)(maxScale*holePoints[i].getY()));
+    }
+
+    ClipperLib::Clipper clipper;
+    clipper.AddPath(region, ClipperLib::ptSubject, true);
+    clipper.AddPath(hole, ClipperLib::ptClip, true);
+    clipper.Execute(ClipperLib::ctDifference, solution, ClipperLib::pftNonZero, ClipperLib::pftNonZero);
+
+    if(solution.size()==1){
+        //Hole does intersect, so Region has to change and the hole "dissapears"
+        std::vector<Point> newPoints;
+
+        for(int i=0;i<solution[0].size();i++){
+            newPoints.push_back(Point(solution[0][i].X/(1.0*maxScale), solution[0][i].Y/(1.0*maxScale)));
+        }
+
+        this->mutate(newPoints);
+    }else{
+        //TODO: Ignore holes outside the region
+        this->holes.push_back(h);
+    }
 }
 
 void Region::generatePoints(PointGenerator p, int nX, int nY){
@@ -43,7 +78,6 @@ Rectangle Region::getBox() {
     return Rectangle(Point(xMin,yMin), Point(xMax,yMax));
 }
 
-
 void Region::clean() {
     std::vector<int> toKeep;
     std::vector<Point> newSeeds;
@@ -61,8 +95,28 @@ void Region::clean() {
 
 
 std::vector<Point> Region::getRegionPoints() {
-    return this->p;
+    std::vector<Point> points;
+    points.assign(this->p.begin(), this->p.end());
+
+    for(int i=0;i<holes.size();i++){
+        std::vector<Point> p = holes[i]->getPoints();
+        points.insert(points.end(), p.begin(), p.end());
+    }
+
+    return points;
 }
+
+void Region::getSegments(std::vector<Segment> &s) {
+    //TODO: Manage border cases here!
+
+    Polygon::getSegments(s);
+    int offset = (int) this->p.size();
+
+    for(int i=0;i<holes.size();i++){
+        holes[i]->getSegments(s, offset);
+    }
+}
+
 
 
 

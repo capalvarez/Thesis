@@ -27,11 +27,11 @@ TEST_F(TriangleMeshGeneratorTest, Square1Test){
 }
 
 TEST_F(TriangleMeshGeneratorTest, Square2Test){
-    Mesh m = square_gen2->getMesh();
+  /*  Mesh m = square_gen2->getMesh();
     m.printInFile("example2.txt");
 
     Triangulation t = square_gen2->getDelaunayTriangulation();
-    t.writeInFile("triangles2.txt");
+    t.writeInFile("triangles2.txt");*/
 }
 
 TEST_F(TriangleMeshGeneratorTest, PentagonTest){
@@ -50,4 +50,15 @@ TEST_F(TriangleMeshGeneratorTest, BorderTest){
 //
 //    Triangulation t = square_gen_borders->getDelaunayTriangulation();
 //    t.writeInFile("triangles_borders.txt");
+}
+
+TEST_F(TriangleMeshGeneratorTest, NoPointsTest){
+    std::vector<Point> empty;
+    TriangleMeshGenerator g (empty, *this->square);
+
+    Triangulation t = g.getDelaunayTriangulation();
+    t.writeInFile("nopoints.txt");
+    Mesh m = g.getMesh();
+    m.printInFile("noPoints.txt");
+
 }
