@@ -14,14 +14,22 @@ Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
     this->centroid = this->calculateCentroid(p);
 }
 
+void Polygon::mutate(std::vector<Point> &p) {
+    this->points.clear();
+    utilities::TrivialIndexVector(this->points,p.size());
+
+    std::vector<Point> this_points;
+    for(int i=0;i<points.size();i++){
+        this_points.push_back(p[points[i]]);
+    }
+
+    this->diameter = this->calculateDiameter(this_points);
+    this->area = this->calculateArea(p);
+    this->centroid = this->calculateCentroid(p);
+}
 
 Polygon::Polygon(std::vector<Point> &p) {
-    std::vector<int> index;
-    utilities::TrivialIndexVector(index,p.size());
-
-    for(int i=0;i<index.size();i++){
-        this->points.push_back(index.at(i));
-    }
+    utilities::TrivialIndexVector(this->points,p.size());
 
     std::vector<Point> this_points;
     for(int i=0;i<points.size();i++){
@@ -86,6 +94,15 @@ void Polygon::getSegments(std::vector<Segment>& segments) {
 
     for(int i=0;i<n; i++){
         segments.push_back(Segment(this->points[i%n], this->points[(i+1)%n]));
+    }
+}
+
+
+void Polygon::getSegments(std::vector<Segment> &segments, int offset) {
+    int n = (int) this->points.size();
+
+    for(int i=0;i<n; i++){
+        segments.push_back(Segment(this->points[i%n] + offset , this->points[(i+1)%n] + offset));
     }
 }
 
