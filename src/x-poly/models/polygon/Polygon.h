@@ -27,6 +27,7 @@ public:
     double getArea();
     Point getCentroid();
 
+    void mutate(std::vector<Point>& p);
     void getSegments(std::vector<Segment>& segments);
     void getSegments(std::vector<Segment>& segments, int offset);
     bool containsPoint(std::vector<Point>& p, Point point);
