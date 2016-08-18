@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 #include <x-poly/models/polygon/Polygon.h>
-#include <matrix/DegreesOfFreedom.h>
+#include <matrix/dof/DegreesOfFreedom.h>
 
 class DegreesOfFreedomTest : public ::testing::Test{
 protected:

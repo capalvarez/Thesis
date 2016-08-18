@@ -1,6 +1,5 @@
 #include <utilities/operations.h>
 #include "DegreesOfFreedom.h"
-#include "lobattoQuadrature.cpp"
 
 DegreesOfFreedom::DegreesOfFreedom(Polygon p, int k, std::vector<Point>& points) {
     this->order = k;
@@ -33,49 +32,45 @@ DegreesOfFreedom::DegreesOfFreedom(Polygon p, int k, std::vector<Point>& points)
         points.push_back(p.getCentroid());
         this->dof.push_back((int) points.size()-1);
     }
-
 }
-
 
 int DegreesOfFreedom::numberOfDOF() {
     return (int) this->dof.size();
 }
 
-Pair<double> DegreesOfFreedom::normal(int i, std::vector<Point> points) {
-    if(i<this->numberOfSides){
-        Point previous;
-        if(i==0){
-            previous = points[numberOfSides-1];
-        }else{
-            previous = points[i-1];
-        }
-
-        Point next = points[(i+1)%numberOfSides];
-
-        Pair<double> prev_vector = operations::normal(points[i], previous);
-        Pair<double> next_vector = operations::normal(next, points[i]);
-
-        return Pair<double>((prev_vector.first+next_vector.first)/2,
-                            (prev_vector.second+next_vector.second)/2);
-
-    }else{
-        if(i<(this->numberOfSides*this->order - 1)){
-            int edge = i/(this->order+1);
-            Point p1 = points[edge];
-            Point p2 = points[(edge+1)%numberOfSides];
-
-            return operations::normal(p1,p2);
-        }else{
-            //TODO: Fix this patch!
-            return Pair<double>(0,0);
-        }
-    }
-}
-
-
 std::vector<int> DegreesOfFreedom::getDOF() {
     return this->dof;
 }
+
+std::vector<int> DegreesOfFreedom::getNeighbours(int dof) {
+    std::vector<int> neighbours;
+
+    if(dof<this->numberOfSides){
+        neighbours.push_back((numberOfSides + dof-1)%numberOfSides);
+
+        for(int i=0;i<this->order-1;i++){
+            neighbours.push_back(numberOfSides + (numberOfSides + dof-1)%numberOfSides*(order-1) + i);
+        }
+
+        neighbours.push_back(dof);
+
+        for(int i=0;i<this->order-1;i++){
+            neighbours.push_back(numberOfSides + (numberOfSides + dof)%numberOfSides*(order-1) + i);
+        }
+
+        neighbours.push_back((dof + 1)%numberOfSides);
+    } else {
+
+    }
+
+
+
+
+
+
+
+}
+
 
 
 
