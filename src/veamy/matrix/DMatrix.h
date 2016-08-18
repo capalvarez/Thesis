@@ -3,7 +3,7 @@
 
 #include "lib/Eigen/Dense"
 #include <x-poly/models/polygon/Polygon.h>
-#include "DegreesOfFreedom.h"
+#include "matrix/dof/DegreesOfFreedom.h"
 #include "BasePolinomials.h"
 
 class DMatrix {

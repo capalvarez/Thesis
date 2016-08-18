@@ -1,11 +1,17 @@
 #include "testvempolygon.h"
 
 TEST_F(VEMPolygonTest, TriangulateTest){
-    std::vector<VEMTriangle> triangle;
+    std::vector<IntegrationTriangle> triangle;
     square->triangulate(triangle,points);
-    std::vector<VEMTriangle> expected = {VEMTriangle(4,0,1), VEMTriangle(4,1,2), VEMTriangle(4,2,3), VEMTriangle(4,3,0)};
+    std::vector<IntegrationTriangle> expected = {IntegrationTriangle(3,0,1), IntegrationTriangle(1,2,3)};
 
     EXPECT_EQ(triangle, expected);
+
+    triangle.clear();
+    nonconvex->triangulate(triangle,points);
+    std::vector<IntegrationTriangle> expected2 = {IntegrationTriangle(0,1,4), IntegrationTriangle(3,0,4),
+                                                  IntegrationTriangle(4,2,3)};
+    EXPECT_EQ(triangle, expected2);
 }
 
 TEST_F(VEMPolygonTest, AverageTest){

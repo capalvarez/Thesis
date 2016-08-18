@@ -10,7 +10,7 @@ TEST(BMatrixTest, InitializationTest){
 
     Polygon p (point_index, points);
 
-   // BMatrix b (p, 1, points);
+  /*  BMatrix b (p, 1, points);
 
     Eigen::MatrixXf expected(3,4);
     double v = 1/(2*sqrt(2));
@@ -18,7 +18,7 @@ TEST(BMatrixTest, InitializationTest){
             -v, v, v, -v,
             -v, -v, v ,v;
 
-   // EXPECT_EQ(b.getBMatrix(), expected);
+    EXPECT_EQ(b.getBMatrix(), expected);*/
 
     BMatrix b2 (p,2,points);
 

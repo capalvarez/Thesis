@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 #include <x-poly/models/basic/Point.h>
-#include <models/VEMPolygon.h>
+#include <models/integration/IntegrationPolygon.h>
 #include "testfunctions/testfunctions.h"
 
 class VEMPolygonTest : public ::testing::Test{
@@ -13,13 +13,13 @@ protected:
         std::vector<int> index = {0,1,2,3};
         std::vector<int> index2 = {0,1,4,2,3};
 
-        square = new VEMPolygon(index,points);
-        nonconvex = new VEMPolygon(index2,points);
+        square = new IntegrationPolygon(index,points);
+        nonconvex = new IntegrationPolygon(index2,points);
     }
 
     std::vector<Point> points;
-    VEMPolygon* square;
-    VEMPolygon* nonconvex;
+    IntegrationPolygon* square;
+    IntegrationPolygon* nonconvex;
 };
 
 #endif

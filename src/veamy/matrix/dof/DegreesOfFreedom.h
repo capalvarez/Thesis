@@ -5,6 +5,7 @@
 #include <x-poly/models/basic/Point.h>
 #include <x-poly/models/polygon/Polygon.h>
 #include "utilities/Pair.h"
+#include <veamy/matrix/lobattoQuadrature.h>
 
 class DegreesOfFreedom {
 private:
@@ -15,7 +16,7 @@ private:
 public:
     DegreesOfFreedom(Polygon p, int k, std::vector<Point>& points);
     int numberOfDOF();
-    Pair<double> normal(int k, std::vector<Point> points);
+    std::vector<int> getNeighbours(int dof);
 
     std::vector<int> getDOF();
 };

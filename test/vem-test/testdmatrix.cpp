@@ -11,7 +11,7 @@ TEST(DMatrixTest, InitializationTest){
 
     Polygon p (point_index, points);
 
-    //DMatrix d (p, 1, points);
+    DMatrix d (p, 1, points);
     Eigen::MatrixXf expected(4,3);
 
     double value = 1/(2*sqrt(2));
@@ -20,10 +20,10 @@ TEST(DMatrixTest, InitializationTest){
             1, value, value,
             1, -value, value;
 
-   // EXPECT_EQ(d.getDMatrix(), expected);
+    EXPECT_EQ(d.getDMatrix(), expected);
 
     DMatrix d2 (p,2,points);
 
-    //std::cout << d2.getDMatrix() << std::endl;
+    std::cout << d2.getDMatrix() << std::endl;
 }
 
