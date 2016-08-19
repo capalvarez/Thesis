@@ -4,7 +4,6 @@
 #include <gtest/gtest.h>
 #include <x-poly/models/basic/Point.h>
 #include <models/integration/IntegrationPolygon.h>
-#include "testfunctions/testfunctions.h"
 
 class VEMPolygonTest : public ::testing::Test{
 protected:

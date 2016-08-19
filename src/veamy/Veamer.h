@@ -10,6 +10,7 @@ private:
     std::vector<Point> points;
 public:
     void loadData(Mesh m);
+    void simulate();
 };
 
 

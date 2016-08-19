@@ -1,11 +1,11 @@
 #ifndef THESIS_OUTERDOF_H
 #define THESIS_OUTERDOF_H
 
-
 #include <x-poly/models/polygon/Polygon.h>
 #include <utilities/Pair.h>
+#include "DOF.h"
 
-class OuterDOF {
+class OuterDOF : public DOF {
 private:
     int index;
 public:
@@ -15,4 +15,4 @@ public:
 };
 
 
-#endif //THESIS_OUTERDOF_H
+#endif

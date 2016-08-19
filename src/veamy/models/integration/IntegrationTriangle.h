@@ -4,8 +4,7 @@
 #include <x-poly/models/polygon/Triangle.h>
 #include <x-poly/models/basic/Point.h>
 #include <lib/Eigen/Dense>
-
-typedef double(*func_t)(double, double);
+#include "IntegrationFunction.h"
 
 class IntegrationTriangle{
 private:
@@ -25,7 +24,7 @@ public:
 
     bool isNull();
 
-    double integrate(func_t f, std::vector<Point> points);
+    double integrate(IntegrationFunction* f, std::vector<Point> points);
     bool operator==(const IntegrationTriangle& other) const;
     bool isConvex(std::vector<Point> points);
     bool inside(Point p, std::vector<Point> points);

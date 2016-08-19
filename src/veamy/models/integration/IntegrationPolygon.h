@@ -14,7 +14,7 @@ public:
     IntegrationPolygon(std::vector<int> index, std::vector<Point> points);
     std::vector<IntegrationTriangle> triangulate(std::vector<IntegrationTriangle>& triangles, std::vector<Point>& points);
 
-    double getAverage(func_t f, std::vector<Point> points);
+    double integrate(IntegrationFunction* f, std::vector<Point> points);
 };
 
 #endif

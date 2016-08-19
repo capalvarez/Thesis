@@ -16,7 +16,7 @@ std::vector<IntegrationTriangle> IntegrationPolygon::triangulate(std::vector<Int
     return triangles;
 }
 
-double IntegrationPolygon::getAverage(func_t f, std::vector<Point> points) {
+double IntegrationPolygon::integrate(IntegrationFunction* f, std::vector<Point> points) {
     double result = 0;
     std::vector<IntegrationTriangle> triangles;
     triangulate(triangles, points);
@@ -40,7 +40,7 @@ IntegrationTriangle IntegrationPolygon::getEar(std::vector<Point> points, std::v
     if(size==3){
         IntegrationTriangle ear (pointList[0], pointList[1], pointList[2]);
         pointList.clear();
-        return ear;http://9gag.com/gag/aB1yrxQ?ref=fbp
+        return ear;
     }
 
     for(int i=0;i<size;i++){
