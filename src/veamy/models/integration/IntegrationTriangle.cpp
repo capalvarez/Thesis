@@ -8,7 +8,6 @@ IntegrationTriangle::IntegrationTriangle(int p1, int p2, int p3) {
     this->p3 = p3;
 }
 
-
 IntegrationTriangle::IntegrationTriangle() {
     this->p1 = -1;
 }
@@ -25,7 +24,7 @@ int IntegrationTriangle::getThird() const {
     return this->p3;
 }
 
-double IntegrationTriangle::integrate(func_t f, std::vector<Point> points) {
+double IntegrationTriangle::integrate(IntegrationFunction* f, std::vector<Point> points) {
     int order = 2;
     double result = 0;
 
@@ -42,7 +41,7 @@ double IntegrationTriangle::integrate(func_t f, std::vector<Point> points) {
         double P = p1.getX() + (p2.getX() - p1.getX())*quad_p[i].getX() + (p3.getX() - p1.getX())*quad_p[i].getY();
         double Q = p1.getY() + (p2.getY() - p1.getY())*quad_p[i].getX() + (p3.getY() - p1.getY())*quad_p[i].getY();
 
-        double r = f(P,Q);
+        double r = f->call(P,Q);
         result += weight[i]*r;
     }
 

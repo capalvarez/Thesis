@@ -3,14 +3,14 @@
 
 #include "lib/Eigen/Dense"
 #include <x-poly/models/polygon/Polygon.h>
-#include "matrix/dof/DegreesOfFreedom.h"
 #include "BasePolinomials.h"
+#include <matrix/dof/DOF.h>
 
 class DMatrix {
 private:
     Eigen::MatrixXf D;
 public:
-    DMatrix(Polygon p, int k, std::vector<Point> points);
+    DMatrix(std::vector<DOF*> dofs, Polygon p, BasePolinomials b, std::vector<Point> points);
     Eigen::MatrixXf getDMatrix();
 };
 

@@ -1,3 +1,4 @@
+#include <utilities/operations.h>
 #include "testvempolygon.h"
 
 TEST_F(VEMPolygonTest, TriangulateTest){
@@ -15,8 +16,13 @@ TEST_F(VEMPolygonTest, TriangulateTest){
 }
 
 TEST_F(VEMPolygonTest, AverageTest){
-    double (*f)(double, double);
-    f = testfunctions::sum;
+    class Sum : public IntegrationFunction{
+    public:
+        double call(double x, double y){
+            return x + y;
+        }
+    };
 
-    EXPECT_FLOAT_EQ(square->getAverage(f,points), 1);
+    Sum* f = new Sum();
+    EXPECT_FLOAT_EQ(square->integrate(f,points), 1);
 }

@@ -7,6 +7,15 @@ Pair<T>::Pair(T first, T second) {
 }
 
 template <typename T>
+Pair<T>::Pair(const Pair &other) {
+    this->first = other.first;
+    this->second = other.second;
+}
+
+template <typename T>
+Pair<T>::Pair() {}
+
+template <typename T>
 bool Pair<T>::operator==(const Pair &other) const{
     return this->first == other.first && this->second == other.second;
 }

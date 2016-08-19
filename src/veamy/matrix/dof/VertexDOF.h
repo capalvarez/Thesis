@@ -7,7 +7,6 @@
 class VertexDOF : public OuterDOF{
 public:
     VertexDOF(int i);
-
 };
 
 

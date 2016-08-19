@@ -8,6 +8,8 @@ class InnerDOF : public DOF{
 private:
     Pair<int> alpha;
 public:
+    InnerDOF(Pair<int> a);
+
     double getValue(std::vector<Point> points, Pair<int> coeffs, Polygon p);
 };
 

@@ -8,6 +8,8 @@ public:
     T second;
 
     Pair(T first, T second);
+    Pair(const Pair& other);
+    Pair();
     bool operator==(const Pair& other) const;
     T dot(Pair other);
     Pair<T> average(Pair<T> other);
