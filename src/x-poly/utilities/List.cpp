@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <x-poly/models/polygon/Polygon.h>
 #include <x-poly/models/basic/Segment.h>
+#include <veamy/matrix/dof/OuterDOF.h>
 #include "List.h"
 
 template <typename T>
@@ -56,6 +57,7 @@ template class List<Point>;
 template class List<Segment>;
 template class List<Polygon>;
 template class List<int>;
+template class List<OuterDOF*>;
 
 
 

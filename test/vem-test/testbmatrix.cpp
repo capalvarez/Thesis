@@ -37,7 +37,7 @@ TEST(BMatrixTest, InitializationTest){
 
     BMatrix b2 (2, dofs2, p, base2, points);
 
-    std::cout << b2.getBMatrix() << std::endl;
+    //std::cout << b2.getBMatrix() << std::endl;
 
 }
 

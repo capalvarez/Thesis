@@ -21,7 +21,7 @@ BMatrix::BMatrix(int k, std::vector<DOF*> dofs, Polygon p, BasePolinomials b, st
         Pair<int> poly = b.getPolinomial(poly_id);
 
         for(int dof_id=0;dof_id<dofs.size();dof_id++){
-            this->B(poly_id,dof_id) = dofs[dof_id]->lineIntegral(k,p,weight,points,poly) +
+            this->B(poly_id,dof_id) = dofs[dof_id]->lineIntegral(dof_id,k,p,weight,points,poly) +
                     dofs[dof_id]->laplacianIntegral(poly,p);
        }
     }

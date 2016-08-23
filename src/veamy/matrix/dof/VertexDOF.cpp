@@ -6,12 +6,13 @@
 VertexDOF::VertexDOF(int i) : OuterDOF(i){}
 
 
-double VertexDOF::lineIntegral(int k, Polygon p, std::vector<double> weights, std::vector<Point> points, Pair<int> poly) {
+double VertexDOF::lineIntegral(int local_id, int k, Polygon p, std::vector<double> weights, std::vector<Point> points, Pair<int> poly) {
     double integral = 0;
     int n = p.numberOfSides();
+    std::vector<int> polyPoints = p.getPoints();
 
-    Edge prev ((n+index-1)%n, index);
-    Edge next (index,(n+index+1)%n);
+    Edge prev (polyPoints[(n+local_id-1)%n], polyPoints[local_id]);
+    Edge next (polyPoints[local_id],polyPoints[(n+local_id+1)%n]);
 
     Pair<double> prevNormal = prev.getNormal(points);
     Pair<double> nextNormal = next.getNormal(points);

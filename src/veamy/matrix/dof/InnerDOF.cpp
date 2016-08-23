@@ -39,7 +39,7 @@ double InnerDOF::getValue(std::vector<Point> points, Pair<int> coeffs, Polygon p
     return integral;
 }
 
-double InnerDOF::lineIntegral(int k, Polygon p, std::vector<double> weights, std::vector<Point> points, Pair<int> poly) {
+double InnerDOF::lineIntegral(int local_id, int k, Polygon p, std::vector<double> weights, std::vector<Point> points, Pair<int> poly) {
     return 0;
 }
 

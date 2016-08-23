@@ -2,11 +2,13 @@
 
 
 BasePolinomials::BasePolinomials(int k) {
-    this->polinomials.push_back(Pair<int>(0,0));
+    if(k>=0){
+        this->polinomials.push_back(Pair<int>(0,0));
 
-    for(int i=1;i<=k; i++){
-        for(int j=0; j<=i; j++){
-            this->polinomials.push_back(Pair<int>(i-j, j));
+        for(int i=1;i<=k; i++){
+            for(int j=0; j<=i; j++){
+                this->polinomials.push_back(Pair<int>(i-j, j));
+            }
         }
     }
 }

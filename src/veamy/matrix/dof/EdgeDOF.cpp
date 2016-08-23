@@ -6,7 +6,7 @@
 EdgeDOF::EdgeDOF(int i) : OuterDOF(i){}
 
 
-double EdgeDOF::lineIntegral(int k, Polygon p, std::vector<double> weights, std::vector<Point> points, Pair<int> poly) {
+double EdgeDOF::lineIntegral(int local_id, int k, Polygon p, std::vector<double> weights, std::vector<Point> points, Pair<int> poly) {
     double integral = 0;
     int n = p.numberOfSides();
     int e = (index-n)/(k-1);
