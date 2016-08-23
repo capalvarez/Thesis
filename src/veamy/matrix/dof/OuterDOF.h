@@ -6,12 +6,14 @@
 #include "DOF.h"
 
 class OuterDOF : public DOF {
-private:
+protected:
     int index;
 public:
     OuterDOF(int i);
 
     double getValue(std::vector<Point> points, Pair<int> coeffs, Polygon p);
+    virtual double lineIntegral(int k, Polygon p, std::vector<double> weights, std::vector<Point> points, Pair<int> poly) = 0;
+    double laplacianIntegral(Pair<int> poly, Polygon p);
 };
 
 

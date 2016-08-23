@@ -1,7 +1,7 @@
 #include "DMatrix.h"
 
 DMatrix::DMatrix(std::vector<DOF*> dofs, Polygon p, BasePolinomials b, std::vector<Point> points) {
-    this->D = Eigen::MatrixXf::Zero(dofs.size(), b.nOfPolinomials());
+    this->D = Eigen::MatrixXd::Zero(dofs.size(), b.nOfPolinomials());
     this->D.col(0).setOnes();
 
     for(int dof_id=0; dof_id<dofs.size(); dof_id++){
@@ -13,7 +13,7 @@ DMatrix::DMatrix(std::vector<DOF*> dofs, Polygon p, BasePolinomials b, std::vect
     }
 }
 
-Eigen::MatrixXf DMatrix::getDMatrix() {
+Eigen::MatrixXd DMatrix::getDMatrix() {
     return this->D;
 }
 

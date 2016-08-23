@@ -19,7 +19,7 @@ TEST(DMatrixTest, InitializationTest){
     std::vector<DOF*> dofs = {new VertexDOF(0), new VertexDOF(1), new VertexDOF(2), new VertexDOF(3)};
 
     DMatrix d (dofs, p, b, points);
-    Eigen::MatrixXf expected(4,3);
+    Eigen::MatrixXd expected(4,3);
 
     double value = 1/(2*sqrt(2));
     expected << 1, -value, -value,
@@ -41,6 +41,19 @@ TEST(DMatrixTest, InitializationTest){
 
     DMatrix d2 (dofs2, p, b2, points);
 
-    std::cout << d2.getDMatrix() << std::endl;
+    Eigen::MatrixXd expected2(9,6);
+    double v = 1/8.0;
+
+    expected2.row(0) << 1, -value, -value, v, v, v;
+    expected2.row(1) << 1, value, - value, v, -v, v;
+    expected2.row(2) << 1, value, value, v, v, v;
+    expected2.row(3) << 1, -value, value, v, -v, v;
+    expected2.row(4) << 1, 0, -value, 0, 0, v;
+    expected2.row(5) << 1, value, 0, v, 0, 0;
+    expected2.row(6) << 1, 0, value, 0, 0, v;
+    expected2.row(7) << 1, -value, 0, v, 0, 0;
+    expected2.row(8) << 1, 0, 0, 1/24.0, 0, 1/24.0;
+
+    EXPECT_TRUE(d2.getDMatrix().isApprox(expected2,0.0001));
 }
 

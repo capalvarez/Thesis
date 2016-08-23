@@ -11,6 +11,8 @@ public:
     InnerDOF(Pair<int> a);
 
     double getValue(std::vector<Point> points, Pair<int> coeffs, Polygon p);
+    double lineIntegral(int k, Polygon p, std::vector<double> weights, std::vector<Point> points, Pair<int> poly);
+    double laplacianIntegral(Pair<int> poly, Polygon p);
 };
 
 #endif

@@ -8,10 +8,10 @@
 
 class DMatrix {
 private:
-    Eigen::MatrixXf D;
+    Eigen::MatrixXd D;
 public:
     DMatrix(std::vector<DOF*> dofs, Polygon p, BasePolinomials b, std::vector<Point> points);
-    Eigen::MatrixXf getDMatrix();
+    Eigen::MatrixXd getDMatrix();
 };
 
 

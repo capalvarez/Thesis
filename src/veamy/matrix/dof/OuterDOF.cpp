@@ -13,4 +13,9 @@ double OuterDOF::getValue(std::vector<Point> points, Pair<int> coeffs, Polygon p
     return operations::power(xFactor, coeffs.first)*operations::power(yFactor, coeffs.second);
 }
 
+double OuterDOF::laplacianIntegral(Pair<int> poly, Polygon p) {
+    return 0;
+}
+
+
 
