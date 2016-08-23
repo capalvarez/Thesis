@@ -3,15 +3,24 @@
 
 #include <models/Element.h>
 #include <x-poly/models/Mesh.h>
+#include <x-poly/utilities/List.h>
+#include <matrix/dof/OuterDOF.h>
+#include <matrix/dof/OuterDOFS.h>
 
 class Veamer {
 private:
     std::vector<Element> elements;
-    std::vector<Point> points;
+    List<Point> points;
+    OuterDOFS outerDOFs;
+
+    int k;
 public:
+    Veamer(int k);
     void loadData(Mesh m);
     void simulate();
+
+    std::vector<Element> getElements();
 };
 
 
-#endif //THESIS_VEAMER_H
+#endif
