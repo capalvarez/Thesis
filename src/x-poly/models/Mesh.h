@@ -9,11 +9,18 @@
 class Mesh {
 private:
     std::vector<Point> points;
-    std::vector<Polygon*> elements;
+    std::vector<Polygon> elements;
+    std::vector<Segment> edges;
 public:
-    Mesh(std::vector<Point>& p, std::vector<Polygon*>& e);
+    Mesh(std::vector<Point>& p, std::vector<Polygon>& e, std::vector<Segment>& s);
     Mesh();
     ~Mesh();
+
+    std::vector<Point> getPoints();
+    std::vector<Segment> getEdges();
+    std::vector<Polygon> getElements();
+
+    void printInFile(std::string fileName);
 };
 
 

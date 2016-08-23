@@ -3,6 +3,8 @@
 
 #include <gtest/gtest.h>
 #include <x-poly/models/Region.h>
+#include <x-poly/models/generator/functions.h>
+#include <x-poly/models/basic/Point.h>
 
 class RegionTest: public ::testing::Test {
 protected:

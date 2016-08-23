@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "Polygon.h"
 
 Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
@@ -157,7 +158,7 @@ bool Polygon::isConvex(std::vector<Point>& p) {
     return true;
 }
 
-std::vector<int> Polygon::getPoints() {
+std::vector<int> Polygon::getPoints() const{
     return this->points;
 }
 
@@ -185,6 +186,19 @@ bool Polygon::isClockwise(std::vector<Point> &p) {
     return sum>0;
 }
 
+bool Polygon::operator==(const Polygon &other) const{
+    return std::is_permutation(this->points.begin(), this->points.end(), other.getPoints().begin());
+}
+
+std::string Polygon::getString() {
+    std::string base = std::to_string(this->points[0]);
+
+    for(int i=1;i<this->points.size();i++){
+        base += " " + std::to_string(this->points[i]);
+    }
+
+    return base;
+}
 
 
 
