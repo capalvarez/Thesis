@@ -7,6 +7,7 @@
 class EdgeDOF : public OuterDOF{
 public:
     EdgeDOF(int i);
+    double lineIntegral(int k, Polygon p, std::vector<double> weights, std::vector<Point> points, Pair<int> poly);
 };
 
 

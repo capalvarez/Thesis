@@ -7,7 +7,8 @@
 class VertexDOF : public OuterDOF{
 public:
     VertexDOF(int i);
+    double lineIntegral(int k, Polygon p, std::vector<double> weights, std::vector<Point> points, Pair<int> poly);
 };
 
 
-#endif //THESIS_VERTEXDOF_H
+#endif
