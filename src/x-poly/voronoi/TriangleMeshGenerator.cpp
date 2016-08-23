@@ -1,24 +1,6 @@
+#include <models/Triangulation.h>
 #include "TriangleMeshGenerator.h"
-struct Key {
-    int first;
-    int second;
 
-    Key(int f, int s){first=f; second=s;}
-
-    bool operator==(const Key &other) const{
-        return first == other.first && second == other.second ||
-               first == other.second && second == other.first;
-    }
-};
-
-struct KeyHasher {
-    std::size_t operator()(const Key &k) const {
-        using std::size_t;
-        using std::hash;
-
-        return hash<int>()(k.first) + hash<int>()(k.second);
-    }
-};
 
 TriangleMeshGenerator::TriangleMeshGenerator(std::vector<Point>& point_list, Region region) {
     callTriangle(point_list, region);
@@ -29,23 +11,26 @@ Mesh TriangleMeshGenerator::getMesh() {
     return this->mesh;
 }
 
+Triangulation TriangleMeshGenerator::getDelaunayTriangulation() {
+    return Triangulation(this->meshPoints, this->triangles);
+}
+
 void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, Region region) {
     struct triangulateio in, out;
 
     std::vector<Point> regionPoints = region.getRegionPoints();
-    in.numberofpoints = (int) point_list.size() + (int) regionPoints.size();
+    List<Point> pointList;
+    pointList.push_list(point_list);
+    std::vector<int> regionIndex = pointList.push_list(regionPoints);
+
+
+    in.numberofpoints = pointList.size();
     in.pointlist = (REAL*)malloc(in.numberofpoints*2*sizeof(REAL));
     int points = 0;
 
-    for(int i=0;i<point_list.size();i++){
-        in.pointlist[points] = point_list[i].getX();
-        in.pointlist[points+1] = point_list[i].getY();
-        points+=2;
-    }
-
-    for(int i=0;i<regionPoints.size(); ++i) {
-        in.pointlist[points] = regionPoints[i].getX();
-        in.pointlist[points+1] = regionPoints[i].getY();
+    for(int i=0;i<pointList.size();i++){
+        in.pointlist[points] = pointList.get(i).getX();
+        in.pointlist[points+1] = pointList.get(i).getY();
         points+=2;
     }
 
@@ -64,8 +49,8 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, Region 
     in.segmentlist = (int*)malloc(in.numberofsegments*2*sizeof(int));
     in.segmentmarkerlist = (int*) NULL;
     for(int i=0;i<segments.size();i++){
-        in.segmentlist[2*i] = segments[i].getFirst() + (int) point_list.size();
-        in.segmentlist[2*i+1] = segments[i].getSecond() + (int) point_list.size();
+        in.segmentlist[2*i] = regionIndex[segments[i].getFirst()];
+        in.segmentlist[2*i+1] = regionIndex[segments[i].getSecond()];
     }
 
     std::vector<Hole*> holes = region.getHoles();
@@ -93,8 +78,6 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, Region 
     sprintf(switches,"pzneD");
     triangulate(switches, &in, &out, (struct triangulateio *)NULL);
 
-    std::unordered_map<Key, int, KeyHasher> edgeMap;
-
     for(int i=0;i<out.numberofpoints;i++){
         PointData data (i);
         this->points.push_back(data);
@@ -112,7 +95,11 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, Region 
     for(int i=0;i<out.numberoftriangles;i++){
         std::vector<int> triangle_points = {out.trianglelist[3*i], out.trianglelist[3*i+1],
                                             out.trianglelist[3*i+2]};
-        Triangle* triangle = new Triangle(triangle_points, this->meshPoints);
+        realPoints.push_back(out.trianglelist[3*i]);
+        realPoints.push_back(out.trianglelist[3*i+1]);
+        realPoints.push_back(out.trianglelist[3*i+2]);
+
+        Triangle triangle (triangle_points, this->meshPoints);
         int i1 = edgeMap[Key(out.trianglelist[3*i], out.trianglelist[3*i+1])];
         int i2 = edgeMap[Key(out.trianglelist[3*i+1], out.trianglelist[3*i+2])];
         int i3 = edgeMap[Key(out.trianglelist[3*i+2], out.trianglelist[3*i])];
@@ -126,51 +113,86 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, Region 
 }
 
 Mesh TriangleMeshGenerator::delaunayToVoronoi() {
-    /*for(int i=0;i<this->meshPoints.size(); i++) {
-        std::vector<int> cellPoints;
-        Point regionCenter = this->meshPoints[i];
-        EdgeData init_edge = this->edges[this->points[i].edge];
+    for(int i=0;i<this->realPoints.size(); i++) {
+        int index = this->realPoints.get(i);
+        List<int> cellPoints;
+        Point regionCenter = this->meshPoints[index];
+        EdgeData init_edge = this->edges[this->points[index].edge];
 
         int t1 = init_edge.t1;
         int t2 = init_edge.t2;
 
-        //Tomo ambos circumcentros, los meto en el vector
-        //Uno los circumcentros y guardo este segmento en el vector
-        //Pongo los indices de los circumcentros en el vector de cellPoints
+        int index1 = voronoiPoints.push_back(getCircumcenter(t1,this->points[index].edge,meshPoints));
+        int index2 = voronoiPoints.push_back(getCircumcenter(t2,this->points[index].edge,meshPoints));
 
-        EdgeData edge = this->edges[t1.nextEdge()];
-
-        while(t1!=-1 || edge!=init_edge){
-            t1 = edge.t1;
-            t2 = edge.t2;
-
-            //Hago lo mismo que antes
-            //actualizo edge
+        //TODO: Fix this!
+        if(index1!=index2){
+            voronoiEdges.push_back(Segment(index2,index1));
+            cellPoints.push_back(index2);
         }
 
-        //Condicion de borde
-        if(t1==-1){
-            //Reviso si el primer punto, ultimo punto y regionCenter son colineales
-            //si lo son, agrego el segmento (ultimo, primero)
-            //si no lo son, agrego regionCenter a la region y agrego los segmentos
-            //(ultimo, centro) y (centro, primero)
+        cellPoints.push_back(index1);
+
+        EdgeData edge = this->edges[triangles[t1].nextEdge(index, init_edge, edgeMap)];
+
+        while(!edge.equals(init_edge)){
+            t2 = t1;
+            t1 = edge.t1!=t2? edge.t1 : edge.t2;
+
+            int currentEdge = edgeMap[Key(edge.p1, edge.p2)];
+            index1 = voronoiPoints.push_back(getCircumcenter(t1,currentEdge,meshPoints));
+            index2 = voronoiPoints.push_back(getCircumcenter(t2,currentEdge,meshPoints));
+
+            if(index1!=index2){
+                voronoiEdges.push_back(Segment(index2, index1));
+                cellPoints.push_back(index2);
+            }
+
+            cellPoints.push_back(index1);
+
+            if(t1!=-1){
+                edge = this->edges[triangles[t1].nextEdge(index, edge, edgeMap)];
+            }else{
+                break;
+            }
         }
 
+        if(edge.t2==-1){
+            int firstPoint = cellPoints.get(0);
+            int lastPoint = cellPoints.get(cellPoints.size()-1);
 
-        this->voronoiCells.push_back(Polygon(cellPoints, this->voronoiPoints));
+            if(geometry_functions::collinear(voronoiPoints.get(firstPoint),regionCenter,voronoiPoints.get(lastPoint))){
+                voronoiEdges.push_back(Segment(lastPoint, firstPoint));
+            } else{
+                int regionIndex = voronoiPoints.push_back(regionCenter);
+                cellPoints.push_back(regionIndex);
+
+                voronoiEdges.push_back(Segment(lastPoint, regionIndex));
+                voronoiEdges.push_back(Segment(regionIndex, firstPoint));
+            }
+        }
+
+        std::vector<Point> pointList = voronoiPoints.getList();
+        std::vector<int> cellPointsList = cellPoints.getList();
+
+        this->voronoiCells.push_back(Polygon(cellPointsList, pointList));
     }
-*/
-    return Mesh();
-}
 
+    std::vector<Point> points = this->voronoiPoints.getList();
+    std::vector<Polygon> cells = this->voronoiCells.getList();
+    std::vector<Segment> edges = this->voronoiEdges.getList();
+
+    return Mesh(points, cells, edges);
+}
 
 Point TriangleMeshGenerator::getCircumcenter(int triangle, int edge, std::vector<Point> &points) {
     if(triangle!=-1){
-        return this->triangles[triangle]->getCircumcenter();
+        return this->triangles[triangle].getCircumcenter();
     }else{
         return Segment(this->edges[edge].p1, this->edges[edge].p2).middlePoint(points);
     }
 }
+
 
 
 

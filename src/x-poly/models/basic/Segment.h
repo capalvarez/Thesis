@@ -15,6 +15,7 @@ public:
     int getFirst() const;
     int getSecond() const;
     bool operator==(const Segment other) const;
+    std::string getString();
 
     bool contains(std::vector<Point>& p, Point point);
     Point middlePoint(std::vector<Point> p);

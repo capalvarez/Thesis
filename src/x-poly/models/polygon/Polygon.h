@@ -34,8 +34,11 @@ public:
 
     bool isConvex(std::vector<Point>& p);
     bool isClockwise(std::vector<Point>& p);
-    std::vector<int> getPoints();
+    std::vector<int> getPoints() const;
     int numberOfSides();
+
+    bool operator==(const Polygon& other) const;
+    std::string getString();
 };
 
 #endif
