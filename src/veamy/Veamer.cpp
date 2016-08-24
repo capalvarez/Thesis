@@ -17,13 +17,17 @@ void Veamer::loadData(Mesh m) {
     }
 }
 
-void Veamer::simulate() {
-    Eigen::MatrixXf K;
+Eigen::MatrixXd Veamer::simulate() {
+    Eigen::MatrixXd K;
+    int n = this->outerDOFs.size() + (this->k)*(this->k-1)/2;
+
+    K = Eigen::MatrixXd::Zero(n,n);
 
     for(int i=0;i<elements.size();i++){
-
+        elements[i].assembleK(outerDOFs, K);
     }
 
+    return  K;
 }
 
 std::vector<Element> Veamer::getElements() {

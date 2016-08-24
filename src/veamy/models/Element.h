@@ -23,6 +23,7 @@ private:
 public:
     Element(Polygon p, List<Point>& points, OuterDOFS& out, int k);
     Eigen::MatrixXd getK();
+    void assembleK(OuterDOFS out, Eigen::MatrixXd& Kglobal);
 };
 
 

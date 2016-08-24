@@ -17,9 +17,10 @@ private:
 public:
     Veamer(int k);
     void loadData(Mesh m);
-    void simulate();
+    Eigen::MatrixXd simulate();
 
     std::vector<Element> getElements();
+
 };
 
 

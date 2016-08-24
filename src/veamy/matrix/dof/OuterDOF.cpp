@@ -17,5 +17,11 @@ double OuterDOF::laplacianIntegral(Pair<int> poly, Polygon p) {
     return 0;
 }
 
+int OuterDOF::globalIndex() {
+    return this->index;
+}
+
+
+
 
 

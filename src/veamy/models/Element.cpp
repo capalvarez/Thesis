@@ -108,6 +108,21 @@ Eigen::MatrixXd Element::getK() {
 }
 
 
+void Element::assembleK(OuterDOFS out, Eigen::MatrixXd& Kglobal) {
+    for (int i = 0; i < this->K.rows(); i++) {
+        int globalI = out.get(outerDofs[i])->globalIndex();
+
+        for (int j = 0; j < this->K.cols(); j++) {
+            int globalJ = out.get(outerDofs[j])->globalIndex();
+
+            Kglobal(globalI, globalJ) = Kglobal(globalI, globalJ) + this->K(i, j);
+        }
+    }
+}
+
+
+
+
 
 
 

@@ -14,10 +14,7 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     v.loadData(m);
 
     std::vector<Element> elements = v.getElements();
-
-    std::cout << elements[0].getK() << std::endl;
-
-
+    Eigen::MatrixXd K = v.simulate();
 
 }
 
