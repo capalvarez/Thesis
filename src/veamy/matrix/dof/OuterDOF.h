@@ -14,6 +14,7 @@ public:
     double getValue(std::vector<Point> points, Pair<int> coeffs, Polygon p);
     virtual double lineIntegral(int local_id, int k, Polygon p, std::vector<double> weights, std::vector<Point> points, Pair<int> poly) = 0;
     double laplacianIntegral(Pair<int> poly, Polygon p);
+    int globalIndex();
 };
 
 
