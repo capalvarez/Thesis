@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
-#include <matrix/dof/OuterDOFS.h>
+#include <matrix/dof/DOFS.h>
 
 TEST(OuterDOFTest, AddVertexDOFTest){
-    OuterDOFS outer;
+    DOFS outer;
     outer.addVertexDOF(3);
     outer.addVertexDOF(2);
     outer.addVertexDOF(3);

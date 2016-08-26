@@ -5,13 +5,13 @@
 #include <x-poly/models/Mesh.h>
 #include <x-poly/utilities/List.h>
 #include <matrix/dof/OuterDOF.h>
-#include <matrix/dof/OuterDOFS.h>
+#include <matrix/dof/DOFS.h>
 
 class Veamer {
 private:
     std::vector<Element> elements;
     List<Point> points;
-    OuterDOFS outerDOFs;
+    DOFS outerDOFs;
 
     int k;
 public:
