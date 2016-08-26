@@ -13,7 +13,7 @@ void Veamer::loadData(Mesh m) {
     std::vector<Polygon> polygons = m.getElements();
 
     for(int i=0;i<polygons.size();i++){
-        elements.push_back(Element(polygons[i], this->points, outerDOFs, k));
+        elements.push_back(Element(i, polygons[i], this->points, outerDOFs, k));
     }
 }
 
@@ -27,7 +27,7 @@ Eigen::MatrixXd Veamer::simulate() {
         elements[i].assembleK(outerDOFs, K);
     }
 
-    return  K;
+    return K;
 }
 
 std::vector<Element> Veamer::getElements() {

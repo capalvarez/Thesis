@@ -1,38 +1,40 @@
 #include <iostream>
 #include "Element.h"
 
-Element::Element(Polygon p, List<Point>& points, OuterDOFS& out, int k) {
+Element::Element(Polygon p, List<Point>& points, DOFS& out, int k) {
     std::vector<int> vertex = p.getPoints();
 
     for(int i=0;i<vertex.size();i++){
-        outerDofs.push_back(out.addVertexDOF(vertex[i]));
+        dofs.push_back(out.addVertexDOF(vertex[i]));
     }
 
     std::vector<double> quadrature;
     std::vector<double> weights;
     lobatto::lobatto_set(k+1,quadrature,weights);
 
-    /*for(int vertex_id=0; vertex_id<vertex.size(); vertex_id++) {
-        Point p1 = points.get(vertex_id);
-        Point p2 = points.get((vertex_id + 1)%vertex.size());
+    for(int vertex_id=0; vertex_id<vertex.size(); vertex_id++) {
+        Point p1 = points.get(vertex[vertex_id]);
+        Point p2 = points.get(vertex[(vertex_id + 1)%vertex.size()]);
 
         for (int l = 1; l < quadrature.size() - 1; l++) {
-            double x = p1.getX() + (p2.getX() - p1.getX()) / 2 * (quadrature[l] + 1);
-            double y = p1.getY() + (p2.getY() - p1.getY()) / 2 * (quadrature[l] + 1);
+            double x = p1.getX() + (p2.getX() - p1.getX()) * quadrature[l];
+            double y = p1.getY() + (p2.getY() - p1.getY()) * quadrature[l];
 
             Point newPoint(x, y);
             int index = points.push_back(newPoint);
 
-            this->dof.push_back((int) points.size() - 1);
+            dofs.push_back(out.addEdgeDOF(index));
         }
-    }*/
+    }
 
     BasePolinomials innerBase(k-2);
     for(int l=0;l<innerBase.nOfPolinomials();l++){
-        innerDofs.push_back(new InnerDOF(innerBase.getPolinomial(l)));
+        dofs.push_back(out.addInnerDOF(innerBase.getPolinomial(l)));
     }
 
-    std::vector<DOF*> dofs = getDOFS(out);
+
+
+
     std::vector<Point> pointVector = points.getList();
     initMatrizAndVector(dofs, pointVector, weights, p, k);
 }
@@ -89,31 +91,19 @@ void Element::initMatrizAndVector(std::vector<DOF*> dofs, std::vector<Point> poi
     this->K = PiS.transpose()*G*PiS + (I-Pi).transpose()*(I-Pi);
 }
 
-std::vector<DOF*> Element::getDOFS(OuterDOFS out) {
-    std::vector<DOF *> dofs;
-
-    for(int i=0;i<this->outerDofs.size(); i++){
-        dofs.push_back(out.get(outerDofs[i]));
-    }
-
-    for(int i=0;i<this->innerDofs.size();i++){
-        dofs.push_back(innerDofs[i]);
-    }
-
-    return dofs;
-}
-
 Eigen::MatrixXd Element::getK() {
     return this->K;
 }
 
 
-void Element::assembleK(OuterDOFS out, Eigen::MatrixXd& Kglobal) {
+void Element::assembleK(DOFS out, Eigen::MatrixXd& Kglobal) {
+    std::vector<DOF*> dofs = getDOFS(out);
+
     for (int i = 0; i < this->K.rows(); i++) {
-        int globalI = out.get(outerDofs[i])->globalIndex();
+        int globalI = dofs[i]->globalIndex();
 
         for (int j = 0; j < this->K.cols(); j++) {
-            int globalJ = out.get(outerDofs[j])->globalIndex();
+            int globalJ = dofs[j]->globalIndex();
 
             Kglobal(globalI, globalJ) = Kglobal(globalI, globalJ) + this->K(i, j);
         }

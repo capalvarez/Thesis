@@ -2,8 +2,9 @@
 #include <utilities/operations.h>
 #include "InnerDOF.h"
 
-InnerDOF::InnerDOF(Pair<int> a) {
+InnerDOF::InnerDOF(Pair<int> a, int index) {
     this->alpha = a;
+    this->index = index;
 }
 
 double InnerDOF::getValue(std::vector<Point> points, Pair<int> coeffs, Polygon p) {
@@ -46,6 +47,12 @@ double InnerDOF::lineIntegral(int local_id, int k, Polygon p, std::vector<double
 double InnerDOF::laplacianIntegral(Pair<int> poly, Polygon p) {
     return -p.getArea()*operations::laplacian(poly,p);
 }
+
+int InnerDOF::globalIndex() {
+    return this->index;
+}
+
+
 
 
 

@@ -5,17 +5,18 @@
 #include <x-poly/utilities/List.h>
 #include "OuterDOF.h"
 
-class OuterDOFS {
+class DOFS {
 private:
-    List<OuterDOF*> list;
+    List<DOF*> list;
     std::vector<int> occupied_indexes;
 public:
     int addVertexDOF(int index);
     int addEdgeDOF(int index);
+    int addInnerDOF(Pair<int> poly);
 
-    List<OuterDOF*> getDOFS();
+    List<DOF*> getDOFS();
     int size();
-    OuterDOF* get(int i);
+    DOF* get(int i);
 };
 
 
