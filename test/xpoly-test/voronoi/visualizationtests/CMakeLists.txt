@@ -1,5 +1,3 @@
-set(TEST_SRCS main.cpp)
-
-add_executable(visualizationtest ${Main_SRCS})
+add_executable(visualizationtest visualizationtest.cpp)
 target_link_libraries(visualizationtest libxpoly)
 
