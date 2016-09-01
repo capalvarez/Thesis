@@ -71,6 +71,8 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> 
         }
     }
 
+    std::cout << B << std::endl << std::endl  << D << std::endl << std::endl;
+
     Eigen::MatrixXd G;
     Eigen::MatrixXd PiS;
     Eigen::MatrixXd Pi;
