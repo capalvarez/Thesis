@@ -4,40 +4,43 @@
 #include "EdgeDOF.h"
 #include "InnerDOF.h"
 
-int DOFS::addVertexDOF(int index) {
+int DOFS::addOuterDOF(int index, int type) {
     typename std::vector<int>::iterator it;
-    it = std::find(occupied_indexes.begin(), occupied_indexes.end(), index);
+    it = std::find(occupied_point_indexes.begin(), occupied_point_indexes.end(), index);
 
-    if(it!=occupied_indexes.end()){
-        return (int) std::distance(occupied_indexes.begin(),it);
+    if(it!=occupied_point_indexes.end()){
+        int outerDOF_index = (int) std::distance(occupied_point_indexes.begin(),it);
+
+        return outer_indexes[outerDOF_index];
     }
 
-    list.push_back(new VertexDOF(index));
-    occupied_indexes.push_back(index);
+    int newIndex;
+    if(type==0){
+        newIndex = list.push_back(new VertexDOF(index));
+    }else{
+        newIndex = list.push_back(new EdgeDOF(index));
+    }
 
-    return (int) occupied_indexes.size() - 1;
+    occupied_point_indexes.push_back(index);
+    outer_indexes.push_back(newIndex);
+
+    return newIndex;
+}
+
+
+int DOFS::addVertexDOF(int index) {
+    return addOuterDOF(index, 0);
 }
 
 int DOFS::addEdgeDOF(int index) {
-    typename std::vector<int>::iterator it;
-    it = std::find(occupied_indexes.begin(), occupied_indexes.end(), index);
-
-    if(it!=occupied_indexes.end()){
-        return (int) std::distance(occupied_indexes.begin(),it);
-    }
-
-    list.push_back(new EdgeDOF(index));
-    occupied_indexes.push_back(index);
-
-    return (int) occupied_indexes.size() - 1;
+    return addOuterDOF(index, 1);
 }
 
 
 int DOFS::addInnerDOF(Pair<int> poly) {
-    list.push_back(new InnerDOF(poly, occupied_indexes.size()));
-    occupied_indexes.push_back(occupied_indexes.size());
+    list.push_back(new InnerDOF(poly, list.size()));
 
-    return (int) occupied_indexes.size() - 1;
+    return list.size() - 1;
 }
 
 List<DOF *> DOFS::getDOFS() {
