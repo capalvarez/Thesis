@@ -32,16 +32,11 @@ Element::Element(Polygon p, List<Point>& points, DOFS& out, int k) {
         dofs.push_back(out.addInnerDOF(innerBase.getPolinomial(l)));
     }
 
-
-
-
     std::vector<Point> pointVector = points.getList();
-    initMatrizAndVector(dofs, pointVector, weights, p, k);
+    initMatrix(out, pointVector, weights, p, k);
 }
 
-
-void Element::initMatrizAndVector(std::vector<DOF*> dofs, std::vector<Point> points, std::vector<double> weight,
-                                  Polygon p, int k) {
+void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> weight, Polygon p, int k) {
     BasePolinomials b(k);
 
     Eigen::MatrixXd D;
@@ -54,7 +49,7 @@ void Element::initMatrizAndVector(std::vector<DOF*> dofs, std::vector<Point> poi
         for(int poly_id=1; poly_id<b.nOfPolinomials(); poly_id++){
             Pair<int> coefficients = b.getPolinomial(poly_id);
 
-            D(dof_id,poly_id) = dofs[dof_id]->getValue(points, coefficients, p);
+            D(dof_id,poly_id) = d.get(dofs[dof_id])->getValue(points, coefficients, p);
         }
     }
 
@@ -71,8 +66,8 @@ void Element::initMatrizAndVector(std::vector<DOF*> dofs, std::vector<Point> poi
         Pair<int> poly = b.getPolinomial(poly_id);
 
         for(int local=0;local<dofs.size();local++){
-            B(poly_id,local) = dofs[local]->lineIntegral(local,k,p,weight,points,poly) +
-                    dofs[local]->laplacianIntegral(poly,p);
+            B(poly_id,local) = d.get(dofs[local])->lineIntegral(local,k,p,weight,points,poly) +
+                    d.get(dofs[local])->laplacianIntegral(poly,p);
         }
     }
 
@@ -95,20 +90,34 @@ Eigen::MatrixXd Element::getK() {
     return this->K;
 }
 
+void Element::initVector() {
+
+}
+
+Eigen::VectorXd Element::getF() {
+    return this->f;
+}
 
 void Element::assembleK(DOFS out, Eigen::MatrixXd& Kglobal) {
-    std::vector<DOF*> dofs = getDOFS(out);
-
     for (int i = 0; i < this->K.rows(); i++) {
-        int globalI = dofs[i]->globalIndex();
+        int globalI = out.get(this->dofs[i])->globalIndex();
 
         for (int j = 0; j < this->K.cols(); j++) {
-            int globalJ = dofs[j]->globalIndex();
+            int globalJ = out.get(this->dofs[j])->globalIndex();
 
             Kglobal(globalI, globalJ) = Kglobal(globalI, globalJ) + this->K(i, j);
         }
     }
 }
+
+void Element::assembleF(DOFS out, Eigen::VectorXd &Fglobal) {
+    for (int i = 0; i < this->K.rows(); i++) {
+        int globalI = out.get(this->dofs[i])->globalIndex();
+
+        Fglobal(globalI) = Fglobal(globalI) + this->f(i);
+    }
+}
+
 
 
 

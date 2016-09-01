@@ -57,7 +57,7 @@ template class List<Point>;
 template class List<Segment>;
 template class List<Polygon>;
 template class List<int>;
-template class List<OuterDOF*>;
+template class List<DOF*>;
 
 
 

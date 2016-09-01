@@ -33,7 +33,7 @@ TEST(BMatrixTest, InitializationTest){
     points.push_back(Point(0,0.5));
 
     std::vector<DOF*> dofs2 = {new VertexDOF(0), new VertexDOF(1), new VertexDOF(2), new VertexDOF(3), new EdgeDOF(4),
-                               new EdgeDOF(5), new EdgeDOF(6), new EdgeDOF(7), new InnerDOF(Pair<int>(0,0,1))};
+                               new EdgeDOF(5), new EdgeDOF(6), new EdgeDOF(7), new InnerDOF(Pair<int>(0,0),1)};
 
     BMatrix b2 (2, dofs2, p, base2, points);
 

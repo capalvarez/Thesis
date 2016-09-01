@@ -8,7 +8,10 @@
 class DOFS {
 private:
     List<DOF*> list;
-    std::vector<int> occupied_indexes;
+    std::vector<int> occupied_point_indexes;
+    std::vector<int> outer_indexes;
+
+    int addOuterDOF(int index, int type);
 public:
     int addVertexDOF(int index);
     int addEdgeDOF(int index);
