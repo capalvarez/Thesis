@@ -1,8 +1,10 @@
 #ifndef THESIS_INNERDOF_H
 #define THESIS_INNERDOF_H
 
-
+#include <models/integration/IntegrationPolygon.h>
+#include <utilities/operations.h>
 #include "DOF.h"
+#include <veamy/models/integration/functions/MaMbFunction.h>
 
 class InnerDOF : public DOF{
 private:

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <models/integration/IntegrationFunction.h>
 #include "Element.h"
 
 Element::Element(Polygon p, List<Point>& points, DOFS& out, int k) {
@@ -92,7 +93,28 @@ Eigen::MatrixXd Element::getK() {
     return this->K;
 }
 
-void Element::initVector() {
+void Element::initVector(int k) {
+    BasePolinomials b(k);
+
+    Eigen::MatrixXd H;
+    H = Eigen::MatrixXd::Zero(b.nOfPolinomials(), b.nOfPolinomials());
+
+    for (int alpha=0;alpha<b.nOfPolinomials();++alpha){
+        for (int beta = 0; beta < b.nOfPolinomials(); ++beta) {
+            Pair<int> mAlpha = b.getPolinomial(alpha);
+            Pair<int> mBeta = b.getPolinomial(beta);
+
+
+
+
+            //H(alpha,beta) =
+
+        }
+    }
+
+
+
+
 
 }
 

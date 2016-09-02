@@ -22,6 +22,8 @@ private:
 public:
     Polygon(std::vector<int>& points, std::vector<Point>& p);
     Polygon(std::vector<Point>& p);
+    Polygon(const Polygon &obj);
+    Polygon();
 
     double getDiameter();
     double getArea();

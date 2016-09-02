@@ -33,6 +33,19 @@ Polygon::Polygon(std::vector<Point> &p) {
     this->centroid = this->calculateCentroid(p);
 }
 
+
+Polygon::Polygon() {
+
+}
+
+Polygon::Polygon(const Polygon &obj) {
+    this->area = obj.area;
+    this->diameter = obj.diameter;
+    this->centroid = obj.centroid;
+
+    this->points.assign(obj.points.begin(), obj.points.end());
+}
+
 double Polygon::calculateDiameter(std::vector<Point>& p) {
     std::vector<std::pair<Point,Point> > rotatingCalipers = convex::rotatingCalipers(p);
     double max = -1;
