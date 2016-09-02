@@ -7,6 +7,8 @@
 #include <matrix/dof/OuterDOF.h>
 #include <matrix/dof/DOFS.h>
 
+typedef double(*func_t)(double, double);
+
 class Veamer {
 private:
     std::vector<Element> elements;
@@ -16,7 +18,7 @@ private:
     int k;
 public:
     Veamer(int k);
-    void loadData(Mesh m);
+    void loadData(Mesh m, func_t f);
     Eigen::MatrixXd simulate();
 
     std::vector<Element> getElements();
