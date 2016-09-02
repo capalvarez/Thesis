@@ -6,14 +6,14 @@ Veamer::Veamer(int k) {
     this->k = k;
 }
 
-void Veamer::loadData(Mesh m) {
+void Veamer::loadData(Mesh m, func_t f) {
     std::vector<Point> meshPoints = m.getPoints();
     this->points.push_list(meshPoints);
 
     std::vector<Polygon> polygons = m.getElements();
 
     for(int i=0;i<polygons.size();i++){
-        elements.push_back(Element(polygons[i], this->points, outerDOFs, k));
+        elements.push_back(Element(polygons[i], this->points, outerDOFs, k, f));
     }
 }
 

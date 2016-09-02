@@ -2,7 +2,7 @@
 #include <models/integration/IntegrationFunction.h>
 #include "Element.h"
 
-Element::Element(Polygon p, List<Point>& points, DOFS& out, int k) {
+Element::Element(Polygon p, List<Point>& points, DOFS& out, int k, func_t f) {
     std::vector<int> vertex = p.getPoints();
 
     for(int i=0;i<vertex.size();i++){
@@ -34,10 +34,10 @@ Element::Element(Polygon p, List<Point>& points, DOFS& out, int k) {
     }
 
     std::vector<Point> pointVector = points.getList();
-    initMatrix(out, pointVector, weights, p, k);
+    initMatrix(out, pointVector, weights, p, k, f);
 }
 
-void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> weight, Polygon p, int k) {
+void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> weight, Polygon p, int k, func_t f) {
     BasePolinomials b(k);
 
     Eigen::MatrixXd D;
@@ -72,7 +72,7 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> 
         }
     }
 
-    std::cout << B << std::endl << std::endl  << D << std::endl << std::endl;
+    //std::cout << B << std::endl << std::endl  << D << std::endl << std::endl;
 
     Eigen::MatrixXd G;
     Eigen::MatrixXd PiS;
@@ -87,35 +87,110 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> 
     G.row(0).setZero();
 
     this->K = PiS.transpose()*G*PiS + (I-Pi).transpose()*(I-Pi);
-}
-
-Eigen::MatrixXd Element::getK() {
-    return this->K;
-}
-
-void Element::initVector(int k) {
-    BasePolinomials b(k);
 
     Eigen::MatrixXd H;
     H = Eigen::MatrixXd::Zero(b.nOfPolinomials(), b.nOfPolinomials());
+
+    IntegrationPolygon polygon(p.getPoints(), points);
 
     for (int alpha=0;alpha<b.nOfPolinomials();++alpha){
         for (int beta = 0; beta < b.nOfPolinomials(); ++beta) {
             Pair<int> mAlpha = b.getPolinomial(alpha);
             Pair<int> mBeta = b.getPolinomial(beta);
 
+            MaMbFunction* f = new MaMbFunction(mAlpha, mBeta, p);
 
+            H(alpha,beta) = polygon.integrate(f, points);
 
-
-            //H(alpha,beta) =
-
+            delete(f);
         }
     }
 
+    std::cout << H << std::endl;
 
+    if(k>1){
+        Eigen::MatrixXd C;
+        C = Eigen::MatrixXd::Zero(b.nOfPolinomials(), this->dofs.size());
 
+        for (int alpha = 0; alpha < b.nOfPolinomials() - 2; ++alpha) {
+            C(alpha, k*p.numberOfSides() - 1 + alpha) = p.getArea();
+        }
 
+        Eigen::MatrixXd Cfull = H*PiS;
 
+        C.row(b.nOfPolinomials() - 2) = Cfull.row(b.nOfPolinomials() - 2);
+        C.row(b.nOfPolinomials() - 1) = Cfull.row(b.nOfPolinomials() - 1);
+
+        Eigen::MatrixXd PiZeroS;
+        PiZeroS = H.inverse() * C;
+
+        class LoadTerm : public IntegrationFunction{
+        private:
+            int i;
+            int k;
+            Polygon poly;
+            Eigen::MatrixXd PiZS;
+            func_t f;
+        public:
+            LoadTerm(int i, int k, Polygon p, func_t f, Eigen::MatrixXd PiZeroS){
+                this->i = i;
+                this->k = k;
+                this->poly = p;
+                this->f = f;
+                this->PiZS = PiZeroS;
+            }
+
+            double call(double x, double y){
+                double xFactor = ((x - poly.getCentroid().getX())/poly.getDiameter());
+                double yFactor = ((y - poly.getCentroid().getY())/poly.getDiameter());
+
+                BasePolinomials b(k);
+                double PiSPhi = 0;
+
+                for (int alpha = 0; alpha < b.nOfPolinomials(); ++alpha) {
+                    Pair<int> a = b.getPolinomial(alpha);
+
+                    PiSPhi += PiZS(alpha,i)*operations::power(xFactor,a.first)*operations::power(yFactor,a.second);
+                }
+
+                return f(x,y)*PiSPhi;
+            }
+        };
+
+        this->f = Eigen::VectorXd::Zero(dofs.size());
+
+        for (int i = 0; i < dofs.size(); ++i) {
+            LoadTerm* l = new LoadTerm(i,k,p,f,PiZeroS);
+            this->f(i) = polygon.integrate(l,points);
+
+            delete(l);
+        }
+    }else{
+        class LoadTerm: public IntegrationFunction{
+        private:
+            func_t f;
+        public:
+            LoadTerm(func_t f){
+                this->f = f;
+            }
+            double call(double x, double y){
+                return f(x,y);
+            }
+        };
+
+        this->f = Eigen::VectorXd::Zero(dofs.size());
+        LoadTerm* l = new LoadTerm(f);
+
+        for (int i = 0; i < dofs.size(); ++i) {
+            this->f(i) = polygon.integrate(l,points)/p.numberOfSides();
+        }
+
+        delete(l);
+    }
+}
+
+Eigen::MatrixXd Element::getK() {
+    return this->K;
 }
 
 Eigen::VectorXd Element::getF() {
