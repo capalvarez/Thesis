@@ -18,7 +18,7 @@ private:
     Eigen::MatrixXd K;
     Eigen::MatrixXd f;
     void initMatrix(DOFS d, std::vector<Point> points, std::vector<double> weight, Polygon p, int k);
-    void initVector();
+    void initVector(int k);
 public:
     Element(Polygon p, List<Point>& points, DOFS& out, int k);
     Eigen::MatrixXd getK();
