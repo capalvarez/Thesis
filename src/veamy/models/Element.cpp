@@ -67,13 +67,13 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> 
         Pair<int> poly = b.getPolinomial(poly_id);
 
         for(int local=0;local<dofs.size();local++){
-            B(poly_id,local) = d.get(dofs[local])->lineIntegral(local,k,p,weight,points,poly) +
+            B(poly_id,local) = d.get(dofs[local])->lineIntegral(local,this->dofs,d,k,p,weight,points,poly) +
                     d.get(dofs[local])->laplacianIntegral(poly,p);
         }
     }
 
-    //std::cout << B << std::endl << std::endl  << D << std::endl << std::endl;
-
+    std::cout << B << std::endl << std::endl  << D << std::endl << std::endl;
+/*
     Eigen::MatrixXd G;
     Eigen::MatrixXd PiS;
     Eigen::MatrixXd Pi;
@@ -106,7 +106,7 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> 
         }
     }
 
-    std::cout << H << std::endl;
+    //std::cout << H << std::endl;
 
     if(k>1){
         Eigen::MatrixXd C;
@@ -186,7 +186,7 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> 
         }
 
         delete(l);
-    }
+    }*/
 }
 
 Eigen::MatrixXd Element::getK() {

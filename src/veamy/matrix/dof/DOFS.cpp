@@ -4,9 +4,9 @@
 #include "EdgeDOF.h"
 #include "InnerDOF.h"
 
-int DOFS::addOuterDOF(int index, int type) {
+int DOFS::addOuterDOF(int point_index, int type) {
     typename std::vector<int>::iterator it;
-    it = std::find(occupied_point_indexes.begin(), occupied_point_indexes.end(), index);
+    it = std::find(occupied_point_indexes.begin(), occupied_point_indexes.end(), point_index);
 
     if(it!=occupied_point_indexes.end()){
         int outerDOF_index = (int) std::distance(occupied_point_indexes.begin(),it);
@@ -16,12 +16,12 @@ int DOFS::addOuterDOF(int index, int type) {
 
     int newIndex;
     if(type==0){
-        newIndex = list.push_back(new VertexDOF(index));
+        newIndex = list.push_back(new VertexDOF(list.size(),point_index));
     }else{
-        newIndex = list.push_back(new EdgeDOF(index));
+        newIndex = list.push_back(new EdgeDOF(list.size(),point_index));
     }
 
-    occupied_point_indexes.push_back(index);
+    occupied_point_indexes.push_back(point_index);
     outer_indexes.push_back(newIndex);
 
     return newIndex;
