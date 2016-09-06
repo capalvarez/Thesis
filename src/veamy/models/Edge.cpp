@@ -5,6 +5,14 @@ Edge::Edge(int p1, int p2) {
     this->p2 = p2;
 }
 
+Pair<double> Edge::getNormal(DOFS dofs, std::vector<Point> points) {
+    Point P1 = points[dofs.get(p1)->pointIndex()];
+    Point P2 = points[dofs.get(p2)->pointIndex()];
+
+    return Pair<double>((P2.getY()-P1.getY()), -(P2.getX()-P1.getX()));
+}
+
+
 Pair<double> Edge::getNormal(std::vector<Point> points) {
     Point P1 = points[p1];
     Point P2 = points[p2];

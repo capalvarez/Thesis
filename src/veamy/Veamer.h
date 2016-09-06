@@ -13,10 +13,11 @@ class Veamer {
 private:
     std::vector<Element> elements;
     List<Point> points;
-    DOFS outerDOFs;
+
 
     int k;
 public:
+    DOFS outerDOFs;
     Veamer(int k);
     void loadData(Mesh m, func_t f);
     Eigen::MatrixXd simulate();

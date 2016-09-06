@@ -30,6 +30,9 @@ TEST(VeamerTest, LoadDataHigherOrderTest){
     std::vector<int> p1 ={0,1,4,5};
     std::vector<int> p2 ={1,2,3,4};
 
+    Polygon poly1(p1,points);
+    Polygon poly2(p2,points);
+
     std::vector<Polygon> polygons = {Polygon(p1,points), Polygon(p2,points)};
     std::vector<Segment> segments;
 

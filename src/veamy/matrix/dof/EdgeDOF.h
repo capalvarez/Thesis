@@ -3,11 +3,12 @@
 
 
 #include "OuterDOF.h"
+#include "DOFS.h"
 
 class EdgeDOF : public OuterDOF{
 public:
-    EdgeDOF(int i);
-    double lineIntegral(int local_id, int k, Polygon p, std::vector<double> weights, std::vector<Point> points, Pair<int> poly);
+    EdgeDOF(int i, int p);
+    double lineIntegral(int local_id, std::vector<int> elementDOFS, DOFS globalDOFS, int k, Polygon p, std::vector<double> weights, std::vector<Point> points, Pair<int> poly);
 };
 
 

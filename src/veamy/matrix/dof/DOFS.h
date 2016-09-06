@@ -3,7 +3,10 @@
 
 #include <array>
 #include <x-poly/utilities/List.h>
-#include "OuterDOF.h"
+#include <veamy/utilities/Pair.h>
+#include "DOF.h"
+
+class DOF;
 
 class DOFS {
 private:
@@ -11,7 +14,7 @@ private:
     std::vector<int> occupied_point_indexes;
     std::vector<int> outer_indexes;
 
-    int addOuterDOF(int index, int type);
+    int addOuterDOF(int point_index, int type);
 public:
     int addVertexDOF(int index);
     int addEdgeDOF(int index);

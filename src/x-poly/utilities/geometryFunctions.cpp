@@ -13,9 +13,7 @@ namespace geometry_functions{
         return area2(p1,p2,p3)==0;
     }
 
-    double triangleArea(Point p1, Point p2){
-        Point origin = *new Point();
-
+    double triangleArea(Point p1, Point p2, Point origin){
         return area2(p1,p2,origin)/2.0;
     }
 }
