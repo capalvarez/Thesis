@@ -16,9 +16,11 @@ int DOFS::addOuterDOF(int point_index, int type) {
 
     int newIndex;
     if(type==0){
-        newIndex = list.push_back(new VertexDOF(list.size(),point_index));
+        newIndex = list.push_back(new VertexDOF(list.size(),point_index, DOF::Axis::x));
+        list.push_back(new VertexDOF(list.size(), point_index, DOF::Axis::y));
     }else{
-        newIndex = list.push_back(new EdgeDOF(list.size(),point_index));
+        newIndex = list.push_back(new EdgeDOF(list.size(),point_index, DOF::Axis::x));
+        list.push_back(new EdgeDOF(list.size(), point_index, DOF::Axis::y));
     }
 
     occupied_point_indexes.push_back(point_index);
@@ -36,9 +38,9 @@ int DOFS::addEdgeDOF(int index) {
     return addOuterDOF(index, 1);
 }
 
-
 int DOFS::addInnerDOF(Pair<int> poly) {
-    list.push_back(new InnerDOF(poly, list.size()));
+    list.push_back(new InnerDOF(poly, list.size(), DOF::Axis::x));
+    list.push_back(new InnerDOF(poly, list.size(), DOF::Axis::y));
 
     return list.size() - 1;
 }

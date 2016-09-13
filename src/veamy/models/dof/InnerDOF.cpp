@@ -1,8 +1,9 @@
 #include "InnerDOF.h"
 
-InnerDOF::InnerDOF(Pair<int> a, int index) {
+InnerDOF::InnerDOF(Pair<int> a, int index, Axis axis) {
     this->alpha = a;
     this->index = index;
+    this->d = axis;
 }
 
 double InnerDOF::getValue(std::vector<Point> points, Pair<int> coeffs, Polygon p) {

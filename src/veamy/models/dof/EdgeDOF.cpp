@@ -3,7 +3,7 @@
 #include "EdgeDOF.h"
 
 
-EdgeDOF::EdgeDOF(int i, int p) : OuterDOF(i, p){}
+EdgeDOF::EdgeDOF(int i, int p, Axis a) : OuterDOF(i, p, a){}
 
 
 double EdgeDOF::lineIntegral(int local_id, std::vector<int> elementDOFS, DOFS globalDOFS, int k, Polygon p, std::vector<double> weights, std::vector<Point> points, Pair<int> poly) {
