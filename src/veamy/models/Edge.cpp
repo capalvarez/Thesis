@@ -13,13 +13,6 @@ Pair<double> Edge::getNormal(DOFS dofs, std::vector<Point> points) {
 }
 
 
-Pair<double> Edge::getNormal(std::vector<Point> points) {
-    Point P1 = points[p1];
-    Point P2 = points[p2];
-
-    return Pair<double>((P2.getY()-P1.getY()), -(P2.getX()-P1.getX()));
-}
-
 double Edge::getLength(std::vector<Point> points) {
     Point P1 = points[p1];
     Point P2 = points[p2];

@@ -5,6 +5,7 @@
 #include <utilities/Pair.h>
 #include <vector>
 #include <matrix/dof/DOFS.h>
+#include <models/dof/DOFS.h>
 
 class Edge {
 private:
@@ -14,7 +15,6 @@ public:
     Edge(int p1, int p2);
 
     Pair<double> getNormal(DOFS dofs, std::vector<Point> points);
-    Pair<double> getNormal(std::vector<Point> points);
     double getLength(std::vector<Point> points);
     std::vector<int> getDOFsInside(int k, int numberSides);
 

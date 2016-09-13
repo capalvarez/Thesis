@@ -19,7 +19,7 @@ TEST_F(VEMPolygonTest, AverageTest){
     class Sum : public IntegrationFunction{
     public:
         double call(double x, double y){
-            return x + y;
+            return (x + y);
         }
     };
 
