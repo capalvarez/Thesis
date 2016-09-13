@@ -2,9 +2,10 @@
 #include "OuterDOF.h"
 
 
-OuterDOF::OuterDOF(int i, int p) {
+OuterDOF::OuterDOF(int i, int p, Axis axis) {
     this->index = i;
     this->point_index = p;
+    this->d = axis;
 }
 
 double OuterDOF::getValue(std::vector<Point> points, Pair<int> coeffs, Polygon p) {

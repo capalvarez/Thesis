@@ -1,14 +1,14 @@
 #include "PointConstraint.h"
 
-PointConstraint::PointConstraint(Point p, Constraint::ConstraintDirection d) {
+PointConstraint::PointConstraint(Point p, Constraint::Direction d) {
 
 }
 
-PointConstraint::PointConstraint(std::vector<Point> p, Constraint::ConstraintDirection d) {
+PointConstraint::PointConstraint(std::vector<Point> p, Constraint::Direction d) {
 
 }
 
-void void PointConstraint::addToMap(std::unordered_map<Point, int, PointHasher> map) {
+void PointConstraint::addToMap(std::unordered_map<Point, int, PointHasher> map) {
 
 }
 

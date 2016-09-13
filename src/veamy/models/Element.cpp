@@ -1,5 +1,5 @@
 #include <iostream>
-#include <models/integration/IntegrationFunction.h>
+#include <matrix/integration/IntegrationFunction.h>
 #include "Element.h"
 
 Element::Element(Polygon p, List<Point>& points, DOFS& out, int k, func_t f) {

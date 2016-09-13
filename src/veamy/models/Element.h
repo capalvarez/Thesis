@@ -1,12 +1,12 @@
 #ifndef THESIS_ELEMENT_H
 #define THESIS_ELEMENT_H
 
-#include <veamy/matrix/dof/DOF.h>
-#include <matrix/dof/InnerDOF.h>
+#include <veamy/models/dof/DOF.h>
+#include <models/dof/InnerDOF.h>
 #include <x-poly/utilities/List.h>
-#include <matrix/dof/DOFS.h>
+#include <models/dof/DOFS.h>
 #include <x-poly/models/polygon/Polygon.h>
-#include <matrix/dof/VertexDOF.h>
+#include <models/dof/VertexDOF.h>
 #include <matrix/lobattoQuadrature.h>
 #include <matrix/BasePolinomials.h>
 #include <veamy/lib/Eigen/Dense>

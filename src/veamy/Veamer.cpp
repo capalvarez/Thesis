@@ -32,14 +32,15 @@ Eigen::VectorXd Veamer::simulate() {
         elements[i].assembleF(DOFs, f);
     }
 
-    //Apply constraints
+    //Apply constrained_points
     std::vector<int> c = this->constraints.getConstrainedDOF();
 
     for (int j = 0; j < c.size(); ++j) {
+        matrixOps::removeRow(K, c[j]);
+        matrixOps::removeColumn(K, c[j]);
+
 
     }
-
-
 
     //Solve the system
     Eigen::VectorXd x = K.colPivHouseholderQr().solve(f);

@@ -10,7 +10,7 @@ class OuterDOF : public DOF {
 protected:
     int point_index;
 public:
-    OuterDOF(int i, int p);
+    OuterDOF(int i, int p, Axis axis);
 
     double getValue(std::vector<Point> points, Pair<int> coeffs, Polygon p);
     virtual double lineIntegral(int local_id, std::vector<int> elementDOFS, DOFS globalDOFS, int k, Polygon p, std::vector<double> weights, std::vector<Point> points, Pair<int> poly) = 0;
