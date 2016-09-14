@@ -3,8 +3,7 @@
 
 #include <x-poly/models/polygon/Polygon.h>
 #include <veamy/utilities/Pair.h>
-#include "DOF.h"
-#include "DOFS.h"
+#include <veamy/models/dof/DOF.h>
 
 class OuterDOF : public DOF {
 protected:
@@ -13,7 +12,7 @@ public:
     OuterDOF(int i, int p, Axis axis);
 
     double getValue(std::vector<Point> points, Pair<int> coeffs, Polygon p);
-    virtual double lineIntegral(int local_id, std::vector<int> elementDOFS, DOFS globalDOFS, int k, Polygon p, std::vector<double> weights, std::vector<Point> points, Pair<int> poly) = 0;
+    virtual double lineIntegral(int local_id, std::vector<int> elementDOFS, std::vector<DOF*> globalDOFS, int k, Polygon p, std::vector<double> weights, std::vector<Point> points, Pair<int> poly) = 0;
     double laplacianIntegral(Pair<int> poly, Polygon p);
     int globalIndex();
     int pointIndex();

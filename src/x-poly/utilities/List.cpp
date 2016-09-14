@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <x-poly/models/polygon/Polygon.h>
 #include <x-poly/models/basic/Segment.h>
-#include <veamy/matrix/dof/OuterDOF.h>
+#include <veamy/models/dof/OuterDOF.h>
 #include "List.h"
 
 template <typename T>
