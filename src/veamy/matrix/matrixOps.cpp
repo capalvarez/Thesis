@@ -24,4 +24,15 @@ namespace matrixOps {
 
         matrix.conservativeResize(numRows,numCols);
     }
+
+    Eigen::MatrixXd getColumns(Eigen::MatrixXd& matrix, std::vector<int> cols){
+        Eigen::MatrixXd newMatrix;
+        newMatrix = Eigen::MatrixXd::Zero(matrix.rows(),cols.size());
+
+        for (int i = 0; i < cols.size(); ++i) {
+            newMatrix.row(i) = matrix.row(cols[i]);
+        }
+
+        return newMatrix;
+    }
 }

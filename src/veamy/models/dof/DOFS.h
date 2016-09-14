@@ -4,9 +4,11 @@
 #include <array>
 #include <x-poly/utilities/List.h>
 #include <veamy/utilities/Pair.h>
-#include "DOF.h"
-
-class DOF;
+#include <veamy/models/dof/VertexDOF.h>
+#include <veamy/models/dof/EdgeDOF.h>
+#include <veamy/models/dof/InnerDOF.h>
+#include <algorithm>
+#include <veamy/models/constraints/Constraints.h>
 
 class DOFS {
 private:
@@ -14,11 +16,11 @@ private:
     std::vector<int> occupied_point_indexes;
     std::vector<int> outer_indexes;
 
-    int addOuterDOF(int point_index, int type);
+    Pair<int> addOuterDOF(Constraints constraints, std::vector<Point> points, int point_index, int type);
 public:
-    int addVertexDOF(int index);
-    int addEdgeDOF(int index);
-    int addInnerDOF(Pair<int> poly);
+    Pair<int> addVertexDOF(Constraints constraints, std::vector<Point> points, int index);
+    Pair<int> addEdgeDOF(Constraints constraints, std::vector<Point> points, int index);
+    Pair<int> addInnerDOF(Pair<int> poly);
 
     List<DOF*> getDOFS();
     int size();

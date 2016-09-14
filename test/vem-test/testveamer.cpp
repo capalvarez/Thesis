@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <Veamer.h>
 #include <models/constraints/PointConstraint.h>
+#include <models/constraints/values/Constant.h>
 
 double sum (double x, double y){
     return x + y;
@@ -21,8 +22,8 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     Mesh m (points,polygons,segments);
     Constraints c;
 
-    PointConstraint* const1 = new PointConstraint(Point(0,0), Constraint::Direction::Total);
-    PointConstraint* const2 = new PointConstraint(Point(0,1), Constraint::Direction::Total);
+    PointConstraint* const1 = new PointConstraint(Point(0,0), Constraint::Direction::Total, new Constant(0));
+    PointConstraint* const2 = new PointConstraint(Point(0,1), Constraint::Direction::Total, new Constant(0));
 
     c.addConstraint(const1);
     c.addConstraint(const2);

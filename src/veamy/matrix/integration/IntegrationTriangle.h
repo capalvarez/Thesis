@@ -3,7 +3,7 @@
 
 #include <x-poly/models/polygon/Triangle.h>
 #include <x-poly/models/basic/Point.h>
-#include <lib/Eigen/Dense>
+#include <veamy/lib/Eigen/Dense>
 #include "IntegrationFunction.h"
 
 class IntegrationTriangle{

@@ -21,7 +21,7 @@ private:
 
     void initMatrix(DOFS d, std::vector<Point> points, std::vector<double> weight, Polygon p, int k, func_t f);
 public:
-    Element(Polygon p, List<Point>& points, DOFS& out, int k, func_t f);
+    Element(Constraints constraints, Polygon p, List<Point>& points, DOFS& out, int k, func_t f);
     Eigen::MatrixXd getK();
     Eigen::VectorXd getF();
     void assembleK(DOFS out, Eigen::MatrixXd& Kglobal);
