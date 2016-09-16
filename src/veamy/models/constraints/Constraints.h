@@ -13,12 +13,12 @@
 
 class Constraints {
 private:
-    std::unordered_map<Point, Constraint*, PointHasher> constrained_points;
-    std::unordered_map<int, Constraint*, intHasher> constraints_map;
+    std::unordered_map<Point, Constraint, PointHasher> constrained_points;
+    std::unordered_map<int, Constraint, intHasher> constraints_map;
     List<int> constrained_dofs;
 public:
     Constraints();
-    void addConstraint(Constraint* c);
+    void addConstraint(Constraint c);
     bool isConstrained(Point p);
     std::vector<int> getConstrainedDOF();
     void addConstrainedDOF(Point p, int DOF_index, DOF::Axis axis);

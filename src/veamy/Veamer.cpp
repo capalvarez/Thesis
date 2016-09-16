@@ -15,7 +15,7 @@ void Veamer::loadGeometry(Mesh m, Constraints constraints, func_t f) {
     std::vector<Polygon> polygons = m.getElements();
 
     for(int i=0;i<polygons.size();i++){
-        elements.push_back(Element(constraints, polygons[i], this->points, DOFs, k, f));
+        elements.push_back(Element(this->constraints, polygons[i], this->points, DOFs, k, f));
     }
 }
 
@@ -40,8 +40,6 @@ Eigen::VectorXd Veamer::simulate() {
 
     Eigen::VectorXd boundary_values = this->constraints.getBoundaryValues(this->points.getList(), this->DOFs.getDOFS());
 
-    std::cout << K << std::endl;
-
 
     for (int i = 0; i < K.rows(); ++i) {
         f(i) = f(i) - (K_b.row(i)*boundary_values);
@@ -50,6 +48,8 @@ Eigen::VectorXd Veamer::simulate() {
     for (int j = 0; j < c.size(); ++j) {
         matrixOps::removeRow(K, c[j]);
         matrixOps::removeColumn(K, c[j]);
+
+        matrixOps::removeElement(f,c[j]);
     }
 
     //Solve the system

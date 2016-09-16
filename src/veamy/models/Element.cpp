@@ -2,7 +2,7 @@
 #include <matrix/integration/IntegrationFunction.h>
 #include "Element.h"
 
-Element::Element(Constraints constraints, Polygon p, List<Point>& points, DOFS& out, int k, func_t f) {
+Element::Element(Constraints& constraints, Polygon p, List<Point>& points, DOFS& out, int k, func_t f) {
     std::vector<int> vertex = p.getPoints();
 
     for(int i=0;i<vertex.size();i++){
@@ -81,8 +81,6 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> 
                     d.get(dofs[local])->laplacianIntegral(poly,p);
         }
     }
-
-    std::cout << B << std::endl << std::endl;
 
     Eigen::MatrixXd G;
     Eigen::MatrixXd PiS;
