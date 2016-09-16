@@ -40,6 +40,9 @@ Eigen::VectorXd Veamer::simulate() {
 
     Eigen::VectorXd boundary_values = this->constraints.getBoundaryValues(this->points.getList(), this->DOFs.getDOFS());
 
+    std::cout << K << std::endl;
+
+
     for (int i = 0; i < K.rows(); ++i) {
         f(i) = f(i) - (K_b.row(i)*boundary_values);
     }

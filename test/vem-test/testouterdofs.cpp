@@ -1,11 +1,14 @@
 #include <gtest/gtest.h>
-#include <matrix/dof/DOFS.h>
+#include <veamy/models/dof/DOFS.h>
 
 TEST(OuterDOFTest, AddVertexDOFTest){
     DOFS outer;
-    outer.addVertexDOF(3);
-    outer.addVertexDOF(2);
-    outer.addVertexDOF(3);
+    Constraints c;
+    std::vector<Point> points;
+
+    outer.addVertexDOF(c,points,3);
+    outer.addVertexDOF(c,points,2);
+    outer.addVertexDOF(c,points,3);
 
     List<DOF*> list = outer.getDOFS();
     EXPECT_EQ(list.size(),2);

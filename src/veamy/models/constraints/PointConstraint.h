@@ -18,6 +18,8 @@ public:
     PointConstraint(std::vector<Point> p, Direction d, ConstraintValue* value);
 
     double getValue(Point p);
+    void addToMap(std::unordered_map<Point, Constraint*, PointHasher> map);
+
 };
 
 

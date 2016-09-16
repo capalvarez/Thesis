@@ -10,7 +10,10 @@ public:
 
     virtual double getValue(Point p) = 0;
     virtual void addToMap(std::unordered_map<Point, Constraint*, PointHasher> map) = 0;
-    virtual Direction getDirection() = 0;
+    Direction getDirection();
+
+protected:
+    Direction direction;
 };
 
 #endif

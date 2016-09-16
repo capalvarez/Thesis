@@ -32,7 +32,7 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
 
     Eigen::VectorXd x = v.simulate();
 
-    std::cout << x << std::endl << std::endl;
+    //std::cout << x << std::endl << std::endl;
 }
 
 TEST(VeamerTest, LoadDataHigherOrderTest){
@@ -55,9 +55,9 @@ TEST(VeamerTest, LoadDataHigherOrderTest){
     //std::cout << elements[0].getK() << std::endl << std::endl << elements[1].getK();
 
     Eigen::MatrixXd K = v.simulate();
-    Eigen::FullPivLU<Eigen::MatrixXd> lu(K);
+    //Eigen::FullPivLU<Eigen::MatrixXd> lu(K);
 
-    std::cout << K << std::endl << std::endl << lu.isInvertible();
+    //std::cout << K << std::endl << std::endl << lu.isInvertible();
 
 
 }

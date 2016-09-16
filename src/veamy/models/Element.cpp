@@ -69,6 +69,7 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> 
         B.row(0).setOnes();
         B.row(0) = B.row(0)*(1/(double)p.numberOfSides());
     }else{
+        B(0,dofs.size()-2) = 1;
         B(0,dofs.size()-1) = 1;
     }
 
@@ -80,6 +81,8 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> 
                     d.get(dofs[local])->laplacianIntegral(poly,p);
         }
     }
+
+    std::cout << B << std::endl << std::endl;
 
     Eigen::MatrixXd G;
     Eigen::MatrixXd PiS;
