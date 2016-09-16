@@ -2,8 +2,12 @@
 
 Constraints::Constraints() {}
 
-void Constraints::addConstraint(Constraint *c) {
-    c->addToMap(constrained_points);
+void Constraints::addConstraint(Constraint c) {
+    List<Point> points = c.getPoints();
+
+    for (int i = 0; i < points.size(); ++i) {
+        constrained_points.insert(std::make_pair(points.get(i), c));
+    }
 }
 
 bool Constraints::isConstrained(Point p) {
@@ -16,8 +20,8 @@ std::vector<int> Constraints::getConstrainedDOF() {
 
 void Constraints::addConstrainedDOF(Point p, int DOF_index, DOF::Axis axis) {
     if(isConstrained(p)){
-        Constraint* constraint = constrained_points[p];
-        Constraint::Direction direction = constraint->getDirection();
+        Constraint constraint = constrained_points[p];
+        Constraint::Direction direction = constraint.getDirection();
 
         bool insert;
 
@@ -34,20 +38,20 @@ void Constraints::addConstrainedDOF(Point p, int DOF_index, DOF::Axis axis) {
 
         if(insert){
             constrained_dofs.push_back(DOF_index);
-            constraints_map.insert({DOF_index,constraint});
+            constraints_map.insert(std::pair<int,Constraint>(DOF_index, constraint));
         }
     }
 }
 
 Eigen::VectorXd Constraints::getBoundaryValues(std::vector<Point> points, List<DOF*> dofs) {
     Eigen::VectorXd values;
-    values = Eigen::VectorXd::Zero(dofs.size());
+    values = Eigen::VectorXd::Zero(constrained_dofs.size());
 
     for (int i = 0; i < constrained_dofs.size(); ++i){
-        Constraint* constraintI = constraints_map[constrained_dofs.get(i)];
+        Constraint constraintI = constraints_map[constrained_dofs.get(i)];
         DOF* dofI = dofs.get(constrained_dofs.get(i));
 
-        values[constrained_dofs.get(i)] = constraintI->getValue(points[dofI->pointIndex()]);
+        values(i) = constraintI.getValue(points[dofI->pointIndex()]);
     }
 
     return values;

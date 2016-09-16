@@ -1,3 +1,4 @@
+#include <iostream>
 #include "matrixOps.h"
 
 namespace matrixOps {
@@ -30,9 +31,20 @@ namespace matrixOps {
         newMatrix = Eigen::MatrixXd::Zero(matrix.rows(),cols.size());
 
         for (int i = 0; i < cols.size(); ++i) {
-            newMatrix.row(i) = matrix.row(cols[i]);
+            newMatrix.col(i) = matrix.col(cols[i]);
         }
 
         return newMatrix;
+    }
+
+    void removeElement(Eigen::VectorXd& vector, int index){
+        int numRows = vector.rows()-1;
+
+        if(index<numRows){
+            vector.segment(index,numRows-index) =
+                    vector.segment(index+1,numRows-index);
+        }
+
+        vector.conservativeResize(numRows);
     }
 }
