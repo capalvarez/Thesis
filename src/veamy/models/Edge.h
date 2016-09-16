@@ -13,7 +13,7 @@ private:
 public:
     Edge(int p1, int p2);
 
-    Pair<double> getNormal(std::vector<DOF*> dofs, std::vector<Point> points);
+    Pair<double> getNormal(std::vector<int> indexes, std::vector<Point> points);
     double getLength(std::vector<Point> points);
     std::vector<int> getDOFsInside(int k, int numberSides);
 

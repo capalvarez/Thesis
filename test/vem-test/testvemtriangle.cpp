@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <x-poly/models/basic/Point.h>
-#include <models/integration/IntegrationTriangle.h>
+#include <matrix/integration/IntegrationTriangle.h>
 
 TEST(VEMTriangleTest, IntegrateTest){
     class Sum : public IntegrationFunction{
