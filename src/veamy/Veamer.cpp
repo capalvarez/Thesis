@@ -55,7 +55,22 @@ Eigen::VectorXd Veamer::simulate() {
     //Solve the system
     Eigen::VectorXd x = K.colPivHouseholderQr().solve(f);
 
-    return x;
+    int cIndex = 0;
+    int xIndex = 0;
+    Eigen::VectorXd xF;
+    xF = Eigen::VectorXd::Zero(c.size() + x.rows());
+
+    for (int i = 0; i < xF.rows(); ++i) {
+        if(i==c[cIndex]){
+            xF(i) = boundary_values(cIndex);
+            cIndex++;
+        } else{
+            xF(i) = x(xIndex);
+            xIndex++;
+        }
+    }
+
+    return xF;
 }
 
 std::vector<Element> Veamer::getElements() {
