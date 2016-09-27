@@ -11,6 +11,7 @@ private:
     Point circumcenter;
     Point calculateCircumcenter(std::vector<Point>& p);
 public:
+    Triangle();
     Triangle(std::vector<int> points, std::vector<Point>& p);
     Point getCircumcenter();
     int nextEdge(int center, EdgeData edge, std::unordered_map<Key, int, KeyHasher> edgeMap);

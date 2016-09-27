@@ -4,7 +4,6 @@
 #include "MeshGenerator.h"
 #include <vector>
 #include "lib/triangle.h"
-#include <x-poly/models/polygon/Triangle.h>
 #include <unordered_map>
 #include <x-poly/voronoi/structures/EdgeData.h>
 #include <x-poly/voronoi/structures/PointData.h>
