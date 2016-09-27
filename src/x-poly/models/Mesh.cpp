@@ -49,3 +49,7 @@ void Mesh::printInFile(std::string fileName) {
     file.close();
 }
 
+void Mesh::breakPolygons(Segment s) {
+
+}
+

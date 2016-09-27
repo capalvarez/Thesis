@@ -21,6 +21,7 @@ public:
     std::vector<Polygon> getElements();
 
     void printInFile(std::string fileName);
+    void breakPolygons(Segment s);
 };
 
 

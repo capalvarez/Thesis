@@ -7,6 +7,8 @@ Veamer::Veamer(int k) {
     this->k = k;
 }
 
+Veamer(){}
+
 void Veamer::loadGeometry(Mesh m, Constraints constraints, func_t f) {
     //TODO: Optimize space and use a map (polygon_index, element_index)
     std::vector<Point> meshPoints = m.getPoints();

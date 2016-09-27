@@ -8,6 +8,7 @@ class Crack {
 private:
     std::vector<Point> crack_path;
 public:
+    Crack();
     Crack(Point init, Point end);
     Crack(Point init, double angle, double length);
 

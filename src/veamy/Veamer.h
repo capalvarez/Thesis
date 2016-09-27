@@ -35,6 +35,7 @@ private:
 public:
     DOFS DOFs;
     Veamer(int k);
+    Veamer();
 
     void loadGeometry(Mesh m, Constraints constraints, func_t f);
     Eigen::VectorXd simulate();
