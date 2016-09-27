@@ -1,10 +1,11 @@
 #ifndef THESIS_TRIANGULATION_H
 #define THESIS_TRIANGULATION_H
 
-#include <x-poly/models/polygon/Triangle.h>
 #include <vector>
 #include <string>
 #include <fstream>
+#include "polygon/Polygon.h"
+#include "polygon/Triangle.h"
 
 class Triangulation {
 private:

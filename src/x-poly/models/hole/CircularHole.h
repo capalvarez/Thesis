@@ -2,11 +2,11 @@
 #define THESIS_CIRCULARHOLE_H
 
 #include <vector>
-#include "models/basic/Point.h"
+#include <x-poly/models/basic/Point.h>
 #include "Hole.h"
-#include "models/basic/Segment.h"
-#include "models/polygon/Circle.h"
-#include <utilities/utilities.h>
+#include <x-poly/models/basic/Segment.h>
+#include <x-poly/models/polygon/Circle.h>
+#include <x-poly/utilities/utilities.h>
 
 class CircularHole: public Hole, public Circle {
 private:
