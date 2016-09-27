@@ -10,18 +10,20 @@
 #include <veamy/models/dof/DOF.h>
 #include "Constraint.h"
 #include "models/constraints/structures/mapdata.h"
+#include <utilities/SegmentPair.h>
 
-class Constraints {
+class EssentialConstraints {
 private:
-    std::unordered_map<Point, Constraint, PointHasher> constrained_points;
+    std::unordered_map<Segment, Constraint, SegmentHasher> constrained_segments;
     std::unordered_map<int, Constraint, intHasher> constraints_map;
     List<int> constrained_dofs;
 public:
-    Constraints();
+    EssentialConstraints();
     void addConstraint(Constraint c);
-    bool isConstrained(Point p);
+    bool isConstrained(Segment p);
     std::vector<int> getConstrainedDOF();
-    void addConstrainedDOF(Point p, int DOF_index, DOF::Axis axis);
+    void addConstrainedDOF(int DOF_index, DOF::Axis axis, SegmentPair pair);
+    void addConstrainedDOFBySegment(int DOF_index, DOF::Axis axis, Segment s);
 
     Eigen::VectorXd getBoundaryValues(std::vector<Point> points, List<DOF*> dofs);
 };

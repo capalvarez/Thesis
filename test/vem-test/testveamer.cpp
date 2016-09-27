@@ -20,13 +20,12 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     f = sum;
 
     Mesh m (points,polygons,segments);
-    Constraints c;
+    EssentialConstraints c;
 
-    Constraint const1 (Point(0,0), Constraint::Direction::Total, new Constant(1));
-    Constraint const2 (Point(0,1), Constraint::Direction::Total, new Constant(1));
+    Segment constrained(0,3);
+    Constraint const1 (constrained, Constraint::Direction::Total, new Constant(1));
 
     c.addConstraint(const1);
-    c.addConstraint(const2);
 
     v.loadGeometry(m, c, f);
 
@@ -48,7 +47,7 @@ TEST(VeamerTest, LoadDataHigherOrderTest){
     f = sum;
 
     Mesh m (points,polygons,segments);
-    Constraints c;
+    EssentialConstraints c;
     v.loadGeometry(m, c, f);
 
     std::vector<Element> elements = v.getElements();

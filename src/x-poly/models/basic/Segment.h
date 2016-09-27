@@ -10,7 +10,8 @@ private:
     int p2;
 public:
     Segment(int p1, int p2);
-    ~Segment();
+    Segment();
+    Segment(const Segment& other);
 
     int getFirst() const;
     int getSecond() const;

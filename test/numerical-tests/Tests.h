@@ -8,7 +8,7 @@
 #include <x-poly/models/polygon/Polygon.h>
 #include <x-poly/models/polygon/Triangle.h>
 #include <x-poly/models/Mesh.h>
-#include <models/constraints/Constraints.h>
+#include <models/constraints/EssentialConstraints.h>
 #include <models/constraints/values/Constant.h>
 #include <Veamer.h>
 #include <x-poly/models/Region.h>

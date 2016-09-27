@@ -1,12 +1,15 @@
 #include <iostream>
 #include <matrix/integration/IntegrationFunction.h>
 #include "Element.h"
+#include <veamy/utilities/SegmentPair.h>
 
-Element::Element(Constraints& constraints, Polygon p, List<Point>& points, DOFS& out, int k, func_t f) {
+Element::Element(EssentialConstraints& constraints, Polygon p, List<Point>& points, DOFS& out, int k, func_t f) {
     std::vector<int> vertex = p.getPoints();
+    int n = vertex.size();
 
-    for(int i=0;i<vertex.size();i++){
-        Pair<int> indexes = out.addVertexDOF(constraints, points.getList(), vertex[i]);
+    for(int i=0;i<n;i++){
+        SegmentPair pair(Segment(vertex[(i-1+n)%n],vertex[i]), Segment(vertex[i],vertex[(i+1)%n]));
+        Pair<int> indexes = out.addVertexDOF(constraints, points.getList(), vertex[i], pair);
 
         dofs.push_back(indexes.first);
         dofs.push_back(indexes.second);
@@ -16,9 +19,12 @@ Element::Element(Constraints& constraints, Polygon p, List<Point>& points, DOFS&
     std::vector<double> weights;
     lobatto::lobatto_set(k+1,quadrature,weights);
 
-    for(int vertex_id=0; vertex_id<vertex.size(); vertex_id++) {
-        Point p1 = points.get(vertex[vertex_id]);
-        Point p2 = points.get(vertex[(vertex_id + 1)%vertex.size()]);
+    for(int vertex_id=0; vertex_id<n; vertex_id++) {
+        Segment s (vertex[vertex_id], vertex[(vertex_id + 1)%n]);
+        SegmentPair pair(s);
+
+        Point p1 = points.get(s.getFirst());
+        Point p2 = points.get(s.getSecond());
 
         for (int l = 1; l < quadrature.size() - 1; l++) {
             double x = p1.getX() + (p2.getX() - p1.getX()) * quadrature[l];
@@ -27,7 +33,7 @@ Element::Element(Constraints& constraints, Polygon p, List<Point>& points, DOFS&
             Point newPoint(x, y);
             int index = points.push_back(newPoint);
 
-            Pair<int> indexes = out.addEdgeDOF(constraints, points.getList(), index);
+            Pair<int> indexes = out.addEdgeDOF(constraints, points.getList(), index, pair);
 
             dofs.push_back(indexes.first);
             dofs.push_back(indexes.second);
