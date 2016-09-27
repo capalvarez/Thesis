@@ -16,8 +16,15 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     std::vector<Polygon> polygons = {Polygon(p1,points), Polygon(p2,points)};
     std::vector<Segment> segments;
 
-    double (*f)(double, double);
-    f = sum;
+    class Sum : public BodyForce{
+    private:
+        double apply(double x, double y){
+            return x + y;
+        }
+    };
+
+
+    BodyForce* f = new Sum();
 
     Mesh m (points,polygons,segments);
     EssentialConstraints c;

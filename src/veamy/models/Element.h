@@ -10,8 +10,10 @@
 #include <matrix/lobattoQuadrature.h>
 #include <matrix/BasePolinomials.h>
 #include <veamy/lib/Eigen/Dense>
-
-typedef double(*func_t)(double, double);
+#include <veamy/utilities/SegmentPair.h>
+#include <physics/BodyForce.h>
+#include <iostream>
+#include <matrix/integration/IntegrationFunction.h>
 
 class Element {
 private:
@@ -19,9 +21,9 @@ private:
     Eigen::MatrixXd K;
     Eigen::VectorXd f;
 
-    void initMatrix(DOFS d, std::vector<Point> points, std::vector<double> weight, Polygon p, int k, func_t f);
+    void initMatrix(DOFS d, std::vector<Point> points, std::vector<double> weight, Polygon p, int k, BodyForce* f);
 public:
-    Element(EssentialConstraints& constraints, Polygon p, List<Point>& points, DOFS& out, int k, func_t f);
+    Element(EssentialConstraints& constraints, Polygon p, List<Point>& points, DOFS& out, int k, BodyForce* f);
     Eigen::MatrixXd getK();
     Eigen::VectorXd getF();
     void assembleK(DOFS out, Eigen::MatrixXd& Kglobal);
