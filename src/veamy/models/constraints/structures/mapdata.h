@@ -1,14 +1,12 @@
 #ifndef MAPDATA_H
 #define MAPDATA_H
 
-#include <x-poly/models/basic/Point.h>
-
-struct PointHasher {
-    std::size_t operator()(const Point &k) const {
+struct SegmentHasher {
+    std::size_t operator()(const Segment &k) const {
         using std::size_t;
         using std::hash;
 
-        return hash<int>()(k.getX()) + hash<int>()(k.getY());
+        return hash<int>()(k.getFirst()) + hash<int>()(k.getSecond());
     }
 };
 

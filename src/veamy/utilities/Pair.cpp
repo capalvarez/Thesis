@@ -33,3 +33,4 @@ Pair<T> Pair<T>::average(Pair<T> other) {
 template class Pair<int>;
 template class Pair<double>;
 
+

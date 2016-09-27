@@ -5,7 +5,14 @@ Segment::Segment(int p1, int p2) {
     this->p2 = p2;
 }
 
-Segment::~Segment() {}
+
+Segment::Segment(const Segment &other) {
+    this->p1 = other.p1;
+    this->p2 = other.p2;
+}
+
+Segment::Segment() {}
+
 
 int Segment::getFirst() const{
     return this->p1;

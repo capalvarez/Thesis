@@ -1,6 +1,7 @@
 #include "DOFS.h"
 
-Pair<int> DOFS::addOuterDOF(Constraints& constraints, std::vector<Point> points, int point_index, int type) {
+Pair<int> DOFS::addOuterDOF(EssentialConstraints& constraints, std::vector<Point> points, int point_index, int type,
+                            SegmentPair pair) {
     typename std::vector<int>::iterator it;
     it = std::find(occupied_point_indexes.begin(), occupied_point_indexes.end(), point_index);
 
@@ -20,8 +21,8 @@ Pair<int> DOFS::addOuterDOF(Constraints& constraints, std::vector<Point> points,
         list.push_back(new EdgeDOF(list.size(), point_index, DOF::Axis::y));
     }
 
-    constraints.addConstrainedDOF(points[point_index],newIndex,DOF::Axis::x);
-    constraints.addConstrainedDOF(points[point_index],newIndex+1,DOF::Axis::y);
+    constraints.addConstrainedDOF(newIndex,DOF::Axis::x, pair);
+    constraints.addConstrainedDOF(newIndex+1,DOF::Axis::y, pair);
 
     occupied_point_indexes.push_back(point_index);
     outer_indexes.push_back(newIndex);
@@ -30,12 +31,12 @@ Pair<int> DOFS::addOuterDOF(Constraints& constraints, std::vector<Point> points,
 }
 
 
-Pair<int> DOFS::addVertexDOF(Constraints& constraints, std::vector<Point> points, int index) {
-    return addOuterDOF(constraints, points, index, 0);
+Pair<int> DOFS::addVertexDOF(EssentialConstraints& constraints, std::vector<Point> points, int index, SegmentPair pair) {
+    return addOuterDOF(constraints, points, index, 0, pair);
 }
 
-Pair<int> DOFS::addEdgeDOF(Constraints& constraints, std::vector<Point> points, int index) {
-    return addOuterDOF(constraints, points, index, 1);
+Pair<int> DOFS::addEdgeDOF(EssentialConstraints& constraints, std::vector<Point> points, int index, SegmentPair pair) {
+    return addOuterDOF(constraints, points, index, 1, pair);
 }
 
 Pair<int> DOFS::addInnerDOF(Pair<int> poly) {

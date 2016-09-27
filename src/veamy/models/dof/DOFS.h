@@ -8,7 +8,8 @@
 #include <veamy/models/dof/EdgeDOF.h>
 #include <veamy/models/dof/InnerDOF.h>
 #include <algorithm>
-#include <veamy/models/constraints/Constraints.h>
+#include <veamy/models/constraints/EssentialConstraints.h>
+#include <utilities/SegmentPair.h>
 
 class DOFS {
 private:
@@ -16,10 +17,10 @@ private:
     std::vector<int> occupied_point_indexes;
     std::vector<int> outer_indexes;
 
-    Pair<int> addOuterDOF(Constraints& constraints, std::vector<Point> points, int point_index, int type);
+    Pair<int> addOuterDOF(EssentialConstraints& constraints, std::vector<Point> points, int point_index, int type, SegmentPair pair);
 public:
-    Pair<int> addVertexDOF(Constraints& constraints, std::vector<Point> points, int index);
-    Pair<int> addEdgeDOF(Constraints& constraints, std::vector<Point> points, int index);
+    Pair<int> addVertexDOF(EssentialConstraints& constraints, std::vector<Point> points, int index, SegmentPair pair);
+    Pair<int> addEdgeDOF(EssentialConstraints& constraints, std::vector<Point> points, int index, SegmentPair pair);
     Pair<int> addInnerDOF(Pair<int> poly);
 
     List<DOF*> getDOFS();

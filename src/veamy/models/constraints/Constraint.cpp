@@ -3,26 +3,16 @@
 
 Constraint::Constraint() {}
 
-Constraint::Constraint(Point p, Constraint::Direction d, ConstraintValue* value) {
-    this->v = value;
-    this->direction = d;
-    this->constraints.push_back(p);
-}
-
-Constraint::Constraint(std::vector<Point> p, Constraint::Direction d, ConstraintValue* value) {
-    this->v = value;
-    this->direction = d;
-    this->constraints.push_list(p);
-}
-
 Constraint::Constraint(Segment s, Constraint::Direction d, ConstraintValue *value) {
     this->v = value;
     this->direction = d;
+    this->constraints.push_back(s);
 }
 
 Constraint::Constraint(std::vector<Segment> s, Constraint::Direction d, ConstraintValue *value) {
     this->v = value;
     this->direction = d;
+    this->constraints.push_list(s);
 }
 
 double Constraint::getValue(Point p) {
@@ -33,7 +23,7 @@ Constraint::Direction Constraint::getDirection() {
     return direction;
 }
 
-List<Point> Constraint::getPoints() {
+List<Segment> Constraint::getSegments() {
     return this->constraints;
 }
 
