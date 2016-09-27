@@ -1,9 +1,7 @@
-#include <iostream>
-#include <matrix/integration/IntegrationFunction.h>
 #include "Element.h"
-#include <veamy/utilities/SegmentPair.h>
 
-Element::Element(EssentialConstraints& constraints, Polygon p, List<Point>& points, DOFS& out, int k, func_t f) {
+
+Element::Element(EssentialConstraints& constraints, Polygon p, List<Point>& points, DOFS& out, int k, BodyForce* f) {
     std::vector<int> vertex = p.getPoints();
     int n = vertex.size();
 
@@ -52,7 +50,7 @@ Element::Element(EssentialConstraints& constraints, Polygon p, List<Point>& poin
     initMatrix(out, pointVector, weights, p, k, f);
 }
 
-void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> weight, Polygon p, int k, func_t f) {
+void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> weight, Polygon p, int k, BodyForce* f) {
     BasePolinomials b(k);
 
     Eigen::MatrixXd D;
@@ -143,9 +141,9 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> 
         int k;
         Polygon poly;
         Eigen::MatrixXd PiZS;
-        func_t f;
+        BodyForce* f;
     public:
-        LoadTerm(int i, int k, Polygon p, func_t f, Eigen::MatrixXd PiZeroS) {
+        LoadTerm(int i, int k, Polygon p, BodyForce* f, Eigen::MatrixXd PiZeroS) {
             this->i = i;
             this->k = k;
             this->poly = p;
@@ -166,7 +164,7 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> 
                 PiSPhi += PiZS(alpha, i) * operations::power(xFactor, a.first) * operations::power(yFactor, a.second);
             }
 
-            return f(x, y) * PiSPhi;
+            return f->apply(x, y) * PiSPhi;
         }
     };
 

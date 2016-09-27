@@ -8,8 +8,7 @@
 #include <models/dof/DOFS.h>
 #include <models/constraints/EssentialConstraints.h>
 #include <matrix/matrixOps.h>
-
-typedef double(*func_t)(double, double);
+#include <physics/BodyForce.h>
 
 class Veamer {
 private:
@@ -22,7 +21,7 @@ public:
     DOFS DOFs;
     Veamer(int k);
 
-    void loadGeometry(Mesh m, EssentialConstraints constraints, func_t f);
+    void loadGeometry(Mesh m, EssentialConstraints constraints, BodyForce* f);
     Eigen::VectorXd simulate();
     std::vector<Element> getElements();
 
