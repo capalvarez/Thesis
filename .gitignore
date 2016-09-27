@@ -5,4 +5,6 @@ src/x-poly/voronoi/lib/triangle.o
 src/veamy/lib
 visualizer/.idea/
 visualizer/__pycache__
+test/dealii-test/
+test/libmesh-test/
 

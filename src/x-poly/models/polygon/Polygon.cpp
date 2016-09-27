@@ -12,8 +12,9 @@ Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
     this->diameter = this->calculateDiameter(this_points);
     this->area = this->calculateArea(p);
     this->centroid = this->calculateCentroid(p);
-}
 
+    calculateHash();
+}
 
 Polygon::Polygon(std::vector<Point> &p) {
     std::vector<int> index;
@@ -31,6 +32,7 @@ Polygon::Polygon(std::vector<Point> &p) {
     this->diameter = this->calculateDiameter(this_points);
     this->area = this->calculateArea(p);
     this->centroid = this->calculateCentroid(p);
+    calculateHash();
 }
 
 
@@ -44,6 +46,7 @@ Polygon::Polygon(const Polygon &obj) {
     this->centroid = obj.centroid;
 
     this->points.assign(obj.points.begin(), obj.points.end());
+    calculateHash();
 }
 
 double Polygon::calculateDiameter(std::vector<Point>& p) {
@@ -212,6 +215,19 @@ std::string Polygon::getString() {
 
     return base;
 }
+
+
+void Polygon::calculateHash() {
+    std::size_t hash = 0;
+
+    for (int i = 0; i < points.size(); ++i) {
+        hash+= std::hash<int>()(points[i]);
+    }
+
+    this->hash = hash;
+}
+
+
 
 
 

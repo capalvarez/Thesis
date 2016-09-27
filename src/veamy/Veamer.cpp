@@ -8,15 +8,22 @@ Veamer::Veamer(int k) {
 }
 
 void Veamer::loadGeometry(Mesh m, Constraints constraints, func_t f) {
+    //TODO: Optimize space and use a map (polygon_index, element_index)
     std::vector<Point> meshPoints = m.getPoints();
     this->points.push_list(meshPoints);
     this->constraints = constraints;
+    this->f = f;
 
     std::vector<Polygon> polygons = m.getElements();
 
     for(int i=0;i<polygons.size();i++){
-        elements.push_back(Element(this->constraints, polygons[i], this->points, DOFs, k, f));
+        createElement(polygons[i]);
     }
+}
+
+void Veamer::createElement(Polygon p) {
+    polygon_to_element.insert(std::make_pair(p,elements.size()));
+    elements.push_back(Element(this->constraints, p, this->points, DOFs, k, f));
 }
 
 Eigen::VectorXd Veamer::simulate() {
@@ -75,6 +82,17 @@ Eigen::VectorXd Veamer::simulate() {
 
 std::vector<Element> Veamer::getElements() {
     return this->elements;
+}
+
+void Veamer::replaceElement(Polygon old, std::vector<Polygon> newPolygons) {
+    int to_remove = polygon_to_element[old];
+    polygon_to_element.erase(old);
+
+    elements.erase(std::remove(elements.begin(), elements.end(), to_remove), elements.end());
+
+    for (int i = 0; i < newPolygons.size(); ++i) {
+        createElement(newPolygons[i]);
+    }
 }
 
 

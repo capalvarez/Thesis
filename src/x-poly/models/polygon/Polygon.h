@@ -19,6 +19,7 @@ private:
     double calculateDiameter(std::vector<Point>& p);
     double calculateArea(std::vector<Point>& p);
     Point calculateCentroid(std::vector<Point>& p);
+    void calculateHash();
 public:
     Polygon(std::vector<int>& points, std::vector<Point>& p);
     Polygon(std::vector<Point>& p);
@@ -41,6 +42,8 @@ public:
 
     bool operator==(const Polygon& other) const;
     std::string getString();
+
+    std::size_t hash;
 };
 
 #endif
