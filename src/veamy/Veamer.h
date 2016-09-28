@@ -9,12 +9,12 @@
 #include <models/constraints/EssentialConstraints.h>
 #include <matrix/matrixOps.h>
 #include <physics/BodyForce.h>
+#include <models/constraints/ConstraintsContainer.h>
 
 class Veamer {
 private:
     //TODO: Check for inconsistencies (cannot have natural and essential conditions on the same segments)
-    EssentialConstraints essential;
-    NaturalConstraints natural;
+    ConstraintsContainer constraints;
     std::vector<Element> elements;
     List<Point> points;
 
@@ -23,7 +23,7 @@ public:
     DOFS DOFs;
     Veamer(int k);
 
-    void loadGeometry(Mesh m, EssentialConstraints constraints, NaturalConstraints natural, BodyForce* f);
+    void loadGeometry(Mesh m, ConstraintsContainer c, BodyForce* f);
     Eigen::VectorXd simulate();
     std::vector<Element> getElements();
 

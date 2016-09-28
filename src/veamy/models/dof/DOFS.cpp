@@ -1,6 +1,6 @@
 #include "DOFS.h"
 
-Pair<int> DOFS::addOuterDOF(EssentialConstraints& constraints, std::vector<Point> points, int point_index, int type,
+Pair<int> DOFS::addOuterDOF(ConstraintsContainer& constraints, std::vector<Point> points, int point_index, int type,
                             SegmentPair pair) {
     typename std::vector<int>::iterator it;
     it = std::find(occupied_point_indexes.begin(), occupied_point_indexes.end(), point_index);
@@ -31,11 +31,11 @@ Pair<int> DOFS::addOuterDOF(EssentialConstraints& constraints, std::vector<Point
 }
 
 
-Pair<int> DOFS::addVertexDOF(EssentialConstraints& constraints, std::vector<Point> points, int index, SegmentPair pair) {
+Pair<int> DOFS::addVertexDOF(ConstraintsContainer& constraints, std::vector<Point> points, int index, SegmentPair pair) {
     return addOuterDOF(constraints, points, index, 0, pair);
 }
 
-Pair<int> DOFS::addEdgeDOF(EssentialConstraints& constraints, std::vector<Point> points, int index, SegmentPair pair) {
+Pair<int> DOFS::addEdgeDOF(ConstraintsContainer& constraints, std::vector<Point> points, int index, SegmentPair pair) {
     return addOuterDOF(constraints, points, index, 1, pair);
 }
 
