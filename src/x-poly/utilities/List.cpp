@@ -52,6 +52,11 @@ std::vector<int> List<T>::push_list(std::vector<T> list) {
     return index;
 }
 
+template <typename T>
+bool List<T>::contains(T elem) {
+    return std::find(list.begin(), list.end(), elem) != list.end();;
+}
+
 
 template class List<Point>;
 template class List<Segment>;

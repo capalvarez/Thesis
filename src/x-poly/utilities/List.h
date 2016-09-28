@@ -17,6 +17,7 @@ public:
     std::vector<T> getList() const;
     T get(int i);
     bool operator==(const List<T>& other);
+    bool contains(T elem);
 };
 
 

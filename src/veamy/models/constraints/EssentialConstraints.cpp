@@ -2,18 +2,6 @@
 
 EssentialConstraints::EssentialConstraints() {}
 
-void EssentialConstraints::addConstraint(Constraint c) {
-    List<Segment> segments = c.getSegments();
-
-    for (int i = 0; i < segments.size(); ++i) {
-        constrained_segments.insert(std::make_pair(segments.get(i), c));
-    }
-}
-
-bool EssentialConstraints::isConstrained(Segment s) {
-    return constrained_segments.find(s)!=constrained_segments.end();
-}
-
 std::vector<int> EssentialConstraints::getConstrainedDOF() {
     return constrained_dofs.getList();
 }
@@ -26,7 +14,6 @@ void EssentialConstraints::addConstrainedDOF(int DOF_index, DOF::Axis axis, Segm
     }
 
 }
-
 
 void EssentialConstraints::addConstrainedDOFBySegment(int DOF_index, DOF::Axis axis, Segment s) {
     //TODO: Check incompatible constrains

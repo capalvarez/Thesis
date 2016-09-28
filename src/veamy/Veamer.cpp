@@ -7,15 +7,15 @@ Veamer::Veamer(int k) {
     this->k = k;
 }
 
-void Veamer::loadGeometry(Mesh m, EssentialConstraints constraints, BodyForce* f) {
+void Veamer::loadGeometry(Mesh m, EssentialConstraints constraints, NaturalConstraints natural, BodyForce* f) {
     std::vector<Point> meshPoints = m.getPoints();
     this->points.push_list(meshPoints);
-    this->constraints = constraints;
+    this->essential = constraints;
 
     std::vector<Polygon> polygons = m.getElements();
 
     for(int i=0;i<polygons.size();i++){
-        elements.push_back(Element(this->constraints, polygons[i], this->points, DOFs, k, f));
+        elements.push_back(Element(this->essential, polygons[i], this->points, DOFs, k, f, natural));
     }
 }
 
@@ -33,12 +33,12 @@ Eigen::VectorXd Veamer::simulate() {
     }
 
     //Apply constrained_points
-    std::vector<int> c = this->constraints.getConstrainedDOF();
+    std::vector<int> c = this->essential.getConstrainedDOF();
 
     Eigen::MatrixXd K_b;
     K_b= matrixOps::getColumns(K, c);
 
-    Eigen::VectorXd boundary_values = this->constraints.getBoundaryValues(this->points.getList(), this->DOFs.getDOFS());
+    Eigen::VectorXd boundary_values = this->essential.getBoundaryValues(this->points.getList(), this->DOFs.getDOFS());
 
 
     for (int i = 0; i < K.rows(); ++i) {

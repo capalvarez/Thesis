@@ -14,6 +14,7 @@
 #include <physics/BodyForce.h>
 #include <iostream>
 #include <matrix/integration/IntegrationFunction.h>
+#include <models/constraints/NaturalConstraints.h>
 
 class Element {
 private:
@@ -21,9 +22,9 @@ private:
     Eigen::MatrixXd K;
     Eigen::VectorXd f;
 
-    void initMatrix(DOFS d, std::vector<Point> points, std::vector<double> weight, Polygon p, int k, BodyForce* f);
+    void initMatrix(DOFS d, std::vector<Point> points, std::vector<double> weight, Polygon p, int k, BodyForce* f, NaturalConstraints natural);
 public:
-    Element(EssentialConstraints& constraints, Polygon p, List<Point>& points, DOFS& out, int k, BodyForce* f);
+    Element(EssentialConstraints& constraints, Polygon p, List<Point>& points, DOFS& out, int k, BodyForce* f, NaturalConstraints natural);
     Eigen::MatrixXd getK();
     Eigen::VectorXd getF();
     void assembleK(DOFS out, Eigen::MatrixXd& Kglobal);

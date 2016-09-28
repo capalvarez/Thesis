@@ -27,14 +27,14 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     BodyForce* f = new Sum();
 
     Mesh m (points,polygons,segments);
-    EssentialConstraints c;
 
+    EssentialConstraints c;
     Segment constrained(0,3);
     Constraint const1 (constrained, Constraint::Direction::Total, new Constant(1));
-
     c.addConstraint(const1);
 
-    v.loadGeometry(m, c, f);
+    NaturalConstraints natural;
+    v.loadGeometry(m, c, natural, f);
 
     Eigen::VectorXd x = v.simulate();
 
