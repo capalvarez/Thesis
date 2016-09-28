@@ -19,10 +19,9 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     class Sum : public BodyForce{
     private:
         double apply(double x, double y){
-            return x + y;
+            return 0;
         }
     };
-
 
     BodyForce* f = new Sum();
 
@@ -30,11 +29,19 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
 
     EssentialConstraints c;
     Segment constrained(0,3);
-    Constraint const1 (constrained, Constraint::Direction::Total, new Constant(1));
+    Constraint const1 (constrained, Constraint::Direction::Total, new Constant(0));
     c.addConstraint(const1);
 
     NaturalConstraints natural;
-    v.loadGeometry(m, c, natural, f);
+    Segment contrained2(2,5);
+    Constraint const2 (contrained2, Constraint::Direction::Horizontal, new Constant(100));
+    natural.addConstraint(const2);
+
+    ConstraintsContainer container;
+    container.addConstraints(c);
+    container.addConstraints(natural);
+
+    v.loadGeometry(m, container, f);
 
     Eigen::VectorXd x = v.simulate();
 

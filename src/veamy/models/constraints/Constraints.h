@@ -2,6 +2,8 @@
 #define THESIS_CONSTRAINTS_H
 
 #include <x-poly/models/basic/Segment.h>
+#include <models/dof/DOF.h>
+#include <utilities/SegmentPair.h>
 #include "Constraint.h"
 
 class Constraints {
@@ -13,6 +15,10 @@ public:
     void addConstraint(Constraint c);
     bool isConstrained(Segment p);
     bool isConstrained(int dof);
+
+    std::vector<int> getConstrainedDOF();
+    void addConstrainedDOF(int DOF_index, DOF::Axis axis, SegmentPair pair);
+    void addConstrainedDOFBySegment(int DOF_index, DOF::Axis axis, Segment s);
 };
 
 

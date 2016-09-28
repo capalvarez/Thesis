@@ -16,10 +16,6 @@
 class EssentialConstraints : public Constraints{
 public:
     EssentialConstraints();
-    std::vector<int> getConstrainedDOF();
-    void addConstrainedDOF(int DOF_index, DOF::Axis axis, SegmentPair pair);
-    void addConstrainedDOFBySegment(int DOF_index, DOF::Axis axis, Segment s);
-
     Eigen::VectorXd getBoundaryValues(std::vector<Point> points, List<DOF*> dofs);
 };
 
