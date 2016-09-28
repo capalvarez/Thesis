@@ -1,3 +1,4 @@
+#include <matrix/lobattoQuadrature.h>
 #include "IntegrationPolygon.h"
 
 IntegrationPolygon::IntegrationPolygon(std::vector<int> index, std::vector<Point> points) : Polygon(index,points){}

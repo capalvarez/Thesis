@@ -213,6 +213,18 @@ std::string Polygon::getString() {
     return base;
 }
 
+bool Polygon::containsEdge(Segment s) {
+    return isVertex(s.getFirst()) && isVertex(s.getSecond());
+}
+
+bool Polygon::isVertex(int index) {
+    return std::find(points.begin(), points.end(), index) != points.end();
+}
+
+
+
+
+
 
 
 

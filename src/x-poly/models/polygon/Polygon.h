@@ -19,6 +19,7 @@ private:
     double calculateDiameter(std::vector<Point>& p);
     double calculateArea(std::vector<Point>& p);
     Point calculateCentroid(std::vector<Point>& p);
+    bool isVertex(int index);
 public:
     Polygon(std::vector<int>& points, std::vector<Point>& p);
     Polygon(std::vector<Point>& p);
@@ -33,6 +34,7 @@ public:
     bool containsPoint(std::vector<Point>& p, Point point);
     bool inEdges(std::vector<Point>& p, Point point);
     double signedArea(std::vector<Point>& p);
+    bool containsEdge(Segment s);
 
     bool isConvex(std::vector<Point>& p);
     bool isClockwise(std::vector<Point>& p);

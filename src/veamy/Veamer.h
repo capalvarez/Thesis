@@ -12,7 +12,9 @@
 
 class Veamer {
 private:
-    EssentialConstraints constraints;
+    //TODO: Check for inconsistencies (cannot have natural and essential conditions on the same segments)
+    EssentialConstraints essential;
+    NaturalConstraints natural;
     std::vector<Element> elements;
     List<Point> points;
 
@@ -21,7 +23,7 @@ public:
     DOFS DOFs;
     Veamer(int k);
 
-    void loadGeometry(Mesh m, EssentialConstraints constraints, BodyForce* f);
+    void loadGeometry(Mesh m, EssentialConstraints constraints, NaturalConstraints natural, BodyForce* f);
     Eigen::VectorXd simulate();
     std::vector<Element> getElements();
 

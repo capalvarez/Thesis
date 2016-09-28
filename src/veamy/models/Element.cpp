@@ -1,7 +1,7 @@
 #include "Element.h"
 
 
-Element::Element(EssentialConstraints& constraints, Polygon p, List<Point>& points, DOFS& out, int k, BodyForce* f) {
+Element::Element(EssentialConstraints& constraints, Polygon p, List<Point>& points, DOFS& out, int k, BodyForce* f, NaturalConstraints natural) {
     std::vector<int> vertex = p.getPoints();
     int n = vertex.size();
 
@@ -47,10 +47,10 @@ Element::Element(EssentialConstraints& constraints, Polygon p, List<Point>& poin
     }
 
     std::vector<Point> pointVector = points.getList();
-    initMatrix(out, pointVector, weights, p, k, f);
+    initMatrix(out, pointVector, weights, p, k, f, natural);
 }
 
-void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> weight, Polygon p, int k, BodyForce* f) {
+void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> weight, Polygon p, int k, BodyForce* f, NaturalConstraints natural) {
     BasePolinomials b(k);
 
     Eigen::MatrixXd D;
@@ -135,6 +135,8 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> 
     Eigen::MatrixXd PiZeroS;
     PiZeroS = H.inverse() * C;
 
+
+    //TODO: Reuse code here, somehow
     class LoadTerm : public IntegrationFunction {
     private:
         int i;
@@ -172,7 +174,7 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, std::vector<double> 
 
     for (int i = 0; i < dofs.size(); ++i) {
         LoadTerm *l = new LoadTerm(i, k, p, f, PiZeroS);
-        this->f(i) = polygon.integrate(l, points);
+        this->f(i) = polygon.integrate(l, points) + natural.lineIntegral(points,p,dofs[i],i,k,PiZeroS);
 
         delete (l);
     }
