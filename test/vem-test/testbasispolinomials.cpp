@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <matrix/BasePolinomials.h>
+#include <veamy/matrix/BasePolinomials.h>
 
 TEST(BasisPolinomials, CreationTest){
     BasePolinomials linear (1);

@@ -1,4 +1,5 @@
-#include <utilities/operations.h>
+#include <veamy/utilities/operations.h>
+#include <veamy/matrix/integration/IntegrationTriangle.h>
 #include "testvempolygon.h"
 
 TEST_F(VEMPolygonTest, TriangulateTest){

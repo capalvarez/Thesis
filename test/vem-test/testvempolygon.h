@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 #include <x-poly/models/basic/Point.h>
-#include <matrix/integration/IntegrationPolygon.h>
+#include <veamy/matrix/integration/IntegrationPolygon.h>
 
 class VEMPolygonTest : public ::testing::Test{
 protected:
