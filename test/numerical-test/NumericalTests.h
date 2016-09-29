@@ -17,23 +17,24 @@
 
 class NumericalTests{
 private:
-    Mesh one_square;
+    int order;
+
+    Mesh two_squares;
     Mesh hundred_square;
     Mesh random_voronoi_square;
     Mesh rectangle_hole;
     Mesh trapezoid;
     Mesh L;
 
-    Eigen::VectorXd onesquare_rightforceX();
-    Eigen::VectorXd onesquare_rightforceY();
-    Eigen::VectorXd onesquare_noforces();
+    Eigen::VectorXd two_squares_rightforceX();
+    Eigen::VectorXd two_squares_rightforceY();
+    Eigen::VectorXd two_squares_noforces();
 
     Eigen::VectorXd hundredsquare_rightforceX();
     Eigen::VectorXd hundredsquare_rightforceY();
     Eigen::VectorXd hundredsquare_noforces();
 
     Eigen::VectorXd hundredsquare_twoforcesX();
-    Eigen::VectorXd hundredsquare_distributedforce();
 
     Eigen::VectorXd voronoi_rightforceX();
     Eigen::VectorXd voronoi_rightforceY();
@@ -41,14 +42,15 @@ private:
     Eigen::VectorXd hole_rightforceX();
     Eigen::VectorXd hole_twoforceX();
 
+
+    void loadRightForceX(Mesh m, Veamer& v, Segment leftSide, Segment rightSide);
+    void loadRightForceY(Mesh m, Veamer& v, Segment leftSide, Segment rightSide);
+    void loadNoForces(Mesh m, Veamer& v, Segment leftSide, Segment rightSide);
+    void loadTwoForcesX(Mesh m, Veamer& v, Segment leftSide, Segment rightSide);
 public:
-    NumericalTests();
+    NumericalTests(int order);
 
     void runTests();
-
-
-
-
 };
 
 

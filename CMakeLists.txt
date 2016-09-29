@@ -4,11 +4,9 @@ project(Thesis)
 
 enable_testing()
 
-
 add_subdirectory(veamy)
 add_subdirectory(x-poly)
 add_subdirectory(test)
 
-add_subdirectory(test)
 add_subdirectory(test/xpoly-test/voronoi/visualizationtests)
 

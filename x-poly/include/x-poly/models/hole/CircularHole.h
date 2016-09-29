@@ -6,6 +6,7 @@
 #include <x-poly/models/basic/Segment.h>
 #include <x-poly/models/polygon/Circle.h>
 #include <x-poly/models/hole/Hole.h>
+#include <x-poly/models/polygon/Polygon.h>
 
 class CircularHole: public Hole, public Circle {
 public:
