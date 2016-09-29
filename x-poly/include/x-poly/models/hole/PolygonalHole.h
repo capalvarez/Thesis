@@ -3,17 +3,15 @@
 
 #include <vector>
 #include <x-poly/models/polygon/Polygon.h>
-#include "Hole.h"
-
+#include <x-poly/models/hole/Hole.h>
 
 class PolygonalHole: public Hole, public Polygon{
-private:
-    std::vector<Point> points;
 public:
     PolygonalHole(std::vector<Point>& p);
 
+    void getSegments(std::vector<Segment>& s, int offset);
     Point getCenter();
-};
 
+};
 
 #endif

@@ -8,6 +8,7 @@ x-poly/src/voronoi/lib/triangle.c
 veamy/include/veamy/lib
 visualizer/.idea/
 visualizer/__pycache__
+
 test/dealii-test/
 test/libmesh-test/
 test/fracture-test/

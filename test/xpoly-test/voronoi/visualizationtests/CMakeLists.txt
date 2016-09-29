@@ -1,0 +1,3 @@
+add_executable(visualizationtest visualizationtest.cpp)
+target_link_libraries(visualizationtest libxpoly)
+

@@ -1,21 +1,24 @@
 #include <iostream>
 #include <x-poly/models/Triangulation.h>
+
 #include <vector>
+#include <x-poly/models/hole/lib/clipper.hpp>
 
 using namespace std;
 
 int main() {
-    //Testing writeInFile
-    std::vector<Point> region_points;
-    Point p1 = *new Point(0,1);
-    Point p2 = *new Point(0,0);
-    Point p3 = *new Point(1,1);
-    Point p4 = *new Point(1,0);
+    ClipperLib::Path polygon, hole;
+    ClipperLib::Paths solution;
+    polygon << ClipperLib::IntPoint(0,0) << ClipperLib::IntPoint(10,0) <<
+               ClipperLib::IntPoint(10,10) << ClipperLib::IntPoint(0,10);
+    hole << ClipperLib::IntPoint(2,0) << ClipperLib::IntPoint(7,0) <<
+            ClipperLib::IntPoint(7,2) << ClipperLib::IntPoint(2,2);
 
-    region_points.push_back(p1);
-    //{p1,p2,p3,p4};
-    //vector<Point> test_points = {*new Point(0.5,0), *new Point(0,0.5), *new Point(1,0.5), *new Point(0.5,1)};
-    //Region* region = new Region(region_points);
+    ClipperLib::Clipper clipper;
+    clipper.AddPath(polygon, ClipperLib::ptSubject, true);
+    clipper.AddPath(hole, ClipperLib::ptClip, true);
+    clipper.Execute(ClipperLib::ctDifference, solution, ClipperLib::pftNonZero, ClipperLib::pftNonZero);
 
     //MeshGenerator* d = new TriangleDelaunayGenerator(test_points,*region);
+
 }

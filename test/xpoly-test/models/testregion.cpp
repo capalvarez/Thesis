@@ -25,3 +25,23 @@ TEST_F(RegionTest, GeneratePointsTest){
     EXPECT_EQ(polygonRes,polygon->getSeedPoints());
 }
 
+TEST_F(RegionTest, AddHoleTest){
+    std::vector<Point> hPoints = {Point(2,0), Point(7,0), Point(7,2), Point(2,2)};
+    Hole* h = new PolygonalHole(hPoints);
+
+    rectangle->addHole(h);
+    std::vector<Point> expected = {Point(7,2), Point(7,0), Point(10,0), Point(10,10), Point(0,10),
+                                   Point(0,0), Point(2,0), Point(2,2)};
+    EXPECT_EQ(rectangle->getRegionPoints(), expected);
+}
+
+TEST_F(RegionTest, AddHoleInsideTest){
+    std::vector<Point> hPoints = {Point(4,4), Point(6,4), Point(6,6), Point(4,6)};
+    Hole* h = new PolygonalHole(hPoints);
+
+    rectangle->addHole(h);
+    std::vector<Point> expected = {Point(0,0), Point(10,0), Point(10,10), Point(0,10), Point(4,4), Point(6,4),
+                                   Point(6,6), Point(4,6)};
+    EXPECT_EQ(rectangle->getRegionPoints(), expected);
+}
+
