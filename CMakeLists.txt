@@ -4,9 +4,8 @@ project(Thesis)
 
 enable_testing()
 
-add_subdirectory(main)
+add_subdirectory(veamy)
+add_subdirectory(x-poly)
 add_subdirectory(test)
-add_subdirectory(src/veamy)
-add_subdirectory(src/x-poly)
-add_subdirectory(test/numerical-tests)
+
 

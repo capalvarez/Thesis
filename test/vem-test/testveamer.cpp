@@ -1,11 +1,7 @@
 #include <gtest/gtest.h>
-#include <Veamer.h>
-#include <models/constraints/Constraint.h>
-#include <models/constraints/values/Constant.h>
-
-double sum (double x, double y){
-    return x + y;
-}
+#include <veamy/models/constraints/Constraint.h>
+#include <veamy/models/constraints/values/Constant.h>
+#include <veamy/Veamer.h>
 
 TEST(VeamerTest, LoadDataFirstOrderTest){
     Veamer v(1);
@@ -34,7 +30,7 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
 
     NaturalConstraints natural;
     Segment contrained2(2,5);
-    Constraint const2 (contrained2, Constraint::Direction::Horizontal, new Constant(100));
+    Constraint const2 (contrained2, Constraint::Direction::Horizontal, new Constant(0));
     natural.addConstraint(const2);
 
     ConstraintsContainer container;

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <x-poly/models/basic/Point.h>
 #include <x-poly/models/polygon/Polygon.h>
-#include <utilities/operations.h>
+#include <veamy/utilities/operations.h>
 
 TEST(OperationsTest, DotTest){
 
