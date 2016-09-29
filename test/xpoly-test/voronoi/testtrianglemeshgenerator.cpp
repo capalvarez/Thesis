@@ -1,3 +1,4 @@
+#include <x-poly/models/generator/functions.h>
 #include "testtrianglemeshgenerator.h"
 
 TEST_F(TriangleMeshGeneratorTest, Square1Test){
@@ -52,6 +53,21 @@ TEST_F(TriangleMeshGeneratorTest, BorderTest){
 //    t.writeInFile("triangles_borders.txt");
 }
 
+TEST_F(TriangleMeshGeneratorTest, HundredSquaresTest) {
+    std::vector<Point> points = {Point(0, 0), Point(20, 0), Point(20, 5), Point(0, 5)};
+
+    Region region(points);
+    PointGenerator generator (functions::uniform(1), functions::uniform(1));
+
+    region.generatePoints(generator, 20, 5);
+    std::vector<Point> seeds = region.getSeedPoints();
+
+    TriangleMeshGenerator meshGenerator(seeds, region);
+    Mesh mesh = meshGenerator.getMesh();
+    mesh.printInFile("hundred.txt");
+}
+
+
 TEST_F(TriangleMeshGeneratorTest, NoPointsTest){
     std::vector<Point> empty;
     TriangleMeshGenerator g (empty, *this->square);
@@ -62,3 +78,4 @@ TEST_F(TriangleMeshGeneratorTest, NoPointsTest){
     m.printInFile("noPoints.txt");
 
 }
+
