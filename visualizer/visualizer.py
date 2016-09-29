@@ -15,6 +15,7 @@ frame = Frame(window)
 frame.pack()
 
 canvas = Canvas(window, width=900, height=700, bg="white")
+
 points, segments, polygons, limits = read_file("hundred.txt")
 #t_points, triangles, t_limits = read_triangulation("triangles2.txt")
 

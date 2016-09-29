@@ -6,9 +6,14 @@
 #include <vector>
 
 class Hole {
+protected:
+    std::vector<Point> HolePoints;
 public:
     virtual Point getCenter() = 0;
-    virtual void getSegments(std::vector<Segment> segments) = 0;
+    virtual void getSegments(std::vector<Segment>& segments, int offset) = 0;
+    virtual std::vector<Point> getPoints(){
+        return this->HolePoints;
+    };
 };
 
 #endif
