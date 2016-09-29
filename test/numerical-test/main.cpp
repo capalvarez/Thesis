@@ -1,7 +1,7 @@
 #include "NumericalTests.h"
 
 int main(){
-    NumericalTests t;
+    NumericalTests t(1);
     t.runTests();
 }
 
