@@ -25,6 +25,6 @@ TEST(GeometryFunctionsTest, TriangleAreaTest){
     Point p3(4,3);
     Point p4(2,5);
 
-    ASSERT_EQ(geometry_functions::triangleArea(p1,p2), 0.5);
-    ASSERT_EQ(geometry_functions::triangleArea(p3,p4), 7);
+    ASSERT_EQ(geometry_functions::triangleArea(p1,p2,Point(0,0)), 0.5);
+    ASSERT_EQ(geometry_functions::triangleArea(p3,p4,Point(0,0)), 7);
 }

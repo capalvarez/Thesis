@@ -81,3 +81,9 @@ TEST_F(PolygonTest, DiameterTest){
     EXPECT_EQ(square->getDiameter(),sqrt(2));
     EXPECT_EQ(nonconvex->getDiameter(),sqrt(5));
 }
+
+TEST_F(PolygonTest, IsClockwise){
+    EXPECT_FALSE(triangle->isClockwise(points));
+    EXPECT_FALSE(square->isClockwise(points));
+    EXPECT_TRUE(nonclockwise->isClockwise(points));
+}
