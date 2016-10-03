@@ -33,10 +33,6 @@ Eigen::VectorXd Veamer::simulate() {
         elements[i].assembleF(DOFs, f);
     }
 
-    std::cout << K << std::endl << std::endl;
-    std::cout << f << std::endl << std::endl;
-
-
     //Apply constrained_points
     EssentialConstraints essential = this->constraints.getEssentialConstraints();
     std::vector<int> c = essential.getConstrainedDOF();
