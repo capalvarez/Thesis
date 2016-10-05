@@ -1,4 +1,4 @@
-#include <Eigen/Dense>
+#include <veamy/lib/Eigen/Dense>
 #include <iostream>
 #include "Veamer.h"
 
@@ -7,7 +7,7 @@ Veamer::Veamer(int k) {
     this->k = k;
 }
 
-Veamer(){}
+Veamer::Veamer(){}
 
 void Veamer::loadGeometry(Mesh m, Constraints constraints, func_t f) {
     //TODO: Optimize space and use a map (polygon_index, element_index)
@@ -90,7 +90,7 @@ void Veamer::replaceElement(Polygon old, std::vector<Polygon> newPolygons) {
     int to_remove = polygon_to_element[old];
     polygon_to_element.erase(old);
 
-    elements.erase(std::remove(elements.begin(), elements.end(), to_remove), elements.end());
+    elements.erase(elements.begin() + to_remove, elements.end());
 
     for (int i = 0; i < newPolygons.size(); ++i) {
         createElement(newPolygons[i]);

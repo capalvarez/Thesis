@@ -15,12 +15,12 @@ Constraint::Constraint(std::vector<Point> p, Constraint::Direction d, Constraint
     this->constraints.push_list(p);
 }
 
-Constraint::Constraint(Segment s, Constraint::Direction d, ConstraintValue *value) {
+Constraint::Constraint(Segment<int> s, Constraint::Direction d, ConstraintValue *value) {
     this->v = value;
     this->direction = d;
 }
 
-Constraint::Constraint(std::vector<Segment> s, Constraint::Direction d, ConstraintValue *value) {
+Constraint::Constraint(std::vector<Segment<int>> s, Constraint::Direction d, ConstraintValue *value) {
     this->v = value;
     this->direction = d;
 }

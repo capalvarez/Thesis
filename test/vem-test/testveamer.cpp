@@ -14,7 +14,7 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     std::vector<int> p2 ={1,2,5,4};
 
     std::vector<Polygon> polygons = {Polygon(p1,points), Polygon(p2,points)};
-    std::vector<Segment> segments;
+    std::vector<Segment<int>> segments;
 
     double (*f)(double, double);
     f = sum;

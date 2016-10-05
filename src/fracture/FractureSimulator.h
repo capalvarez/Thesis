@@ -7,11 +7,12 @@
 
 class FractureSimulator {
 private:
-    Veamer v;
-    Mesh m;
+    Veamer veamer;
+    Mesh mesh;
     Crack crack;
 public:
     FractureSimulator(int k, Mesh mesh, Crack initial);
+    void simulate(double crack_growth, int max_iter);
 };
 
 

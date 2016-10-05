@@ -6,22 +6,24 @@
 #include <x-poly/models/basic/Segment.h>
 #include <algorithm>
 
+
 class Mesh {
 private:
     std::vector<Point> points;
     std::vector<Polygon> elements;
-    std::vector<Segment> edges;
+    std::vector<Segment<int>> edges;
 public:
-    Mesh(std::vector<Point>& p, std::vector<Polygon>& e, std::vector<Segment>& s);
+    Mesh(std::vector<Point>& p, std::vector<Polygon>& e, std::vector<Segment<int>>& s);
     Mesh();
     ~Mesh();
 
     std::vector<Point> getPoints();
-    std::vector<Segment> getEdges();
+    std::vector<Segment<int>> getEdges();
     std::vector<Polygon> getElements();
 
     void printInFile(std::string fileName);
-    void breakPolygons(Segment s);
+    void breakPolygons(Segment<Point> s);
+    void breakPolygons(Segment<int> s);
 };
 
 

@@ -20,8 +20,8 @@ public:
     Constraint();
     Constraint(Point p, Direction d, ConstraintValue* value);
     Constraint(std::vector<Point> p, Direction d, ConstraintValue* value);
-    Constraint(Segment s, Direction d, ConstraintValue* value);
-    Constraint(std::vector<Segment> s, Direction d, ConstraintValue* value);
+    Constraint(Segment<int> s, Direction d, ConstraintValue* value);
+    Constraint(std::vector<Segment<int>> s, Direction d, ConstraintValue* value);
 
     double getValue(Point p);
     List<Point> getPoints();

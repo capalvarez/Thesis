@@ -8,7 +8,7 @@
 class Hole {
 public:
     virtual Point getCenter() = 0;
-    virtual void getSegments(std::vector<Segment> segments) = 0;
+    virtual void getSegments(std::vector<Segment<int>> segments) = 0;
 };
 
 #endif

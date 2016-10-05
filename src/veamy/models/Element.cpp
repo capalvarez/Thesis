@@ -202,6 +202,11 @@ void Element::assembleF(DOFS out, Eigen::VectorXd &Fglobal) {
     }
 }
 
+bool Element::operator==(const Element other) const {
+    return std::is_permutation(this->dofs.begin(), this->dofs.end(), other.dofs.begin());
+}
+
+
 
 
 

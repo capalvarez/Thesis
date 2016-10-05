@@ -15,7 +15,7 @@ public:
     CircularHole(Point p, double r);
 
     Point getCenter();
-    void getSegments(std::vector<Segment> segments);
+    void getSegments(std::vector<Segment<int>> segments);
 };
 
 

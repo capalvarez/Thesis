@@ -24,7 +24,7 @@ private:
     std::unordered_map<Key, int, KeyHasher> edgeMap;
 
     List<Point> voronoiPoints;
-    List<Segment> voronoiEdges;
+    List<Segment<int>> voronoiEdges;
     List<Polygon> voronoiCells;
 
     Point getCircumcenter(int triangle, int edge, std::vector<Point>& points);

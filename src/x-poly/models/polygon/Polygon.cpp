@@ -97,11 +97,11 @@ double Polygon::signedArea(std::vector<Point>& p) {
     return 0.5*area;
 }
 
-void Polygon::getSegments(std::vector<Segment>& segments) {
+void Polygon::getSegments(std::vector<Segment<int>>& segments) {
     int n = (int) this->points.size();
 
     for(int i=0;i<n; i++){
-        segments.push_back(Segment(this->points[i%n], this->points[(i+1)%n]));
+        segments.push_back(Segment<int>(this->points[i%n], this->points[(i+1)%n]));
     }
 }
 
@@ -147,7 +147,7 @@ bool Polygon::containsPoint(std::vector<Point>& p, Point point) {
 }
 
 bool Polygon::inEdges(std::vector<Point>& p, Point point) {
-    std::vector<Segment> segments;
+    std::vector<Segment<int>> segments;
     this->getSegments(segments);
 
     bool inEdge = false;

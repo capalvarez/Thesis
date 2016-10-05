@@ -1,7 +1,7 @@
 #include <fstream>
 #include "Mesh.h"
 
-Mesh::Mesh(std::vector<Point> &p, std::vector<Polygon> &e, std::vector<Segment>& s) {
+Mesh::Mesh(std::vector<Point> &p, std::vector<Polygon> &e, std::vector<Segment<int>>& s) {
     this->points.assign(p.begin(), p.end());
     this->elements.assign(e.begin(), e.end());
     this->edges.assign(s.begin(), s.end());
@@ -15,7 +15,7 @@ std::vector<Point> Mesh::getPoints() {
     return this->points;
 }
 
-std::vector<Segment> Mesh::getEdges() {
+std::vector<Segment<int>> Mesh::getEdges() {
     return this->edges;
 }
 
@@ -49,7 +49,11 @@ void Mesh::printInFile(std::string fileName) {
     file.close();
 }
 
-void Mesh::breakPolygons(Segment s) {
+void Mesh::breakPolygons(Segment<int> s) {
+
+}
+
+void Mesh::breakPolygons(Segment<Point> s) {
 
 }
 

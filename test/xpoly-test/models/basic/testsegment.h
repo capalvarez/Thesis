@@ -9,10 +9,10 @@ protected:
         Point p2 (1,1);
 
         segment_points = {p1,p2};
-        segment = new Segment(0,1);
+        segment = new Segment<int>(0,1);
     }
 
     std::vector<Point> segment_points;
-    Segment* segment;
+    Segment<int>* segment;
 };
 

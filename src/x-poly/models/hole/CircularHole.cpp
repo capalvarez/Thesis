@@ -7,7 +7,7 @@ Point CircularHole::getCenter() {
     return this->center;
 }
 
-void CircularHole::getSegments(std::vector<Segment> segments) {
+void CircularHole::getSegments(std::vector<Segment<int>> segments) {
     if(this->discrete_points.size()==0){
         discrete_points = discretizeCircle(10);
     }

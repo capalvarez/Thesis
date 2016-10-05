@@ -26,6 +26,8 @@ public:
     Eigen::VectorXd getF();
     void assembleK(DOFS out, Eigen::MatrixXd& Kglobal);
     void assembleF(DOFS out, Eigen::VectorXd& Fglobal);
+
+    bool operator==(const Element other) const;
 };
 
 

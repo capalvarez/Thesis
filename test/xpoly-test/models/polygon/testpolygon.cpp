@@ -13,19 +13,20 @@ TEST_F(PolygonTest, IsConvexTest){
 }
 
 TEST_F(PolygonTest, GetSegmentsTest){
-    std::vector<Segment> expectedT = {Segment(0,1), Segment(1,4), Segment(4,0)};
-    std::vector<Segment> result;
+    std::vector<Segment<int>> expectedT = {Segment<int>(0,1), Segment<int>(1,4), Segment<int>(4,0)};
+    std::vector<Segment<int>> result;
 
     triangle->getSegments(result);
     EXPECT_EQ(result,expectedT);
     result.clear();
 
-    std::vector<Segment> expectedS = {Segment(0,1), Segment(1,2), Segment(2,4), Segment(4,0)};
+    std::vector<Segment<int>> expectedS = {Segment<int>(0,1), Segment<int>(1,2), Segment<int>(2,4), Segment<int>(4,0)};
     square->getSegments(result);
     EXPECT_EQ(result,expectedS);
     result.clear();
 
-    std::vector<Segment> expectedN = {Segment(0,1), Segment(1,6), Segment(6,3), Segment(3,5), Segment(5,0)};
+    std::vector<Segment<int>> expectedN = {Segment<int>(0,1), Segment<int>(1,6), Segment<int>(6,3), Segment<int>(3,5),
+                                           Segment<int>(5,0)};
     nonconvex->getSegments(result);
     EXPECT_EQ(result,expectedN);
 }

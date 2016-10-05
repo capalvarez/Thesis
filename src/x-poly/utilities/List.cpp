@@ -54,7 +54,7 @@ std::vector<int> List<T>::push_list(std::vector<T> list) {
 
 
 template class List<Point>;
-template class List<Segment>;
+template class List<Segment<int>>;
 template class List<Polygon>;
 template class List<int>;
 template class List<DOF*>;
