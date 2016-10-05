@@ -6,12 +6,13 @@
 #include <x-poly/models/basic/Segment.h>
 #include <algorithm>
 
-
 class Mesh {
-private:
+protected:
     std::vector<Point> points;
     std::vector<Polygon> elements;
     std::vector<Segment<int>> edges;
+
+    std::vector<Segment<int>> boundary;
 public:
     Mesh(std::vector<Point>& p, std::vector<Polygon>& e, std::vector<Segment<int>>& s);
     Mesh();
@@ -22,8 +23,8 @@ public:
     std::vector<Polygon> getElements();
 
     void printInFile(std::string fileName);
-    void breakPolygons(Segment<Point> s);
-    void breakPolygons(Segment<int> s);
+
+    bool isInBoundary(Point p);
 };
 
 

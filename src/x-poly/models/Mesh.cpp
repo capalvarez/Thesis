@@ -49,11 +49,3 @@ void Mesh::printInFile(std::string fileName) {
     file.close();
 }
 
-void Mesh::breakPolygons(Segment<int> s) {
-
-}
-
-void Mesh::breakPolygons(Segment<Point> s) {
-
-}
-

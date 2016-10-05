@@ -1,8 +1,8 @@
 #include "FractureSimulator.h"
-#include <fracture/geometry/BrokenMeshInfo.h>
+#include <geometry/structures/BrokenMeshInfo.h>
 
 FractureSimulator::FractureSimulator(int k, Mesh mesh, Crack initial) {
-    this->mesh = mesh;
+    this->mesh = BreakableMesh(mesh);
     this->crack = initial;
 
     BrokenMeshInfo broken = mesh.breakPolygons();
@@ -14,7 +14,7 @@ FractureSimulator::FractureSimulator(int k, Mesh mesh, Crack initial) {
 void FractureSimulator::simulate(double crack_growth, int max_iter) {
     int n_iter = 0;
 
-    while(n_iter<max_iter && this->crack.isFinished()){
+    while(n_iter<max_iter && this->crack.isFinished((BreakableMesh(Mesh())))){
         std::vector<Polygon> refinedPolygons = this->crack.prepareTip();
         this->veamer.replaceElement();
 
