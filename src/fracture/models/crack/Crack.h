@@ -5,19 +5,21 @@
 #include <vector>
 #include <veamy/models/Element.h>
 #include "CrackTip.h"
-#include "geometry/BreakableMesh.h"
+#include <models/geometry/BreakableMesh.h>
 
 class Crack {
 private:
     std::vector<CrackTip> crackTip;
+
 public:
     Crack();
     Crack(BreakableMesh mesh, Point init, Point end);
-    Crack(BreakableMesh mesh, Point init, double angle, double length);
 
-    std::vector<Polygon> grow(BreakableMesh m, Eigen::VectorXd u);
-    std::vector<Polygon> prepareTip(BreakableMesh m);
+    PolygonChangeData grow(BreakableMesh m, Eigen::VectorXd u);
+    PolygonChangeData prepareTip(BreakableMesh m);
     bool isFinished(BreakableMesh mesh);
+
+    void initializeCrack(BreakableMesh mesh);
 };
 
 

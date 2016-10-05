@@ -15,7 +15,7 @@ double CrackTip::calculateAngle() {
     return 0;
 }
 
-Point CrackTip::grow(Eigen::VectorXd u) {
+Segment<Point> CrackTip::grow(BreakableMesh mesh, Eigen::VectorXd u) {
 
 
 
@@ -25,6 +25,11 @@ Point CrackTip::grow(Eigen::VectorXd u) {
 bool CrackTip::isFinished(BreakableMesh mesh) {
     return mesh.isInBoundary(crackPath.back());
 }
+
+void CrackTip::assignLocation(Polygon polygon) {
+    this->container = polygon;
+}
+
 
 
 

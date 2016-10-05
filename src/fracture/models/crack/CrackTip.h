@@ -5,21 +5,22 @@
 #include <x-poly/models/basic/Point.h>
 #include <x-poly/models/polygon/Polygon.h>
 #include <veamy/lib/Eigen/Dense>
-#include <geometry/BreakableMesh.h>
+#include <models/geometry/BreakableMesh.h>
 
 class CrackTip {
 private:
     double length;
     std::vector<Point> crackPath;
     Polygon container;
-    std::vector<int> relatedDOFS;
+
 
     void addPointToPath(double angle);
     double calculateAngle();
 public:
     CrackTip(Segment<Point> crack, double length);
-    Point grow(Eigen::VectorXd u);
+    Segment<Point> grow(BreakableMesh mesh, Eigen::VectorXd u);
     bool isFinished(BreakableMesh mesh);
+    void assignLocation(Polygon polygon);
 
 };
 

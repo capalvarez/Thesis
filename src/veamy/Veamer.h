@@ -41,7 +41,7 @@ public:
     Eigen::VectorXd simulate();
     std::vector<Element> getElements();
 
-    void replaceElement(Polygon old, std::vector<Polygon> newPolygons);
+    void replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons);
 
 };
 

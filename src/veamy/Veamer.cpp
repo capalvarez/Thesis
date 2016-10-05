@@ -86,11 +86,14 @@ std::vector<Element> Veamer::getElements() {
     return this->elements;
 }
 
-void Veamer::replaceElement(Polygon old, std::vector<Polygon> newPolygons) {
-    int to_remove = polygon_to_element[old];
-    polygon_to_element.erase(old);
+void Veamer::replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons) {
+    for (int i = 0; i < old.size(); ++i) {
+        Polygon o = old[i];
+        int to_remove = polygon_to_element[o];
+        polygon_to_element.erase(o);
 
-    elements.erase(elements.begin() + to_remove, elements.end());
+        elements.erase(elements.begin() + to_remove, elements.end());
+    }
 
     for (int i = 0; i < newPolygons.size(); ++i) {
         createElement(newPolygons[i]);

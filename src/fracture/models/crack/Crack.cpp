@@ -1,5 +1,6 @@
 #include <x-poly/models/Mesh.h>
-#include <geometry/structures/BrokenMeshInfo.h>
+#include <models/geometry/structures/BrokenMeshInfo.h>
+#include <models/geometry/structures/PolygonChangeData.h>
 #include "Crack.h"
 #include "DeadCrackTip.h"
 
@@ -29,26 +30,23 @@ Crack::Crack(BreakableMesh mesh, Point init, Point end) {
     crackTip.push_back(CrackTip(Segment<Point>(end, init), 0.01));
 }
 
-Crack::Crack(BreakableMesh mesh, Point init, double angle, double length) {
-
-}
-
-std::vector<Polygon> Crack::grow(BreakableMesh m, Eigen::VectorXd u) {
+PolygonChangeData Crack::grow(BreakableMesh m, Eigen::VectorXd u) {
     std::vector<Polygon> changedPolygons;
 
     for(int i=0;i<crackTip.size();i++){
-        Point tip = crackTip[i].grow(m,u);
+        Point tip = crackTip[i].grow(m, u);
         BrokenMeshInfo polygons = m.breakMesh();
-        tip.assignLocation();
+        crackTip[i].assignLocation(polygons.tipPolygon);
 
-        changedPolygons.assign();
+
+        changedPolygons.assign( );
     }
 
     return changedPolygons;
 }
 
-std::vector<Polygon> Crack::prepareTip(BreakableMesh m) {
-    return std::vector<Polygon>();
+PolygonChangeData Crack::prepareTip(BreakableMesh m) {
+    return PolygonChangeData();
 }
 
 bool Crack::isFinished(BreakableMesh mesh) {
@@ -60,6 +58,15 @@ bool Crack::isFinished(BreakableMesh mesh) {
 
     return finished;
 }
+
+
+void Crack::initializeCrack(BreakableMesh mesh) {
+
+}
+
+
+
+
 
 
 

@@ -2,14 +2,20 @@
 #define THESIS_BROKENMESHINFO_H
 
 struct BrokenMeshInfo{
-    std::vector<Polygon> oldPolygons;
-    std::vector<Polygon> newPolygons;
-    std::vector<Polygon> tipPolygons;
+    PolygonChangeData data;
+    Polygon tipPolygon;
 
-    brokenMeshInfo(std::vector<Polygon> o, std::vector<Polygon> n, std::vector<Polygon> t){
-        oldPolygons = o;
-        newPolygons = n;
+    BrokenMeshInfo(std::vector<Polygon> o, std::vector<Polygon> n, Polygon t){
+        data = PolygonChangeData(o,p);
         tipPolygons = t;
+    }
+
+    oldPolygons(){
+        return data.oldPolygons;
+    }
+
+    newPolygons(){
+        return data.newPolygons;
     }
 
 };
