@@ -4,7 +4,7 @@
 
 Mesh::Mesh(std::vector<Point> &p, std::vector<Polygon> &e, std::vector<Segment>& s) {
     this->points.assign(p.begin(), p.end());
-    this->elements.assign(e.begin(), e.end());
+    this->polygons.assign(e.begin(), e.end());
     this->edges.assign(s.begin(), s.end());
 }
 
@@ -20,8 +20,8 @@ std::vector<Segment> Mesh::getEdges() {
     return this->edges;
 }
 
-std::vector<Polygon> Mesh::getElements() {
-    return this->elements;
+std::vector<Polygon> Mesh::getPolygons() {
+    return this->polygons;
 }
 
 void Mesh::printInFile(std::string fileName) {
@@ -42,9 +42,9 @@ void Mesh::printInFile(std::string fileName) {
         file << this->edges[i].getString() << std::endl;
     }
 
-    file << this->elements.size() << std::endl;
-    for(int i=0;i<this->elements.size();i++){
-        file << this->elements[i].getString() << std::endl;
+    file << this->polygons.size() << std::endl;
+    for(int i=0;i<this->polygons.size();i++){
+        file << this->polygons[i].getString() << std::endl;
     }
 
     file.close();

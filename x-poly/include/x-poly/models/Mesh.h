@@ -9,7 +9,7 @@
 class Mesh {
 private:
     std::vector<Point> points;
-    std::vector<Polygon> elements;
+    std::vector<Polygon> polygons;
     std::vector<Segment> edges;
 public:
     Mesh(std::vector<Point>& p, std::vector<Polygon>& e, std::vector<Segment>& s);
@@ -18,7 +18,7 @@ public:
 
     std::vector<Point> getPoints();
     std::vector<Segment> getEdges();
-    std::vector<Polygon> getElements();
+    std::vector<Polygon> getPolygons();
 
     void printInFile(std::string fileName);
 };

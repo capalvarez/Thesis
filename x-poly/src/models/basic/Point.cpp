@@ -38,3 +38,8 @@ Vector Point::operator-(Point &other) {
     Point3D* newPoint = new Point3D(this->x - other.getX(), this->y - other.getY(),0);
     return Vector(newPoint);
 }
+
+Point Point::operator-(const Point &other) {
+    return Point(this->x - other.x, this->y - other.y);
+}
+

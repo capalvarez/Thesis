@@ -10,6 +10,7 @@
 #include <veamy/physics/BodyForce.h>
 #include <veamy/models/constraints/ConstraintsContainer.h>
 #include <veamy/models/Element.h>
+#include <veamy/lib/Eigen/Dense>
 
 class Veamer {
 private:
@@ -17,11 +18,9 @@ private:
     ConstraintsContainer constraints;
     std::vector<Element> elements;
     List<Point> points;
-
-    int k;
 public:
     DOFS DOFs;
-    Veamer(int k);
+    Veamer();
 
     void loadGeometry(Mesh m, ConstraintsContainer c, BodyForce* f);
     Eigen::VectorXd simulate();

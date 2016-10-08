@@ -2,28 +2,24 @@
 #include <iostream>
 #include <veamy/Veamer.h>
 
-Veamer::Veamer(int k) {
-    this->k = k;
-}
+Veamer::Veamer() {}
 
 void Veamer::loadGeometry(Mesh m, ConstraintsContainer c, BodyForce* f) {
-    //TODO: Make a constructor that doesnt receive body forces (or several)
-
     std::vector<Point> meshPoints = m.getPoints();
     this->points.push_list(meshPoints);
     this->constraints = c;
 
-    std::vector<Polygon> polygons = m.getElements();
+    std::vector<Polygon> polygons = m.getPolygons();
 
     for(int i=0;i<polygons.size();i++){
-        elements.push_back(Element(this->constraints, polygons[i], this->points, DOFs, k, f));
+        elements.push_back(Element(this->constraints, polygons[i], this->points, DOFs, f));
     }
 }
 
 Eigen::VectorXd Veamer::simulate() {
     Eigen::MatrixXd K;
     Eigen::VectorXd f;
-    int n = this->DOFs.size() + (this->k)*(this->k-1)/2;
+    int n = this->DOFs.size();
 
     K = Eigen::MatrixXd::Zero(n,n);
     f = Eigen::VectorXd::Zero(n);

@@ -7,8 +7,6 @@
 #include <veamy/models/dof/DOFS.h>
 #include <x-poly/models/polygon/Polygon.h>
 #include <veamy/models/dof/VertexDOF.h>
-#include <veamy/matrix/lobattoQuadrature.h>
-#include <veamy/matrix/BasePolinomials.h>
 #include <veamy/lib/Eigen/Dense>
 #include <veamy/utilities/SegmentPair.h>
 #include <veamy/physics/BodyForce.h>
@@ -23,10 +21,10 @@ private:
     Eigen::MatrixXd K;
     Eigen::VectorXd f;
 
-    void initMatrix(DOFS d, std::vector<Point> points, std::vector<double> weight, Polygon p, int k, BodyForce* f,
+    void initMatrix(DOFS d, std::vector<Point> points, std::vector<double> weight, Polygon p, BodyForce* f,
                     ConstraintsContainer constrains);
 public:
-    Element(ConstraintsContainer& constraints, Polygon p, List<Point>& points, DOFS& out, int k, BodyForce* f);
+    Element(ConstraintsContainer& constraints, Polygon p, List<Point>& points, DOFS& out, BodyForce* f);
     Eigen::MatrixXd getK();
     Eigen::VectorXd getF();
     void assembleK(DOFS out, Eigen::MatrixXd& Kglobal);
