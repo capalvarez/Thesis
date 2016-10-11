@@ -2,11 +2,9 @@
 #define THESIS_ELEMENT_H
 
 #include <veamy/models/dof/DOF.h>
-#include <veamy/models/dof/InnerDOF.h>
 #include <x-poly/utilities/List.h>
 #include <veamy/models/dof/DOFS.h>
 #include <x-poly/models/polygon/Polygon.h>
-#include <veamy/models/dof/VertexDOF.h>
 #include <veamy/lib/Eigen/Dense>
 #include <veamy/utilities/SegmentPair.h>
 #include <veamy/physics/BodyForce.h>
@@ -21,8 +19,7 @@ private:
     Eigen::MatrixXd K;
     Eigen::VectorXd f;
 
-    void initMatrix(DOFS d, std::vector<Point> points, std::vector<double> weight, Polygon p, BodyForce* f,
-                    ConstraintsContainer constrains);
+    void initMatrix(DOFS d, std::vector<Point> points, Polygon p, BodyForce* f, ConstraintsContainer constrains);
 public:
     Element(ConstraintsContainer& constraints, Polygon p, List<Point>& points, DOFS& out, BodyForce* f);
     Eigen::MatrixXd getK();

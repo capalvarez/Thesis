@@ -55,7 +55,7 @@ bool VeamyList<T>::contains(T elem) {
     return std::find(list.begin(), list.end(), elem) != list.end();;
 }
 
-template class VeamyList<DOF*>;
+template class VeamyList<DOF>;
 template class VeamyList<Segment>;
 
 

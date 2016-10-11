@@ -1,4 +1,7 @@
 #include <veamy/models/Element.h>
+#include <veamy/models/Edge.h>
+#include <veamy/physics/Material.h>
+#include <veamy/matrix/quadrature/QuadraturePolygon.h>
 
 Element::Element(ConstraintsContainer& constraints, Polygon p, List<Point>& points, DOFS& out, BodyForce* f) {
     std::vector<int> vertex = p.getPoints();
@@ -20,7 +23,7 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, BodyForce
                          ConstraintsContainer constraints) {
     std::vector<int> polygonPoints = p.getPoints();
     int n = (int) polygonPoints.size();
-    Point average = p.getAverageVertex();
+    Point average = p.getAverageVertex(points);
     double area = p.getArea();
 
     Eigen::MatrixXd Nr;
@@ -34,36 +37,43 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, BodyForce
     Wc = Eigen::MatrixXd::Zero(2*n, 3);
 
     for(int vertex_id=0; vertex_id<n; vertex_id++){
-        Point vertex = points[vertex_id];
+        Point vertex = points[polygonPoints[vertex_id]];
+
+        Edge prev (polygonPoints[(n+vertex_id-1)%n], polygonPoints[vertex_id]);
+        Edge next (polygonPoints[vertex_id], polygonPoints[(n+vertex_id+1)%n]);
+
+        Pair<double> prevNormal = prev.getNormal(polygonPoints,points);
+        Pair<double> nextNormal = next.getNormal(polygonPoints,points);
+
+        double prevLength = prev.getLength(points);
+        double nextLength = next.getLength(points);
+
         double xDiff = vertex.getX() - average.getX();
         double yDiff = vertex.getY() - average.getY();
 
-
-
-        Vector Qi = 1/4*area*()
-
+        double Qi_x = 1/(4*area)*(prevNormal.first*prevLength + nextNormal.first*nextLength);
+        double Qi_y = 1/(4*area)*(prevNormal.second*prevLength + nextNormal.second*nextLength);
 
         Nr(2*vertex_id, 0) = 1;
         Nr(2*vertex_id, 2) = yDiff;
         Nr(2*vertex_id+1, 1) = 1;
         Nr(2*vertex_id+1, 2) = -xDiff;
 
-        Wr(2*vertex_id, 0) = 1/n;
-        Wr(2*vertex_id, 2) = ;
-        Wr(2*vertex_id+1, 1) = 1/n;
-        Wr(2*vertex_id+1, 2) = ;
+        Wr(2*vertex_id, 0) = 1.0/n;
+        Wr(2*vertex_id, 2) = Qi_y;
+        Wr(2*vertex_id+1, 1) = 1.0/n;
+        Wr(2*vertex_id+1, 2) = -Qi_x;
 
         Nc(2*vertex_id, 0) = xDiff;
         Nc(2*vertex_id, 2) = yDiff;
         Nc(2*vertex_id+1, 1) = yDiff;
         Nc(2*vertex_id+1, 2) = xDiff;
 
-        Wc(2*vertex_id, 0) = 1/n;
-        Wc(2*vertex_id, 2) = ;
-        Wc(2*vertex_id+1, 1) = 1/n;
-        Wc(2*vertex_id+1, 2) = ;
+        Wc(2*vertex_id, 0) = 2*Qi_x;
+        Wc(2*vertex_id, 2) = Qi_y;
+        Wc(2*vertex_id+1, 1) = 2*Qi_y;
+        Wc(2*vertex_id+1, 2) = Qi_x;
     }
-
 
     Eigen::MatrixXd Pr;
     Eigen::MatrixXd Pc;
@@ -72,24 +82,26 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, BodyForce
 
     I = Eigen::MatrixXd::Identity(2*n, 2*n);
 
-    Pr = Nr*Wr.transpose();
-    Pc = Nc*Wc.transpose();
+    Pr = Nr*(Wr.transpose());
+    Pc = Nc*(Wc.transpose());
 
     Pp = Pc + Pr;
 
+    Material m;
+    Eigen::MatrixXd D = m.getMaterialMatrix();
+
     this->K = area*Wc*D*Wc.transpose() + (I - Pp).transpose()*(I - Pp);
-
-
 
     this->f = Eigen::VectorXd::Zero(dofs.size());
     NaturalConstraints natural = constraints.getNaturalConstraints();
 
-    for (int i = 0; i < dofs.size(); ++i) {
-        LoadTerm *l = new LoadTerm(i, k, p, f, PiZeroS);
-        this->f(i) = polygon.integrate(l, points) + natural.lineIntegral(points,p,dofs[i],i,k,PiZeroS);
+    QuadraturePolygon polygon(p);
 
-        delete (l);
+    for (int i = 0; i < dofs.size(); ++i) {
+        this->f(i) = polygon.integrate(f, points) + natural.lineIntegral(points,p,i/2,dofs[i]);
     }
+
+    std::cout << this->f << std::endl;
 }
 
 Eigen::MatrixXd Element::getK() {
@@ -102,10 +114,10 @@ Eigen::VectorXd Element::getF() {
 
 void Element::assembleK(DOFS out, Eigen::MatrixXd& Kglobal) {
     for (int i = 0; i < this->K.rows(); i++) {
-        int globalI = out.get(this->dofs[i])->globalIndex();
+        int globalI = out.get(this->dofs[i]).globalIndex();
 
         for (int j = 0; j < this->K.cols(); j++) {
-            int globalJ = out.get(this->dofs[j])->globalIndex();
+            int globalJ = out.get(this->dofs[j]).globalIndex();
 
             Kglobal(globalI, globalJ) = Kglobal(globalI, globalJ) + this->K(i, j);
         }
@@ -114,7 +126,7 @@ void Element::assembleK(DOFS out, Eigen::MatrixXd& Kglobal) {
 
 void Element::assembleF(DOFS out, Eigen::VectorXd &Fglobal) {
     for (int i = 0; i < this->K.rows(); i++) {
-        int globalI = out.get(this->dofs[i])->globalIndex();
+        int globalI = out.get(this->dofs[i]).globalIndex();
 
         Fglobal(globalI) = Fglobal(globalI) + this->f(i);
     }

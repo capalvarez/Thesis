@@ -26,5 +26,20 @@ List<Segment> Constraint::getSegments() {
     return this->constraints;
 }
 
+Pair<int> Constraint::getIndex(int point_index) {
+    switch(direction){
+        case Horizontal:
+            return Pair<int>(2*point_index, -1);
+        case Vertical:
+            return Pair<int>(-1, 2*point_index+1);
+        case Total:
+            return Pair<int>(2*point_index, 2*point_index+1);
+    }
+
+    return Pair<int>(-1,-1);
+}
+
+
+
 
 

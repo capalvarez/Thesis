@@ -11,8 +11,8 @@ Pair<int> DOFS::addDOF(ConstraintsContainer &constraints, std::vector<Point> poi
         return Pair<int>(outer_indexes[outerDOF_index], outer_indexes[outerDOF_index]+1);
     }
 
-    int newIndex = list.push_back(new VertexDOF(list.size(),point_index, DOF::Axis::x));
-    list.push_back(new VertexDOF(list.size(), point_index, DOF::Axis::y));
+    int newIndex = list.push_back(DOF(list.size(),point_index, DOF::Axis::x));
+    list.push_back(DOF(list.size(), point_index, DOF::Axis::y));
 
     constraints.addConstrainedDOF(newIndex,DOF::Axis::x, pair);
     constraints.addConstrainedDOF(newIndex+1,DOF::Axis::y, pair);
@@ -23,7 +23,7 @@ Pair<int> DOFS::addDOF(ConstraintsContainer &constraints, std::vector<Point> poi
     return Pair<int>(newIndex, newIndex+1);
 }
 
-VeamyList<DOF *> DOFS::getDOFS() {
+VeamyList<DOF> DOFS::getDOFS() {
     return this->list;
 }
 
@@ -31,7 +31,7 @@ int DOFS::size() {
     return list.size();
 }
 
-DOF *DOFS::get(int i) {
+DOF DOFS::get(int i) {
     return list.get(i);
 }
 

@@ -6,8 +6,8 @@ Edge::Edge(int p1, int p2) {
 }
 
 Pair<double> Edge::getNormal(std::vector<int> indexes, std::vector<Point> points) {
-    Point P1 = points[indexes[p1]];
-    Point P2 = points[indexes[p2]];
+    Point P1 = points[p1];
+    Point P2 = points[p2];
 
     return Pair<double>((P2.getY()-P1.getY()), -(P2.getX()-P1.getX()));
 }

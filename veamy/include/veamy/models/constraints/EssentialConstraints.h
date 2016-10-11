@@ -15,7 +15,7 @@
 class EssentialConstraints : public Constraints{
 public:
     EssentialConstraints();
-    Eigen::VectorXd getBoundaryValues(std::vector<Point> points, VeamyList<DOF*> dofs);
+    Eigen::VectorXd getBoundaryValues(std::vector<Point> points, VeamyList<DOF> dofs);
 };
 
 

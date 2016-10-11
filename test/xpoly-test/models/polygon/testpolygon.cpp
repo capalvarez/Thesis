@@ -87,3 +87,7 @@ TEST_F(PolygonTest, IsClockwise){
     EXPECT_FALSE(square->isClockwise(points));
     EXPECT_TRUE(nonclockwise->isClockwise(points));
 }
+
+TEST_F(PolygonTest, AverageTest){
+    EXPECT_EQ(square->getAverageVertex(points), Point(0.5,0.5));
+}

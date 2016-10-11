@@ -4,8 +4,6 @@
 #include <x-poly/models/hole/CircularHole.h>
 #include <x-poly/models/generator/functions.h>
 
-int main();
-
 void generateTest(std::string testName, Region r, Hole* h, std::vector<Point> points){
     r.addHole(h);
 
@@ -26,7 +24,7 @@ void generateTestNoHole(std::string testName, Region r, std::vector<Point> point
     m.printInFile(testName + ".txt");
 }
 
-int main(){
+int run(){
     std::vector<Point> square_points = {Point(0,0), Point(1,0), Point(1,1), Point(0,1)};
     Region square(square_points);
 

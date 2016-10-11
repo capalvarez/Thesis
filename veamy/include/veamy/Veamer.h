@@ -3,7 +3,6 @@
 
 #include <x-poly/models/Mesh.h>
 #include <x-poly/utilities/List.h>
-#include <veamy/models/dof/OuterDOF.h>
 #include <veamy/models/dof/DOFS.h>
 #include <veamy/models/constraints/EssentialConstraints.h>
 #include <veamy/matrix/matrixOps.h>

@@ -1,4 +1,3 @@
-#include <veamy/matrix/lobattoQuadrature.h>
 #include <veamy/matrix/integration/IntegrationPolygon.h>
 
 IntegrationPolygon::IntegrationPolygon(std::vector<int> index, std::vector<Point> points) : Polygon(index,points){}

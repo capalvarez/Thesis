@@ -1,5 +1,5 @@
-#ifndef THESIS_OUTERDOFS_H
-#define THESIS_OUTERDOFS_H
+#ifndef THESIS_DOFS_H
+#define THESIS_DOFS_H
 
 #include <array>
 #include <veamy/utilities/VeamyList.h>
@@ -10,15 +10,15 @@
 
 class DOFS {
 private:
-    VeamyList<DOF*> list;
+    VeamyList<DOF> list;
     std::vector<int> occupied_point_indexes;
     std::vector<int> outer_indexes;
 public:
     Pair<int> addDOF(ConstraintsContainer &constraints, std::vector<Point> points, int point_index,
                      SegmentPair pair);
-    VeamyList<DOF*> getDOFS();
+    VeamyList<DOF> getDOFS();
     int size();
-    DOF* get(int i);
+    DOF get(int i);
 };
 
 

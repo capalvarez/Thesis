@@ -13,6 +13,8 @@ public:
     bool operator==(const Pair& other) const;
     T dot(Pair other);
     Pair<T> average(Pair<T> other);
+    Pair<T> operator*(const double other);
+    Pair<T> operator+(const Pair& other) const;
 };
 
 

@@ -45,6 +45,8 @@ public:
 
     bool operator==(const Polygon& other) const;
     std::string getString();
+
+    Point getAverageVertex(std::vector<Point> p);
 };
 
 #endif

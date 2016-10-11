@@ -29,8 +29,6 @@ void Constraints::addConstrainedDOF(int DOF_index, DOF::Axis axis, SegmentPair p
 }
 
 void Constraints::addConstrainedDOFBySegment(int DOF_index, DOF::Axis axis, Segment s) {
-    //TODO: Check incompatible constrains
-
     if(isConstrained(s)){
         Constraint constraint = constrained_segments[s];
         Constraint::Direction direction = constraint.getDirection();
@@ -53,5 +51,6 @@ void Constraints::addConstrainedDOFBySegment(int DOF_index, DOF::Axis axis, Segm
             constraints_map.insert(std::pair<int,Constraint>(DOF_index, constraint));
         }
     }
+
 }
 

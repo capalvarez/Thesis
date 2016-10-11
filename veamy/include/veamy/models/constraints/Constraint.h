@@ -7,6 +7,7 @@
 #include <veamy/models/constraints/values/ConstraintValue.h>
 #include <x-poly/utilities/List.h>
 #include <x-poly/models/basic/Segment.h>
+#include <veamy/utilities/Pair.h>
 
 class Constraint{
 public:
@@ -23,6 +24,8 @@ public:
     double getValue(Point p);
     List<Segment> getSegments();
     Direction getDirection();
+
+    Pair<int> getIndex(int point_index);
 
 };
 
