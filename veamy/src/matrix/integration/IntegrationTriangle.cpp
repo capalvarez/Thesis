@@ -1,4 +1,3 @@
-
 #include <veamy/matrix/integration/IntegrationTriangle.h>
 
 

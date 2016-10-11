@@ -70,14 +70,7 @@ double Polygon::calculateDiameter(std::vector<Point>& p) {
 }
 
 double Polygon::calculateArea(std::vector<Point>& p) {
-    double area = 0.0;
-    int n = this->points.size();
-
-    for(int i=0; i<n; i++) {
-        area += geometry_functions::triangleArea(p[this->points[i%n]],p[this->points[(i+1)%n]],p[this->points[0]]);
-    }
-
-    return area;
+    return geometry_functions::area(p,this->points);
 }
 
 double Polygon::getArea(){

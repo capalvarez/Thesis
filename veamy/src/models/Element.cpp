@@ -100,8 +100,6 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, BodyForce
     for (int i = 0; i < dofs.size(); ++i) {
         this->f(i) = polygon.integrate(f, points) + natural.lineIntegral(points,p,i/2,dofs[i]);
     }
-
-    std::cout << this->f << std::endl;
 }
 
 Eigen::MatrixXd Element::getK() {
