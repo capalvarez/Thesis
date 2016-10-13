@@ -10,17 +10,17 @@
 
 class Constraints {
 protected:
-    std::unordered_map<Segment, Constraint, SegmentHasher> constrained_segments;
+    std::unordered_map<Segment<int>, Constraint, SegmentHasher> constrained_segments;
     std::unordered_map<int, Constraint, intHasher> constraints_map;
     List<int> constrained_dofs;
 public:
     void addConstraint(Constraint c);
-    bool isConstrained(Segment p);
+    bool isConstrained(Segment<int> p);
     bool isConstrained(int dof);
 
     std::vector<int> getConstrainedDOF();
-    void addConstrainedDOF(int DOF_index, DOF::Axis axis, SegmentPair pair);
-    void addConstrainedDOFBySegment(int DOF_index, DOF::Axis axis, Segment s);
+    void addConstrainedDOF(int DOF_index, DOF::Axis axis, SegmentPair<int> pair);
+    void addConstrainedDOFBySegment(int DOF_index, DOF::Axis axis, Segment<int> s);
 };
 
 

@@ -10,7 +10,7 @@ void ConstraintsContainer::addConstraints(EssentialConstraints c) {
     this->essential = c;
 }
 
-void ConstraintsContainer::addConstrainedDOF(int DOF_index, DOF::Axis axis, SegmentPair pair) {
+void ConstraintsContainer::addConstrainedDOF(int DOF_index, DOF::Axis axis, SegmentPair<int> pair) {
     natural.addConstrainedDOF(DOF_index,axis,pair);
     essential.addConstrainedDOF(DOF_index,axis,pair);
 }

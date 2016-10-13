@@ -10,9 +10,9 @@ private:
     T p1;
     T p2;
 public:
+    Segment();
     Segment(T p1, T p2);
     ~Segment();
-
 
     T getFirst() const;
     T getSecond() const;

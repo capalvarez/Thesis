@@ -15,7 +15,7 @@ private:
     std::vector<int> outer_indexes;
 public:
     Pair<int> addDOF(ConstraintsContainer &constraints, std::vector<Point> points, int point_index,
-                     SegmentPair pair);
+                     SegmentPair<int> pair);
     VeamyList<DOF> getDOFS();
     int size();
     DOF get(int i);

@@ -4,7 +4,7 @@
 #include <x-poly/models/basic/Segment.h>
 
 struct SegmentHasher {
-    std::size_t operator()(const Segment &k) const {
+    std::size_t operator()(const Segment<int> &k) const {
         using std::size_t;
         using std::hash;
 

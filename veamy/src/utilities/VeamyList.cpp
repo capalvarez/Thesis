@@ -56,7 +56,8 @@ bool VeamyList<T>::contains(T elem) {
 }
 
 template class VeamyList<DOF>;
-template class VeamyList<Segment>;
+template class VeamyList<Segment<int>>;
+template class VeamyList<Segment<Point>>;
 
 
 

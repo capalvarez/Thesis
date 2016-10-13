@@ -10,8 +10,8 @@ double QuadraturePolygon::integrate(BodyForce *f, std::vector<Point> points) {
     std::vector<int> polygonPoints = polygon.getPoints();
     int n = (int) polygonPoints.size();
 
-    Segment prev (polygonPoints[n-1], polygonPoints[0]);
-    Segment next (polygonPoints[0], polygonPoints[1]);
+    Segment<int> prev (polygonPoints[n-1], polygonPoints[0]);
+    Segment<int> next (polygonPoints[0], polygonPoints[1]);
 
     for (int i = 0; i < n; ++i) {
         Point point = points[polygonPoints[i]];

@@ -13,23 +13,16 @@ class Constraint{
 public:
     enum Direction {Vertical, Horizontal, Total};
 private:
-    List<Segment> constraints;
+    List<Segment<int>> constraints;
     ConstraintValue* v;
     Direction direction;
 public:
     Constraint();
-<<<<<<< HEAD:veamy/include/veamy/models/constraints/Constraint.h
-    Constraint(Segment s, Direction d, ConstraintValue* value);
-    Constraint(std::vector<Segment> s, Direction d, ConstraintValue* value);
-=======
-    Constraint(Point p, Direction d, ConstraintValue* value);
-    Constraint(std::vector<Point> p, Direction d, ConstraintValue* value);
     Constraint(Segment<int> s, Direction d, ConstraintValue* value);
     Constraint(std::vector<Segment<int>> s, Direction d, ConstraintValue* value);
->>>>>>> fracture_models:src/veamy/models/constraints/Constraint.h
 
     double getValue(Point p);
-    List<Segment> getSegments();
+    List<Segment<int>> getSegments();
     Direction getDirection();
 
     Pair<int> getIndex(int point_index);

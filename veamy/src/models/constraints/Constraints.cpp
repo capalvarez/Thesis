@@ -1,14 +1,14 @@
 #include <veamy/models/constraints/Constraints.h>
 
 void Constraints::addConstraint(Constraint c) {
-    List<Segment> segments = c.getSegments();
+    List<Segment<int>> segments = c.getSegments();
 
     for (int i = 0; i < segments.size(); ++i) {
         constrained_segments.insert(std::make_pair(segments.get(i), c));
     }
 }
 
-bool Constraints::isConstrained(Segment s) {
+bool Constraints::isConstrained(Segment<int> s) {
     return constrained_segments.find(s)!=constrained_segments.end();
 }
 
@@ -20,7 +20,7 @@ std::vector<int> Constraints::getConstrainedDOF() {
     return constrained_dofs.getList();
 }
 
-void Constraints::addConstrainedDOF(int DOF_index, DOF::Axis axis, SegmentPair pair) {
+void Constraints::addConstrainedDOF(int DOF_index, DOF::Axis axis, SegmentPair<int> pair) {
     addConstrainedDOFBySegment(DOF_index, axis, pair.s1);
 
     if(pair.number!=1){
@@ -28,7 +28,7 @@ void Constraints::addConstrainedDOF(int DOF_index, DOF::Axis axis, SegmentPair p
     }
 }
 
-void Constraints::addConstrainedDOFBySegment(int DOF_index, DOF::Axis axis, Segment s) {
+void Constraints::addConstrainedDOFBySegment(int DOF_index, DOF::Axis axis, Segment<int> s) {
     if(isConstrained(s)){
         Constraint constraint = constrained_segments[s];
         Constraint::Direction direction = constraint.getDirection();

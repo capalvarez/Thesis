@@ -6,6 +6,8 @@ Segment<T>::Segment(T p1, T p2) {
     this->p2 = p2;
 }
 
+template <class T>
+Segment<T>::Segment() {}
 
 template <class T>
 Segment<T>::~Segment() {}

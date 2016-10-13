@@ -11,8 +11,8 @@ double NaturalConstraints::lineIntegral(std::vector<Point> points, Polygon p, in
         std::vector<int> polygonPoints = p.getPoints();
         int n = (int) polygonPoints.size();
 
-        Segment prev (polygonPoints[(n + point -1)%n], polygonPoints[point]);
-        Segment next (polygonPoints[point], polygonPoints[(n + point + 1)%n]);
+        Segment<int> prev (polygonPoints[(n + point -1)%n], polygonPoints[point]);
+        Segment<int> next (polygonPoints[point], polygonPoints[(n + point + 1)%n]);
 
         if(constrained_segments.find(prev)!=constrained_segments.end()){
             Constraint c = constrained_segments[prev];

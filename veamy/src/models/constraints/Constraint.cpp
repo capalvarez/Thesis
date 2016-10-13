@@ -2,13 +2,13 @@
 
 Constraint::Constraint() {}
 
-Constraint::Constraint(Segment s, Constraint::Direction d, ConstraintValue *value) {
+Constraint::Constraint(Segment<int> s, Constraint::Direction d, ConstraintValue *value) {
     this->v = value;
     this->direction = d;
     this->constraints.push_back(s);
 }
 
-Constraint::Constraint(std::vector<Segment> s, Constraint::Direction d, ConstraintValue *value) {
+Constraint::Constraint(std::vector<Segment<int>> s, Constraint::Direction d, ConstraintValue *value) {
     this->v = value;
     this->direction = d;
     this->constraints.push_list(s);
@@ -22,7 +22,7 @@ Constraint::Direction Constraint::getDirection() {
     return direction;
 }
 
-List<Segment> Constraint::getSegments() {
+List<Segment<int>> Constraint::getSegments() {
     return this->constraints;
 }
 

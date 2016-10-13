@@ -8,7 +8,7 @@ Element::Element(ConstraintsContainer& constraints, Polygon p, List<Point>& poin
     int n = vertex.size();
 
     for(int i=0;i<n;i++){
-        SegmentPair pair(Segment(vertex[(i-1+n)%n],vertex[i]), Segment(vertex[i],vertex[(i+1)%n]));
+        SegmentPair<int> pair(Segment<int>(vertex[(i-1+n)%n],vertex[i]), Segment<int>(vertex[i],vertex[(i+1)%n]));
         Pair<int> indexes = out.addDOF(constraints, points.getList(), vertex[i], pair);
 
         dofs.push_back(indexes.first);
