@@ -3,6 +3,8 @@
 #include <sstream>
 #include <vector>
 #include <math.h>
+#include <x-poly/models/basic/Point.h>
+#include <algorithm>
 
 
 namespace utilities {
@@ -15,6 +17,7 @@ namespace utilities {
     double radian(double angle){
         return angle*M_PI/180;
     }
+
     template <typename T>
     std::string toString(T a){
         std::stringstream sstream;
@@ -23,7 +26,17 @@ namespace utilities {
 
         return s;
     }
+
     template std::string toString<int>(int a);
     template std::string toString<double>(double a);
+
+    template <typename T>
+    int indexOf(std::vector<T> vector, T element){
+        int pos = std::find(vector.begin(), vector.end(), element) - vector.begin();
+
+        return pos < (int) vector.size()? pos : -1;
+    }
+    template int indexOf<Point>(std::vector<Point> vector, Point p);
+
 }
 

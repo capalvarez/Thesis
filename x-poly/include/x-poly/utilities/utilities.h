@@ -20,6 +20,9 @@ namespace utilities {
 
     template <typename T>
     extern std::string toString(T a);
+
+    template <typename T>
+    extern int indexOf(std::vector<T> vector, T element);
 }
 
 #endif

@@ -16,10 +16,14 @@ private:
     List<Segment<int>> constraints;
     ConstraintValue* v;
     Direction direction;
+
+    Segment<int> fromPointToInt(Segment<Point> s, std::vector<Point> points);
 public:
     Constraint();
     Constraint(Segment<int> s, Direction d, ConstraintValue* value);
     Constraint(std::vector<Segment<int>> s, Direction d, ConstraintValue* value);
+    Constraint(Segment<Point> s, std::vector<Point> points, Direction d, ConstraintValue* value);
+    Constraint(std::vector<Segment<Point>> s, std::vector<Point> points, Direction d, ConstraintValue* value);
 
     double getValue(Point p);
     List<Segment<int>> getSegments();

@@ -10,7 +10,7 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     Veamer v;
     std::vector<Point> points = {Point(0,0), Point(2,0), Point(2,1), Point(0,1)};
     Region region(points);
-    region.generatePoints(PointGenerator(functions::constant(), functions::constant()), 5, 5);
+    region.generatePoints(PointGenerator(functions::constant(), functions::constant()), 4, 4);
 
     class Sum : public BodyForce{
     private:
@@ -27,12 +27,12 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     m.printInFile("Idontgetit.txt");
 
     EssentialConstraints c;
-    Segment<int> constrained(0,3);
-    Segment<int> constrained2 (2,5);
-    Constraint const1 (constrained, Constraint::Direction::Total, new Constant(0));
+    Segment<Point> constrained(Point(0,0),Point(0,1));
+    Segment<Point> constrained2 (Point(2,0),Point(2,1));
+    Constraint const1 (constrained, m.getPoints(), Constraint::Direction::Total, new Constant(0));
 
     c.addConstraint(const1);
-    Constraint const2 (constrained2, Constraint::Direction::Horizontal, new Constant(1));
+    Constraint const2 (constrained2, m.getPoints(), Constraint::Direction::Horizontal, new Constant(1));
     c.addConstraint(const2);
 
     ConstraintsContainer container;
