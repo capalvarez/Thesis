@@ -25,17 +25,15 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
 
     EssentialConstraints c;
     Segment constrained(0,3);
+    Segment constrained2 (2,5);
     Constraint const1 (constrained, Constraint::Direction::Total, new Constant(0));
     c.addConstraint(const1);
-
-    NaturalConstraints natural;
-    Segment contrained2(2,5);
-    Constraint const2 (contrained2, Constraint::Direction::Horizontal, new Constant(10));
-    natural.addConstraint(const2);
+    Constraint const2 (constrained2, Constraint::Direction::Horizontal, new Constant(0.1));
+    c.addConstraint(const2);
 
     ConstraintsContainer container;
     container.addConstraints(c);
-    container.addConstraints(natural);
+
 
     v.loadGeometry(m, container, f);
 

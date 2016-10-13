@@ -43,31 +43,17 @@ Eigen::VectorXd Veamer::simulate() {
     }
 
     for (int j = 0; j < c.size(); ++j) {
-        matrixOps::removeRow(K, c[j]);
-        matrixOps::removeColumn(K, c[j]);
+        K.row(c[j]).setZero();
+        K.col(c[j]).setZero();
+        K(c[j], c[j]) = 1;
 
-        matrixOps::removeElement(f,c[c.size() - 1 - j]);
+        f(c[j]) = boundary_values(j);
     }
 
     //Solve the system
     Eigen::VectorXd x = K.colPivHouseholderQr().solve(f);
 
-    int cIndex = 0;
-    int xIndex = 0;
-    Eigen::VectorXd xF;
-    xF = Eigen::VectorXd::Zero(c.size() + x.rows());
-
-    for (int i = 0; i < xF.rows(); ++i) {
-        if(i==c[cIndex]){
-            xF(i) = boundary_values(cIndex);
-            cIndex++;
-        } else{
-            xF(i) = x(xIndex);
-            xIndex++;
-        }
-    }
-
-    return xF;
+    return x;
 }
 
 std::vector<Element> Veamer::getElements() {

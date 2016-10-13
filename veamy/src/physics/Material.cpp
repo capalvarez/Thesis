@@ -2,8 +2,8 @@
 
 
 Material::Material() {
-    this->v = 0.33;
-    this->E = 25;
+    this->v = 0.3;
+    this->E = 210000000000;
 }
 
 Eigen::MatrixXd Material::getMaterialMatrix() {
