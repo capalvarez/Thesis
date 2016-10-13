@@ -20,6 +20,7 @@ public:
     std::string getString();
 
     bool contains(std::vector<Point>& p, Point point);
+    bool contains(std::vector<Point> p, Segment<int> s);
     Point middlePoint(std::vector<Point> p);
 };
 

@@ -7,20 +7,23 @@
 #include <x-poly/utilities/List.h>
 #include <veamy/models/constraints/Constraint.h>
 #include <veamy/models/constraints/structures/constrained_seg_mapdata.h>
+#include <veamy/models/constraints/structures/isConstrainedInfo.h>
 
 class Constraints {
 protected:
-    std::unordered_map<Segment<int>, Constraint, SegmentHasher> constrained_segments;
+    std::vector<Segment<int>> constrained_segments;
+
+    std::unordered_map<Segment<int>, Constraint, SegmentHasher> segment_map;
     std::unordered_map<int, Constraint, intHasher> constraints_map;
     List<int> constrained_dofs;
 public:
     void addConstraint(Constraint c);
-    bool isConstrained(Segment<int> p);
+    isConstrainedInfo isConstrained(std::vector<Point> points, Segment<int> p);
     bool isConstrained(int dof);
 
     std::vector<int> getConstrainedDOF();
-    void addConstrainedDOF(int DOF_index, DOF::Axis axis, SegmentPair<int> pair);
-    void addConstrainedDOFBySegment(int DOF_index, DOF::Axis axis, Segment<int> s);
+    void addConstrainedDOF(std::vector<Point> points, int DOF_index, DOF::Axis axis, SegmentPair<int> pair);
+    void addConstrainedDOFBySegment(std::vector<Point> points, int DOF_index, DOF::Axis axis, Segment<int> s);
 };
 
 

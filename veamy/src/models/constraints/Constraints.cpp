@@ -4,12 +4,20 @@ void Constraints::addConstraint(Constraint c) {
     List<Segment<int>> segments = c.getSegments();
 
     for (int i = 0; i < segments.size(); ++i) {
-        constrained_segments.insert(std::make_pair(segments.get(i), c));
+        constrained_segments.push_back(segments.get(i));
+        segment_map.insert(std::make_pair(segments.get(i), c));
     }
 }
 
-bool Constraints::isConstrained(Segment<int> s) {
-    return constrained_segments.find(s)!=constrained_segments.end();
+isConstrainedInfo Constraints::isConstrained(std::vector<Point> points, Segment<int> s) {
+   // TODO: Some data structure is necessary to optimize this, is slow as a snail
+
+    for (int i = 0; i < constrained_segments.size(); ++i) {
+        if(constrained_segments[i].contains(points, s))
+            return isConstrainedInfo(constrained_segments[i]);
+    }
+
+    return isConstrainedInfo();
 }
 
 bool Constraints::isConstrained(int dof) {
@@ -20,17 +28,19 @@ std::vector<int> Constraints::getConstrainedDOF() {
     return constrained_dofs.getList();
 }
 
-void Constraints::addConstrainedDOF(int DOF_index, DOF::Axis axis, SegmentPair<int> pair) {
-    addConstrainedDOFBySegment(DOF_index, axis, pair.s1);
+void Constraints::addConstrainedDOF(std::vector<Point> points, int DOF_index, DOF::Axis axis, SegmentPair<int> pair) {
+    addConstrainedDOFBySegment(points, DOF_index, axis, pair.s1);
 
     if(pair.number!=1){
-        addConstrainedDOFBySegment(DOF_index, axis, pair.s2);
+        addConstrainedDOFBySegment(points, DOF_index, axis, pair.s2);
     }
 }
 
-void Constraints::addConstrainedDOFBySegment(int DOF_index, DOF::Axis axis, Segment<int> s) {
-    if(isConstrained(s)){
-        Constraint constraint = constrained_segments[s];
+void Constraints::addConstrainedDOFBySegment(std::vector<Point> points, int DOF_index, DOF::Axis axis, Segment<int> s) {
+    isConstrainedInfo info = isConstrained(points, s);
+
+    if(info.isConstrained){
+        Constraint constraint = segment_map[info.container];
         Constraint::Direction direction = constraint.getDirection();
 
         bool insert;

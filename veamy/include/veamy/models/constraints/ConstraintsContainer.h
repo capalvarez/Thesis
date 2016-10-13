@@ -13,7 +13,7 @@ public:
     void addConstraints(NaturalConstraints c);
     void addConstraints(EssentialConstraints c);
 
-    void addConstrainedDOF(int DOF_index,DOF::Axis axis, SegmentPair<int> pair);
+    void addConstrainedDOF(std::vector<Point> points, int DOF_index,DOF::Axis axis, SegmentPair<int> pair);
 
     EssentialConstraints getEssentialConstraints();
     NaturalConstraints getNaturalConstraints();

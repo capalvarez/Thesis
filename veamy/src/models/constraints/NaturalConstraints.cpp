@@ -14,15 +14,15 @@ double NaturalConstraints::lineIntegral(std::vector<Point> points, Polygon p, in
         Segment<int> prev (polygonPoints[(n + point -1)%n], polygonPoints[point]);
         Segment<int> next (polygonPoints[point], polygonPoints[(n + point + 1)%n]);
 
-        if(constrained_segments.find(prev)!=constrained_segments.end()){
-            Constraint c = constrained_segments[prev];
+        if(segment_map.find(prev)!=segment_map.end()){
+            Constraint c = segment_map[prev];
 
             //TODO: Check convergence with first order aproximation
             integral += 0.5*c.getValue(points[prev.getFirst()]) + 0.5*c.getValue(points[prev.getSecond()]);
         }
 
-        if(constrained_segments.find(next)!=constrained_segments.end()){
-            Constraint c = constrained_segments[next];
+        if(segment_map.find(next)!=segment_map.end()){
+            Constraint c = segment_map[next];
 
             //TODO: Check convergence with first order aproximation
             integral += 0.5*c.getValue(points[next.getFirst()]) + 0.5*c.getValue(points[next.getSecond()]);

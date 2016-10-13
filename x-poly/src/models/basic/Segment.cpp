@@ -69,6 +69,11 @@ std::string Segment<Point>::getString() {
     return this->p1.getString() + " " + this->p2.getString();
 }
 
+template <>
+bool Segment<int>::contains(std::vector<Point> p, Segment<int> s) {
+    return this->contains(p, p[s.getFirst()]) && this->contains(p, p[s.getSecond()]);
+}
+
 
 template class Segment<int>;
 template class Segment<Point>;

@@ -89,11 +89,13 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, BodyForce
 
     Material m;
     Eigen::MatrixXd D = m.getMaterialMatrix();
-    double gamma = 1; //TODO: Study this coefficient's influence
+
+    // TODO: Study this coefficient's influence
+    double gamma = 1;
     double c = (Nc.transpose()*Nc).trace();
     double alphaS = area*m.trace()/c;
     Eigen::MatrixXd Se;
-    Se = alphaS*I;
+    Se = gamma*alphaS*I;
 
     this->K = area*Wc*D*Wc.transpose() + (I - Pp).transpose()*Se*(I - Pp);
 
