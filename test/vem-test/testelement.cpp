@@ -32,6 +32,5 @@ TEST(ElementTest, KMatrixTest){
 
     Element e (container, polygons[0], p, dofs, f);
 
-    std::cout << e.getK() <<std::endl;
 }
 

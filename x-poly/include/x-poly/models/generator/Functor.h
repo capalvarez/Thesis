@@ -3,7 +3,7 @@
 
 class Functor {
 public:
-    virtual double operator()(double x) = 0;
+    virtual double apply(double x) = 0;
 };
 
 

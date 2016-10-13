@@ -8,5 +8,5 @@ add_subdirectory(veamy)
 add_subdirectory(x-poly)
 add_subdirectory(test)
 
-add_subdirectory(test/xpoly-test/voronoi/visualizationtests)
+add_subdirectory(test/visualization-test)
 

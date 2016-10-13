@@ -38,9 +38,12 @@ Eigen::VectorXd Veamer::simulate() {
 
     Eigen::VectorXd boundary_values = essential.getBoundaryValues(this->points.getList(), this->DOFs.getDOFS());
 
+    // std::cout << boundary_values <<  std::endl << std::endl << K_b << std::endl << std::endl;
+
     for (int i = 0; i < K.rows(); ++i) {
         f(i) = f(i) - (K_b.row(i)*boundary_values);
     }
+
 
     for (int j = 0; j < c.size(); ++j) {
         K.row(c[j]).setZero();
@@ -50,8 +53,10 @@ Eigen::VectorXd Veamer::simulate() {
         f(c[j]) = boundary_values(j);
     }
 
+    //std::cout << K << std::endl << std::endl << f << std::endl << std::endl;
+
     //Solve the system
-    Eigen::VectorXd x = K.colPivHouseholderQr().solve(f);
+    Eigen::VectorXd x = K.inverse()*f;
 
     return x;
 }

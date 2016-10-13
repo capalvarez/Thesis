@@ -10,6 +10,8 @@ private:
 public:
     Material();
     Eigen::MatrixXd getMaterialMatrix();
+    double trace();
+
 };
 
 #endif

@@ -3,7 +3,7 @@
 
 namespace functions {
     Functor *constant() {
-        return new Constant();
+        return new Uniform(1.0);
     }
 
     Functor *uniform(double delta) {

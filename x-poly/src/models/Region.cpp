@@ -58,7 +58,8 @@ void Region::addHole(Hole* h) {
 }
 
 void Region::generatePoints(PointGenerator p, int nX, int nY){
-    p.generate(this->seedPoints, this->getBox(), nX, nY);
+    Rectangle box = this->getBox();
+    p.generate(this->seedPoints, box, nX, nY);
     this->clean();
 }
 

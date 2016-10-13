@@ -6,7 +6,7 @@
 class Constant : public Functor {
 public:
     Constant() {}
-    inline double operator()(double x){ return x;}
+    inline double apply(double x){ return x;}
 };
 
 class Uniform : public Functor {
@@ -14,7 +14,7 @@ private:
     double delta;
 public:
     Uniform(double delta){ this->delta = delta;}
-    inline double operator()(double x){ return x*delta;}
+    inline double apply(double x){ return x*delta;}
 };
 
 class Sine : public Functor {
@@ -29,7 +29,7 @@ public:
         this->phase = p;
     }
 
-    inline double operator()(double x){
+    inline double apply(double x){
         return amplitude*std::sin(frecuency*utilities::radian(x) + utilities::radian(phase));
     };
 };
@@ -46,7 +46,7 @@ public:
         this->phase = p;
     }
 
-    inline double operator()(double x){
+    inline double apply(double x){
         return amplitude*std::cos(frecuency*utilities::radian(x) + utilities::radian(phase));
     };
 };
@@ -71,7 +71,7 @@ public:
         delete(uni);
     }
 
-    inline double operator()(double x){return (*uni)(*this->rng);}
+    inline double apply(double x){return (*uni)(*this->rng);}
 };
 
 class Random_Double : public Functor {
@@ -94,7 +94,7 @@ public:
         delete(uni);
     }
 
-    inline double operator()(double x){return (*uni)(*this->rng);}
+    inline double apply(double x){return (*uni)(*this->rng);}
 };
 
 
