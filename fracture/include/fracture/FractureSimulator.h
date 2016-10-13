@@ -3,8 +3,8 @@
 
 #include <x-poly/models/Mesh.h>
 #include <veamy/Veamer.h>
-#include <models/crack/Crack.h>
-#include <models/geometry/BreakableMesh.h>
+#include "models/crack/Crack.h"
+#include "models/geometry/BreakableMesh.h"
 
 class FractureSimulator {
 private:

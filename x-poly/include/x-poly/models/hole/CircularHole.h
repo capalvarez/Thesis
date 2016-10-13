@@ -13,10 +13,8 @@ public:
     CircularHole(Point p, double r, int grade);
 
     Point getCenter();
-    void getSegments(std::vector<Segment>& segments, int offset);
+    void getSegments(std::vector<Segment<int>>& segments, int offset);
     std::vector<Point> getPoints();
-    void getSegments(std::vector<Segment<int>> segments);
-
 };
 
 

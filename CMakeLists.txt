@@ -9,4 +9,5 @@ add_subdirectory(x-poly)
 add_subdirectory(test)
 
 add_subdirectory(test/visualization-test)
+add_subdirectory(fracture)
 

@@ -1,5 +1,5 @@
-#include "FractureSimulator.h"
-#include <models/geometry/structures/PolygonChangeData.h>
+#include "../include/fracture/FractureSimulator.h"
+#include "include/models/geometry/structures/PolygonChangeData.h"
 
 FractureSimulator::FractureSimulator(int k, Mesh mesh, Crack initial) {
     this->mesh = BreakableMesh(mesh);

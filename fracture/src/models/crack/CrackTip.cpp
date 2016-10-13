@@ -1,4 +1,4 @@
-#include "CrackTip.h"
+#include "../../../include/models/crack/CrackTip.h"
 
 CrackTip::CrackTip(Segment<Point> crack, double length) {
     this->length = length;

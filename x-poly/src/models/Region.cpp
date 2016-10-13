@@ -107,7 +107,7 @@ std::vector<Point> Region::getRegionPoints() {
     return points;
 }
 
-void Region::getSegments(std::vector<Segment> &s) {
+void Region::getSegments(std::vector<Segment<int>> &s) {
     //TODO: Manage border cases here!
 
     Polygon::getSegments(s);

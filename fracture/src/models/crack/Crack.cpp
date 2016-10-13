@@ -1,8 +1,8 @@
 #include <x-poly/models/Mesh.h>
 #include <models/geometry/structures/BrokenMeshInfo.h>
 #include <models/geometry/structures/PolygonChangeData.h>
-#include "Crack.h"
-#include "DeadCrackTip.h"
+#include "../../../include/models/crack/Crack.h"
+#include "../../../include/models/crack/DeadCrackTip.h"
 
 Crack::Crack() {}
 

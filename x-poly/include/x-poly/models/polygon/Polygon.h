@@ -34,11 +34,12 @@ public:
 
     void mutate(std::vector<Point>& p);
     void getSegments(std::vector<Segment<int>>& segments);
+    void getSegments(std::vector<Segment<int>> &segments, int offset);
 
     bool containsPoint(std::vector<Point>& p, Point point);
     bool inEdges(std::vector<Point>& p, Point point);
     double signedArea(std::vector<Point>& p);
-    bool containsEdge(Segment s);
+    bool containsEdge(Segment<int> s);
 
     bool isConvex(std::vector<Point>& p);
     bool isClockwise(std::vector<Point>& p);

@@ -1,4 +1,4 @@
-#include "BreakableMesh.h"
+#include "../../../include/models/geometry/BreakableMesh.h"
 
 BreakableMesh::BreakableMesh() {}
 

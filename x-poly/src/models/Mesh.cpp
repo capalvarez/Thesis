@@ -50,3 +50,6 @@ void Mesh::printInFile(std::string fileName) {
     file.close();
 }
 
+bool Mesh::isInBoundary(Point p) {
+    return false;
+}

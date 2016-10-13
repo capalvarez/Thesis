@@ -9,9 +9,8 @@
 class Mesh {
 protected:
     std::vector<Point> points;
-    std::vector<Polygon> elements;
+    std::vector<Polygon> polygons;
     std::vector<Segment<int>> edges;
-
     std::vector<Segment<int>> boundary;
 
 public:
@@ -21,7 +20,7 @@ public:
 
     std::vector<Point> getPoints();
     std::vector<Segment<int>> getEdges();
-    std::vector<Polygon> getElements();
+    std::vector<Polygon> getPolygons();
     void printInFile(std::string fileName);
     bool isInBoundary(Point p);
 };

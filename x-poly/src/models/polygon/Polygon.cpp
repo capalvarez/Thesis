@@ -107,6 +107,13 @@ void Polygon::getSegments(std::vector<Segment<int>>& segments) {
     }
 }
 
+void Polygon::getSegments(std::vector<Segment<int>> &segments, int offset) {
+    int n = (int) this->points.size();
+
+    for(int i=0;i<n; i++){
+        segments.push_back(Segment<int>(this->points[i%n] + offset , this->points[(i+1)%n] + offset));
+    }
+}
 
 Point Polygon::calculateCentroid(std::vector<Point>& p) {
     int n = this->points.size();
@@ -219,7 +226,7 @@ std::string Polygon::getString() {
     return base;
 }
 
-bool Polygon::containsEdge(Segment s) {
+bool Polygon::containsEdge(Segment<int> s) {
     return isVertex(s.getFirst()) && isVertex(s.getSecond());
 }
 

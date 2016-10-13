@@ -8,7 +8,7 @@ Point CircularHole::getCenter() {
     return this->center;
 }
 
-void CircularHole::getSegments(std::vector<Segment>& segments, int offset) {
+void CircularHole::getSegments(std::vector<Segment<int>>& segments, int offset) {
     std::vector<int> indexes;
     utilities::TrivialIndexVector(indexes, (int) this->HolePoints.size());
 
