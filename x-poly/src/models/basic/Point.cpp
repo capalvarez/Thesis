@@ -19,7 +19,7 @@ double Point::getY() const{
 }
 
 std::string Point::getString() {
-   return std::to_string(this->getX()) + " " + std::to_string(this->getY());
+    return utilities::toString<double>(this->getX()) + " " + utilities::toString<double>(this->getY());
 }
 
 double Point::squareNorm() {

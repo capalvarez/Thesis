@@ -5,6 +5,7 @@
 #include "Point3D.h"
 #include <math.h>
 #include <cmath>
+#include <x-poly/utilities/utilities.h>
 
 class Point {
 private:

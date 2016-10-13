@@ -26,7 +26,7 @@ void generateTestNoHole(std::string testName, Region r, std::vector<Point> point
     m.printInFile(testName + ".txt");
 }
 
-int main(){
+int run(){
     std::vector<Point> square_points = {Point(0,0), Point(1,0), Point(1,1), Point(0,1)};
     Region square(square_points);
 
