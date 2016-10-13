@@ -4,18 +4,19 @@
 #include <vector>
 #include <x-poly/models/basic/Point.h>
 
+template <class T>
 class Segment {
 private:
-    int p1;
-    int p2;
+    T p1;
+    T p2;
 public:
-    Segment(int p1, int p2);
-    Segment();
-    Segment(const Segment& other);
+    Segment(T p1, T p2);
+    ~Segment();
 
-    int getFirst() const;
-    int getSecond() const;
-    bool operator==(const Segment other) const;
+
+    T getFirst() const;
+    T getSecond() const;
+    bool operator==(const Segment<T> other) const;
     std::string getString();
 
     bool contains(std::vector<Point>& p, Point point);

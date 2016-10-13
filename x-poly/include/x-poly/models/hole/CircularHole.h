@@ -15,6 +15,8 @@ public:
     Point getCenter();
     void getSegments(std::vector<Segment>& segments, int offset);
     std::vector<Point> getPoints();
+    void getSegments(std::vector<Segment<int>> segments);
+
 };
 
 

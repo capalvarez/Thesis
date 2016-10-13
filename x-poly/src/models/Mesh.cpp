@@ -2,7 +2,7 @@
 #include <x-poly/models/Mesh.h>
 
 
-Mesh::Mesh(std::vector<Point> &p, std::vector<Polygon> &e, std::vector<Segment>& s) {
+Mesh::Mesh(std::vector<Point> &p, std::vector<Polygon> &e, std::vector<Segment<int>>& s) {
     this->points.assign(p.begin(), p.end());
     this->polygons.assign(e.begin(), e.end());
     this->edges.assign(s.begin(), s.end());
@@ -16,7 +16,7 @@ std::vector<Point> Mesh::getPoints() {
     return this->points;
 }
 
-std::vector<Segment> Mesh::getEdges() {
+std::vector<Segment<int>> Mesh::getEdges() {
     return this->edges;
 }
 

@@ -3,10 +3,10 @@
 
 
 Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
-   this->points.assign(points.begin(), points.end());
+    this->points.assign(points.begin(), points.end());
 
     std::vector<Point> this_points;
-    for(int i=0;i<points.size();i++){
+    for (int i = 0; i < points.size(); i++) {
         this_points.push_back(p[points[i]]);
     }
 
@@ -18,6 +18,7 @@ Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
 void Polygon::mutate(std::vector<Point> &p) {
     this->points.clear();
     utilities::TrivialIndexVector(this->points,p.size());
+    calculateHash();
 
     std::vector<Point> this_points;
     for(int i=0;i<points.size();i++){
@@ -40,6 +41,7 @@ Polygon::Polygon(std::vector<Point> &p) {
     this->diameter = this->calculateDiameter(this_points);
     this->area = this->calculateArea(p);
     this->centroid = this->calculateCentroid(p);
+    calculateHash();
 }
 
 
@@ -53,6 +55,7 @@ Polygon::Polygon(const Polygon &obj) {
     this->centroid = obj.centroid;
 
     this->points.assign(obj.points.begin(), obj.points.end());
+    calculateHash();
 }
 
 double Polygon::calculateDiameter(std::vector<Point>& p) {
@@ -96,22 +99,14 @@ double Polygon::signedArea(std::vector<Point>& p) {
     return 0.5*area;
 }
 
-void Polygon::getSegments(std::vector<Segment>& segments) {
+void Polygon::getSegments(std::vector<Segment<int>>& segments) {
     int n = (int) this->points.size();
 
     for(int i=0;i<n; i++){
-        segments.push_back(Segment(this->points[i%n], this->points[(i+1)%n]));
+        segments.push_back(Segment<int>(this->points[i%n], this->points[(i+1)%n]));
     }
 }
 
-
-void Polygon::getSegments(std::vector<Segment> &segments, int offset) {
-    int n = (int) this->points.size();
-
-    for(int i=0;i<n; i++){
-        segments.push_back(Segment(this->points[i%n] + offset , this->points[(i+1)%n] + offset));
-    }
-}
 
 Point Polygon::calculateCentroid(std::vector<Point>& p) {
     int n = this->points.size();
@@ -155,7 +150,7 @@ bool Polygon::containsPoint(std::vector<Point>& p, Point point) {
 }
 
 bool Polygon::inEdges(std::vector<Point>& p, Point point) {
-    std::vector<Segment> segments;
+    std::vector<Segment<int>> segments;
     this->getSegments(segments);
 
     bool inEdge = false;
@@ -244,7 +239,15 @@ Point Polygon::getAverageVertex(std::vector<Point> p) {
     return Point(x/this->numberOfSides(), y/this->numberOfSides());
 }
 
+void Polygon::calculateHash() {
+    std::size_t hash = 0;
 
+    for (int i = 0; i < points.size(); ++i) {
+        hash+= std::hash<int>()(points[i]);
+    }
+
+    this->hash = hash;
+}
 
 
 

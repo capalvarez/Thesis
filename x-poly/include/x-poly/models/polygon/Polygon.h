@@ -20,6 +20,8 @@ private:
     double calculateArea(std::vector<Point>& p);
     Point calculateCentroid(std::vector<Point>& p);
     bool isVertex(int index);
+    void calculateHash();
+
 public:
     Polygon(std::vector<int>& points, std::vector<Point>& p);
     Polygon(std::vector<Point>& p);
@@ -31,8 +33,8 @@ public:
     Point getCentroid();
 
     void mutate(std::vector<Point>& p);
-    void getSegments(std::vector<Segment>& segments);
-    void getSegments(std::vector<Segment>& segments, int offset);
+    void getSegments(std::vector<Segment<int>>& segments);
+
     bool containsPoint(std::vector<Point>& p, Point point);
     bool inEdges(std::vector<Point>& p, Point point);
     double signedArea(std::vector<Point>& p);
@@ -47,6 +49,7 @@ public:
     std::string getString();
 
     Point getAverageVertex(std::vector<Point> p);
+    std::size_t hash;
 };
 
 #endif

@@ -90,7 +90,7 @@ bool IntegrationTriangle::inside(Point p, std::vector<Point> points) {
 
 
 bool IntegrationTriangle::inEdges(Point p, std::vector<Point> points) {
-    std::vector<Segment> segments = {Segment(p1, p2), Segment(p2, p3), Segment(p3,p1)};
+    std::vector<Segment<int>> segments = {Segment<int>(p1, p2), Segment<int>(p2, p3), Segment<int>(p3,p1)};
 
     bool inEdge = false;
     for(int i=0; i<segments.size(); i++){
