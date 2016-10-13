@@ -25,8 +25,8 @@ std::vector<Polygon> Mesh::getPolygons() {
 }
 
 void Mesh::printInFile(std::string fileName) {
-    std::string path(getenv("HOME"));
-    path += "/" + fileName;
+    std::string path("C:\\Users\\Catalina");
+    path += "\\" + fileName;
 
     std::ofstream file;
     file.open(path, std::ios::out);

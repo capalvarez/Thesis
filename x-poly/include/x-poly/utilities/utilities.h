@@ -2,6 +2,7 @@
 #define THESIS_UTILITIES_H
 
 #include <vector>
+#include <iostream>
 
 namespace utilities {
     extern void TrivialIndexVector(std::vector<int>& index_vector, int n);
@@ -16,6 +17,9 @@ namespace utilities {
     };
 
     extern double radian(double angle);
+
+    template <typename T>
+    extern std::string toString(T a);
 }
 
 #endif

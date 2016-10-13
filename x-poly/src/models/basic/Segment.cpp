@@ -42,7 +42,7 @@ Point Segment::middlePoint(std::vector<Point> p) {
 
 
 std::string Segment::getString() {
-    return std::to_string(this->p1) + " " + std::to_string(this->p2);
+    return utilities::toString<double>(this->p1) + " " + utilities::toString<double>(this->p2);
 }
 
 

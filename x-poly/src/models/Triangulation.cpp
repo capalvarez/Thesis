@@ -1,4 +1,5 @@
 #include <include/x-poly/models/Triangulation.h>
+#include <cstdlib>
 
 Triangulation::Triangulation(std::vector <Point> &p, std::vector <Triangle> &t) {
     this->points.assign(p.begin(),p.end());
@@ -6,8 +7,8 @@ Triangulation::Triangulation(std::vector <Point> &p, std::vector <Triangle> &t) 
 }
 
 void Triangulation::writeInFile(std::string fileName) {
-    std::string path(getenv("HOME"));
-    path += "/" + fileName;
+    std::string path("C:\\Users\\Catalina");
+    path += "\\" + fileName;
 
     std::ofstream file;
     file.open(path, std::ios::out);

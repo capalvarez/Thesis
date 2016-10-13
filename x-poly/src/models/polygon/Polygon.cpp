@@ -215,10 +215,10 @@ bool Polygon::operator==(const Polygon &other) const{
 }
 
 std::string Polygon::getString() {
-    std::string base = std::to_string(this->points[0]);
+    std::string base = utilities::toString<double>(this->points[0]);
 
     for(int i=1;i<this->points.size();i++){
-        base += " " + std::to_string(this->points[i]);
+        base += " " + utilities::toString<double>(this->points[i]);
     }
 
     return base;
