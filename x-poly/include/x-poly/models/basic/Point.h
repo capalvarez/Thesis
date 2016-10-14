@@ -11,6 +11,7 @@ class Point {
 private:
     double x;
     double y;
+    bool isBoundaryPoint = false;
 public:
     Point(double x, double y);
     Point();
@@ -25,6 +26,8 @@ public:
     Vector operator-(Point& other);
 
     Point3D get3DPoint();
+    bool isInBoundary();
+    void setBoundary();
 };
 
 #endif

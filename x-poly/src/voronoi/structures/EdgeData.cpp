@@ -21,7 +21,9 @@ bool EdgeData::equals(EdgeData other) {
           this->p2 == other.p1 && this->p1 == other.p1;
 }
 
-
+std::string EdgeData::getString() {
+    return utilities::toString<double>(this->p1) + " " + utilities::toString<double>(this->p2)
+}
 
 
 

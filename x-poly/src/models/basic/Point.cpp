@@ -43,3 +43,10 @@ Point Point::operator-(const Point &other) {
     return Point(this->x - other.x, this->y - other.y);
 }
 
+bool Point::isInBoundary() {
+    return this->isBoundaryPoint;
+}
+
+void Point::setBoundary() {
+    this->isBoundaryPoint = true;
+}

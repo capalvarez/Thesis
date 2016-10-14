@@ -2,7 +2,7 @@
 #include <x-poly/models/Mesh.h>
 
 
-Mesh::Mesh(std::vector<Point> &p, std::vector<Polygon> &e, std::vector<Segment<int>>& s) {
+Mesh::Mesh(std::vector<Point> &p, std::vector<Polygon> &e, std::vector<EdgeData>& s) {
     this->points.assign(p.begin(), p.end());
     this->polygons.assign(e.begin(), e.end());
     this->edges.assign(s.begin(), s.end());
@@ -14,10 +14,6 @@ Mesh::~Mesh() {}
 
 std::vector<Point> Mesh::getPoints() {
     return this->points;
-}
-
-std::vector<Segment<int>> Mesh::getEdges() {
-    return this->edges;
 }
 
 std::vector<Polygon> Mesh::getPolygons() {
@@ -50,6 +46,18 @@ void Mesh::printInFile(std::string fileName) {
     file.close();
 }
 
+int Mesh::findContainerPolygon(Point p) {
+    int poly = utilities::random_integer(0,this->polygons.size());
+
+    if(this->polygons[poly].containsPoint(this->points, p)){
+        return poly;
+    }else{
+
+    }
+}
+
 bool Mesh::isInBoundary(Point p) {
     return false;
 }
+
+

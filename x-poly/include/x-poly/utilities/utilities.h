@@ -23,6 +23,8 @@ namespace utilities {
 
     template <typename T>
     extern int indexOf(std::vector<T> vector, T element);
+
+    extern int random_integer(int min, int max);
 }
 
 #endif

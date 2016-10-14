@@ -22,6 +22,8 @@ public:
     bool contains(std::vector<Point>& p, Point point);
     bool contains(std::vector<Point> p, Segment<int> s);
     Point middlePoint(std::vector<Point> p);
+    bool isBoundary(std::vector<Point> p);
+    bool intersects(std::vector<Point> points, Segment<int> other);
 };
 
 #endif
