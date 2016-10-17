@@ -112,7 +112,7 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, Region 
 
 Mesh TriangleMeshGenerator::delaunayToVoronoi() {
     for(int i=0;i<this->realPoints.size(); i++) {
-        std::vector<int> thisEdges;
+        std::vector<Segment<int>> thisEdges;
 
         int index = this->realPoints.get(i);
         List<int> cellPoints;
