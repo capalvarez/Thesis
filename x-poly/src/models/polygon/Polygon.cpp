@@ -103,7 +103,8 @@ void Polygon::getSegments(std::vector<Segment<int>>& segments) {
     int n = (int) this->points.size();
 
     for(int i=0;i<n; i++){
-        segments.push_back(Segment<int>(this->points[i%n], this->points[(i+1)%n]));
+        Segment<int> s (this->points[i%n], this->points[(i+1)%n]);
+        segments.push_back(s);
     }
 }
 

@@ -1,6 +1,8 @@
 #ifndef THESIS_BROKENMESHINFO_H
 #define THESIS_BROKENMESHINFO_H
 
+#include <fracture/models/geometry/structures/PolygonChangeData.h>
+
 struct BrokenMeshInfo{
     PolygonChangeData data;
     Polygon tipPolygon;

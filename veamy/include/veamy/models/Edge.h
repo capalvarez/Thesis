@@ -2,7 +2,7 @@
 #define THESIS_EDGE_H
 
 #include <x-poly/models/basic/Point.h>
-#include <veamy/utilities/Pair.h>
+#include <x-poly/utilities/Pair.h>
 #include <vector>
 #include <veamy/models/dof/DOF.h>
 

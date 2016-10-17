@@ -1,4 +1,4 @@
-#include <veamy/utilities/Pair.h>
+#include <x-poly/utilities/Pair.h>
 
 template <typename T>
 Pair<T>::Pair(T first, T second) {

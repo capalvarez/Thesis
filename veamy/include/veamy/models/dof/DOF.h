@@ -1,7 +1,7 @@
 #ifndef THESIS_DOF_H
 #define THESIS_DOF_H
 
-#include <veamy/utilities/Pair.h>
+#include <x-poly/utilities/Pair.h>
 #include <x-poly/models/polygon/Polygon.h>
 
 class DOF {

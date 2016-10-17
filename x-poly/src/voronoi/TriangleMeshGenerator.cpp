@@ -131,7 +131,7 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
         //TODO: Fix this!
         if(index1!=index2){
             EdgeData e = EdgeData(index2,index1);
-            int edgeIndex = voronoiEdges.push_back(e);
+            int edgeIndex = voronoiEdges.insert(e);
             thisEdges.push_back(edgeIndex);
 
             cellPoints.push_back(index2);
@@ -208,7 +208,6 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
 
     std::vector<Point> points = this->voronoiPoints.getList();
     std::vector<Polygon> cells = this->voronoiCells.getList();
-    std::vector<EdgeData> edges = this->voronoiEdges.getList();
 
     return Mesh(points, cells, edges);
 }

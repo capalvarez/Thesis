@@ -1,11 +1,10 @@
 #ifndef THESIS_CRACKTIP_H
 #define THESIS_CRACKTIP_H
 
-
 #include <x-poly/models/basic/Point.h>
 #include <x-poly/models/polygon/Polygon.h>
 #include <veamy/lib/Eigen/Dense>
-#include <models/geometry/BreakableMesh.h>
+#include <fracture/models/geometry/BreakableMesh.h>
 
 class CrackTip {
 private:

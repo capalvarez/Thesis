@@ -7,7 +7,7 @@
 #include <veamy/models/constraints/values/ConstraintValue.h>
 #include <x-poly/utilities/List.h>
 #include <x-poly/models/basic/Segment.h>
-#include <veamy/utilities/Pair.h>
+#include <x-poly/utilities/Pair.h>
 
 class Constraint{
 public:

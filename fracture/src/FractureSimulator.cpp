@@ -1,11 +1,11 @@
-#include "../include/fracture/FractureSimulator.h"
-#include "include/models/geometry/structures/PolygonChangeData.h"
+#include <fracture/FractureSimulator.h>
+#include <fracture/models/geometry/structures/PolygonChangeData.h>
 
-FractureSimulator::FractureSimulator(int k, Mesh mesh, Crack initial) {
+FractureSimulator::FractureSimulator(Mesh mesh, Crack initial) {
     this->mesh = BreakableMesh(mesh);
     this->crack = initial;
     this->crack.initializeCrack(this->mesh);
-    this->veamer = Veamer(k);
+    this->veamer = Veamer();
 }
 
 void FractureSimulator::simulate(double crack_growth, int max_iter) {

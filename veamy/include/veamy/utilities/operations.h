@@ -2,7 +2,7 @@
 #define THESIS_OPERATIONS_H
 #include <x-poly/models/polygon/Polygon.h>
 #include <x-poly/models/basic/Point.h>
-#include "Pair.h"
+#include "x-poly/utilities/Pair.h"
 
 namespace operations{
     extern Pair<double> gradient(Pair<int> polinomial, Polygon p, Point point);

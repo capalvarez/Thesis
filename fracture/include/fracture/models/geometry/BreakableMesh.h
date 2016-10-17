@@ -3,7 +3,7 @@
 
 #include <x-poly/models/basic/Point.h>
 #include <x-poly/models/Mesh.h>
-#include <models/geometry/structures/BrokenMeshInfo.h>
+#include <fracture/models/geometry/structures/BrokenMeshInfo.h>
 
 class BreakableMesh : public Mesh{
 private:

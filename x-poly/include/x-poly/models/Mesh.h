@@ -6,15 +6,18 @@
 #include <x-poly/models/basic/Segment.h>
 #include <algorithm>
 #include <x-poly/voronoi/structures/EdgeData.h>
+#include <x-poly/voronoi/structures/mapdata.h>
+#include <x-poly/utilities/Pair.h>
+#include <unordered_map>
 
 class Mesh {
 protected:
     std::vector<Point> points;
     std::vector<Polygon> polygons;
-    std::vector<EdgeData> edges;
+    std::unordered_map<Segment<int>, Pair<int>, SegmentHasher> edges;
 
 public:
-    Mesh(std::vector<Point>& p, std::vector<Polygon>& e, std::vector<EdgeData>& s);
+    Mesh(std::vector<Point>& p, std::vector<Polygon>& e, std::unordered_map<Segment<int>,Pair<int>,SegmentHasher> s);
     Mesh();
     ~Mesh();
 

@@ -2,10 +2,10 @@
 #include <x-poly/models/Mesh.h>
 
 
-Mesh::Mesh(std::vector<Point> &p, std::vector<Polygon> &e, std::vector<EdgeData>& s) {
+Mesh::Mesh(std::vector<Point> &p, std::vector<Polygon> &e, std::unordered_map<Segment<int>,Pair<int>,SegmentHasher> s) {
     this->points.assign(p.begin(), p.end());
     this->polygons.assign(e.begin(), e.end());
-    this->edges.assign(s.begin(), s.end());
+    this->edges = s;
 }
 
 Mesh::Mesh() {}
@@ -34,8 +34,9 @@ void Mesh::printInFile(std::string fileName) {
 
 
     file << this->edges.size() << std::endl;
-    for(int i=0;i<this->edges.size();i++){
-        file << this->edges[i].getString() << std::endl;
+    for(auto e: this->edges){
+        Segment<int> edge = e.first;
+        file << edge.getString() << std::endl;
     }
 
     file << this->polygons.size() << std::endl;
@@ -47,12 +48,34 @@ void Mesh::printInFile(std::string fileName) {
 }
 
 int Mesh::findContainerPolygon(Point p) {
-    int poly = utilities::random_integer(0,this->polygons.size());
+    int i = utilities::random_integer(0,this->polygons.size());
 
-    if(this->polygons[poly].containsPoint(this->points, p)){
-        return poly;
-    }else{
+    while(true){
+        bool found = false;
+        Polygon poly = this->polygons[i];
 
+        if(poly.containsPoint(this->points, p)){
+            return i;
+        }else{
+            Segment<Point> lookup(poly.getCentroid(), p);
+
+            std::vector<Segment<int>> polySeg;
+            poly.getSegments(polySeg);
+
+            for (int j = 0; j < polySeg.size() ; ++j) {
+                if(polySeg[j].intersects(this->points, lookup)){
+                    Pair<int> edge = this->edges[polySeg[j]];
+
+                    i = edge.first!=i? i : edge.second;
+                    found = true;
+                    break;
+                }
+            }
+
+            if(!found){
+                return -1;
+            }
+        }
     }
 }
 
