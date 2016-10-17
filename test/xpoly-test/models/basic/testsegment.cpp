@@ -9,9 +9,17 @@ TEST_F(SegmentTest, ContainsPointTest){
 }
 
 TEST_F(SegmentTest, MiddlePointTest){
-	ASSERT_EQ(segment->middlePoint(segment_points), *new Point(0.5,0.5));
+	EXPECT_EQ(segment->middlePoint(segment_points), *new Point(0.5,0.5));
 }
 
+TEST_F(SegmentTest, IntersectsTest){
+    Segment<Point> s1(Point(0,1), Point(1,0));
+    Segment<Point> s2(Point(1,2), Point(4,0));
+    EXPECT_TRUE(segment->intersects(segment_points, s1));
+    EXPECT_FALSE(segment->intersects(segment_points, s2));
+
+
+}
 
 
 

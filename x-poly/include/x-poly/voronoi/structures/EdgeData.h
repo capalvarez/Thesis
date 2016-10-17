@@ -2,6 +2,7 @@
 #define THESIS_EDGEDATA_H
 
 #include <iostream>
+#include <x-poly/utilities/utilities.h>
 
 class EdgeData{
 public:
@@ -14,6 +15,7 @@ public:
     void setTriangle(int t);
     bool equals(EdgeData other);
     std::string getString();
+    bool operator==(const EdgeData& other) const;
 };
 
 #endif

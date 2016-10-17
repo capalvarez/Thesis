@@ -1,15 +1,16 @@
 #include <x-poly/utilities/List.h>
+#include <x-poly/voronoi/structures/EdgeData.h>
 
 template <typename T>
 List<T>::List() {}
 
 template <typename T>
-int List<T>::push_back(T item) {
+int List<T>::push_back(T& item) {
     typename std::vector<T>::iterator index;
     index = std::find(list.begin(), list.end(), item);
 
     if(index!=list.end()){
-        return (int) std::distance(list.begin(),index);
+        return std::distance(list.begin(),index);
     }
 
     list.push_back(item);
@@ -33,7 +34,7 @@ bool List<T>::operator==(const List<T> &other) {
 }
 
 template <typename T>
-T List<T>::get(int i) {
+T& List<T>::get(int i) {
     return list[i];
 }
 
@@ -58,6 +59,7 @@ template class List<Point>;
 template class List<Segment<int>>;
 template class List<Polygon>;
 template class List<int>;
+template class List<EdgeData>;
 
 
 

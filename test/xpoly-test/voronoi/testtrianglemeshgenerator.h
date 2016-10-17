@@ -32,7 +32,7 @@ protected:
 
         pentagonPoints = {Point(6,4)};
 
-        //square_gen = new TriangleMeshGenerator(points1,*square);
+        square_gen = new TriangleMeshGenerator(points1,*square);
         //square_gen2 = new TriangleMeshGenerator(random_points,*square);
         //square_gen_borders = new TriangleMeshGenerator(points_border,*square);
         //pentagon_gen = new TriangleMeshGenerator(pentagonPoints,*pentagon);

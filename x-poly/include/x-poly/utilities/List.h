@@ -12,12 +12,12 @@ private:
     std::vector<T> list;
 public:
     List();
-    int push_back(T item);
+    int push_back(T& item);
     int size();
     std::vector<int> push_list(std::vector<T> list);
 
     std::vector<T> getList() const;
-    T get(int i);
+    T& get(int i);
     bool operator==(const List<T>& other);
     bool contains(T elem);
 };

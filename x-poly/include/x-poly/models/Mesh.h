@@ -5,7 +5,7 @@
 #include <x-poly/models/basic/Point.h>
 #include <x-poly/models/basic/Segment.h>
 #include <algorithm>
-#include <include/x-poly/voronoi/structures/EdgeData.h>
+#include <x-poly/voronoi/structures/EdgeData.h>
 
 class Mesh {
 protected:

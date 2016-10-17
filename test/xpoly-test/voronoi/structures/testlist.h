@@ -9,12 +9,13 @@ class ListTest : public ::testing::Test{
 protected:
     virtual void SetUp(){
         list = new List<Point>();
+        std::vector<Point> p = {Point(0,0), Point(1,0), Point(1,1), Point(0,0), Point(2,0)};
 
-        list->push_back(Point(0,0));
-        list->push_back(Point(1,0));
-        list->push_back(Point(1,1));
-        list->push_back(Point(0,0));
-        list->push_back(Point(2,0));
+        list->push_back(p[0]);
+        list->push_back(p[1]);
+        list->push_back(p[2]);
+        list->push_back(p[3]);
+        list->push_back(p[4]);
     }
 
     List<Point>* list;
