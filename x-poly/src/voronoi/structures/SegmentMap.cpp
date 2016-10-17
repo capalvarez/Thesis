@@ -2,18 +2,21 @@
 
 SegmentMap::SegmentMap() {}
 
-void SegmentMap::insert(Segment<int> s, Pair<int> &p) {
-    std::unordered_map<Segment<int>,Pair<int>,SegmentHasher>::const_iterator got = this->map.find (s);
+void SegmentMap::insert(Segment<int> s, int polygonIndex) {
+    std::unordered_map<Segment<int>,Neighbours,SegmentHasher>::iterator got = this->map.find(s);
 
     if(got == this->map.end()){
-        this->map.insert(std::make_pair(s,p));
+        Neighbours n (polygonIndex);
+        this->map.insert(std::make_pair(s,n));
+    }else{
+        got->second.setNeighbour(polygonIndex);
     }
 }
 
-Pair<int>& SegmentMap::get(Segment<int> s) {
+Neighbours& SegmentMap::get(Segment<int> s) {
     return map[s];
 }
 
-std::unordered_map<Segment<int>, Pair<int>, SegmentHasher>& SegmentMap::getMap() {
+std::unordered_map<Segment<int>,Neighbours, SegmentHasher>& SegmentMap::getMap() {
     return this->map;
 }

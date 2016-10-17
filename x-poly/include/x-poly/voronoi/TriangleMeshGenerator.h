@@ -12,20 +12,21 @@
 #include <x-poly/voronoi/structures/mapdata.h>
 #include <x-poly/models/Triangulation.h>
 #include <x-poly/models/Triangulation.h>
+#include <x-poly/voronoi/structures/Neighbours.h>
 
 class TriangleMeshGenerator : public MeshGenerator{
 private:
     Mesh mesh;
     std::vector<PointData> points;
-    std::vector<EdgeData> edges;
     std::vector<Triangle> triangles;
     std::vector<Point> meshPoints;
+    std::vector<EdgeData> edges;
     List<int> realPoints;
 
     std::unordered_map<Key, int, KeyHasher> edgeMap;
 
     List<Point> voronoiPoints;
-    std::unordered_map<Segment<int>,Pair<int>,SegmentHasher> voronoiEdges;
+    std::unordered_map<Segment<int>,Neighbours,SegmentHasher> voronoiEdges;
     List<Polygon> voronoiCells;
 
     Point getCircumcenter(int triangle, int edge, std::vector<Point>& points);
