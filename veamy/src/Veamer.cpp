@@ -12,9 +12,15 @@ void Veamer::loadGeometry(Mesh m, ConstraintsContainer c, BodyForce* f) {
     std::vector<Polygon> polygons = m.getPolygons();
 
     for(int i=0;i<polygons.size();i++){
-        elements.push_back(Element(this->constraints, polygons[i], this->points, DOFs, f));
+        createElement(polygons[i], f);
     }
 }
+
+void Veamer::createElement(Polygon p, BodyForce* f) {
+    polygon_to_element.insert(std::make_pair(p,elements.size()));
+    elements.push_back(Element(this->constraints, p, this->points, DOFs, f));
+}
+
 
 Eigen::VectorXd Veamer::simulate() {
     Eigen::MatrixXd K;
@@ -65,6 +71,16 @@ std::vector<Element> Veamer::getElements() {
     return this->elements;
 }
 
+void Veamer::replaceElement(Polygon old, std::vector<Polygon> newPolygons) {
+    int to_remove = polygon_to_element[old];
+    polygon_to_element.erase(old);
+
+    elements.erase(elements.begin() + to_remove, elements.end());
+
+    for (int i = 0; i < newPolygons.size(); ++i) {
+        createElement(newPolygons[i]);
+    }
+}
 
 
 

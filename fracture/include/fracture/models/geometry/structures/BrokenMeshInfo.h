@@ -4,7 +4,9 @@
 #include <fracture/models/geometry/structures/PolygonChangeData.h>
 
 struct BrokenMeshInfo{
-    PolygonChangeData data;
+    std::vector<Polygon> oldPolygons;
+    std::vector<Polygon> newPolygons;
+
     Polygon tipPolygon;
 
     BrokenMeshInfo(std::vector<Polygon> o, std::vector<Polygon> n, Polygon t){

@@ -13,6 +13,20 @@ void SegmentMap::insert(Segment<int> s, int polygonIndex) {
     }
 }
 
+void SegmentMap::insert(Segment<int> s, Neighbours n) {
+    this->map.insert(std::make_pair(s,n));
+}
+
+void SegmentMap::replace_neighbour(Segment<int> s, int oldNeighbour, int newNeighbour) {
+    std::unordered_map<Segment<int>,Neighbours,SegmentHasher>::iterator got = this->map.find(s);
+
+    if(got == this->map.end()){
+        this->insert(s, newNeighbour);
+    }else{
+        got->second.changeNeighbour(oldNeighbour, newNeighbour);
+    }
+}
+
 Neighbours& SegmentMap::get(Segment<int> s) {
     return map[s];
 }
@@ -23,4 +37,8 @@ std::unordered_map<Segment<int>,Neighbours, SegmentHasher>& SegmentMap::getMap()
 
 int SegmentMap::size() {
     return this->map.size();
+}
+
+void SegmentMap::delete_element(Segment<int> key) {
+    this->map.erase(key);
 }
