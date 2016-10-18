@@ -28,6 +28,9 @@ public:
     Point3D get3DPoint();
     bool isInBoundary();
     void setBoundary();
+
+    void setX(double newX);
+    void setY(double newY);
 };
 
 #endif

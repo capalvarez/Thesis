@@ -39,8 +39,8 @@ namespace utilities {
     template int indexOf<Point>(std::vector<Point> vector, Point p);
 
     int random_integer(int min, int max){
-        std::random_device rd;
-        std::mt19937 rng (rd());
+        static std::random_device rd;
+        static std::mt19937 rng (rd());
         std::uniform_int_distribution<int> uni(min,max);
 
         return uni(rng);

@@ -12,14 +12,15 @@ private:
     std::vector<Point> crackPath;
     Polygon container;
 
-
     void addPointToPath(double angle);
     double calculateAngle();
 public:
+    CrackTip();
     CrackTip(Segment<Point> crack, double length);
     Segment<Point> grow(BreakableMesh mesh, Eigen::VectorXd u);
     bool isFinished(BreakableMesh mesh);
     void assignLocation(Polygon polygon);
+    Point getPoint();
 
 };
 

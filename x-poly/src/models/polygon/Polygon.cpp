@@ -257,6 +257,12 @@ void Polygon::calculateHash() {
     this->hash = hash;
 }
 
+void Polygon::fixCCW(std::vector<Point> p) {
+    if(isClockwise(p)){
+        std::reverse(this->points.begin(), this->points.end());
+    }
+}
+
 
 
 

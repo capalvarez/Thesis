@@ -192,6 +192,8 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
         std::vector<int> cellPointsList = cellPoints.getList();
 
         Polygon p = Polygon(cellPointsList, pointList);
+        p.fixCCW(pointList);
+
         int cellIndex = this->voronoiCells.push_back(p);
 
         for (int j = 0; j < thisEdges.size(); ++j) {

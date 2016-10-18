@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <x-poly/voronoi/structures/Neighbours.h>
 #include <x-poly/voronoi/structures/SegmentMap.h>
+#include <x-poly/models/structures/NeighbourInfo.h>
 
 class Mesh {
 protected:
@@ -29,6 +30,8 @@ public:
     bool isInBoundary(Point p);
 
     int findContainerPolygon(Point p);
+    Polygon getPolygon(int index);
+    NeighbourInfo getNeighbour(int poly_index, Segment<Point> direction);
 };
 
 

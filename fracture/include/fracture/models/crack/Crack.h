@@ -5,16 +5,14 @@
 #include <vector>
 #include <veamy/models/Element.h>
 #include <fracture/models/geometry/BreakableMesh.h>
-#include <fracture/models/crack/DeadCrackTip.h>
 #include <fracture/models/crack/CrackTip.h>
-
 #include <fracture/models/geometry/structures/BrokenMeshInfo.h>
 
 
 class Crack {
 private:
-    std::vector<CrackTip> crackTip;
-
+    CrackTip init;
+    CrackTip end;
 public:
     Crack();
     Crack(BreakableMesh mesh, Point init, Point end);

@@ -56,25 +56,18 @@ int Mesh::findContainerPolygon(Point p) {
 
         if(poly.containsPoint(this->points, p)){
             return i;
-        }else{
+        }else {
             Segment<Point> lookup(poly.getCentroid(), p);
+            NeighbourInfo neighbour = getNeighbour(i,lookup);
 
-            std::vector<Segment<int>> polySeg;
-            poly.getSegments(polySeg);
-
-            for (int j = 0; j < polySeg.size() ; ++j) {
-                if(polySeg[j].intersects(this->points, lookup)){
-                    Neighbours edge = this->edges.get(polySeg[j]);
-
-                    i = edge.getFirst()!=i? i : edge.getSecond();
-                    found = true;
-                    break;
-                }
+            if(neighbour.neighbour!=-1) {
+                i = neighbour.neighbour;
+                found = true;
             }
+        }
 
-            if(!found){
-                return -1;
-            }
+        if (!found) {
+            return -1;
         }
     }
 }
@@ -83,4 +76,28 @@ bool Mesh::isInBoundary(Point p) {
     return false;
 }
 
+Polygon Mesh::getPolygon(int index) {
+    return this->polygons[index];
+}
 
+NeighbourInfo Mesh::getNeighbour(int poly_index, Segment<Point> direction) {
+    Polygon poly = getPolygon(poly_index);
+
+    std::vector<Segment<int>> polySeg;
+    poly.getSegments(polySeg);
+
+    for (int j = 0; j < polySeg.size() ; ++j) {
+        Point p;
+        bool intersects = polySeg[j].intersection(this->points, direction, p);
+
+        if(intersects){
+            Neighbours edge = this->edges.get(polySeg[j]);
+
+            poly_index = edge.getFirst()!=poly_index? edge.getFirst() : edge.getSecond();
+
+            return NeighbourInfo(poly_index,polySeg[j], p);
+        }
+    }
+
+    return NeighbourInfo(-1,Segment<int>(),Point());
+}

@@ -30,7 +30,11 @@ void CrackTip::assignLocation(Polygon polygon) {
     this->container = polygon;
 }
 
+CrackTip::CrackTip() {}
 
+Point CrackTip::getPoint() {
+    return this->crackPath.back();
+}
 
 
 

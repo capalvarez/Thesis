@@ -84,7 +84,7 @@ bool Segment<Point>::isBoundary(std::vector<Point> p) {
 }
 
 template <>
-bool Segment<int>::intersects(std::vector<Point> points, Segment<Point> other) {
+bool Segment<int>::intersection(std::vector<Point> points, Segment<Point> other, Point &inter) {
     Point p1 = points[this->p1];
     Point p2 = points[this->p2];
 
@@ -99,7 +99,17 @@ bool Segment<int>::intersects(std::vector<Point> points, Segment<Point> other) {
     s = (-s1_y * (p1.getX() - o1.getX()) + s1_x * (p1.getY() - o1.getY())) / (-s2_x * s1_y + s1_x * s2_y);
     t = ( s2_x * (p1.getY() - o1.getY()) - s2_y * (p1.getX() - o1.getX())) / (-s2_x * s1_y + s1_x * s2_y);
 
-    return (s >= 0 && s <= 1 && t >= 0 && t <= 1);
+    if (s >= 0 && s <= 1 && t >= 0 && t <= 1){
+        double i_x = p1.getX() + (t * s1_x);
+        double i_y = p1.getY() + (t * s1_y);
+
+        inter.setX(i_x);
+        inter.setY(i_y);
+
+        return true;
+    }
+
+    return false;
 }
 
 

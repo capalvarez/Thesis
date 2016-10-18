@@ -50,3 +50,11 @@ bool Point::isInBoundary() {
 void Point::setBoundary() {
     this->isBoundaryPoint = true;
 }
+
+void Point::setX(double newX) {
+    this->x = newX;
+}
+
+void Point::setY(double newY) {
+    this->y = newY;
+}

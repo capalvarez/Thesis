@@ -11,7 +11,7 @@ private:
 public:
     BreakableMesh();
     BreakableMesh(Mesh m);
-    BrokenMeshInfo breakMesh(Segment<Point> crack);
+    BrokenMeshInfo breakMesh(int init, Segment<Point> crack);
 
 };
 
