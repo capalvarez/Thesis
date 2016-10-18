@@ -15,6 +15,7 @@ public:
     void insert(Segment<int> s, int polygonIndex);
     Neighbours& get(Segment<int> s);
     std::unordered_map<Segment<int>,Neighbours,SegmentHasher>& getMap();
+    int size();
 };
 
 #endif 

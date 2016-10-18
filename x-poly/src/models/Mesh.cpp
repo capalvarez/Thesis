@@ -2,7 +2,7 @@
 #include <x-poly/models/Mesh.h>
 
 
-Mesh::Mesh(std::vector<Point> &p, std::vector<Polygon> &e, std::unordered_map<Segment<int>,Neighbours,SegmentHasher> s) {
+Mesh::Mesh(std::vector<Point> &p, std::vector<Polygon> &e, SegmentMap s) {
     this->points.assign(p.begin(), p.end());
     this->polygons.assign(e.begin(), e.end());
     this->edges = s;
@@ -34,7 +34,7 @@ void Mesh::printInFile(std::string fileName) {
 
 
     file << this->edges.size() << std::endl;
-    for(auto e: this->edges){
+    for(auto e: this->edges.getMap()){
         Segment<int> edge = e.first;
         file << edge.getString() << std::endl;
     }
@@ -64,7 +64,7 @@ int Mesh::findContainerPolygon(Point p) {
 
             for (int j = 0; j < polySeg.size() ; ++j) {
                 if(polySeg[j].intersects(this->points, lookup)){
-                    Neighbours edge = this->edges[polySeg[j]];
+                    Neighbours edge = this->edges.get(polySeg[j]);
 
                     i = edge.getFirst()!=i? i : edge.getSecond();
                     found = true;

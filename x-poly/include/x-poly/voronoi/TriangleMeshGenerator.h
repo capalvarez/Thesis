@@ -13,6 +13,7 @@
 #include <x-poly/models/Triangulation.h>
 #include <x-poly/models/Triangulation.h>
 #include <x-poly/voronoi/structures/Neighbours.h>
+#include <x-poly/voronoi/structures/SegmentMap.h>
 
 class TriangleMeshGenerator : public MeshGenerator{
 private:
@@ -26,7 +27,7 @@ private:
     std::unordered_map<Key, int, KeyHasher> edgeMap;
 
     List<Point> voronoiPoints;
-    std::unordered_map<Segment<int>,Neighbours,SegmentHasher> voronoiEdges;
+    SegmentMap voronoiEdges;
     List<Polygon> voronoiCells;
 
     Point getCircumcenter(int triangle, int edge, std::vector<Point>& points);

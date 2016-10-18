@@ -195,7 +195,7 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
         int cellIndex = this->voronoiCells.push_back(p);
 
         for (int j = 0; j < thisEdges.size(); ++j) {
-
+            voronoiEdges.insert(thisEdges[j], cellIndex);
         }
     }
 

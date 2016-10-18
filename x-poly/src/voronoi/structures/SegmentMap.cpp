@@ -20,3 +20,7 @@ Neighbours& SegmentMap::get(Segment<int> s) {
 std::unordered_map<Segment<int>,Neighbours, SegmentHasher>& SegmentMap::getMap() {
     return this->map;
 }
+
+int SegmentMap::size() {
+    return this->map.size();
+}

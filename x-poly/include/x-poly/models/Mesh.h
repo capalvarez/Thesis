@@ -10,15 +10,16 @@
 #include <x-poly/utilities/Pair.h>
 #include <unordered_map>
 #include <x-poly/voronoi/structures/Neighbours.h>
+#include <x-poly/voronoi/structures/SegmentMap.h>
 
 class Mesh {
 protected:
     std::vector<Point> points;
     std::vector<Polygon> polygons;
-    std::unordered_map<Segment<int>, Neighbours, SegmentHasher> edges;
+    SegmentMap edges;
 
 public:
-    Mesh(std::vector<Point>& p, std::vector<Polygon>& e, std::unordered_map<Segment<int>,Neighbours,SegmentHasher> s);
+    Mesh(std::vector<Point>& p, std::vector<Polygon>& e, SegmentMap s);
     Mesh();
     ~Mesh();
 
