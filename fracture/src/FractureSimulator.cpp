@@ -4,8 +4,10 @@
 FractureSimulator::FractureSimulator(Mesh mesh, Crack initial) {
     this->mesh = BreakableMesh(mesh);
     this->crack = initial;
-    this->crack.initializeCrack(this->mesh);
     this->veamer = Veamer();
+
+    PolygonChangeData initialChanges = this->crack.initializeCrack(this->mesh);
+    this->veamer.replaceElements(initialChanges.oldPolygons, initialChanges.newPolygons);
 }
 
 void FractureSimulator::simulate(double crack_growth, int max_iter) {

@@ -13,7 +13,7 @@ TEST(ElementTest, KMatrixTest){
     std::vector<int> p1 ={0,1,3,2};
 
     std::vector<Polygon> polygons = {Polygon(p1,points)};
-    std::vector<Segment<int>> segments;
+    SegmentMap segments;
 
     class Sum : public BodyForce{
     private:

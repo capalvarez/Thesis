@@ -8,6 +8,7 @@
 #include <veamy/models/constraints/Constraint.h>
 #include <veamy/models/constraints/structures/constrained_seg_mapdata.h>
 #include <veamy/models/constraints/structures/isConstrainedInfo.h>
+#include <x-poly/voronoi/structures/mapdata.h>
 
 class Constraints {
 protected:

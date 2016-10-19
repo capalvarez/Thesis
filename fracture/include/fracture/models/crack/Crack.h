@@ -6,8 +6,6 @@
 #include <veamy/models/Element.h>
 #include <fracture/models/geometry/BreakableMesh.h>
 #include <fracture/models/crack/CrackTip.h>
-#include <fracture/models/geometry/structures/BrokenMeshInfo.h>
-
 
 class Crack {
 private:
@@ -21,7 +19,7 @@ public:
     PolygonChangeData prepareTip(BreakableMesh m);
     bool isFinished(BreakableMesh mesh);
 
-    void initializeCrack(BreakableMesh mesh);
+    PolygonChangeData initializeCrack(BreakableMesh mesh);
 };
 
 

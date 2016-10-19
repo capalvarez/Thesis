@@ -18,7 +18,8 @@ Constraint::Constraint(std::vector<Segment<int>> s, Constraint::Direction d, Con
 Constraint::Constraint(Segment<Point> s, std::vector<Point> points, Constraint::Direction d, ConstraintValue *value) {
     this->v = value;
     this->direction = d;
-    this->constraints.push_back(fromPointToInt(s, points));
+    Segment<int> int_segment = fromPointToInt(s, points);
+    this->constraints.push_back(int_segment);
 }
 
 Constraint::Constraint(std::vector<Segment<Point>> s, std::vector<Point> points, Constraint::Direction d,
@@ -27,7 +28,8 @@ Constraint::Constraint(std::vector<Segment<Point>> s, std::vector<Point> points,
     this->direction = d;
 
     for(int i = 0; i<s.size(); i++){
-        this->constraints.push_back(fromPointToInt(s[i], points));
+        Segment<int> int_segment = fromPointToInt(s[i], points);
+        this->constraints.push_back(int_segment);
     }
 }
 

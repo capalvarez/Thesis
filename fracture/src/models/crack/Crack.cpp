@@ -9,24 +9,25 @@ Crack::Crack(BreakableMesh mesh, Point init, Point end) {
 }
 
 PolygonChangeData Crack::prepareTip(BreakableMesh m) {
-    return PolygonChangeData(std::vector<Polygon>(), std::vector<Polygon>())
+    return PolygonChangeData(std::vector<Polygon>(), std::vector<Polygon>(), Polygon());
 }
 
 bool Crack::isFinished(BreakableMesh mesh) {
     return init.isFinished(mesh) && end.isFinished(mesh);
 }
 
-
-void Crack::initializeCrack(BreakableMesh mesh) {
+PolygonChangeData Crack::initializeCrack(BreakableMesh mesh) {
     int poly1 = mesh.findContainerPolygon(this->init.getPoint());
     init.assignLocation(mesh.getPolygon(poly1));
 
-    int endPolygon = mesh.breakMesh(poly1, Segment<Point>(this->init.getPoint(), this->end.getPoint()));
-    end.assignLocation(mesh.getPolygon(endPolygon));
+    PolygonChangeData change = mesh.breakMesh(poly1, Segment<Point>(this->init.getPoint(), this->end.getPoint()));
+    end.assignLocation(change.lastPolygon);
+
+    return change;
 }
 
 PolygonChangeData Crack::grow(BreakableMesh m, Eigen::VectorXd u) {
-    return PolygonChangeData(std::vector<Polygon>(), std::vector<Polygon>());
+    return PolygonChangeData(std::vector<Polygon>(), std::vector<Polygon>(), Polygon());
 }
 
 

@@ -24,11 +24,13 @@ class Veamer {
 private:
     //TODO: Check for inconsistencies (cannot have natural and essential conditions on the same segments)
     ConstraintsContainer constraints;
+    BodyForce* f;
+
     std::vector<Element> elements;
     std::unordered_map<Polygon, int, PolygonHasher> polygon_to_element;
     List<Point> points;
 
-    void createElement(Polygon p, BodyForce* f);
+    void createElement(Polygon p);
 public:
     DOFS DOFs;
     Veamer();
@@ -38,6 +40,8 @@ public:
     std::vector<Element> getElements();
 
     void replaceElement(Polygon old, std::vector<Polygon> newPolygons);
+    void replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons);
+
 
 };
 

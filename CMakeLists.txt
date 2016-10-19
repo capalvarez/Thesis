@@ -6,8 +6,9 @@ enable_testing()
 
 add_subdirectory(veamy)
 add_subdirectory(x-poly)
+add_subdirectory(fracture)
 add_subdirectory(test)
 
 add_subdirectory(test/visualization-test)
-add_subdirectory(fracture)
+
 
