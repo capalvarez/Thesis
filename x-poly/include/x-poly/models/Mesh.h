@@ -24,13 +24,19 @@ public:
     Mesh();
     ~Mesh();
 
-    std::vector<Point> getPoints();
-    std::vector<Polygon> getPolygons();
+    std::vector<Point>& getPoints();
+    std::vector<Point> getPoints() const;
+    std::vector<Polygon>& getPolygons();
+    std::vector<Polygon> getPolygons() const;
+    SegmentMap& getSegments();
+    SegmentMap getSegments() const ;
+
     void printInFile(std::string fileName);
     bool isInBoundary(Point p);
 
+
     int findContainerPolygon(Point p);
-    Polygon getPolygon(int index);
+    Polygon& getPolygon(int index);
     NeighbourInfo getNeighbour(int poly_index, Segment<Point> direction);
 };
 

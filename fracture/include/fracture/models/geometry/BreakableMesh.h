@@ -7,11 +7,9 @@
 
 
 class BreakableMesh : public Mesh{
-private:
-    Mesh mesh;
 public:
     BreakableMesh();
-    BreakableMesh(Mesh m);
+    BreakableMesh(const Mesh& m);
     PolygonChangeData breakMesh(int init, Segment<Point> crack);
 
 };

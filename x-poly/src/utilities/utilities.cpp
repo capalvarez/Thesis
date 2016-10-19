@@ -37,6 +37,7 @@ namespace utilities {
         return pos < (int) vector.size()? pos : -1;
     }
     template int indexOf<Point>(std::vector<Point> vector, Point p);
+    template int indexOf<int>(std::vector<int> vector, int p);
 
     int random_integer(int min, int max){
         static std::random_device rd;

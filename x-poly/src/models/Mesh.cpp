@@ -12,12 +12,28 @@ Mesh::Mesh() {}
 
 Mesh::~Mesh() {}
 
-std::vector<Point> Mesh::getPoints() {
+std::vector<Point>& Mesh::getPoints() {
     return this->points;
 }
 
-std::vector<Polygon> Mesh::getPolygons() {
+std::vector<Polygon>& Mesh::getPolygons() {
     return this->polygons;
+}
+
+SegmentMap &Mesh::getSegments() {
+    return this->edges;
+}
+
+std::vector<Point> Mesh::getPoints() const {
+    return this->points;
+}
+
+std::vector<Polygon> Mesh::getPolygons() const {
+    return this->polygons;
+}
+
+SegmentMap Mesh::getSegments() const {
+    return this->edges;
 }
 
 void Mesh::printInFile(std::string fileName) {
@@ -76,12 +92,12 @@ bool Mesh::isInBoundary(Point p) {
     return false;
 }
 
-Polygon Mesh::getPolygon(int index) {
+Polygon& Mesh::getPolygon(int index) {
     return this->polygons[index];
 }
 
 NeighbourInfo Mesh::getNeighbour(int poly_index, Segment<Point> direction) {
-    Polygon poly = getPolygon(poly_index);
+    Polygon& poly = getPolygon(poly_index);
 
     std::vector<Segment<int>> polySeg;
     poly.getSegments(polySeg);

@@ -13,8 +13,4 @@ TEST(MeshTest, FindPolygonTest) {
     int p1 = m.findContainerPolygon(Point(0.5,0.5));
     int p2 = m.findContainerPolygon(Point(0.1,0.1));
 
-
-
-
-
 }
