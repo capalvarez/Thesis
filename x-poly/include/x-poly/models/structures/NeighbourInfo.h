@@ -14,6 +14,11 @@ struct NeighbourInfo {
         edge = e;
         intersection = i;
     }
+
+    void orderCCW(std::vector<Point> points, Point center){
+        edge.orderCCW(points, center);
+    }
+
 };
 
 #endif 

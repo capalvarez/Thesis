@@ -97,6 +97,10 @@ Polygon& Mesh::getPolygon(int index) {
 }
 
 NeighbourInfo Mesh::getNeighbour(int poly_index, Segment<Point> direction) {
+    return getNeighbour(poly_index, direction, -1);
+}
+
+NeighbourInfo Mesh::getNeighbour(int poly_index, Segment<Point> direction, int previous) {
     Polygon& poly = getPolygon(poly_index);
 
     std::vector<Segment<int>> polySeg;
@@ -109,9 +113,11 @@ NeighbourInfo Mesh::getNeighbour(int poly_index, Segment<Point> direction) {
         if(intersects){
             Neighbours edge = this->edges.get(polySeg[j]);
 
-            poly_index = edge.getFirst()!=poly_index? edge.getFirst() : edge.getSecond();
+            int next_poly = edge.getFirst()!=poly_index? edge.getFirst() : edge.getSecond();
 
-            return NeighbourInfo(poly_index,polySeg[j], p);
+            if(next_poly!=previous) {
+                return NeighbourInfo(next_poly, polySeg[j], p);
+            }
         }
     }
 

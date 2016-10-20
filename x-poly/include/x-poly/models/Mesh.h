@@ -18,7 +18,6 @@ protected:
     std::vector<Point> points;
     std::vector<Polygon> polygons;
     SegmentMap edges;
-
 public:
     Mesh(std::vector<Point>& p, std::vector<Polygon>& e, SegmentMap s);
     Mesh();
@@ -38,6 +37,7 @@ public:
     int findContainerPolygon(Point p);
     Polygon& getPolygon(int index);
     NeighbourInfo getNeighbour(int poly_index, Segment<Point> direction);
+    NeighbourInfo getNeighbour(int poly_index, Segment<Point> direction, int previous);
 };
 
 

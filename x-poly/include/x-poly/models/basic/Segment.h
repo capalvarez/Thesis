@@ -24,6 +24,7 @@ public:
     Point middlePoint(std::vector<Point> p);
     bool isBoundary(std::vector<Point> p);
     bool intersection(std::vector<Point> points, Segment<Point> other, Point &inter);
+    void orderCCW(std::vector<Point> points, Point center);
 };
 
 #endif
