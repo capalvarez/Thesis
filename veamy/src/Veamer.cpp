@@ -71,9 +71,6 @@ std::vector<Element> Veamer::getElements() {
     return this->elements;
 }
 
-
-
-
 void Veamer::replaceElement(Polygon old, std::vector<Polygon> newPolygons) {
     int to_remove = polygon_to_element[old];
     polygon_to_element.erase(old);

@@ -2,7 +2,7 @@
 
 Crack::Crack() {}
 
-Crack::Crack(BreakableMesh mesh, Point init, Point end) {
+Crack::Crack(Point init, Point end) {
     //TODO: Ask the user for speed!
     this->init = CrackTip(Segment<Point>(init, end), 0.01);
     this->end = CrackTip(Segment<Point>(end, init), 0.01);

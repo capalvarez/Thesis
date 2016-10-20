@@ -13,7 +13,7 @@ private:
     CrackTip end;
 public:
     Crack();
-    Crack(BreakableMesh mesh, Point init, Point end);
+    Crack(Point init, Point end);
 
     PolygonChangeData grow(BreakableMesh m, Eigen::VectorXd u);
     PolygonChangeData prepareTip(BreakableMesh m);

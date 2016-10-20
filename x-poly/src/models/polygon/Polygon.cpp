@@ -157,16 +157,23 @@ bool Polygon::containsPoint(std::vector<Point>& p, Point point) {
     return oddNodes || inEdges(p,point);
 }
 
-bool Polygon::inEdges(std::vector<Point>& p, Point point) {
+Segment<int> Polygon::containerEdge(std::vector<Point>& p, Point point){
     std::vector<Segment<int>> segments;
     this->getSegments(segments);
 
-    bool inEdge = false;
     for(int i=0; i<segments.size(); i++){
-        inEdge = inEdge || segments[i].contains(p,point);
+        if(segments[i].contains(p,point)){
+            return segments[i];
+        }
     }
 
-    return inEdge;
+    return Segment<int>(-1, -1);
+}
+
+bool Polygon::inEdges(std::vector<Point>& p, Point point) {
+    Segment<int> container = containerEdge(p, point);
+
+    return container.getFirst()!= -1 && container.getSecond()!= -1;
 }
 
 bool Polygon::isConvex(std::vector<Point>& p) {

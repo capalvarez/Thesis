@@ -52,6 +52,8 @@ public:
     Point getAverageVertex(std::vector<Point> p);
     std::size_t hash;
     void fixCCW(std::vector<Point> p);
+
+    Segment<int> containerEdge(std::vector<Point>& p, Point point);
 };
 
 #endif

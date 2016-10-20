@@ -64,7 +64,7 @@ void Mesh::printInFile(std::string fileName) {
 }
 
 int Mesh::findContainerPolygon(Point p) {
-    int i = utilities::random_integer(0,this->polygons.size());
+    int i = utilities::random_integer(0,this->polygons.size()-1);
 
     while(true){
         bool found = false;
@@ -89,6 +89,14 @@ int Mesh::findContainerPolygon(Point p) {
 }
 
 bool Mesh::isInBoundary(Point p) {
+    Polygon& container = this->polygons[findContainerPolygon(p)];
+
+    if(container.inEdges(this->points, p)){
+        Segment<int> containerEdge = container.containerEdge(this->points, p);
+
+        return containerEdge.isBoundary(this->points);
+    }
+
     return false;
 }
 
