@@ -1,10 +1,12 @@
 #include <fracture/FractureSimulator.h>
 #include <fracture/models/geometry/structures/PolygonChangeData.h>
 
-FractureSimulator::FractureSimulator(Mesh mesh, Crack initial) {
+FractureSimulator::FractureSimulator(Mesh mesh, Crack initial, ProblemConditions conditions) {
     this->mesh = BreakableMesh(mesh);
     this->crack = initial;
     this->veamer = Veamer();
+
+    this->veamer.loadGeometry(mesh, conditions.constraints, conditions.f);
 
     PolygonChangeData initialChanges = this->crack.initializeCrack(this->mesh);
     this->veamer.replaceElements(initialChanges.oldPolygons, initialChanges.newPolygons);
