@@ -131,3 +131,7 @@ NeighbourInfo Mesh::getNeighbour(int poly_index, Segment<Point> direction, int p
 
     return NeighbourInfo(-1,Segment<int>(),Point());
 }
+
+bool Mesh::isFull() {
+    return this->points.size()>0;
+}

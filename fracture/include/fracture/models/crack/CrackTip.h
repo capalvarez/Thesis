@@ -18,6 +18,7 @@ public:
     CrackTip();
     CrackTip(Segment<Point> crack, double length);
     Segment<Point> grow(BreakableMesh mesh, Eigen::VectorXd u);
+    PolygonChangeData prepareTip(BreakableMesh mesh);
     bool isFinished(BreakableMesh mesh);
     void assignLocation(Polygon polygon);
     Point getPoint();

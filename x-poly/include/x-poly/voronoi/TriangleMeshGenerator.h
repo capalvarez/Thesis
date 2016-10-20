@@ -17,11 +17,16 @@
 
 class TriangleMeshGenerator : public MeshGenerator{
 private:
+    // TODO: Clear some space when the processing is done
     Mesh mesh;
+
+    //Delaunay Triangulation
     std::vector<PointData> points;
     std::vector<Triangle> triangles;
     std::vector<Point> meshPoints;
     std::vector<EdgeData> edges;
+    SegmentMap delaunayEdges;
+
     List<int> realPoints;
 
     std::unordered_map<Key, int, KeyHasher> edgeMap;

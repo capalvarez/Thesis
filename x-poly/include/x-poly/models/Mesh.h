@@ -33,7 +33,7 @@ public:
     void printInFile(std::string fileName);
     bool isInBoundary(Point p);
 
-
+    bool isFull();
     int findContainerPolygon(Point p);
     Polygon& getPolygon(int index);
     NeighbourInfo getNeighbour(int poly_index, Segment<Point> direction);

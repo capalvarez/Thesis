@@ -9,6 +9,10 @@ Crack::Crack(Point init, Point end) {
 }
 
 PolygonChangeData Crack::prepareTip(BreakableMesh m) {
+    PolygonChangeData tip1 = this->init.
+
+
+
     return PolygonChangeData(std::vector<Polygon>(), std::vector<Polygon>(), Polygon());
 }
 

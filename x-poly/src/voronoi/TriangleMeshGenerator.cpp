@@ -2,15 +2,19 @@
 
 TriangleMeshGenerator::TriangleMeshGenerator(std::vector<Point>& point_list, Region region) {
     callTriangle(point_list, region);
-    this->mesh = delaunayToVoronoi();
 }
 
 Mesh TriangleMeshGenerator::getMesh() {
+    if(!this->mesh.isFull()){
+        this->mesh = delaunayToVoronoi();
+    }
+
     return this->mesh;
 }
 
 Triangulation TriangleMeshGenerator::getDelaunayTriangulation() {
-    return Triangulation(this->meshPoints, this->triangles);
+
+    return Triangulation(this->meshPoints, this->triangles, delaunayEdges);
 }
 
 void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, Region region) {
@@ -107,6 +111,14 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, Region 
         this->edges[i3].setTriangle(i);
 
         this->triangles.push_back(triangle);
+    }
+
+    for (int i = 0; i < edges.size(); ++i) {
+        EdgeData data = edges[i];
+        Segment<int> segment (data.p1, data.p2);
+        Neighbours neighbours(data.t1, data.t2);
+
+        this->delaunayEdges.insert(segment, neighbours);
     }
 }
 

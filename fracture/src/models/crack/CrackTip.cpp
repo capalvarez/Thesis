@@ -22,6 +22,13 @@ Segment<Point> CrackTip::grow(BreakableMesh mesh, Eigen::VectorXd u) {
 
 }
 
+PolygonChangeData CrackTip::prepareTip(BreakableMesh mesh) {
+
+
+
+
+}
+
 bool CrackTip::isFinished(BreakableMesh mesh) {
     return mesh.isInBoundary(crackPath.back());
 }
