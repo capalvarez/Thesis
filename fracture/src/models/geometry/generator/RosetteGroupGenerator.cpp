@@ -1,5 +1,6 @@
 #include <fracture/models/geometry/generator/RosetteGroupGenerator.h>
 
+
 RosetteGroupGenerator::RosetteGroupGenerator(Point c, double inner, double outer, double angle) {
     this->center = c;
     this->innerRadius = inner;

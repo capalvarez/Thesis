@@ -10,7 +10,7 @@ class CrackTip {
 private:
     double length;
     std::vector<Point> crackPath;
-    Polygon container;
+    int container_polygon;
 
     void addPointToPath(double angle);
     double calculateAngle();
@@ -20,7 +20,7 @@ public:
     Segment<Point> grow(BreakableMesh mesh, Eigen::VectorXd u);
     PolygonChangeData prepareTip(BreakableMesh mesh);
     bool isFinished(BreakableMesh mesh);
-    void assignLocation(Polygon& polygon);
+    void assignLocation(int polygon);
     Point getPoint();
 
 };

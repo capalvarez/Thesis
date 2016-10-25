@@ -2,6 +2,8 @@
 #define THESIS_ROSETTEGROUPGENERATOR_H
 
 #include <x-poly/models/basic/Point.h>
+#include <vector>
+#include <x-poly/utilities/utilities.h>
 
 class RosetteGroupGenerator{
 private:

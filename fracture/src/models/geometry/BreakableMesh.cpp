@@ -18,7 +18,7 @@ PolygonChangeData BreakableMesh::breakMesh(int init, Segment<Point> crack) {
         Polygon& poly1 = getPolygon(n1.neighbour);
 
         if(poly1.containsPoint(this->points.getList(), crack.getSecond())){
-            return PolygonChangeData(oldPolygons, newPolygons, poly1);
+            return PolygonChangeData(oldPolygons, newPolygons, n1.neighbour);
         }
 
         std::vector<int> poly1_points = poly1.getPoints();
