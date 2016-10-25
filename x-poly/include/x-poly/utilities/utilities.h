@@ -20,9 +20,6 @@ namespace utilities {
     extern double radian(double angle);
 
     template <typename T>
-    extern std::string toString(T a);
-
-    template <typename T>
     extern int indexOf(std::vector<T> vector, T element);
 
     extern int random_integer(int min, int max);

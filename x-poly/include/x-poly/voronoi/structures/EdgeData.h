@@ -2,7 +2,8 @@
 #define THESIS_EDGEDATA_H
 
 #include <iostream>
-#include <x-poly/utilities/utilities.h>
+#include <x-poly/utilities/stringUtils.h>
+
 
 class EdgeData{
 public:

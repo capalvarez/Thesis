@@ -1,6 +1,6 @@
 #define _USE_MATH_DEFINES
 
-#include <sstream>
+
 #include <vector>
 #include <math.h>
 #include <x-poly/models/basic/Point.h>
@@ -17,18 +17,6 @@ namespace utilities {
     double radian(double angle){
         return angle*M_PI/180;
     }
-
-    template <typename T>
-    std::string toString(T a){
-        std::stringstream sstream;
-        sstream << a;
-        std::string s = sstream.str();
-
-        return s;
-    }
-
-    template std::string toString<int>(int a);
-    template std::string toString<double>(double a);
 
     template <typename T>
     int indexOf(std::vector<T> vector, T element){

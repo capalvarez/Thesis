@@ -22,7 +22,7 @@ bool EdgeData::equals(EdgeData other) {
 }
 
 std::string EdgeData::getString() {
-    return utilities::toString<double>(this->p1) + " " + utilities::toString<double>(this->p2);
+    return string_utils::toString<double>(this->p1) + " " + string_utils::toString<double>(this->p2);
 }
 
 bool EdgeData::operator==(const EdgeData &other) const {
