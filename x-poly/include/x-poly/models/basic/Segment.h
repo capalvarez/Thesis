@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <x-poly/models/basic/Point.h>
+#include <x-poly/utilities/utilities.h>
 
 template <class T>
 class Segment {

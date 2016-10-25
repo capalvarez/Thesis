@@ -1,6 +1,9 @@
 #ifndef THESIS_GEOMETRYFUNCTIONS_H
 #define THESIS_GEOMETRYFUNCTIONS_H
 
+#include <x-poly/models/basic/Point.h>
+#include <vector>
+
 namespace geometry_functions{
     extern double area2(Point p1, Point p2, Point p3);
     extern bool collinear(Point p1, Point p2, Point p3);

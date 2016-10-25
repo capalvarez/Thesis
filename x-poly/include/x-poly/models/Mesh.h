@@ -12,10 +12,11 @@
 #include <x-poly/voronoi/structures/Neighbours.h>
 #include <x-poly/voronoi/structures/SegmentMap.h>
 #include <x-poly/models/structures/NeighbourInfo.h>
+#include <x-poly/utilities/List.h>
 
 class Mesh {
 protected:
-    std::vector<Point> points;
+    List<Point> points;
     std::vector<Polygon> polygons;
     SegmentMap edges;
 public:
@@ -23,8 +24,8 @@ public:
     Mesh();
     ~Mesh();
 
-    std::vector<Point>& getPoints();
-    std::vector<Point> getPoints() const;
+    List<Point>& getPoints();
+    List<Point> getPoints() const;
     std::vector<Polygon>& getPolygons();
     std::vector<Polygon> getPolygons() const;
     SegmentMap& getSegments();

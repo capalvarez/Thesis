@@ -5,7 +5,7 @@
 Veamer::Veamer() {}
 
 void Veamer::loadGeometry(Mesh m, ConstraintsContainer c, BodyForce* f) {
-    std::vector<Point> meshPoints = m.getPoints();
+    std::vector<Point> meshPoints = m.getPoints().getList();
     this->points.push_list(meshPoints);
     this->constraints = c;
     this->f = f;

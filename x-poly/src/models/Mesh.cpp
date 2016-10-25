@@ -3,7 +3,7 @@
 
 
 Mesh::Mesh(std::vector<Point> &p, std::vector<Polygon> &e, SegmentMap s) {
-    this->points.assign(p.begin(), p.end());
+    this->points.push_list(p);
     this->polygons.assign(e.begin(), e.end());
     this->edges = s;
 }
@@ -12,7 +12,7 @@ Mesh::Mesh() {}
 
 Mesh::~Mesh() {}
 
-std::vector<Point>& Mesh::getPoints() {
+List<Point>& Mesh::getPoints() {
     return this->points;
 }
 
@@ -24,7 +24,7 @@ SegmentMap &Mesh::getSegments() {
     return this->edges;
 }
 
-std::vector<Point> Mesh::getPoints() const {
+List<Point> Mesh::getPoints() const {
     return this->points;
 }
 
@@ -45,7 +45,7 @@ void Mesh::printInFile(std::string fileName) {
 
     file << this->points.size() << std::endl;
     for(int i=0;i<this->points.size();i++){
-        file << this->points[i].getString() << std::endl;
+        file << this->points.get(i).getString() << std::endl;
     }
 
 
@@ -70,7 +70,7 @@ int Mesh::findContainerPolygon(Point p) {
         bool found = false;
         Polygon poly = this->polygons[i];
 
-        if(poly.containsPoint(this->points, p)){
+        if(poly.containsPoint(this->points.getList(), p)){
             return i;
         }else {
             Segment<Point> lookup(poly.getCentroid(), p);
@@ -91,10 +91,10 @@ int Mesh::findContainerPolygon(Point p) {
 bool Mesh::isInBoundary(Point p) {
     Polygon& container = this->polygons[findContainerPolygon(p)];
 
-    if(container.inEdges(this->points, p)){
-        Segment<int> containerEdge = container.containerEdge(this->points, p);
+    if(container.inEdges(this->points.getList(), p)){
+        Segment<int> containerEdge = container.containerEdge(this->points.getList(), p);
 
-        return containerEdge.isBoundary(this->points);
+        return containerEdge.isBoundary(this->points.getList());
     }
 
     return false;
@@ -116,7 +116,7 @@ NeighbourInfo Mesh::getNeighbour(int poly_index, Segment<Point> direction, int p
 
     for (int j = 0; j < polySeg.size() ; ++j) {
         Point p;
-        bool intersects = polySeg[j].intersection(this->points, direction, p);
+        bool intersects = polySeg[j].intersection(this->points.getList(), direction, p);
 
         if(intersects){
             Neighbours edge = this->edges.get(polySeg[j]);

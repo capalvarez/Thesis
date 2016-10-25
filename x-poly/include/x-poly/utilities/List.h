@@ -17,6 +17,7 @@ public:
     std::vector<int> push_list(std::vector<T> list);
 
     std::vector<T> getList() const;
+    std::vector<T>& getList();
     T& get(int i);
     bool operator==(const List<T>& other);
     bool contains(T elem);

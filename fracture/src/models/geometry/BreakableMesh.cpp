@@ -17,7 +17,7 @@ PolygonChangeData BreakableMesh::breakMesh(int init, Segment<Point> crack) {
     while(true){
         Polygon& poly1 = getPolygon(n1.neighbour);
 
-        if(poly1.containsPoint(this->points, crack.getSecond())){
+        if(poly1.containsPoint(this->points.getList(), crack.getSecond())){
             return PolygonChangeData(oldPolygons, newPolygons, poly1);
         }
 
@@ -35,8 +35,8 @@ PolygonChangeData BreakableMesh::breakMesh(int init, Segment<Point> crack) {
         std::vector<int> new1 = {p1, p2};
         std::vector<int> new2 = {p2, p1};
 
-        n1.orderCCW(this->points, poly1.getCentroid());
-        n2.orderCCW(this->points, poly1.getCentroid());
+        n1.orderCCW(this->points.getList(), poly1.getCentroid());
+        n2.orderCCW(this->points.getList(), poly1.getCentroid());
 
         int indexOfStart = utilities::indexOf(poly1_points, n2.edge.getSecond());
         int point = n2.edge.getSecond();
@@ -58,8 +58,8 @@ PolygonChangeData BreakableMesh::breakMesh(int init, Segment<Point> crack) {
         // Create new polygons and insert them on the mesh
         oldPolygons.push_back(poly1);
 
-        Polygon newPolygon1 (new1, this->points);
-        Polygon newPolygon2 (new2, this->points);
+        Polygon newPolygon1 (new1, this->points.getList());
+        Polygon newPolygon2 (new2, this->points.getList());
 
         newPolygons.push_back(newPolygon1);
         this->polygons[n1.neighbour] = newPolygon1;

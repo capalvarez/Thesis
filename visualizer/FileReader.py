@@ -51,7 +51,7 @@ def read_file(file_name):
 
 
 def read_triangulation(file_name):
-    file = open("/home/cata/" + file_name, "r")
+    file = open("C:\\Users\\Catalina\\" + file_name, "r")
     number_points = int(file.readline())
     points = []
     triangles = []

@@ -270,6 +270,15 @@ void Polygon::fixCCW(std::vector<Point> p) {
     }
 }
 
+std::vector<Point> Polygon::getPoints(std::vector<Point> p) {
+    std::vector<Point> returnPoints;
+
+    for (int i = 0; i < this->points.size(); ++i) {
+        returnPoints.push_back(p[this->points[i]]);
+    }
+
+    return returnPoints;
+}
 
 
 

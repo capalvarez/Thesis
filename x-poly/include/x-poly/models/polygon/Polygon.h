@@ -6,7 +6,6 @@
 #include <x-poly/models/basic/Segment.h>
 #include <x-poly/utilities/geometryFunctions.h>
 #include <x-poly/utilities/convexHull.h>
-#include <x-poly/utilities/utilities.h>
 
 class Polygon {
 protected:
@@ -54,6 +53,7 @@ public:
     void fixCCW(std::vector<Point> p);
 
     Segment<int> containerEdge(std::vector<Point>& p, Point point);
+    std::vector<Point> getPoints(std::vector<Point> p);
 };
 
 #endif

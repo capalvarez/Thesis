@@ -54,6 +54,10 @@ bool List<T>::contains(T elem) {
     return std::find(list.begin(), list.end(), elem) != list.end();;
 }
 
+template <typename T>
+std::vector<T>& List<T>::getList() {
+    return this->list;
+}
 
 template class List<Point>;
 template class List<Segment<int>>;

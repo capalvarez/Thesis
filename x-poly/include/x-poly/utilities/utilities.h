@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <x-poly/models/basic/Point.h>
 
 namespace utilities {
     extern void TrivialIndexVector(std::vector<int>& index_vector, int n);

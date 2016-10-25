@@ -16,20 +16,20 @@ frame.pack()
 
 canvas = Canvas(window, width=900, height=700, bg="white")
 
-points, segments, polygons, limits = read_file("broken.txt")
-#t_points, triangles, t_limits = read_triangulation("triangles2.txt")
+#points, segments, polygons, limits = read_file("rosette.txt")
+t_points, triangles, t_limits = read_triangulation("rosette.txt")
 
-button = Button(frame, text="Draw Polygons", command=lambda p=polygons, c=canvas, ps=points: draw_polygons(p, c, ps))
-button2 = Button(frame, text="Draw Segments", command=lambda s=segments, c=canvas, p=points: draw_segments(s, c, p))
+#button = Button(frame, text="Draw Polygons", command=lambda p=polygons, c=canvas, ps=points: draw_polygons(p, c, ps))
+#button2 = Button(frame, text="Draw Segments", command=lambda s=segments, c=canvas, p=points: draw_segments(s, c, p))
 button3 = Button(frame, text="Clear", command=lambda: canvas.delete("all"))
 
-draw_list(points, canvas, limits,"yellow")
-#draw_list(t_points, canvas, t_limits, "green")
-#draw_list(triangles, canvas, t_points, "green")
+#draw_list(points, canvas, limits,"yellow")
+draw_list(t_points, canvas, t_limits, "green")
+draw_list(triangles, canvas, t_points, "green")
 
 canvas.pack()
-button.pack(side="right")
-button2.pack(side="right")
+#button.pack(side="right")
+#button2.pack(side="right")
 button3.pack(side="right")
 
 window.mainloop()

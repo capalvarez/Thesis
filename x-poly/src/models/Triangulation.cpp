@@ -27,3 +27,14 @@ void Triangulation::writeInFile(std::string fileName) {
     file.close();
 }
 
+std::vector<Triangle> Triangulation::getTriangles() {
+    return this->triangles;
+}
+
+std::vector<Point> Triangulation::getPoints() {
+    return this->points;
+}
+
+SegmentMap Triangulation::getSegments() {
+    return this->edgeMap;
+}

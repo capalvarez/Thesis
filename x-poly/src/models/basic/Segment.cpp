@@ -1,5 +1,6 @@
 #include <x-poly/models/basic/Segment.h>
 
+
 template <class T>
 Segment<T>::Segment(T p1, T p2) {
     this->p1 = p1;

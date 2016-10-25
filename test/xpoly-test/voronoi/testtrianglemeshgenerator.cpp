@@ -6,7 +6,7 @@ TEST_F(TriangleMeshGeneratorTest, Square1Test){
 
     std::vector<Point> expectedPoints = {Point(0,0.5), Point(0.5,0), Point(0.5,1), Point(1,0.5),
                                          Point(0,0), Point(1,0), Point(1,1),Point(0,1)};
-    EXPECT_EQ(m.getPoints(), expectedPoints);
+    EXPECT_EQ(m.getPoints().getList(), expectedPoints);
 
     std::vector<Segment<int>> expectedSegments = {Segment<int>(0,1), Segment<int>(0,2), Segment<int>(2,3), Segment<int>(3,1),
                                                   Segment<int>(0,4), Segment<int>(4,1), Segment<int>(3,5), Segment<int>(5,1),
