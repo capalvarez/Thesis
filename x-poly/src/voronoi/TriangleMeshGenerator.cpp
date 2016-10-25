@@ -13,7 +13,6 @@ Mesh TriangleMeshGenerator::getMesh() {
 }
 
 Triangulation TriangleMeshGenerator::getDelaunayTriangulation() {
-
     return Triangulation(this->meshPoints, this->triangles, delaunayEdges);
 }
 

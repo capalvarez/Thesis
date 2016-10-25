@@ -231,7 +231,7 @@ std::string Polygon::getString() {
         base += " " + string_utils::toString<double>(this->points[i]);
     }
 
-    return base;
+    return base + " " + getCentroid().getString();
 }
 
 bool Polygon::containsEdge(Segment<int> s) {
