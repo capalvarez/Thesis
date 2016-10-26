@@ -20,6 +20,13 @@ TEST_F(SegmentTest, IntersectsTest){
     EXPECT_TRUE(segment->intersection(segment_points, s1, p));
     EXPECT_FALSE(segment->intersection(segment_points, s2, p));
 
+}
+
+TEST_F(SegmentTest, CartesianAngleTest){
+    EXPECT_EQ(segment->cartesianAngle(segment_points),45);
+    EXPECT_EQ(Segment<int>(0,2).cartesianAngle(segment_points),135);
+    EXPECT_EQ(Segment<int>(0,3).cartesianAngle(segment_points),225);
+    EXPECT_EQ(Segment<int>(0,4).cartesianAngle(segment_points),315);
 
 }
 

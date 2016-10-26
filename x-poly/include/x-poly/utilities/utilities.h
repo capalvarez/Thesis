@@ -19,6 +19,8 @@ namespace utilities {
 
     extern double radian(double angle);
 
+    extern double degrees(double angle);
+
     template <typename T>
     extern int indexOf(std::vector<T> vector, T element);
 

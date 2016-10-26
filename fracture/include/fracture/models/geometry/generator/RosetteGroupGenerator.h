@@ -17,7 +17,7 @@ private:
 public:
     // TODO: Ask the user this parameters!
     RosetteGroupGenerator(Point c, double inner, double outer, double angle);
-    std::vector<Point> getPoints();
+    std::vector<Point> getPoints(double initAngle);
 };
 
 

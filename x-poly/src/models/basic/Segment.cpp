@@ -127,5 +127,27 @@ void Segment<int>::orderCCW(std::vector<Point> points, Point center) {
     }
 }
 
+template <>
+double Segment<int>::cartesianAngle(std::vector<Point> points) {
+    Point p1 = points[this->p1];
+    Point p2 = points[this->p2];
+
+    double dY = p2.getY() - p1.getY();
+    double dX = p2.getX() - p1.getX();
+
+    return utilities::degrees(atan2(dY, dX));
+}
+
+template <>
+double Segment<Point>::cartesianAngle(std::vector<Point> points) {
+    Point p1 = this->p1;
+    Point p2 = this->p2;
+
+    double dY = p2.getY() - p1.getY();
+    double dX = p2.getX() - p1.getX();
+
+    return utilities::degrees(atan2(dY, dX));
+}
+
 template class Segment<int>;
 template class Segment<Point>;

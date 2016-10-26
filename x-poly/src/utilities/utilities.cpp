@@ -18,6 +18,10 @@ namespace utilities {
         return angle*M_PI/180;
     }
 
+    double degrees(double angle){
+        return (angle > 0 ? angle : (2*M_PI + angle)) * 360 / (2*M_PI);
+    }
+
     template <typename T>
     int indexOf(std::vector<T> vector, T element){
         int pos = std::find(vector.begin(), vector.end(), element) - vector.begin();
