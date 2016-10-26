@@ -15,8 +15,6 @@ private:
 
     void addPointToPath(double angle);
     double calculateAngle();
-
-    Polygon getTransformedTriangle(Triangle triangle, BreakableMesh mesh, std::unordered_map<int, int> pointMap);
 public:
     CrackTip();
     CrackTip(Segment<Point> crack, double length);

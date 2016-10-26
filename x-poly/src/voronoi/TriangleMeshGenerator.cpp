@@ -83,6 +83,9 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, Region 
         PointData data (i);
         this->points.push_back(data);
         this->meshPoints.push_back(Point(out.pointlist[i*2], out.pointlist[i*2+1]));
+        if(out.pointmarkerlist[i]==1){
+            this->meshPoints.back().setBoundary();
+        }
     }
 
     for(int i=0;i<out.numberofedges;i++) {
@@ -119,6 +122,25 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, Region 
 
         this->delaunayEdges.insert(segment, neighbours);
     }
+
+    free(in.pointlist);
+    free(in.pointattributelist);
+    free(in.pointmarkerlist);
+    free(in.segmentlist);
+    free(in.segmentmarkerlist);
+    free(in.holelist);
+    free(in.regionlist);
+
+    free(out.pointlist);
+    free(out.pointattributelist);
+    free(out.pointmarkerlist);
+    free(out.trianglelist);
+    free(out.triangleattributelist);
+    free(out.neighborlist);
+    free(out.segmentmarkerlist);
+    free(out.segmentlist);
+    free(out.edgelist);
+    free(out.edgemarkerlist);
 }
 
 Mesh TriangleMeshGenerator::delaunayToVoronoi() {

@@ -49,41 +49,83 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
     }
 
     std::vector<Triangle> triangles = triangulation.getTriangles();
-    meshPolygons[this->container_polygon] = getTransformedTriangle(triangles[0], mesh, pointMap);
 
-    //for (int i = 0; i < n; ++i) {
-        //Segment<int> edge(newTrianglePoints[i], newTrianglePoints[(i+1)%n]);
-        //segments.replace_neighbour(edge,container_polygon,0);
-    //}
+    // TODO: Refactor this, PLEASE, I'm serious
 
-    std::vector<Segment<int>> containerPolygon;
-    container.getSegments(containerPolygon);
+    std::vector<Segment<int>> containerSegments;
+    container.getSegments(containerSegments);
+
+    std::vector<int> oldTrianglePoints = triangles[0].getPoints();
+    int n = oldTrianglePoints.size();
+
+    std::vector<int> newTrianglePoints;
+
+    for (int k = 0; k < n ; ++k) {
+        newTrianglePoints.push_back(pointMap[oldTrianglePoints[k]]);
+    }
+
+    Polygon newPolygon =  Polygon(newTrianglePoints, mesh.getPoints().getList());
+    meshPolygons[this->container_polygon] = newPolygon;
+
+    for (int j = 0; j < n; ++j) {
+        Segment<int> edge(newTrianglePoints[j], newTrianglePoints[(j+1)%n]);
+        Segment<int> originalEdge(oldTrianglePoints[j],oldTrianglePoints[(j+1)%n]);
+
+        if(originalEdge.isBoundary(triangulation.getPoints())){
+            for (int k = 0; k < containerSegments.size(); ++k) {
+                if(containerSegments[k].contains(meshPoints.getList(),edge)){
+                    Neighbours n = segments.get(containerSegments[k]);
+                    int otherNeighbour = n.getFirst()==this->container_polygon? n.getSecond() : n.getFirst();
+
+                    segments.insert(edge, 0);
+                    segments.insert(edge, otherNeighbour);
+                    break;
+                }
+            }
+        }else{
+            segments.insert(edge,0);
+        }
+    }
 
     for (int i = 1; i < triangles.size() ; ++i) {
-        Polygon newPolygon = getTransformedTriangle(triangles[i], mesh, pointMap);
+        std::vector<int> oldTrianglePoints = triangles[i].getPoints();
+        int n = oldTrianglePoints.size();
+
+        std::vector<int> newTrianglePoints;
+
+        for (int k = 0; k < n ; ++k) {
+            newTrianglePoints.push_back(pointMap[oldTrianglePoints[k]]);
+        }
+
+        Polygon newPolygon =  Polygon(newTrianglePoints, mesh.getPoints().getList());
         meshPolygons.push_back(newPolygon);
 
-        std::vector<int> newPolygonPoints = newPolygon.getPoints();
-        int n = newPolygonPoints.size();
-
         for (int j = 0; j < n; ++j) {
-            Segment<int> edge(newPolygonPoints[j], newPolygonPoints[(j+1)%n]);
-            Segment<int> originalEdge;
-
+            Segment<int> edge(newTrianglePoints[j], newTrianglePoints[(j+1)%n]);
+            Segment<int> originalEdge(oldTrianglePoints[j],oldTrianglePoints[(j+1)%n]);
 
             if(originalEdge.isBoundary(triangulation.getPoints())){
+                for (int k = 0; k < containerSegments.size(); ++k) {
+                    if(containerSegments[k].contains(meshPoints.getList(),edge)){
+                        Neighbours n = segments.get(containerSegments[k]);
+                        int otherNeighbour = n.getFirst()==this->container_polygon? n.getSecond() : n.getFirst();
 
-
-
+                        segments.insert(edge, meshPolygons.size()-1);
+                        segments.insert(edge, otherNeighbour);
+                        break;
+                    }
+                }
             }else{
                 segments.insert(edge,meshPolygons.size()-1);
             }
         }
     }
 
+    for (int i = 0; i < containerSegments.size(); ++i) {
+        segments.delete_element(containerSegments[i]);
+    }
+
     mesh.printInFile("prepare.txt");
-
-
 
     return PolygonChangeData(std::vector<Polygon>(), std::vector<Polygon>(), 0);
 
@@ -102,19 +144,5 @@ CrackTip::CrackTip() {}
 Point CrackTip::getPoint() {
     return this->crackPath.back();
 }
-
-Polygon CrackTip::getTransformedTriangle(Triangle triangle, BreakableMesh mesh, std::unordered_map<int, int> pointMap) {
-    std::vector<int> oldTrianglePoints = triangle.getPoints();
-    int n = oldTrianglePoints.size();
-
-    std::vector<int> newTrianglePoints;
-
-    for (int k = 0; k < n ; ++k) {
-        newTrianglePoints.push_back(pointMap[oldTrianglePoints[k]]);
-    }
-
-    return Polygon(newTrianglePoints, mesh.getPoints().getList());
-}
-
 
 
