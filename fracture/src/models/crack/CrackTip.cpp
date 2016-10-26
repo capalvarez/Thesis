@@ -28,6 +28,7 @@ Segment<Point> CrackTip::grow(BreakableMesh& mesh, Eigen::VectorXd u) {
 PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
     double crackAngle = Segment<Point>(crackPath.back(), crackPath[crackPath.size() - 2]).cartesianAngle(crackPath);
     Polygon container = mesh.getPolygon(this->container_polygon);
+    std::vector<Polygon> newPolygons;
 
     std::vector<Point> rosettePoints = RosetteGroupGenerator(this->getPoint(), 0.1, 0.2, 90).getPoints(crackAngle);
     std::vector<Point> containerPoints = container.getPoints(mesh.getPoints().getList());
@@ -75,6 +76,8 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
             index = meshPolygons.size() - 1;
         }
 
+        newPolygons.push_back(newPolygon);
+
         for (int j = 0; j < n; ++j) {
             Segment<int> edge(newTrianglePoints[j], newTrianglePoints[(j+1)%n]);
             Segment<int> originalEdge(oldTrianglePoints[j],oldTrianglePoints[(j+1)%n]);
@@ -101,9 +104,7 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
     }
 
     mesh.printInFile("prepare.txt");
-
-    return PolygonChangeData(std::vector<Polygon>(), std::vector<Polygon>(), 0);
-
+    return PolygonChangeData(container, newPolygons);
 }
 
 bool CrackTip::isFinished(BreakableMesh mesh) {

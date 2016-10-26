@@ -10,6 +10,6 @@ class Polygon:
             p2 = points[self.p[(i+1)%len(self.p)]]
 
             canvas.create_line(p1.x,p1.y,p2.x,p2.y,fill=color)
-            canvas.create_text(self.centroid.x, self.centroid.y, text=self.index)
+            #canvas.create_text(self.centroid.x, self.centroid.y, text=self.index)
 
 

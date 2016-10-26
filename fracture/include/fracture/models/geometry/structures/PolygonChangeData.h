@@ -11,6 +11,18 @@ struct PolygonChangeData{
         newPolygons = newP;
         lastPolygon = last;
     }
+
+    PolygonChangeData(Polygon oldP, std::vector<Polygon> newP){
+        oldPolygons.push_back(oldP);
+        newPolygons = newP;
+    }
+
+    PolygonChangeData(std::vector<Polygon> oldP, std::vector<Polygon> newP){
+        oldPolygons = oldP;
+        newPolygons = newP;
+    }
+
+
 };
 
 

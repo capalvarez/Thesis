@@ -9,11 +9,24 @@ Crack::Crack(Point init, Point end) {
 }
 
 PolygonChangeData Crack::prepareTip(BreakableMesh m) {
+    std::vector<Polygon> oldP;
+    std::vector<Polygon> newP;
 
+    if(!this->init.isFinished(m)){
+        PolygonChangeData data = this->init.prepareTip(m);
 
+        oldP.push_back(data.oldPolygons[0]);
+        newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());
+    }
 
+    if(!this->end.isFinished(m)){
+        PolygonChangeData data = this->end.prepareTip(m);
 
-    return PolygonChangeData(std::vector<Polygon>(), std::vector<Polygon>(), 0);
+        oldP.push_back(data.oldPolygons[0]);
+        newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());
+    }
+
+    return PolygonChangeData(oldP, newP);
 }
 
 bool Crack::isFinished(BreakableMesh mesh) {
