@@ -1,7 +1,7 @@
 #include <fracture/models/crack/CrackTip.h>
 
-CrackTip::CrackTip(Segment<Point> crack, double length, double radius) {
-    this->length = length;
+CrackTip::CrackTip(Segment<Point> crack, double speed, double radius) {
+    this->speed = speed;
     this->radius = radius;
     crackPath.push_back(crack.getSecond());
     crackPath.push_back(crack.getFirst());
@@ -10,8 +10,8 @@ CrackTip::CrackTip(Segment<Point> crack, double length, double radius) {
 void CrackTip::addPointToPath(double angle) {
     Point last = crackPath.back();
 
-    Point newPoint(last.getX() + this->length*std::cos(utilities::radian(angle)),
-                   last.getY() + this->length*std::sin(utilities::radian(angle)));
+    Point newPoint(last.getX() + this->speed*std::cos(utilities::radian(angle)),
+                   last.getY() + this->speed*std::sin(utilities::radian(angle)));
 
     this->crackPath.push_back(newPoint);
 }
@@ -39,7 +39,7 @@ double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
 }
 
 PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
-    double angle = calculateAngle(problem, Eigen::VectorXd());
+    double angle = calculateAngle(problem, u);
     Point lastPoint = crackPath.back();
     addPointToPath(angle);
 

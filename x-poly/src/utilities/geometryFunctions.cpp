@@ -10,8 +10,7 @@ namespace geometry_functions{
     }
 
     bool collinear(Point p1, Point p2, Point p3){
-        //TODO: Check for precision errors here
-        return area2(p1,p2,p3)==0;
+        return std::abs(area2(p1,p2,p3))<0.001;
     }
 
     double triangleArea(Point p1, Point p2, Point origin){

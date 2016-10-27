@@ -16,7 +16,7 @@
 
 class CrackTip {
 private:
-    double length;
+    double speed;
     double radius;
     std::vector<Point> crackPath;
     int container_polygon;

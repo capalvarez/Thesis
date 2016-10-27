@@ -1,4 +1,5 @@
 #include <x-poly/models/Region.h>
+#include <stdexcept>
 
 Region::Region(std::vector<Point>& points) : Polygon(points){
     this->p = points;
@@ -10,9 +11,7 @@ void Region::mutate(std::vector<Point> &points) {
     Polygon::mutate(points);
 }
 
-Region::~Region() {
-   // std::for_each(holes.begin(), holes.end(), utilities::DeleteVector<Hole*>());
-}
+Region::~Region() {}
 
 std::vector<Hole*> Region::getHoles() {
     return this->holes;
@@ -52,8 +51,13 @@ void Region::addHole(Hole* h) {
 
         this->mutate(newPoints);
     }else{
-        //TODO: Ignore holes outside the region
-        this->holes.push_back(h);
+        //Two cases, hole is completely inside or completely outside, just ignore holes outside
+
+        if(this->containsPoint(this->p, h->getCenter())){
+            this->holes.push_back(h);
+        }else{
+            throw std::invalid_argument("Hole lies outside region");
+        }
     }
 }
 
@@ -109,6 +113,7 @@ std::vector<Point> Region::getRegionPoints() {
 
 void Region::getSegments(std::vector<Segment<int>> &s) {
     //TODO: Manage border cases here!
+    // TODO: Don't quite remember the problem, needs studying
 
     Polygon::getSegments(s);
     int offset = (int) this->p.size();

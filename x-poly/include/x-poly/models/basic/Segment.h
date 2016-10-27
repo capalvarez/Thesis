@@ -17,6 +17,8 @@ public:
 
     T getFirst() const;
     T getSecond() const;
+
+    double length();
     bool operator==(const Segment<T> other) const;
     std::string getString();
 

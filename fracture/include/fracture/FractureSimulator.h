@@ -5,7 +5,7 @@
 #include <veamy/Veamer.h>
 #include <fracture/models/crack/Crack.h>
 #include <fracture/models/geometry/BreakableMesh.h>
-#include <fracture/models/problem/ProblemConditions.h>
+#include <veamy/physics/ProblemConditions.h>
 
 class FractureSimulator {
 private:

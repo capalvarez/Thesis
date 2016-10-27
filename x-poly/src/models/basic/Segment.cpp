@@ -149,5 +149,11 @@ double Segment<Point>::cartesianAngle(std::vector<Point> points) {
     return utilities::degrees(atan2(dY, dX));
 }
 
+template <>
+double Segment<Point>::length() {
+    return std::sqrt(std::pow(this->p1.getX() - this->p2.getX(), 2) + std::pow(this->p1.getY() - this->p2.getY(),2));
+}
+
+
 template class Segment<int>;
 template class Segment<Point>;

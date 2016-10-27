@@ -2,10 +2,11 @@
 
 Crack::Crack() {}
 
-Crack::Crack(Point init, Point end) {
-    //TODO: Ask the user for speed!
-    this->init = CrackTip(Segment<Point>(init, end), 0.01);
-    this->end = CrackTip(Segment<Point>(end, init), 0.01);
+Crack::Crack(Point init, Point end, double speed, double ratio) {
+    Segment<Point> crack (init, end);
+
+    this->init = CrackTip(crack, speed, crack.length()*ratio);
+    this->end = CrackTip(Segment<Point>(end, init), speed, crack.length()*ratio);
 }
 
 PolygonChangeData Crack::prepareTip(BreakableMesh m) {
@@ -43,19 +44,20 @@ PolygonChangeData Crack::initializeCrack(BreakableMesh mesh) {
     return change;
 }
 
-PolygonChangeData Crack::grow(BreakableMesh m, Eigen::VectorXd u) {
+PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
     std::vector<Polygon> oldP;
     std::vector<Polygon> newP;
 
-    if(!this->init.isFinished(m)){
-        PolygonChangeData data = this->init.grow(u, Problem(0,0,0));
+    // TODO: CHECK NOW
+    if(!this->init.isFinished(*problem.mesh)){
+        PolygonChangeData data = this->init.grow(u, problem);
 
         oldP.insert(oldP.end(), data.oldPolygons.begin(), data.oldPolygons.end());
         newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());
     }
 
-    if(!this->end.isFinished(m)){
-        PolygonChangeData data = this->end.grow(u, Problem(0,0,0));
+    if(!this->end.isFinished(*problem.mesh)){
+        PolygonChangeData data = this->end.grow(u, problem);
 
         oldP.insert(oldP.end(), data.oldPolygons.begin(), data.oldPolygons.end());
         newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());

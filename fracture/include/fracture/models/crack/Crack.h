@@ -13,9 +13,9 @@ private:
     CrackTip end;
 public:
     Crack();
-    Crack(Point init, Point end);
+    Crack(Point init, Point end, double speed, double ratio);
 
-    PolygonChangeData grow(BreakableMesh m, Eigen::VectorXd u);
+    PolygonChangeData grow(Problem problem, Eigen::VectorXd u);
     PolygonChangeData prepareTip(BreakableMesh m);
     bool isFinished(BreakableMesh mesh);
 

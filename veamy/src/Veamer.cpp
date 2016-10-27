@@ -48,7 +48,6 @@ Eigen::VectorXd Veamer::simulate() {
         f(i) = f(i) - (K_b.row(i)*boundary_values);
     }
 
-
     for (int j = 0; j < c.size(); ++j) {
         K.row(c[j]).setZero();
         K.col(c[j]).setZero();
@@ -56,8 +55,6 @@ Eigen::VectorXd Veamer::simulate() {
 
         f(c[j]) = boundary_values(j);
     }
-
-    //std::cout << K << std::endl << std::endl << f << std::endl << std::endl;
 
     //Solve the system
     Eigen::VectorXd x = K.inverse()*f;
