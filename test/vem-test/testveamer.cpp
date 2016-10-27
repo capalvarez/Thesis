@@ -29,16 +29,18 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     EssentialConstraints c;
     Segment<Point> constrained(Point(0,0),Point(0,1));
     Segment<Point> constrained2 (Point(2,0),Point(2,1));
-    Constraint const1 (constrained, m.getPoints(), Constraint::Direction::Total, new Constant(0));
+    Constraint const1 (constrained, m.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
 
     c.addConstraint(const1);
-    Constraint const2 (constrained2, m.getPoints(), Constraint::Direction::Horizontal, new Constant(1));
+    Constraint const2 (constrained2, m.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(1));
     c.addConstraint(const2);
 
     ConstraintsContainer container;
     container.addConstraints(c);
 
-    v.loadGeometry(m, container, f);
+    ProblemConditions conditions(container, f, Material());
+
+    v.initProblem(m, conditions);
 
     Eigen::VectorXd x = v.simulate();
 

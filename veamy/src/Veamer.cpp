@@ -2,13 +2,13 @@
 #include <iostream>
 #include <veamy/Veamer.h>
 
+
 Veamer::Veamer() {}
 
-void Veamer::loadGeometry(Mesh m, ConstraintsContainer c, BodyForce* f) {
+void Veamer::initProblem(Mesh m, ProblemConditions conditions) {
     std::vector<Point> meshPoints = m.getPoints().getList();
     this->points.push_list(meshPoints);
-    this->constraints = c;
-    this->f = f;
+    this->conditions = conditions;
 
     std::vector<Polygon> polygons = m.getPolygons();
 
@@ -19,7 +19,7 @@ void Veamer::loadGeometry(Mesh m, ConstraintsContainer c, BodyForce* f) {
 
 void Veamer::createElement(Polygon p) {
     polygon_to_element.insert(std::make_pair(p,elements.size()));
-    elements.push_back(Element(this->constraints, p, this->points, DOFs, this->f));
+    elements.push_back(Element(this->conditions, p, this->points, DOFs));
 }
 
 Eigen::VectorXd Veamer::simulate() {
@@ -36,7 +36,7 @@ Eigen::VectorXd Veamer::simulate() {
     }
 
     //Apply constrained_points
-    EssentialConstraints essential = this->constraints.getEssentialConstraints();
+    EssentialConstraints essential = this->conditions.constraints.getEssentialConstraints();
     std::vector<int> c = essential.getConstrainedDOF();
 
     Eigen::MatrixXd K_b;

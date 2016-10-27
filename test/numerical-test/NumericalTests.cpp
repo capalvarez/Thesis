@@ -143,7 +143,7 @@ void NumericalTests::loadRightForceX(Mesh m, Veamer &v, Segment leftSide, Segmen
     container.addConstraints(c);
     container.addConstraints(natural);
 
-    v.loadGeometry(m, container, f);
+    v.initProblem(m, container, f);
 }
 
 void NumericalTests::loadRightForceY(Mesh m, Veamer &v, Segment leftSide, Segment rightSide) {
@@ -167,7 +167,7 @@ void NumericalTests::loadRightForceY(Mesh m, Veamer &v, Segment leftSide, Segmen
     container.addConstraints(c);
     container.addConstraints(natural);
 
-    v.loadGeometry(m, container, f);
+    v.initProblem(m, container, f);
 }
 
 void NumericalTests::loadNoForces(Mesh m, Veamer &v, Segment leftSide, Segment rightSide) {
@@ -188,7 +188,7 @@ void NumericalTests::loadNoForces(Mesh m, Veamer &v, Segment leftSide, Segment r
     ConstraintsContainer container;
     container.addConstraints(c);
 
-    v.loadGeometry(m, container, f);
+    v.initProblem(m, container, f);
 }
 
 void NumericalTests::loadTwoForcesX(Mesh m, Veamer &v, Segment leftSide, Segment rightSide) {

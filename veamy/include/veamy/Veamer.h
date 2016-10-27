@@ -6,10 +6,9 @@
 #include <veamy/models/dof/DOFS.h>
 #include <veamy/models/constraints/EssentialConstraints.h>
 #include <veamy/matrix/matrixOps.h>
-#include <veamy/physics/BodyForce.h>
-#include <veamy/models/constraints/ConstraintsContainer.h>
 #include <veamy/models/Element.h>
 #include <veamy/lib/Eigen/Dense>
+#include <veamy/physics/ProblemConditions.h>
 
 struct PolygonHasher {
     std::size_t operator()(const Polygon &k) const {
@@ -23,8 +22,7 @@ struct PolygonHasher {
 class Veamer {
 private:
     //TODO: Check for inconsistencies (cannot have natural and essential conditions on the same segments)
-    ConstraintsContainer constraints;
-    BodyForce* f;
+    ProblemConditions conditions;
 
     std::vector<Element> elements;
     std::unordered_map<Polygon, int, PolygonHasher> polygon_to_element;
@@ -35,7 +33,7 @@ public:
     DOFS DOFs;
     Veamer();
 
-    void loadGeometry(Mesh m, ConstraintsContainer c, BodyForce* f);
+    void initProblem(Mesh m, ProblemConditions conditions);
     Eigen::VectorXd simulate();
     std::vector<Element> getElements();
 

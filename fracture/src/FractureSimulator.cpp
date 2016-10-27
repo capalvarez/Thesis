@@ -6,7 +6,7 @@ FractureSimulator::FractureSimulator(Mesh mesh, Crack initial, ProblemConditions
     this->crack = initial;
     this->veamer = Veamer();
 
-    this->veamer.loadGeometry(mesh, conditions.constraints, conditions.f);
+    this->veamer.initProblem(mesh, conditions.constraints, conditions.f);
 
     PolygonChangeData initialChanges = this->crack.initializeCrack(this->mesh);
     this->veamer.replaceElements(initialChanges.oldPolygons, initialChanges.newPolygons);

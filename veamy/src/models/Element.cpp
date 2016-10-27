@@ -3,24 +3,23 @@
 #include <veamy/physics/Material.h>
 #include <veamy/matrix/quadrature/QuadraturePolygon.h>
 
-Element::Element(ConstraintsContainer& constraints, Polygon p, List<Point>& points, DOFS& out, BodyForce* f) {
+Element::Element(ProblemConditions& conditions, Polygon p, List<Point>& points, DOFS& out) {
     std::vector<int> vertex = p.getPoints();
     int n = vertex.size();
 
     for(int i=0;i<n;i++){
         SegmentPair<int> pair(Segment<int>(vertex[(i-1+n)%n],vertex[i]), Segment<int>(vertex[i],vertex[(i+1)%n]));
-        Pair<int> indexes = out.addDOF(constraints, points.getList(), vertex[i], pair);
+        Pair<int> indexes = out.addDOF(conditions.constraints, points.getList(), vertex[i], pair);
 
         dofs.push_back(indexes.first);
         dofs.push_back(indexes.second);
     }
 
     std::vector<Point> pointVector = points.getList();
-    initMatrix(out, pointVector, p, f, constraints);
+    initMatrix(out, pointVector, p, conditions);
 }
 
-void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, BodyForce* f,
-                         ConstraintsContainer constraints) {
+void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemConditions& conditions) {
     std::vector<int> polygonPoints = p.getPoints();
     int n = (int) polygonPoints.size();
     Point average = p.getAverageVertex(points);
@@ -87,25 +86,24 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, BodyForce
 
     Pp = Pc + Pr;
 
-    Material m;
-    Eigen::MatrixXd D = m.getMaterialMatrix();
+    Eigen::MatrixXd D = conditions.material.getMaterialMatrix();
 
     //TODO: Study this coefficient's influence
     double gamma = 1;
     double c = (Nc.transpose()*Nc).trace();
-    double alphaS = area*m.trace()/c;
+    double alphaS = area*conditions.material.trace()/c;
     Eigen::MatrixXd Se;
     Se = gamma*alphaS*I;
 
     this->K = area*Wc*D*Wc.transpose() + (I - Pp).transpose()*Se*(I - Pp);
 
     this->f = Eigen::VectorXd::Zero(dofs.size());
-    NaturalConstraints natural = constraints.getNaturalConstraints();
+    NaturalConstraints natural = conditions.constraints.getNaturalConstraints();
 
     QuadraturePolygon polygon(p);
 
     for (int i = 0; i < dofs.size(); ++i) {
-        this->f(i) = polygon.integrate(f, points) + natural.lineIntegral(points,p,i/2,dofs[i]);
+        this->f(i) = polygon.integrate(conditions.f, points) + natural.lineIntegral(points,p,i/2,dofs[i]);
     }
 }
 

@@ -30,7 +30,9 @@ TEST(ElementTest, KMatrixTest){
     List<Point> p;
     p.push_list(points);
 
-    Element e (container, polygons[0], p, dofs, f);
+    ProblemConditions conditions(container, f, Material());
+
+    Element e (conditions, polygons[0], p, dofs);
 
 }
 

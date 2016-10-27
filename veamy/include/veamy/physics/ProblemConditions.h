@@ -1,6 +1,8 @@
 #ifndef THESIS_PROBLEMCONDITIONS_H
 #define THESIS_PROBLEMCONDITIONS_H
 
+#include <veamy/physics/Material.h>
+
 struct ProblemConditions{
     ConstraintsContainer constraints;
     BodyForce* f;
@@ -11,6 +13,8 @@ struct ProblemConditions{
         f = bodyForce;
         material = mat;
     }
+
+    ProblemConditions(){};
 };
 
 
