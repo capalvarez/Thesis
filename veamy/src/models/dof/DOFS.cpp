@@ -20,7 +20,11 @@ Pair<int> DOFS::addDOF(ConstraintsContainer &constraints, std::vector<Point> poi
     occupied_point_indexes.push_back(point_index);
     outer_indexes.push_back(newIndex);
 
-    return Pair<int>(newIndex, newIndex+1);
+    //TODO: Check memory usage here
+    Pair<int> dofPair(newIndex, newIndex+1);
+    point_to_dofs.insert(std::make_pair(point_index, dofPair));
+
+    return dofPair;
 }
 
 VeamyList<DOF> DOFS::getDOFS() {
@@ -35,7 +39,9 @@ DOF DOFS::get(int i) {
     return list.get(i);
 }
 
-
+Pair<int> DOFS::pointToDOFS(int point) {
+    return this->point_to_dofs[point];
+}
 
 
 

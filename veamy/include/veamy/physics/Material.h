@@ -12,6 +12,7 @@ public:
     Eigen::MatrixXd getMaterialMatrix();
     double trace();
 
+    double stressIntensityFactor();
 };
 
 #endif

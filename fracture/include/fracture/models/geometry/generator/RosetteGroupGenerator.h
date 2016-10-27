@@ -15,7 +15,7 @@ private:
 
     double angle;
 public:
-    RosetteGroupGenerator(Point c, double inner, double outer, double angle);
+    RosetteGroupGenerator(Point c, double outer, double angle);
     std::vector<Point> getPoints(double initAngle);
 };
 

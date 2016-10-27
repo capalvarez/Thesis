@@ -1,36 +1,61 @@
 #include <fracture/models/crack/CrackTip.h>
-#include <fracture/models/geometry/generator/RosetteGroupGenerator.h>
-#include <x-poly/models/Region.h>
-#include <x-poly/voronoi/TriangleMeshGenerator.h>
 
-CrackTip::CrackTip(Segment<Point> crack, double length) {
+CrackTip::CrackTip(Segment<Point> crack, double length, double radius) {
     this->length = length;
+    this->radius = radius;
     crackPath.push_back(crack.getSecond());
     crackPath.push_back(crack.getFirst());
 }
 
 void CrackTip::addPointToPath(double angle) {
+    Point last = crackPath.back();
 
+    Point newPoint(last.getX() + this->length*std::cos(utilities::radian(angle)),
+                   last.getY() + this->length*std::sin(utilities::radian(angle)));
+
+    this->crackPath.push_back(newPoint);
 }
 
-double CrackTip::calculateAngle() {
+double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
+    Pair<int> dofB = problem.veamer->pointToDOFS(this->points.b);
+    Pair<int> dofC = problem.veamer->pointToDOFS(this->points.c);
+    Pair<int> dofD = problem.veamer->pointToDOFS(this->points.d);
+    Pair<int> dofE = problem.veamer->pointToDOFS(this->points.e);
 
-    return 0;
+    double factor = problem.material->stressIntensityFactor()*std::sqrt(2*M_PI/this->radius)*
+                    1/std::cos(utilities::radian(this->crackAngle));
+
+    double kI = factor * (4*(u[dofB.second] - u[dofD.second]) - (u[dofC.second] - u[dofE.second])/2);
+    double kII = factor * (4*(u[dofB.first] - u[dofD.first]) - (u[dofC.first] - u[dofE.first])/2);
+
+
+    if(kII!=0){
+        double r = kI/kII;
+
+        return 2*std::atan(r/4 - utilities::sign(kII)/4*std::sqrt((std::pow(r,2) + 8)))  + this->crackAngle;
+    }else{
+        return this->crackAngle;
+    }
 }
 
-Segment<Point> CrackTip::grow(BreakableMesh& mesh, Eigen::VectorXd u) {
+PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
+    double angle = calculateAngle(problem, Eigen::VectorXd());
+    Point lastPoint = crackPath.back();
+    addPointToPath(angle);
 
+    PolygonChangeData changeData = problem.mesh->breakMesh(this->container_polygon, Segment<Point>(lastPoint, crackPath.back()));
+    assignLocation(changeData.lastPolygon);
 
-
-
+    return changeData;
 }
 
 PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
-    double crackAngle = Segment<Point>(crackPath.back(), crackPath[crackPath.size() - 2]).cartesianAngle(crackPath);
+    this->crackAngle = Segment<Point>(crackPath.back(), crackPath[crackPath.size() - 2]).cartesianAngle(crackPath);
     Polygon container = mesh.getPolygon(this->container_polygon);
     std::vector<Polygon> newPolygons;
 
-    std::vector<Point> rosettePoints = RosetteGroupGenerator(this->getPoint(), 0.1, 0.2, 90).getPoints(crackAngle);
+    // TODO: I know 45 is about right, but don't hardcode it
+    std::vector<Point> rosettePoints = RosetteGroupGenerator(this->getPoint(), this->radius, 45).getPoints(this->crackAngle);
     std::vector<Point> containerPoints = container.getPoints(mesh.getPoints().getList());
 
     std::vector<Polygon>& meshPolygons = mesh.getPolygons();
@@ -50,6 +75,7 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
         pointMap.insert(std::make_pair(j,pointIndex));
     }
 
+    this->points = CrackTipPoints(pointMap[1], pointMap[2], pointMap[3], pointMap[4]);
     std::vector<Triangle> triangles = triangulation.getTriangles();
 
     std::vector<Segment<int>> containerSegments;

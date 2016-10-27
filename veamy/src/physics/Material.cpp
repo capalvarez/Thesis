@@ -25,6 +25,10 @@ double Material::trace() {
     return 4*c*(1 - this->v);
 }
 
+double Material::stressIntensityFactor() {
+    return this->E/(12*(1 + this->v)*(1 - this->v));
+}
+
 
 
 

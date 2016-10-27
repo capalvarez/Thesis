@@ -44,8 +44,6 @@ Eigen::VectorXd Veamer::simulate() {
 
     Eigen::VectorXd boundary_values = essential.getBoundaryValues(this->points.getList(), this->DOFs.getDOFS());
 
-    // std::cout << boundary_values <<  std::endl << std::endl << K_b << std::endl << std::endl;
-
     for (int i = 0; i < K.rows(); ++i) {
         f(i) = f(i) - (K_b.row(i)*boundary_values);
     }
@@ -93,6 +91,10 @@ void Veamer::replaceElements(std::vector<Polygon> old, std::vector<Polygon> newP
     for (int i = 0; i < newPolygons.size(); ++i) {
         createElement(newPolygons[i]);
     }
+}
+
+Pair<int> Veamer::pointToDOFS(int point_index) {
+    this->DOFs.pointToDOFS(point_index);
 }
 
 

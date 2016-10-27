@@ -85,12 +85,18 @@ def read_triangulation(file_name):
 
         points.append(Point(float(line[0]), float(line[1]), i))
 
+    limits = [min_x, max_x, min_y, max_y]
     number_triangles = int(file.readline())
     for i in range(number_triangles):
         line = file.readline().split()
-        triangles.append(Polygon(list(map(lambda x: int(x), line))))
+        cx = float(line[len(line) - 2])
+        cy = float(line[len(line) - 1])
 
-    limits = [min_x, max_x, min_y, max_y]
+        cxP = 50 + limits[0] + 800 / (limits[1] - limits[0]) * cx
+        cyP = 50 + limits[2] + 600 / (limits[3] - limits[2]) * cy
+
+        polygons_points = line[0:len(line)-2]
+        triangles.append(Polygon(list(map(lambda x: int(x), polygons_points)),Point(cxP,cyP),i))
 
     return list(map(
         lambda p, limits=limits: Point(50 + limits[0] + 800 / (limits[1] - limits[0]) * p.x, 50 + limits[2] + 600 / (limits[3] - limits[2]) * p.y, p.index), points)), triangles, limits

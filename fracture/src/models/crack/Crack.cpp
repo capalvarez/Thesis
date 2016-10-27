@@ -44,7 +44,24 @@ PolygonChangeData Crack::initializeCrack(BreakableMesh mesh) {
 }
 
 PolygonChangeData Crack::grow(BreakableMesh m, Eigen::VectorXd u) {
-    return PolygonChangeData(std::vector<Polygon>(), std::vector<Polygon>(), 0);
+    std::vector<Polygon> oldP;
+    std::vector<Polygon> newP;
+
+    if(!this->init.isFinished(m)){
+        PolygonChangeData data = this->init.grow(u, Problem(0,0,0));
+
+        oldP.insert(oldP.end(), data.oldPolygons.begin(), data.oldPolygons.end());
+        newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());
+    }
+
+    if(!this->end.isFinished(m)){
+        PolygonChangeData data = this->end.grow(u, Problem(0,0,0));
+
+        oldP.insert(oldP.end(), data.oldPolygons.begin(), data.oldPolygons.end());
+        newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());
+    }
+
+    return PolygonChangeData(oldP, newP);
 }
 
 

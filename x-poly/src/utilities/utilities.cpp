@@ -23,6 +23,13 @@ namespace utilities {
     }
 
     template <typename T>
+    int sign(T x){
+        return (x > 0) - (x < 0);
+    }
+
+    template int sign<double>(double x);
+
+    template <typename T>
     int indexOf(std::vector<T> vector, T element){
         int pos = std::find(vector.begin(), vector.end(), element) - vector.begin();
 
