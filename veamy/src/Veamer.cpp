@@ -94,5 +94,9 @@ Pair<int> Veamer::pointToDOFS(int point_index) {
     this->DOFs.pointToDOFS(point_index);
 }
 
+Material Veamer::getMaterial() {
+    return conditions.material;
+}
+
 
 

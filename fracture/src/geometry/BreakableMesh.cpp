@@ -1,4 +1,4 @@
-#include <fracture/models/geometry/BreakableMesh.h>
+#include <fracture/geometry/BreakableMesh.h>
 
 BreakableMesh::BreakableMesh() {}
 

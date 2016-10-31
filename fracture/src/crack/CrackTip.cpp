@@ -1,4 +1,4 @@
-#include <fracture/models/crack/CrackTip.h>
+#include <fracture/crack/CrackTip.h>
 
 CrackTip::CrackTip(Segment<Point> crack, double speed, double radius) {
     this->speed = speed;
@@ -22,7 +22,7 @@ double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
     Pair<int> dofD = problem.veamer->pointToDOFS(this->points.d);
     Pair<int> dofE = problem.veamer->pointToDOFS(this->points.e);
 
-    double factor = problem.material->stressIntensityFactor()*std::sqrt(2*M_PI/this->radius)*
+    double factor = problem.veamer->getMaterial().stressIntensityFactor()*std::sqrt(2*M_PI/this->radius)*
                     1/std::cos(utilities::radian(this->crackAngle));
 
     double kI = factor * (4*(u[dofB.second] - u[dofD.second]) - (u[dofC.second] - u[dofE.second])/2);
@@ -128,8 +128,6 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
     for (int i = 0; i < containerSegments.size(); ++i) {
         segments.delete_element(containerSegments[i]);
     }
-
-    mesh.printInFile("prepare.txt");
     return PolygonChangeData(container, newPolygons);
 }
 

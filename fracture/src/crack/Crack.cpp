@@ -1,4 +1,4 @@
-#include <fracture/models/crack/Crack.h>
+#include <fracture/crack/Crack.h>
 
 Crack::Crack() {}
 
@@ -13,19 +13,8 @@ PolygonChangeData Crack::prepareTip(BreakableMesh m) {
     std::vector<Polygon> oldP;
     std::vector<Polygon> newP;
 
-    if(!this->init.isFinished(m)){
-        PolygonChangeData data = this->init.prepareTip(m);
-
-        oldP.push_back(data.oldPolygons[0]);
-        newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());
-    }
-
-    if(!this->end.isFinished(m)){
-        PolygonChangeData data = this->end.prepareTip(m);
-
-        oldP.push_back(data.oldPolygons[0]);
-        newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());
-    }
+    this->prepareTip(this->init, oldP, newP, m);
+    this->prepareTip(this->end, oldP, newP, m);
 
     return PolygonChangeData(oldP, newP);
 }
@@ -48,25 +37,29 @@ PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
     std::vector<Polygon> oldP;
     std::vector<Polygon> newP;
 
-    // TODO: CHECK NOW
-    if(!this->init.isFinished(*problem.mesh)){
-        PolygonChangeData data = this->init.grow(u, problem);
-
-        oldP.insert(oldP.end(), data.oldPolygons.begin(), data.oldPolygons.end());
-        newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());
-    }
-
-    if(!this->end.isFinished(*problem.mesh)){
-        PolygonChangeData data = this->end.grow(u, problem);
-
-        oldP.insert(oldP.end(), data.oldPolygons.begin(), data.oldPolygons.end());
-        newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());
-    }
+    this->grow(this->init, oldP, newP, problem, u);
+    this->grow(this->end, oldP, newP, problem, u);
 
     return PolygonChangeData(oldP, newP);
 }
 
+void Crack::prepareTip(CrackTip tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh mesh) {
+    if(!tip.isFinished(mesh)){
+        PolygonChangeData data = tip.prepareTip(mesh);
 
+        oldP.push_back(data.oldPolygons[0]);
+        newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());
+    }
+}
+
+void Crack::grow(CrackTip tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, Problem problem, Eigen::VectorXd u) {
+    if(!tip.isFinished(*problem.mesh)){
+        PolygonChangeData data = tip.grow(u, problem);
+
+        oldP.insert(oldP.end(), data.oldPolygons.begin(), data.oldPolygons.end());
+        newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());
+    }
+}
 
 
 

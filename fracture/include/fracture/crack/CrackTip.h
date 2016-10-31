@@ -4,12 +4,12 @@
 #include <x-poly/models/basic/Point.h>
 #include <x-poly/models/polygon/Polygon.h>
 #include <veamy/lib/Eigen/Dense>
-#include <fracture/models/geometry/BreakableMesh.h>
+#include <fracture/geometry/BreakableMesh.h>
 #include <x-poly/models/polygon/Triangle.h>
 #include <veamy/physics/Material.h>
-#include <fracture/models/problem/Problem.h>
-#include <fracture/models/crack/structures/CrackTipPoints.h>
-#include <fracture/models/geometry/generator/RosetteGroupGenerator.h>
+#include <fracture/problem/Problem.h>
+#include <fracture/crack/structures/CrackTipPoints.h>
+#include <fracture/geometry/generator/RosetteGroupGenerator.h>
 #include <x-poly/models/Region.h>
 #include <x-poly/voronoi/TriangleMeshGenerator.h>
 

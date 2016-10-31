@@ -14,6 +14,8 @@ private:
     double outerRadius;
 
     double angle;
+
+    void generatePoint(double angle, double radius);
 public:
     RosetteGroupGenerator(Point c, double outer, double angle);
     std::vector<Point> getPoints(double initAngle);
