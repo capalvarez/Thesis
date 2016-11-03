@@ -74,6 +74,10 @@ void Mesh::printInFile(std::string fileName) {
 int Mesh::findContainerPolygon(Point p) {
     int i = utilities::random_integer(0,this->polygons.size()-1);
 
+    return this->findContainerPolygon(p, i);
+}
+
+int Mesh::findContainerPolygon(Point p, int i) {
     while(true){
         bool found = false;
         Polygon poly = this->polygons[i];

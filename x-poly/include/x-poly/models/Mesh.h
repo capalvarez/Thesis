@@ -40,6 +40,7 @@ public:
 
     bool isFull();
     int findContainerPolygon(Point p);
+    int findContainerPolygon(Point p, int init_polygon);
     Polygon& getPolygon(int index);
     NeighbourInfo getNeighbour(int poly_index, Segment<Point> direction);
     NeighbourInfo getNeighbour(int poly_index, Segment<Point> direction, int previous);

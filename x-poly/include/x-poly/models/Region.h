@@ -10,7 +10,8 @@
 #include <x-poly/models/generator/PointGenerator.h>
 #include <climits>
 #include <x-poly/models/hole/PolygonalHole.h>
-#include <x-poly/models/hole/lib/clipper.hpp>
+#include <x-poly/models/hole/clipper/lib/clipper.hpp>
+#include <x-poly/models/hole/clipper/ClipperWrapper.h>
 
 class Region: public Polygon {
 private:

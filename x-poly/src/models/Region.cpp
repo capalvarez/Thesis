@@ -17,6 +17,7 @@ Region::Region() : Polygon(){}
 
 Region::Region(const Region &other) : Polygon(other){
     this->p = other.p;
+    this->holes = other.holes;
     this->maxScale =  1000000;
 }
 
@@ -31,22 +32,7 @@ std::vector<Point> Region::getSeedPoints() {
 void Region::addHole(Hole* h) {
     //When we receive a hole we check whether the difference between the region and the hole is just
     //one path (according to the used library)
-    ClipperLib::Path region, hole;
-    ClipperLib::Paths solution;
-
-    for(int i=0;i<this->p.size(); i++){
-        region << ClipperLib::IntPoint((int)(maxScale*this->p[i].getX()), (int)(maxScale*this->p[i].getY()));
-    }
-
-    std::vector<Point> holePoints = h->getPoints();
-    for(int i=0;i<holePoints.size();i++){
-        hole << ClipperLib::IntPoint((int)(maxScale*holePoints[i].getX()), (int)(maxScale*holePoints[i].getY()));
-    }
-
-    ClipperLib::Clipper clipper;
-    clipper.AddPath(region, ClipperLib::ptSubject, true);
-    clipper.AddPath(hole, ClipperLib::ptClip, true);
-    clipper.Execute(ClipperLib::ctDifference, solution, ClipperLib::pftNonZero, ClipperLib::pftNonZero);
+    ClipperLib::Paths solution = ClipperWrapper::polyIntersection(this->p, h->getPoints(), maxScale);
 
     if(solution.size()==1){
         //Hole does intersect, so Region has to change and the hole "dissapears"

@@ -1,7 +1,7 @@
 .idea/
 x-poly/include/x-poly/voronoi/lib/triangle.h
-x-poly/include/x-poly/models/hole/lib/clipper.hpp
-x-poly/src/models/hole/lib/clipper.cpp
+x-poly/include/x-poly/models/hole/clipper/lib/clipper.hpp
+x-poly/src/models/hole/clipper/lib/clipper.cpp
 x-poly/src/voronoi/lib/triangle.h
 x-poly/src/voronoi/lib/triangle.o
 x-poly/src/voronoi/lib/triangle.c
