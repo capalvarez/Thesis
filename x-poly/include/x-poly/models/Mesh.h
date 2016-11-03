@@ -43,6 +43,7 @@ public:
     Polygon& getPolygon(int index);
     NeighbourInfo getNeighbour(int poly_index, Segment<Point> direction);
     NeighbourInfo getNeighbour(int poly_index, Segment<Point> direction, int previous);
+    Region getRegion() const;
 };
 
 

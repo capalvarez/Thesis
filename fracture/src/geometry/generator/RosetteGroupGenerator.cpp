@@ -44,7 +44,7 @@ void RosetteGroupGenerator::generatePoint(double angle, double radius) {
 void RosetteGroupGenerator::cleanPoints(Region region) {
     for (int i = 0; i < this->points.size(); ++i) {
         if(!region.containsPoint(this->points[i])){
-            this->points.erase(std::remove(this->points.begin(), this->points.end(), i), this->points.end());
+            this->points.erase(this->points.begin() + i);
         }
     }
 }

@@ -10,6 +10,8 @@
 
 TEST(ElementTest, KMatrixTest){
     std::vector<Point> points = {Point(0,0), Point(1,0), Point(0,1), Point(1,1)};
+    Region region(points);
+
     std::vector<int> p1 ={0,1,3,2};
 
     std::vector<Polygon> polygons = {Polygon(p1,points)};
@@ -23,7 +25,7 @@ TEST(ElementTest, KMatrixTest){
     };
 
     BodyForce* f = new Sum();
-    Mesh m(points, polygons, segments, Region(std::vector<Point>()));
+    Mesh m(points, polygons, segments, region);
 
     ConstraintsContainer container;
     DOFS dofs;

@@ -6,6 +6,7 @@ BreakableMesh::BreakableMesh(const Mesh& m) {
     this->points = m.getPoints();
     this->polygons = m.getPolygons();
     this->edges = m.getSegments();
+    this->region = m.getRegion();
 }
 
 PolygonChangeData BreakableMesh::breakMesh(int init, Segment<Point> crack) {

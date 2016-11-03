@@ -13,7 +13,6 @@ test/libmesh-test/
 
 test/dealii-test/
 test/libmesh-test/
-test/fracture-test/
 
 git-author-rewrite.sh
 

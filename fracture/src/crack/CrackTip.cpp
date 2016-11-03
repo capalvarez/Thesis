@@ -65,7 +65,7 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
 
     // TODO: I know 45 is about right, but don't hardcode it
     std::vector<Point> rosettePoints = RosetteGroupGenerator(this->getPoint(), this->radius, 45).getPoints(
-            this->crackAngle, nullptr);
+            this->crackAngle, mesh.getRegion());
     std::vector<Point> containerPoints = container.getPoints(mesh.getPoints().getList());
 
     std::vector<Polygon>& meshPolygons = mesh.getPolygons();

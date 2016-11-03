@@ -143,3 +143,7 @@ NeighbourInfo Mesh::getNeighbour(int poly_index, Segment<Point> direction, int p
 bool Mesh::isFull() {
     return this->points.size()>0;
 }
+
+Region Mesh::getRegion() const{
+    return this->region;
+}
