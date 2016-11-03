@@ -25,7 +25,6 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list) {
     pointList.push_list(point_list);
     std::vector<int> regionIndex = pointList.push_list(regionPoints);
 
-
     in.numberofpoints = pointList.size();
     in.pointlist = (REAL*)malloc(in.numberofpoints*2*sizeof(REAL));
     int points = 0;
@@ -130,7 +129,6 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list) {
     free(in.segmentlist);
     free(in.segmentmarkerlist);
     free(in.holelist);
-    free(in.regionlist);
 
     free(out.pointlist);
     free(out.pointattributelist);
