@@ -38,7 +38,7 @@ public:
     std::vector<Element> getElements();
 
     void replaceElement(Polygon old, std::vector<Polygon> newPolygons);
-    void replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons);
+    void replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons, List<Point> points);
 
     Pair<int> pointToDOFS(int point_index);
     Material getMaterial();

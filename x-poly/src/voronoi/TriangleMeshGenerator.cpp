@@ -1,7 +1,8 @@
 #include <x-poly/voronoi/TriangleMeshGenerator.h>
 
 TriangleMeshGenerator::TriangleMeshGenerator(std::vector<Point>& point_list, Region region) {
-    callTriangle(point_list, region);
+    this->region = region;
+    callTriangle(point_list);
 }
 
 Mesh TriangleMeshGenerator::getMesh() {
@@ -16,7 +17,7 @@ Triangulation TriangleMeshGenerator::getDelaunayTriangulation() {
     return Triangulation(this->meshPoints, this->triangles, delaunayEdges);
 }
 
-void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, Region region) {
+void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list) {
     struct triangulateio in, out;
 
     std::vector<Point> regionPoints = region.getRegionPoints();
@@ -240,7 +241,7 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
     realPoints.getList().clear();
     edgeMap.clear();
 
-    return Mesh(points, cells, voronoiEdges);
+    return Mesh(points, cells, voronoiEdges, this->region);
 }
 
 Point TriangleMeshGenerator::getCircumcenter(int triangle, int edge, std::vector<Point> &points) {

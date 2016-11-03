@@ -1,5 +1,6 @@
 #include <x-poly/voronoi/structures/Neighbours.h>
 #include <assert.h>
+#include <stdexcept>
 
 Neighbours::Neighbours() {}
 
@@ -27,7 +28,7 @@ void Neighbours::changeNeighbour(int oldN, int newN) {
         return;
     }
 
-    assert(0==0 && "This should not happen :C");
+    throw std::invalid_argument("Please assign an existant neighbour");
 }
 
 int Neighbours::getFirst() {

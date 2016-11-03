@@ -16,6 +16,15 @@ void CrackTip::addPointToPath(double angle) {
     this->crackPath.push_back(newPoint);
 }
 
+CrackTip::CrackTip(const CrackTip &t) {
+    this->points = t.points;
+    this->container_polygon = t.container_polygon;
+    this->crackAngle = t.crackAngle;
+    this->crackPath = t.crackPath;
+    this->speed = t.speed;
+    this->radius = t.radius;
+}
+
 double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
     Pair<int> dofB = problem.veamer->pointToDOFS(this->points.b);
     Pair<int> dofC = problem.veamer->pointToDOFS(this->points.c);
@@ -55,7 +64,8 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
     std::vector<Polygon> newPolygons;
 
     // TODO: I know 45 is about right, but don't hardcode it
-    std::vector<Point> rosettePoints = RosetteGroupGenerator(this->getPoint(), this->radius, 45).getPoints(this->crackAngle);
+    std::vector<Point> rosettePoints = RosetteGroupGenerator(this->getPoint(), this->radius, 45).getPoints(
+            this->crackAngle, nullptr);
     std::vector<Point> containerPoints = container.getPoints(mesh.getPoints().getList());
 
     std::vector<Polygon>& meshPolygons = mesh.getPolygons();

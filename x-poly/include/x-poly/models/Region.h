@@ -22,6 +22,8 @@ private:
     void clean();
 public:
     Region(std::vector<Point>& points);
+    Region();
+    Region(const Region& other);
     ~Region();
 
     void mutate(std::vector<Point>& points);
@@ -32,6 +34,8 @@ public:
     void generatePoints(PointGenerator p, int nX, int nY);
     Rectangle getBox();
     void getSegments(std::vector<Segment<int>>& s);
+    bool containsPoint(Point p);
+
 };
 
 #endif

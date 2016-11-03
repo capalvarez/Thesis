@@ -12,17 +12,18 @@ private:
     CrackTip init;
     CrackTip end;
 
-    void prepareTip(CrackTip tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh mesh);
+    void prepareTip(CrackTip tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh);
     void grow(CrackTip tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, Problem problem, Eigen::VectorXd u);
 public:
     Crack();
     Crack(Point init, Point end, double speed, double ratio);
+    Crack(const Crack& c);
 
     PolygonChangeData grow(Problem problem, Eigen::VectorXd u);
-    PolygonChangeData prepareTip(BreakableMesh m);
+    PolygonChangeData prepareTip(BreakableMesh &m);
     bool isFinished(BreakableMesh mesh);
 
-    PolygonChangeData initializeCrack(BreakableMesh mesh);
+    PolygonChangeData initializeCrack(BreakableMesh &mesh);
 };
 
 

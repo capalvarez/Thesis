@@ -10,7 +10,7 @@ NumericalTests::NumericalTests(int order) {
     std::vector<Polygon> polygons = {Polygon(p1,points), Polygon(p2,points)};
     std::vector<Segment> segments;
 
-    two_squares = Mesh(points,polygons,segments);
+    two_squares = Mesh(points, polygons, segments, Region(std::vector<Point>()));
 
     /*Hundred Square*/
     std::vector<Point> hundred_square_points = {Point(0, 0), Point(20, 0), Point(20, 5), Point(0, 5)};

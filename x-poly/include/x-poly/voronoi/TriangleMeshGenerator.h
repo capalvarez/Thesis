@@ -17,6 +17,7 @@
 
 class TriangleMeshGenerator : public MeshGenerator{
 private:
+    Region region;
     Mesh mesh;
 
     //Delaunay Triangulation
@@ -34,7 +35,7 @@ private:
     List<Polygon> voronoiCells;
 
     Point getCircumcenter(int triangle, int edge, std::vector<Point>& points);
-    void callTriangle(std::vector<Point>& point_list, Region region);
+    void callTriangle(std::vector<Point> &point_list);
     Mesh delaunayToVoronoi();
 public:
     TriangleMeshGenerator(std::vector<Point>& point_list, Region region);

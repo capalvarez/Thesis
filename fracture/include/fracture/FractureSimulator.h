@@ -3,9 +3,10 @@
 
 #include <x-poly/models/Mesh.h>
 #include <veamy/Veamer.h>
-#include <fracture/models/crack/Crack.h>
-#include <fracture/models/geometry/BreakableMesh.h>
+#include <fracture/crack/Crack.h>
+#include <fracture/geometry/BreakableMesh.h>
 #include <veamy/physics/ProblemConditions.h>
+#include <fracture/geometry/structures/PolygonChangeData.h>
 
 class FractureSimulator {
 private:
@@ -13,7 +14,7 @@ private:
     BreakableMesh mesh;
     Crack crack;
 public:
-    FractureSimulator(Mesh mesh, Crack initial, ProblemConditions conditions);
+    FractureSimulator(const Mesh& mesh, const Crack& initial, const ProblemConditions& conditions);
     void simulate(double crack_growth, int max_iter);
 };
 

@@ -9,11 +9,18 @@ Crack::Crack(Point init, Point end, double speed, double ratio) {
     this->end = CrackTip(Segment<Point>(end, init), speed, crack.length()*ratio);
 }
 
-PolygonChangeData Crack::prepareTip(BreakableMesh m) {
+Crack::Crack(const Crack& c) {
+    this->init = c.init;
+    this->end = c.end;
+}
+
+PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
     std::vector<Polygon> oldP;
     std::vector<Polygon> newP;
 
     this->prepareTip(this->init, oldP, newP, m);
+    m.printInFile("test.txt");
+
     this->prepareTip(this->end, oldP, newP, m);
 
     return PolygonChangeData(oldP, newP);
@@ -23,7 +30,7 @@ bool Crack::isFinished(BreakableMesh mesh) {
     return init.isFinished(mesh) && end.isFinished(mesh);
 }
 
-PolygonChangeData Crack::initializeCrack(BreakableMesh mesh) {
+PolygonChangeData Crack::initializeCrack(BreakableMesh& mesh) {
     int poly1 = mesh.findContainerPolygon(this->init.getPoint());
     init.assignLocation(poly1);
 
@@ -43,7 +50,7 @@ PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
     return PolygonChangeData(oldP, newP);
 }
 
-void Crack::prepareTip(CrackTip tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh mesh) {
+void Crack::prepareTip(CrackTip tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh) {
     if(!tip.isFinished(mesh)){
         PolygonChangeData data = tip.prepareTip(mesh);
 

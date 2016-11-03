@@ -2,15 +2,23 @@
 #include <x-poly/models/Mesh.h>
 
 
-Mesh::Mesh(std::vector<Point> &p, std::vector<Polygon> &e, SegmentMap s) {
+Mesh::Mesh(std::vector<Point> &p, std::vector<Polygon> &e, SegmentMap s, Region r) {
     this->points.push_list(p);
     this->polygons.assign(e.begin(), e.end());
     this->edges = s;
+    this->region = r;
 }
 
 Mesh::Mesh() {}
 
 Mesh::~Mesh() {}
+
+Mesh::Mesh(const Mesh &m) {
+    this->points = m.getPoints();
+    this->polygons = m.getPolygons();
+    this->edges = m.getSegments();
+    this->region = m.region;
+}
 
 List<Point>& Mesh::getPoints() {
     return this->points;

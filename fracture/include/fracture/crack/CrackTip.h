@@ -22,12 +22,14 @@ private:
     int container_polygon;
     CrackTipPoints points;
     double crackAngle;
-
-    void addPointToPath(double angle);
-    double calculateAngle(Problem problem, Eigen::VectorXd u);
 public:
     CrackTip();
     CrackTip(Segment<Point> crack, double length, double radius);
+    CrackTip(const CrackTip& t);
+
+    void addPointToPath(double angle);
+    double calculateAngle(Problem problem, Eigen::VectorXd u);
+
     PolygonChangeData grow(Eigen::VectorXd u, Problem problem);
     PolygonChangeData prepareTip(BreakableMesh& mesh);
     bool isFinished(BreakableMesh mesh);

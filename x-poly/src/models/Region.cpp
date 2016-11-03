@@ -13,6 +13,13 @@ void Region::mutate(std::vector<Point> &points) {
 
 Region::~Region() {}
 
+Region::Region() : Polygon(){}
+
+Region::Region(const Region &other) : Polygon(other){
+    this->p = other.p;
+    this->maxScale =  1000000;
+}
+
 std::vector<Hole*> Region::getHoles() {
     return this->holes;
 }
@@ -53,7 +60,7 @@ void Region::addHole(Hole* h) {
     }else{
         //Two cases, hole is completely inside or completely outside, just ignore holes outside
 
-        if(this->containsPoint(this->p, h->getCenter())){
+        if(Polygon::containsPoint(this->p, h->getCenter())){
             this->holes.push_back(h);
         }else{
             throw std::invalid_argument("Hole lies outside region");
@@ -88,7 +95,7 @@ void Region::clean() {
     std::vector<Point> newSeeds;
 
     for(int i = 0; i<seedPoints.size(); i++){
-        if(containsPoint(p,seedPoints[i])) toKeep.push_back(i);
+        if(Polygon::containsPoint(p,seedPoints[i])) toKeep.push_back(i);
     }
 
     for(int i=0; i<toKeep.size(); i++){
@@ -123,6 +130,9 @@ void Region::getSegments(std::vector<Segment<int>> &s) {
     }
 }
 
+bool Region::containsPoint(Point p) {
+    return Polygon::containsPoint(this->p, p);
+}
 
 
 

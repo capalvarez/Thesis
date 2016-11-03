@@ -4,6 +4,7 @@
 #include <x-poly/models/basic/Point.h>
 #include <vector>
 #include <x-poly/utilities/utilities.h>
+#include <x-poly/models/Region.h>
 
 class RosetteGroupGenerator{
 private:
@@ -15,10 +16,11 @@ private:
 
     double angle;
 
+    void cleanPoints(Region region);
     void generatePoint(double angle, double radius);
 public:
     RosetteGroupGenerator(Point c, double outer, double angle);
-    std::vector<Point> getPoints(double initAngle);
+    std::vector<Point> getPoints(double initAngle, Region region);
 };
 
 

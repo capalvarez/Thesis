@@ -13,14 +13,18 @@
 #include <x-poly/voronoi/structures/SegmentMap.h>
 #include <x-poly/models/structures/NeighbourInfo.h>
 #include <x-poly/utilities/List.h>
+#include "Region.h"
 
 class Mesh {
 protected:
     List<Point> points;
     std::vector<Polygon> polygons;
     SegmentMap edges;
+
+    Region region;
 public:
-    Mesh(std::vector<Point>& p, std::vector<Polygon>& e, SegmentMap s);
+    Mesh(std::vector<Point> &p, std::vector<Polygon> &e, SegmentMap s, Region r);
+    Mesh(const Mesh& m);
     Mesh();
     ~Mesh();
 

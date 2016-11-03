@@ -77,7 +77,9 @@ void Veamer::replaceElement(Polygon old, std::vector<Polygon> newPolygons) {
     }
 }
 
-void Veamer::replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons) {
+void Veamer::replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons, List<Point> points) {
+    this->points = points;
+
     for (int i = 0; i < old.size(); ++i) {
         int to_remove = polygon_to_element[old[i]];
         polygon_to_element.erase(old[i]);
@@ -97,6 +99,5 @@ Pair<int> Veamer::pointToDOFS(int point_index) {
 Material Veamer::getMaterial() {
     return conditions.material;
 }
-
 
 
