@@ -14,15 +14,15 @@ FractureSimulator::FractureSimulator(const Mesh& mesh, const Crack& initial, con
 void FractureSimulator::simulate(double crack_growth, int max_iter) {
     int n_iter = 0;
 
-    while(n_iter<max_iter && !this->crack.isFinished(this->mesh)){
+    //while(n_iter<max_iter && !this->crack.isFinished(this->mesh)){
         PolygonChangeData refinedPolygons = this->crack.prepareTip(this->mesh);
 
-        this->veamer.replaceElements(refinedPolygons.oldPolygons, refinedPolygons.newPolygons, this->mesh.getPoints());
+        //this->veamer.replaceElements(refinedPolygons.oldPolygons, refinedPolygons.newPolygons, this->mesh.getPoints());
 
-        Eigen::VectorXd u = this->veamer.simulate();
-        PolygonChangeData affectedPolygons = this->crack.grow(Problem(&this->veamer, &this->mesh), u);
-        this->veamer.replaceElements(affectedPolygons.oldPolygons, affectedPolygons.newPolygons, List<Point>());
-    }
+        //Eigen::VectorXd u = this->veamer.simulate();
+        //PolygonChangeData affectedPolygons = this->crack.grow(Problem(&this->veamer, &this->mesh), u);
+        //this->veamer.replaceElements(affectedPolygons.oldPolygons, affectedPolygons.newPolygons, List<Point>());
+    //}
 
 
 }

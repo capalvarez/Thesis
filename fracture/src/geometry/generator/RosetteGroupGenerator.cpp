@@ -44,6 +44,11 @@ void RosetteGroupGenerator::generatePoint(double angle, double radius, Breakable
     if(!this->current.containsPoint(mesh.getPoints().getList(), point)){
         int newContainer = mesh.findContainerPolygon(point, this->currentContainer);
 
+        // No polygon contains this point (it's outside the region, so it's ignored)
+        if(newContainer==-1){
+            return;
+        }
+
         this->currentContainer = newContainer;
         this->current = mesh.getPolygon(newContainer);
 

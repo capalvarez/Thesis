@@ -19,10 +19,9 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
     std::vector<Polygon> newP;
 
     this->prepareTip(this->init, oldP, newP, m);
-    m.printInFile("test.txt");
-
     this->prepareTip(this->end, oldP, newP, m);
 
+    m.printInFile("test.txt");
     return PolygonChangeData(oldP, newP);
 }
 
