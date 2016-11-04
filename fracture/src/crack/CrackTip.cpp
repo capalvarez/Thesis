@@ -64,9 +64,22 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
     std::vector<Polygon> newPolygons;
 
     // TODO: I know 45 is about right, but don't hardcode it
-    std::vector<Point> rosettePoints = RosetteGroupGenerator(this->getPoint(), this->radius, 45).getPoints(
-            this->crackAngle, mesh.getRegion());
-    std::vector<Point> containerPoints = container.getPoints(mesh.getPoints().getList());
+    RosetteGroupGenerator rosette = RosetteGroupGenerator(this->getPoint(), this->radius, 45, container_polygon, container);
+    std::vector<Point> rosettePoints = rosette.getPoints(this->crackAngle, mesh);
+
+    std::vector<Polygon> polys = rosette.getChangedPolygons(mesh);
+
+    int maxScale = 100000;
+    ClipperLib::Paths merged = ClipperWrapper::polyUnion(polys, mesh.getPoints().getList(), maxScale);
+    std::vector<Point> containerPoints;
+
+    if(merged.size()==1){
+        for (int i = 0; i < merged[0].size(); ++i) {
+            containerPoints.push_back(Point(merged[0][i].X/(1.0*maxScale), merged[0][i].Y/(1.0*maxScale)));
+        }
+    }else{
+        throw std::uncaught_exception();
+    }
 
     std::vector<Polygon>& meshPolygons = mesh.getPolygons();
     List<Point>& meshPoints = mesh.getPoints();
