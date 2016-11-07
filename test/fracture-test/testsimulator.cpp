@@ -43,7 +43,7 @@ TEST(FractureSimulatorTest, SimulateTest){
     TriangleMeshGenerator meshGenerator(seeds, square);
     Mesh mesh = meshGenerator.getMesh();
 
-    Crack crack(Point(0.6,1.5), Point(0.8,1.5), 0.1, 0.8);
+    Crack crack(Point(0.7,1.5), Point(0.8,1.5), 0.1, 5);
 
     class Sum : public BodyForce{
     private:

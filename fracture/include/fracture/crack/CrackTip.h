@@ -25,6 +25,7 @@ private:
 
     std::vector<Point> tipPoints;
     std::vector<Polygon> changedPolygons;
+    std::vector<int> changedIndex;
 public:
     CrackTip();
     CrackTip(Segment<Point> crack, double length, double radius);

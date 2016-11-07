@@ -1,4 +1,5 @@
 #include <fracture/crack/CrackTip.h>
+#include <fracture/geometry/mesh/RemeshAdapter.h>
 
 CrackTip::CrackTip(Segment<Point> crack, double speed, double radius) {
     this->speed = speed;
@@ -23,6 +24,9 @@ CrackTip::CrackTip(const CrackTip &t) {
     this->crackPath = t.crackPath;
     this->speed = t.speed;
     this->radius = t.radius;
+    this->changedPolygons = t.changedPolygons;
+    this->changedIndex = t.changedIndex;
+    this->tipPoints = t.tipPoints;
 }
 
 double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
@@ -59,18 +63,10 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
 }
 
 PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
-    std::vector<Polygon> newPolygons;
+    RemeshAdapter remesher(this->changedPolygons, mesh.getPoints().getList());
+    std::vector<Polygon> newPolygons = remesher.remesh(this->tipPoints, this->changedIndex, mesh);
 
-
-
-    std::vector<Polygon>& meshPolygons = mesh.getPolygons();
-    List<Point>& meshPoints = mesh.getPoints();
-    SegmentMap& segments = mesh.getSegments();
-
-
-
-
-    return PolygonChangeData(container, newPolygons);
+    return PolygonChangeData(this->changedPolygons, newPolygons);
 }
 
 bool CrackTip::isFinished(BreakableMesh mesh) {
@@ -100,8 +96,11 @@ std::set<int> CrackTip::generateTipPoints(BreakableMesh mesh) {
     tipPoints = rosette.getPoints(this->crackAngle, mesh);
 
     this->changedPolygons = rosette.getChangedPolygons(mesh);
+    std::set<int> indexes = rosette.getChangedPolygons();
 
-    return rosette.getChangedPolygons();
+    std::copy(indexes.begin(), indexes.end(), std::back_inserter(this->changedIndex));
+
+    return indexes;
 }
 
 std::vector<Point> CrackTip::getTipPoints() {

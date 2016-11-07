@@ -15,6 +15,12 @@ PolygonChangeData BreakableMesh::breakMesh(int init, Segment<Point> crack) {
 
     NeighbourInfo n1 = getNeighbour(init, crack);
 
+    // TODO: Quick fix
+    if(n1.neighbour<0){
+        //If the crack is in one element, return the same element
+        return PolygonChangeData(oldPolygons, newPolygons, init);
+    }
+
     while(true){
         Polygon& poly1 = getPolygon(n1.neighbour);
 

@@ -22,7 +22,9 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
     std::set<int> tip1 = this->init.generateTipPoints(m);
     std::set<int> tip2 = this->end.generateTipPoints(m);
 
-    if(this->init.getPolygon() == this->end.getPolygon()){
+    const bool is_affected = tip1.find(this->end.getPolygon()) != tip1.end();
+
+    if(this->init.getPolygon() == this->end.getPolygon() || is_affected){
         std::vector<Point> tip_points1 = this->init.getTipPoints();
         std::vector<Point> tip_points2 = this->end.getTipPoints();
         tip_points1.insert(tip_points1.end(), tip_points2.begin(), tip_points2.end());
@@ -37,16 +39,12 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         std::set_union(tip1.begin(), tip1.end(), tip2.begin(), tip2.end(), std::back_inserter(changedPolygons));
 
         std::vector<Polygon> newPolygons = remesher.remesh(tip_points1, changedPolygons, m);
+        newP.insert(newP.end(), newPolygons.begin(), newPolygons.end());
+        oldP.insert(oldP.end(), changed1.begin(), changed1.end());
 
     }else{
-        const bool is_affected = tip1.find(this->end.getPolygon()) != tip1.end();
-
-        if(is_affected){
-
-        }else{
-            this->prepareTip(this->init, oldP, newP, m);
-            this->prepareTip(this->end, oldP, newP, m);
-        }
+        this->prepareTip(this->init, oldP, newP, m);
+        this->prepareTip(this->end, oldP, newP, m);
     }
 
     m.printInFile("test.txt");
@@ -81,7 +79,7 @@ void Crack::prepareTip(CrackTip tip, std::vector<Polygon> &oldP, std::vector<Pol
     if(!tip.isFinished(mesh)){
         PolygonChangeData data = tip.prepareTip(mesh);
 
-        oldP.push_back(data.oldPolygons[0]);
+        oldP.insert(oldP.end(), data.oldPolygons.begin(), data.oldPolygons.end());
         newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());
     }
 }
