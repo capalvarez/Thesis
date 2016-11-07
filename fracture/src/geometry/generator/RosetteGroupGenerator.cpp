@@ -67,3 +67,7 @@ std::vector<Polygon> RosetteGroupGenerator::getChangedPolygons(BreakableMesh mes
 
     return polys;
 }
+
+std::set<int> RosetteGroupGenerator::getChangedPolygons() {
+    return this->changedPolygons;
+}

@@ -22,6 +22,9 @@ private:
     int container_polygon;
     CrackTipPoints points;
     double crackAngle;
+
+    std::vector<Point> tipPoints;
+    std::vector<Polygon> changedPolygons;
 public:
     CrackTip();
     CrackTip(Segment<Point> crack, double length, double radius);
@@ -34,7 +37,12 @@ public:
     PolygonChangeData prepareTip(BreakableMesh& mesh);
     bool isFinished(BreakableMesh mesh);
     void assignLocation(int polygon);
+    int getPolygon();
     Point getPoint();
+
+    std::set<int> generateTipPoints(BreakableMesh mesh);
+    std::vector<Point> getTipPoints();
+    std::vector<Polygon> getChangedPolygons();
 
 };
 

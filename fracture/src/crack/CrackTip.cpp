@@ -59,98 +59,17 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
 }
 
 PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
-    this->crackAngle = Segment<Point>(crackPath.back(), crackPath[crackPath.size() - 2]).cartesianAngle(crackPath);
-    Polygon container = mesh.getPolygon(this->container_polygon);
     std::vector<Polygon> newPolygons;
 
-    // TODO: I know 45 is about right, but don't hardcode it
-    RosetteGroupGenerator rosette = RosetteGroupGenerator(this->getPoint(), this->radius, 45, container_polygon, container);
-    std::vector<Point> rosettePoints = rosette.getPoints(this->crackAngle, mesh);
 
-    std::vector<Polygon> polys = rosette.getChangedPolygons(mesh);
-
-    int maxScale = 100000;
-    ClipperLib::Paths merged = ClipperWrapper::polyUnion(polys, mesh.getPoints().getList(), maxScale);
-    std::vector<Point> containerPoints;
-
-    if(merged.size()==1){
-        for (int i = 0; i < merged[0].size(); ++i) {
-            containerPoints.push_back(Point(merged[0][i].X/(1.0*maxScale), merged[0][i].Y/(1.0*maxScale)));
-        }
-    }else{
-        throw std::uncaught_exception();
-    }
 
     std::vector<Polygon>& meshPolygons = mesh.getPolygons();
     List<Point>& meshPoints = mesh.getPoints();
     SegmentMap& segments = mesh.getSegments();
 
-    Region containerRegion (containerPoints);
 
-    TriangleMeshGenerator generator(rosettePoints, containerRegion);
-    Triangulation triangulation = generator.getDelaunayTriangulation();
 
-    std::unordered_map<int,int> pointMap;
-    std::vector<Point> trianglePoints = triangulation.getPoints();
 
-    for (int j = 0; j < trianglePoints.size() ; ++j) {
-        int pointIndex = meshPoints.push_back(trianglePoints[j]);
-        pointMap.insert(std::make_pair(j,pointIndex));
-    }
-
-    this->points = CrackTipPoints(pointMap[1], pointMap[2], pointMap[3], pointMap[4]);
-    std::vector<Triangle> triangles = triangulation.getTriangles();
-
-    std::vector<Segment<int>> containerSegments;
-    container.getSegments(containerSegments);
-
-    for (int i = 0; i < triangles.size() ; ++i) {
-        std::vector<int> oldTrianglePoints = triangles[i].getPoints();
-        int n = oldTrianglePoints.size();
-
-        std::vector<int> newTrianglePoints;
-
-        for (int k = 0; k < n ; ++k) {
-            newTrianglePoints.push_back(pointMap[oldTrianglePoints[k]]);
-        }
-
-        Polygon newPolygon =  Polygon(newTrianglePoints, mesh.getPoints().getList());
-        int index;
-
-        if(i==0){
-            meshPolygons[this->container_polygon] = newPolygon;
-            index = 0;
-        }else{
-            meshPolygons.push_back(newPolygon);
-            index = meshPolygons.size() - 1;
-        }
-
-        newPolygons.push_back(newPolygon);
-
-        for (int j = 0; j < n; ++j) {
-            Segment<int> edge(newTrianglePoints[j], newTrianglePoints[(j+1)%n]);
-            Segment<int> originalEdge(oldTrianglePoints[j],oldTrianglePoints[(j+1)%n]);
-
-            if(originalEdge.isBoundary(triangulation.getPoints())){
-                for (int k = 0; k < containerSegments.size(); ++k) {
-                    if(containerSegments[k].contains(meshPoints.getList(),edge)){
-                        Neighbours n = segments.get(containerSegments[k]);
-                        int otherNeighbour = n.getFirst()==this->container_polygon? n.getSecond() : n.getFirst();
-
-                        segments.insert(edge, index);
-                        segments.insert(edge, otherNeighbour);
-                        break;
-                    }
-                }
-            }else{
-                segments.insert(edge,index);
-            }
-        }
-    }
-
-    for (int i = 0; i < containerSegments.size(); ++i) {
-        segments.delete_element(containerSegments[i]);
-    }
     return PolygonChangeData(container, newPolygons);
 }
 
@@ -168,3 +87,27 @@ Point CrackTip::getPoint() {
     return this->crackPath.back();
 }
 
+int CrackTip::getPolygon() {
+    return this->container_polygon;
+}
+
+std::set<int> CrackTip::generateTipPoints(BreakableMesh mesh) {
+    this->crackAngle = Segment<Point>(crackPath.back(), crackPath[crackPath.size() - 2]).cartesianAngle(crackPath);
+    Polygon container = mesh.getPolygon(this->container_polygon);
+
+    // TODO: I know 45 is about right, but don't hardcode it
+    RosetteGroupGenerator rosette = RosetteGroupGenerator(this->getPoint(), this->radius, 45, container_polygon, container);
+    tipPoints = rosette.getPoints(this->crackAngle, mesh);
+
+    this->changedPolygons = rosette.getChangedPolygons(mesh);
+
+    return rosette.getChangedPolygons();
+}
+
+std::vector<Point> CrackTip::getTipPoints() {
+    return this->tipPoints;
+}
+
+std::vector<Polygon> CrackTip::getChangedPolygons() {
+    return this->changedPolygons;
+}

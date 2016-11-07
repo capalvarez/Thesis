@@ -26,6 +26,7 @@ public:
                               Polygon container);
     std::vector<Point> getPoints(double initAngle, BreakableMesh mesh);
     std::vector<Polygon> getChangedPolygons(BreakableMesh mesh);
+    std::set<int> getChangedPolygons();
 };
 
 

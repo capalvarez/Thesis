@@ -1,4 +1,5 @@
 #include <fracture/crack/Crack.h>
+#include <fracture/geometry/mesh/RemeshAdapter.h>
 
 Crack::Crack() {}
 
@@ -18,8 +19,35 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
     std::vector<Polygon> oldP;
     std::vector<Polygon> newP;
 
-    this->prepareTip(this->init, oldP, newP, m);
-    this->prepareTip(this->end, oldP, newP, m);
+    std::set<int> tip1 = this->init.generateTipPoints(m);
+    std::set<int> tip2 = this->end.generateTipPoints(m);
+
+    if(this->init.getPolygon() == this->end.getPolygon()){
+        std::vector<Point> tip_points1 = this->init.getTipPoints();
+        std::vector<Point> tip_points2 = this->end.getTipPoints();
+        tip_points1.insert(tip_points1.end(), tip_points2.begin(), tip_points2.end());
+
+        std::vector<Polygon> changed1 = this->init.getChangedPolygons();
+        std::vector<Polygon> changed2 = this->end.getChangedPolygons();
+        changed1.insert(changed1.end(), changed2.begin(), changed2.end());
+
+        RemeshAdapter remesher (changed1, m.getPoints().getList());
+
+        std::vector<int> changedPolygons;
+        std::set_union(tip1.begin(), tip1.end(), tip2.begin(), tip2.end(), std::back_inserter(changedPolygons));
+
+        std::vector<Polygon> newPolygons = remesher.remesh(tip_points1, changedPolygons, m);
+
+    }else{
+        const bool is_affected = tip1.find(this->end.getPolygon()) != tip1.end();
+
+        if(is_affected){
+
+        }else{
+            this->prepareTip(this->init, oldP, newP, m);
+            this->prepareTip(this->end, oldP, newP, m);
+        }
+    }
 
     m.printInFile("test.txt");
     return PolygonChangeData(oldP, newP);
