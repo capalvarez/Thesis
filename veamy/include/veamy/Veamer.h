@@ -42,6 +42,7 @@ public:
 
     Pair<int> pointToDOFS(int point_index);
     Material getMaterial();
+    List<Point> getPoints();
 };
 
 

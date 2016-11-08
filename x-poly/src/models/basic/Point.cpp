@@ -18,7 +18,7 @@ double Point::getY() const{
     return this->y;
 }
 
-std::string Point::getString() {
+std::string Point::getString() const{
     return string_utils::toString<double>(this->getX()) + " " + string_utils::toString<double>(this->getY());
 }
 

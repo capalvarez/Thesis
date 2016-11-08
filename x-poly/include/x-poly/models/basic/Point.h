@@ -21,7 +21,7 @@ public:
     double getY() const;
 
     double squareNorm();
-    std::string getString();
+    std::string getString() const;
     bool operator==(const Point& other) const;
     Point operator-(const Point& other);
     Vector operator-(Point& other);
