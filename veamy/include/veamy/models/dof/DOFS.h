@@ -13,9 +13,9 @@ private:
     VeamyList<DOF> list;
     std::vector<int> occupied_point_indexes;
     std::vector<int> outer_indexes;
-
-    std::unordered_map<int, Pair<int>> point_to_dofs;
 public:
+    std::unordered_map<int, Pair<int>> point_to_dofs;
+
     Pair<int> addDOF(ConstraintsContainer &constraints, std::vector<Point> points, int point_index,
                      SegmentPair<int> pair);
     VeamyList<DOF> getDOFS();

@@ -100,4 +100,7 @@ Material Veamer::getMaterial() {
     return conditions.material;
 }
 
+List<Point> Veamer::getPoints() {
+    return this->points;
+}
 
