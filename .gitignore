@@ -6,8 +6,9 @@ x-poly/src/voronoi/lib/triangle.h
 x-poly/src/voronoi/lib/triangle.o
 x-poly/src/voronoi/lib/triangle.c
 veamy/include/veamy/lib
-visualizer/.idea/
-visualizer/__pycache__
+python-visualizer/.idea/
+python-visualizer/__pycache__
+
 
 test/dealii-test/
 test/libmesh-test/
