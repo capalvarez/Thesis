@@ -8,9 +8,9 @@
 
 TEST(PostProcessorTest, DisplacementTest){
     Veamer v;
-    std::vector<Point> points = {Point(0,0), Point(2,0), Point(2,1), Point(0,1)};
+    std::vector<Point> points = {Point(0,0), Point(3,0), Point(3,1), Point(0,1)};
     Region region(points);
-    region.generatePoints(PointGenerator(functions::constant(), functions::constant()), 10, 10);
+    region.generatePoints(PointGenerator(functions::constant(), functions::constant()), 16, 16);
 
     class Sum : public BodyForce{
     private:
@@ -28,7 +28,7 @@ TEST(PostProcessorTest, DisplacementTest){
 
     EssentialConstraints c;
     Segment<Point> constrained(Point(0,0),Point(0,1));
-    Segment<Point> constrained2 (Point(2,0),Point(2,1));
+    Segment<Point> constrained2 (Point(3,0),Point(3,1));
     Constraint const1 (constrained, m.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
 
     c.addConstraint(const1);

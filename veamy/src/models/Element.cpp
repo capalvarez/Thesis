@@ -41,8 +41,8 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemCo
         Edge prev (polygonPoints[(n+vertex_id-1)%n], polygonPoints[vertex_id]);
         Edge next (polygonPoints[vertex_id], polygonPoints[(n+vertex_id+1)%n]);
 
-        Pair<double> prevNormal = prev.getNormal(polygonPoints,points);
-        Pair<double> nextNormal = next.getNormal(polygonPoints,points);
+        Pair<double> prevNormal = utilities::normalize(prev.getNormal(polygonPoints,points));
+        Pair<double> nextNormal = utilities::normalize(next.getNormal(polygonPoints,points));
 
         double prevLength = prev.getLength(points);
         double nextLength = next.getLength(points);
@@ -50,8 +50,8 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemCo
         double xDiff = vertex.getX() - average.getX();
         double yDiff = vertex.getY() - average.getY();
 
-        double Qi_x = 1/(4*area)*(prevNormal.first*prevLength + nextNormal.first*nextLength);
-        double Qi_y = 1/(4*area)*(prevNormal.second*prevLength + nextNormal.second*nextLength);
+        double Qi_x = 1/(2*area)*(prevNormal.first*prevLength + nextNormal.first*nextLength);
+        double Qi_y = 1/(2*area)*(prevNormal.second*prevLength + nextNormal.second*nextLength);
 
         Nr(2*vertex_id, 0) = 1;
         Nr(2*vertex_id, 2) = yDiff;

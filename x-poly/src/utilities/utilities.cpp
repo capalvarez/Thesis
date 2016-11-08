@@ -5,6 +5,7 @@
 #include <math.h>
 #include <x-poly/models/basic/Point.h>
 #include <algorithm>
+#include <x-poly/utilities/Pair.h>
 
 
 namespace utilities {
@@ -20,6 +21,12 @@ namespace utilities {
 
     double degrees(double angle){
         return (angle > 0 ? angle : (2*M_PI + angle)) * 360 / (2*M_PI);
+    }
+
+    Pair<double> normalize(Pair<double> vector){
+        double norm = std::sqrt(std::pow(vector.first,2) + std::pow(vector.second,2));
+
+        return Pair<double>(vector.first/norm, vector.second/norm);
     }
 
     template <typename T>
