@@ -16,7 +16,7 @@ void PostProcessor::displacementsProcess(std::unordered_map<Point, double, Point
         Pair<int> dofs = d.second;
 
         dispX.insert(std::make_pair(p, u(dofs.first)));
-        dispX.insert(std::make_pair(p, u(dofs.second)));
+        dispY.insert(std::make_pair(p, u(dofs.second)));
     }
 }
 

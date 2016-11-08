@@ -1,7 +1,5 @@
 .idea/
 x-poly/include/x-poly/voronoi/lib
-x-poly/include/x-poly/models/hole/clipper/lib/clipper.hpp
-x-poly/src/models/hole/clipper/lib/clipper.cpp
 x-poly/src/voronoi/lib/triangle.o
 x-poly/src/voronoi/lib/triangle.c
 veamy/include/veamy/lib
@@ -10,9 +8,14 @@ python-visualization/__pycache__
 test/dealii-test/
 test/libmesh-test/
 
-test/dealii-test/
-test/libmesh-test/
-
-
-
-
+x-poly/include/x-poly/models/hole/lib/
+x-poly/src/models/hole/lib/
+python-visualization/displacement-visualizator/__init__.py
+python-visualization/displacement-visualizator/__pycache__/
+python-visualization/displacement-visualizator/example.py
+python-visualization/displacement-visualizator/visualizer.py
+python-visualization/mesh-visualizator/Drawer.pyc
+python-visualization/mesh-visualizator/FileReader.pyc
+python-visualization/mesh-visualizator/Point.pyc
+python-visualization/mesh-visualizator/Polygon.pyc
+python-visualization/mesh-visualizator/Segment.pyc
