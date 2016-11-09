@@ -25,26 +25,15 @@ Region RemeshAdapter::computeRemeshRegion(std::vector<Polygon> remeshPolygons, s
     return  Region (containerPoints);
 }
 
-std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, std::vector<int> changedPolygons, Mesh &mesh) {
+std::vector<Polygon> RemeshAdapter::adaptToMesh(Triangulation triangulation, std::vector<int> changedPolygons,
+                                                Mesh &mesh,
+                                                std::unordered_map<int, int> pointMap) {
     std::vector<Polygon> newPolygons;
 
     List<Point>& meshPoints = mesh.getPoints();
     std::vector<Polygon>& meshPolygons = mesh.getPolygons();
     SegmentMap& segments = mesh.getSegments();
 
-    TriangleMeshGenerator generator(points, region);
-    Triangulation triangulation = generator.getDelaunayTriangulation();
-
-    std::unordered_map<int,int> pointMap;
-    std::vector<Point> trianglePoints = triangulation.getPoints();
-
-    for (int j = 0; j < trianglePoints.size() ; ++j) {
-        int pointIndex = meshPoints.push_back(trianglePoints[j]);
-        pointMap.insert(std::make_pair(j,pointIndex));
-    }
-
-    // TODO: Need this info
-    //this->points = CrackTipPoints(pointMap[1], pointMap[2], pointMap[3], pointMap[4]);
     std::vector<Triangle> triangles = triangulation.getTriangles();
 
     std::vector<Segment<int>> containerSegments;
@@ -67,7 +56,7 @@ std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, std::vecto
 
         if(i<changedPolygons.size()){
             meshPolygons[changedPolygons[i]] = newPolygon;
-            index = 0;
+            index = changedPolygons[i];
         }else{
             meshPolygons.push_back(newPolygon);
             index = meshPolygons.size() - 1;
@@ -105,4 +94,32 @@ std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, std::vecto
     }
 
     return newPolygons;
+}
+
+Triangulation RemeshAdapter::triangulate(std::vector<Point> points) {
+    TriangleMeshGenerator generator(points, region);
+    Triangulation triangulation = generator.getDelaunayTriangulation();
+
+    return triangulation;
+}
+
+std::unordered_map<int, int> RemeshAdapter::includeNewPoints(List<Point> &meshPoints, Triangulation triangulation) {
+    std::unordered_map<int,int> pointMap;
+    std::vector<Point> trianglePoints = triangulation.getPoints();
+
+    for (int j = 0; j < trianglePoints.size() ; ++j) {
+        int pointIndex = meshPoints.push_back(trianglePoints[j]);
+        pointMap.insert(std::make_pair(j,pointIndex));
+    }
+
+    return pointMap;
+}
+
+std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, std::vector<int> changedPolygons, Mesh &m) {
+    Triangulation t = this->triangulate(points);
+    t.writeInFile("testing.txt");
+
+    std::unordered_map<int,int> pointMap = this->includeNewPoints(m.getPoints(), t);
+
+    return adaptToMesh(t, changedPolygons, m, pointMap);
 }

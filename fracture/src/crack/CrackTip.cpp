@@ -64,7 +64,13 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
 
 PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
     RemeshAdapter remesher(this->changedPolygons, mesh.getPoints().getList());
-    std::vector<Polygon> newPolygons = remesher.remesh(this->tipPoints, this->changedIndex, mesh);
+
+    Triangulation t = remesher.triangulate(tipPoints);
+    std::unordered_map<int,int> pointMap = remesher.includeNewPoints(mesh.getPoints(), t);
+
+    this->points = CrackTipPoints(pointMap[1], pointMap[2], pointMap[3], pointMap[4]);
+
+    std::vector<Polygon> newPolygons = remesher.adaptToMesh(t, this->changedIndex, mesh, pointMap);
 
     return PolygonChangeData(this->changedPolygons, newPolygons);
 }
@@ -83,17 +89,11 @@ Point CrackTip::getPoint() {
     return this->crackPath.back();
 }
 
-int CrackTip::getPolygon() {
-    return this->container_polygon;
-}
-
 std::set<int> CrackTip::generateTipPoints(BreakableMesh mesh) {
     this->crackAngle = Segment<Point>(crackPath.back(), crackPath[crackPath.size() - 2]).cartesianAngle(crackPath);
     Polygon container = mesh.getPolygon(this->container_polygon);
 
-    mesh.getSegments().printInFile("wat.txt");
-
-    // TODO: I know 45 is about right, but don't hardcode it
+     // TODO: I know 45 is about right, but don't hardcode it
     RosetteGroupGenerator rosette = RosetteGroupGenerator(this->getPoint(), this->radius, 45, container_polygon, container);
     tipPoints = rosette.getPoints(this->crackAngle, mesh);
 
@@ -103,12 +103,4 @@ std::set<int> CrackTip::generateTipPoints(BreakableMesh mesh) {
     std::copy(indexes.begin(), indexes.end(), std::back_inserter(this->changedIndex));
 
     return indexes;
-}
-
-std::vector<Point> CrackTip::getTipPoints() {
-    return this->tipPoints;
-}
-
-std::vector<Polygon> CrackTip::getChangedPolygons() {
-    return this->changedPolygons;
 }

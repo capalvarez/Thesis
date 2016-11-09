@@ -38,13 +38,11 @@ public:
     PolygonChangeData prepareTip(BreakableMesh& mesh);
     bool isFinished(BreakableMesh mesh);
     void assignLocation(int polygon);
-    int getPolygon();
     Point getPoint();
 
     std::set<int> generateTipPoints(BreakableMesh mesh);
-    std::vector<Point> getTipPoints();
-    std::vector<Polygon> getChangedPolygons();
 
+    friend class Crack;
 };
 
 #endif
