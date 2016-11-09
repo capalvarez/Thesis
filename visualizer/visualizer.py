@@ -23,9 +23,9 @@ button = Button(frame, text="Draw Polygons", command=lambda p=polygons, c=canvas
 button2 = Button(frame, text="Draw Segments", command=lambda s=segments, c=canvas, p=points: draw_segments(s, c, p))
 button3 = Button(frame, text="Clear", command=lambda: canvas.delete("all"))
 
-#draw_list(points, canvas, limits,"red")
-draw_list(t_points, canvas, t_limits, "red")
-draw_list(triangles, canvas, t_points, "blue")
+draw_list(points, canvas, limits,"red")
+#draw_list(t_points, canvas, t_limits, "red")
+#draw_list(triangles, canvas, t_points, "blue")
 
 canvas.pack()
 button.pack(side="right")

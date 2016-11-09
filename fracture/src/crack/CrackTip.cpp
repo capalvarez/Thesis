@@ -56,6 +56,8 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
     Point lastPoint = crackPath.back();
     addPointToPath(angle);
 
+    this->container_polygon = problem.mesh->findContainerPolygon(this->getPoint());
+
     PolygonChangeData changeData = problem.mesh->breakMesh(this->container_polygon, Segment<Point>(lastPoint, crackPath.back()));
     assignLocation(changeData.lastPolygon);
 
@@ -90,7 +92,7 @@ Point CrackTip::getPoint() {
 }
 
 std::set<int> CrackTip::generateTipPoints(BreakableMesh mesh) {
-    this->crackAngle = Segment<Point>(crackPath.back(), crackPath[crackPath.size() - 2]).cartesianAngle(crackPath);
+    this->crackAngle = Segment<Point>(crackPath[crackPath.size() - 2],crackPath.back()).cartesianAngle(crackPath);
     Polygon container = mesh.getPolygon(this->container_polygon);
 
      // TODO: I know 45 is about right, but don't hardcode it

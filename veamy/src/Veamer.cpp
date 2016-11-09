@@ -93,7 +93,7 @@ void Veamer::replaceElements(std::vector<Polygon> old, std::vector<Polygon> newP
 }
 
 Pair<int> Veamer::pointToDOFS(int point_index) {
-    this->DOFs.pointToDOFS(point_index);
+    return this->DOFs.pointToDOFS(point_index);
 }
 
 Material Veamer::getMaterial() {
