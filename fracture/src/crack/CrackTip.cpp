@@ -91,6 +91,8 @@ std::set<int> CrackTip::generateTipPoints(BreakableMesh mesh) {
     this->crackAngle = Segment<Point>(crackPath.back(), crackPath[crackPath.size() - 2]).cartesianAngle(crackPath);
     Polygon container = mesh.getPolygon(this->container_polygon);
 
+    mesh.getSegments().printInFile("wat.txt");
+
     // TODO: I know 45 is about right, but don't hardcode it
     RosetteGroupGenerator rosette = RosetteGroupGenerator(this->getPoint(), this->radius, 45, container_polygon, container);
     tipPoints = rosette.getPoints(this->crackAngle, mesh);

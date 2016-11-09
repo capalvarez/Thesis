@@ -6,6 +6,7 @@
 #include <x-poly/utilities/Pair.h>
 #include <unordered_map>
 #include "Neighbours.h"
+#include <fstream>
 
 class SegmentMap{
 private:
@@ -19,6 +20,7 @@ public:
     std::unordered_map<Segment<int>,Neighbours,SegmentHasher>& getMap();
     int size();
     void delete_element(Segment<int> key);
+    void printInFile(std::string fileName);
 
 };
 

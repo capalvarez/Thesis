@@ -20,7 +20,7 @@ public:
 
     double length();
     bool operator==(const Segment<T> other) const;
-    std::string getString();
+    std::string getString() const;
 
     bool contains(std::vector<Point>& p, Point point);
     bool contains(std::vector<Point> p, Segment<int> s);

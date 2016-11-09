@@ -1,6 +1,9 @@
 #ifndef THESIS_NEIGHBOURS_H
 #define THESIS_NEIGHBOURS_H
 
+#include <iostream>
+#include <x-poly/utilities/stringUtils.h>
+
 class Neighbours {
 private:
     int n1;
@@ -13,6 +16,7 @@ public:
     void changeNeighbour(int oldN, int newN);
     int getFirst();
     int getSecond();
+    std::string getString() const;
 };
 
 

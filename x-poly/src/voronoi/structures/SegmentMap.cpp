@@ -42,3 +42,18 @@ int SegmentMap::size() {
 void SegmentMap::delete_element(Segment<int> key) {
     this->map.erase(key);
 }
+
+void SegmentMap::printInFile(std::string fileName) {
+    std::string path("C:\\Users\\Catalina");
+    path += "\\" + fileName;
+
+    std::ofstream file;
+    file.open(path, std::ios::out);
+
+
+    for(auto v : this->map){
+        file << v.first.getString() + " " + v.second.getString() << std::endl;
+    }
+
+    file.close();
+}

@@ -60,13 +60,13 @@ Point Segment<Point>::middlePoint(std::vector<Point> p) {
 }
 
 template <>
-std::string Segment<int>::getString() {
-    return string_utils::toString<double>(this->p1) + " " + string_utils::toString<double>(this->p2);
+std::string Segment<int>::getString() const{
+    return string_utils::toString<double>(this->getFirst()) + " " + string_utils::toString<double>(this->getSecond());
 }
 
 template <>
-std::string Segment<Point>::getString() {
-    return this->p1.getString() + " " + this->p2.getString();
+std::string Segment<Point>::getString() const{
+    return this->getFirst().getString() + " " + this->getSecond().getString();
 }
 
 template <>

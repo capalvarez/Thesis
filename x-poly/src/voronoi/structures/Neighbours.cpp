@@ -1,6 +1,4 @@
 #include <x-poly/voronoi/structures/Neighbours.h>
-#include <assert.h>
-#include <stdexcept>
 
 Neighbours::Neighbours() {}
 
@@ -37,4 +35,9 @@ int Neighbours::getFirst() {
 
 int Neighbours::getSecond() {
     return this->n2;
+}
+
+std::string Neighbours::getString() const {
+    return string_utils::toString<double>(this->n1) + " " + string_utils::toString<double>(this->n2);
+
 }

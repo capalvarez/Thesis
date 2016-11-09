@@ -88,7 +88,7 @@ int Mesh::findContainerPolygon(Point p, int i) {
             Segment<Point> lookup(poly.getCentroid(), p);
             NeighbourInfo neighbour = getNeighbour(i,lookup);
 
-            if(neighbour.neighbour!=-1) {
+            if(neighbour.neighbour>-1) {
                 i = neighbour.neighbour;
                 found = true;
             }
