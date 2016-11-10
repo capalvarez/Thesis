@@ -106,4 +106,34 @@ PolygonChangeData BreakableMesh::breakMesh(int init, Segment<Point> crack) {
     }
 }
 
+void BreakableMesh::swapPolygons(int first, int last) {
+    Polygon p1 = getPolygon(first);
+    Polygon p2 = getPolygon(last);
+
+    std::vector<Segment<int>> firstSegments;
+    p1.getSegments(firstSegments);
+
+    std::vector<Segment<int>> lastSegments;
+    p2.getSegments(lastSegments);
+
+    for(Segment<int> s: firstSegments){
+        edges.get(s).changeNeighbour(first, last);
+    }
+
+    for(Segment<int> s: lastSegments){
+        edges.get(s).changeNeighbour(last, first);
+    }
+
+    this->polygons[first] = p2;
+    this->polygons[last] = p1;
+
+    edges.printInFile("edges.txt");
+}
+
+void BreakableMesh::removePolygon() {
+
+}
+
+void BreakableMesh::mergePolygons(int i1, int i2) {
+}
 

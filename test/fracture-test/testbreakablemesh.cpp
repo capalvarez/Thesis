@@ -25,10 +25,26 @@ TEST(BreakableMeshTest, BreakMeshTest){
     breakableMesh.breakMesh(2, crack);
 
     breakableMesh.printInFile("broken.txt");
+}
+
+TEST(BreakableMeshTest, SwapPolygonsTest){
+    std::vector<Point> squarePoints = {Point(0,0),Point(3,0),Point(3,3),Point(0,3)};
+    Region square (squarePoints);
+
+    PointGenerator generator (functions::uniform(1), functions::uniform(1));
+
+    square.generatePoints(generator, 3, 3);
+    std::vector<Point> seeds = square.getSeedPoints();
+
+    TriangleMeshGenerator meshGenerator(seeds, square);
+    Mesh mesh = meshGenerator.getMesh();
+
+    BreakableMesh breakableMesh(mesh);
+
+    breakableMesh.swapPolygons(0,8);
 
 
-
-
+    breakableMesh.printInFile("testMesh.txt");
 
 
 }
