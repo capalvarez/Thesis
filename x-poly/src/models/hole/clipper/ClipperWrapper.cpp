@@ -43,3 +43,9 @@ ClipperLib::Paths ClipperWrapper::polyUnion(std::vector<Polygon> polys, std::vec
 ClipperLib::IntPoint ClipperWrapper::scalePoint(Point point, int maxScale) {
     return ClipperLib::IntPoint((int)(maxScale*point.getX()), (int)(maxScale*point.getY()));
 }
+
+ClipperLib::Paths ClipperWrapper::polyUnion(Polygon p1, Polygon p2, std::vector<Point> points, int maxScale) {
+    std::vector<Polygon> polygons = {p1, p2};
+
+    return ClipperWrapper::polyUnion(polygons, points, maxScale);
+}

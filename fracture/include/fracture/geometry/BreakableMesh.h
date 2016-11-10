@@ -9,7 +9,6 @@
 class BreakableMesh : public Mesh{
 private:
 
-    void removePolygon();
     void mergePolygons(int i1, int i2);
 
 

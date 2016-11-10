@@ -1,4 +1,5 @@
 #include <fracture/geometry/BreakableMesh.h>
+#include <x-poly/models/structures/PointHasher.h>
 
 BreakableMesh::BreakableMesh() {}
 
@@ -126,14 +127,60 @@ void BreakableMesh::swapPolygons(int first, int last) {
 
     this->polygons[first] = p2;
     this->polygons[last] = p1;
-
-    edges.printInFile("edges.txt");
 }
 
-void BreakableMesh::removePolygon() {
-
-}
 
 void BreakableMesh::mergePolygons(int i1, int i2) {
+    // TODO: Check if polygons are neighbours, if not, that's an error!
+
+    swapPolygons(i2, this->polygons.size()-1);
+
+    Polygon poly1 = getPolygon(i1);
+    Polygon poly2 = getPolygon(this->polygons.size() - 1);
+
+    int maxScale = 10000;
+    ClipperLib::Paths merged = ClipperWrapper::polyUnion(poly1, poly2, points.getList(), 100000);
+
+    std::unordered_map<Point,int,PointHasher> oldPolygonPoints;
+
+    for (int p : poly1.getPoints()){
+        oldPolygonPoints.insert(std::make_pair(points.get(p),p));
+    }
+
+    for (int p : poly2.getPoints()){
+        oldPolygonPoints.insert(std::make_pair(points.get(p),p));
+    }
+
+    std::vector<int> newPolygonPoints;
+
+    if(merged.size()==1){
+        for (int i = 0; i < merged[0].size(); ++i) {
+            Point p (merged[0][i].X/(1.0*maxScale), merged[0][i].Y/(1.0*maxScale));
+
+            newPolygonPoints.push_back(oldPolygonPoints[p]);
+        }
+    }
+
+    Polygon newPolygon(newPolygonPoints, points.getList());
+
+    this->polygons[i1] = newPolygon;
+
+    std::vector<Segment<int>> poly2Segments;
+    poly2.getSegments(poly2Segments);
+
+
+    for(Segment<int> s: poly2Segments){
+
+    }
+
+
+
+
+
+
+
+
+
+
 }
 

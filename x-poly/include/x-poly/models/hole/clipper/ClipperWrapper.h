@@ -11,6 +11,7 @@ private:
 public:
     static ClipperLib::Paths polyIntersection(std::vector<Point> parent, std::vector<Point> child, int maxScale);
     static ClipperLib::Paths polyUnion(std::vector<Polygon> polys, std::vector<Point> points, int maxScale);
+    static ClipperLib::Paths polyUnion(Polygon p1, Polygon p2, std::vector<Point> points, int maxScale);
 };
 
 
