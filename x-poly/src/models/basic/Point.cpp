@@ -27,7 +27,7 @@ double Point::squareNorm() {
 }
 
 bool Point::operator==(const Point &other) const{
-    return std::abs(this->x-other.x)<0.0001 && std::abs(this->y-other.y)<0.0001;
+    return std::abs(this->x-other.x)<0.01 && std::abs(this->y-other.y)<0.01;
 }
 
 Point3D Point::get3DPoint() {

@@ -45,6 +45,25 @@ TEST(BreakableMeshTest, SwapPolygonsTest){
 
 
     breakableMesh.printInFile("testMesh.txt");
+}
 
+TEST(BreakableMeshTest, MergePolygonsTest){
+    std::vector<Point> squarePoints = {Point(0,0),Point(3,0),Point(3,3),Point(0,3)};
+    Region square (squarePoints);
 
+    PointGenerator generator (functions::uniform(1), functions::uniform(1));
+
+    square.generatePoints(generator, 3, 3);
+    std::vector<Point> seeds = square.getSeedPoints();
+
+    TriangleMeshGenerator meshGenerator(seeds, square);
+    Mesh mesh = meshGenerator.getMesh();
+
+    BreakableMesh breakableMesh(mesh);
+
+    breakableMesh.printInFile("testMesh1.txt");
+
+    breakableMesh.mergePolygons(0,1);
+    breakableMesh.printInFile("testMesh.txt");
+    breakableMesh.getSegments().printInFile("edges.txt");
 }

@@ -80,6 +80,8 @@ PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
     this->grow(this->init, oldP, newP, problem, u);
     this->grow(this->end, oldP, newP, problem, u);
 
+    problem.mesh->printInFile("changed.txt");
+
     return PolygonChangeData(oldP, newP);
 }
 

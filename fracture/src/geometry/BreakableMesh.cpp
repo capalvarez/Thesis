@@ -129,7 +129,6 @@ void BreakableMesh::swapPolygons(int first, int last) {
     this->polygons[last] = p1;
 }
 
-
 void BreakableMesh::mergePolygons(int i1, int i2) {
     // TODO: Check if polygons are neighbours, if not, that's an error!
 
@@ -139,7 +138,7 @@ void BreakableMesh::mergePolygons(int i1, int i2) {
     Polygon poly2 = getPolygon(this->polygons.size() - 1);
 
     int maxScale = 10000;
-    ClipperLib::Paths merged = ClipperWrapper::polyUnion(poly1, poly2, points.getList(), 100000);
+    ClipperLib::Paths merged = ClipperWrapper::polyUnion(poly1, poly2, points.getList(), maxScale);
 
     std::unordered_map<Point,int,PointHasher> oldPolygonPoints;
 
@@ -168,19 +167,10 @@ void BreakableMesh::mergePolygons(int i1, int i2) {
     std::vector<Segment<int>> poly2Segments;
     poly2.getSegments(poly2Segments);
 
-
     for(Segment<int> s: poly2Segments){
-
+        edges.replace_neighbour(s, this->polygons.size() - 1, i1);
     }
 
-
-
-
-
-
-
-
-
-
+    this->polygons.pop_back();
 }
 
