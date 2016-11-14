@@ -7,6 +7,8 @@ python-visualization/.idea/
 python-visualization/__pycache__
 test/dealii-test/
 test/libmesh-test/
+visualizer/
+
 
 x-poly/include/x-poly/models/hole/lib/
 x-poly/src/models/hole/lib/
@@ -19,3 +21,4 @@ python-visualization/mesh-visualizator/FileReader.pyc
 python-visualization/mesh-visualizator/Point.pyc
 python-visualization/mesh-visualizator/Polygon.pyc
 python-visualization/mesh-visualizator/Segment.pyc
+pycalculix-test/
