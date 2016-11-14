@@ -6,11 +6,13 @@ NumericalTests::NumericalTests(int order) {
     std::vector<Point> points = {Point(0,0), Point(1,0), Point(2,0), Point(0,1), Point(1,1), Point(2,1)};
     std::vector<int> p1 ={0,1,4,3};
     std::vector<int> p2 ={1,2,5,4};
+    std::vector<Point> regionPoints = {points[0], points[2], points[5], points[3]};
 
     std::vector<Polygon> polygons = {Polygon(p1,points), Polygon(p2,points)};
-    std::vector<Segment> segments;
+    SegmentMap segments;
+    Region r(regionPoints);
 
-    two_squares = Mesh(points, polygons, segments, Region(std::vector<Point>()));
+    two_squares = Mesh(points, polygons, segments, r);
 
     /*Hundred Square*/
     std::vector<Point> hundred_square_points = {Point(0, 0), Point(20, 0), Point(20, 5), Point(0, 5)};
@@ -67,29 +69,29 @@ NumericalTests::NumericalTests(int order) {
 
 
 Eigen::VectorXd NumericalTests::two_squares_rightforceX() {
-    Veamer v(order);
-    loadRightForceX(two_squares, v, Segment(0,3), Segment(2,5));
+    Veamer v;
+    loadRightForceX(two_squares, v, Segment<int>(0,3), Segment<int>(2,5));
 
     return v.simulate();
 }
 
 Eigen::VectorXd NumericalTests::two_squares_rightforceY() {
-    Veamer v(order);
-    loadRightForceY(two_squares, v, Segment(0,3), Segment(2,5));
+    Veamer v;
+    loadRightForceY(two_squares, v, Segment<int>(0,3), Segment<int>(2,5));
 
     return v.simulate();
 }
 
 Eigen::VectorXd NumericalTests::two_squares_noforces() {
-    Veamer v(order);
-    loadNoForces(two_squares, v, Segment(0,3), Segment(2,5));
+    Veamer v;
+    loadNoForces(two_squares, v, Segment<int>(0,3), Segment<int>(2,5));
 
     return v.simulate();
 }
 
 Eigen::VectorXd NumericalTests::hundredsquare_rightforceX() {
-    Veamer v(order);
-    loadRightForceX(hundred_square, v, Segment(0,3), Segment(1,2));
+    Veamer v;
+    loadRightForceX(hundred_square, v, Segment<int>(0,3), Segment<int>(1,2));
 
     return v.simulate();
 }
@@ -122,7 +124,7 @@ Eigen::VectorXd NumericalTests::hole_twoforceX() {
     return Eigen::Matrix<double, -1, 1, 0, -1, 1>();
 }
 
-void NumericalTests::loadRightForceX(Mesh m, Veamer &v, Segment leftSide, Segment rightSide) {
+void NumericalTests::loadRightForceX(Mesh m, Veamer &v, Segment<int> leftSide, Segment<int> rightSide) {
     class None : public BodyForce {
         double apply (double x, double y){
             return 0;
@@ -143,10 +145,12 @@ void NumericalTests::loadRightForceX(Mesh m, Veamer &v, Segment leftSide, Segmen
     container.addConstraints(c);
     container.addConstraints(natural);
 
-    v.initProblem(m, container, f);
+    ProblemConditions p (container, f, Material());
+
+    v.initProblem(m, p);
 }
 
-void NumericalTests::loadRightForceY(Mesh m, Veamer &v, Segment leftSide, Segment rightSide) {
+void NumericalTests::loadRightForceY(Mesh m, Veamer &v, Segment<int> leftSide, Segment<int> rightSide) {
     class None : public BodyForce {
         double apply (double x, double y){
             return 0;
@@ -167,10 +171,12 @@ void NumericalTests::loadRightForceY(Mesh m, Veamer &v, Segment leftSide, Segmen
     container.addConstraints(c);
     container.addConstraints(natural);
 
-    v.initProblem(m, container, f);
+    ProblemConditions p (container, f, Material());
+
+    v.initProblem(m, p);
 }
 
-void NumericalTests::loadNoForces(Mesh m, Veamer &v, Segment leftSide, Segment rightSide) {
+void NumericalTests::loadNoForces(Mesh m, Veamer &v, Segment<int> leftSide, Segment<int> rightSide) {
     class None : public BodyForce {
         double apply (double x, double y){
             return 0;
@@ -188,10 +194,12 @@ void NumericalTests::loadNoForces(Mesh m, Veamer &v, Segment leftSide, Segment r
     ConstraintsContainer container;
     container.addConstraints(c);
 
-    v.initProblem(m, container, f);
+    ProblemConditions p (container, f, Material());
+
+    v.initProblem(m, p);
 }
 
-void NumericalTests::loadTwoForcesX(Mesh m, Veamer &v, Segment leftSide, Segment rightSide) {
+void NumericalTests::loadTwoForcesX(Mesh m, Veamer &v, Segment<int> leftSide, Segment<int> rightSide) {
 
 }
 

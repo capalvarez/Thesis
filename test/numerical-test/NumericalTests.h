@@ -43,10 +43,10 @@ private:
     Eigen::VectorXd hole_twoforceX();
 
 
-    void loadRightForceX(Mesh m, Veamer& v, Segment leftSide, Segment rightSide);
-    void loadRightForceY(Mesh m, Veamer& v, Segment leftSide, Segment rightSide);
-    void loadNoForces(Mesh m, Veamer& v, Segment leftSide, Segment rightSide);
-    void loadTwoForcesX(Mesh m, Veamer& v, Segment leftSide, Segment rightSide);
+    void loadRightForceX(Mesh m, Veamer& v, Segment<int> leftSide, Segment<int> rightSide);
+    void loadRightForceY(Mesh m, Veamer& v, Segment<int> leftSide, Segment<int> rightSide);
+    void loadNoForces(Mesh m, Veamer& v, Segment<int> leftSide, Segment<int> rightSide);
+    void loadTwoForcesX(Mesh m, Veamer& v, Segment<int> leftSide, Segment<int> rightSide);
 public:
     NumericalTests(int order);
 
