@@ -1,8 +1,17 @@
 #include <veamy/physics/Material.h>
 
-Material::Material() {
-    this->v = 0.3;
-    this->E = 210000000000;
+Material::Material(double E, double v) {
+    this->v = v;
+    this->E = E;
+}
+
+Material::Material() {}
+
+Material::Material(Materials::material m) {
+    material_info info = Materials::properties[m];
+
+    this->E = info.E;
+    this->v = info.v;
 }
 
 Eigen::MatrixXd Material::getMaterialMatrix() {
@@ -30,6 +39,10 @@ double Material::trace() {
 
 double Material::stressIntensityFactor() {
     return this->E/(12*(1 + this->v)*(1 - this->v));
+}
+
+bool Material::operator==(const Material &other) const{
+    return std::abs(this->E-other.E)<0.01 && std::abs(this->v-other.v)<0.01;
 }
 
 
