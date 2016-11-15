@@ -16,9 +16,6 @@ void CircularHole::getSegments(std::vector<Segment<int>>& segments, int offset) 
     discretePolygon.getSegments(segments, offset);
 }
 
-std::vector<Point> CircularHole::getPoints() {
-    return this->HolePoints;
-}
 
 
 

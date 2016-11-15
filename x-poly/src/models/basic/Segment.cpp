@@ -30,16 +30,6 @@ bool Segment<T>::operator==(const Segment<T> other) const{
 }
 
 template <>
-bool Segment<int>::contains(std::vector<Point>& p, Point point) {
-    Point p1 = p[this->p1];
-    Point p2 = p[this->p2];
-
-    return  ((point.getX()>=p1.getX() && point.getX()<=p2.getX()) || (point.getX()>=p2.getX() && point.getX()<=p1.getX())) &&
-            ((point.getY()>=p1.getY() && point.getY()<=p2.getY()) || (point.getY()>=p2.getY() && point.getY()<=p1.getY())) &&
-            std::abs(p1.getX()*(p2.getY()-point.getY()) + p2.getX()*(point.getY()-p1.getY()) + point.getX()*(p1.getY()-p2.getY()))<0.0001;
-}
-
-template <>
 bool Segment<Point>::contains(std::vector<Point>& p, Point point) {
     Point p1 = this->p1;
     Point p2 = this->p2;
@@ -47,6 +37,14 @@ bool Segment<Point>::contains(std::vector<Point>& p, Point point) {
     return  ((point.getX()>=p1.getX() && point.getX()<=p2.getX()) || (point.getX()>=p2.getX() && point.getX()<=p1.getX())) &&
             ((point.getY()>=p1.getY() && point.getY()<=p2.getY()) || (point.getY()>=p2.getY() && point.getY()<=p1.getY())) &&
             std::abs(p1.getX()*(p2.getY()-point.getY()) + p2.getX()*(point.getY()-p1.getY()) + point.getX()*(p1.getY()-p2.getY()))<0.0001;
+}
+
+template <>
+bool Segment<int>::contains(std::vector<Point>& p, Point point) {
+    Point p1 = p[this->p1];
+    Point p2 = p[this->p2];
+
+    return Segment<Point>(p1,p2).contains(p, point);
 }
 
 template <>
@@ -128,17 +126,6 @@ void Segment<int>::orderCCW(std::vector<Point> points, Point center) {
 }
 
 template <>
-double Segment<int>::cartesianAngle(std::vector<Point> points) {
-    Point p1 = points[this->p1];
-    Point p2 = points[this->p2];
-
-    double dY = p2.getY() - p1.getY();
-    double dX = p2.getX() - p1.getX();
-
-    return utilities::degrees(atan2(dY, dX));
-}
-
-template <>
 double Segment<Point>::cartesianAngle(std::vector<Point> points) {
     Point p1 = this->p1;
     Point p2 = this->p2;
@@ -149,11 +136,19 @@ double Segment<Point>::cartesianAngle(std::vector<Point> points) {
     return utilities::degrees(atan2(dY, dX));
 }
 
+
+template <>
+double Segment<int>::cartesianAngle(std::vector<Point> points) {
+    Point p1 = points[this->p1];
+    Point p2 = points[this->p2];
+
+    return Segment<Point>(p1,p2).cartesianAngle(points);
+}
+
 template <>
 double Segment<Point>::length() {
     return std::sqrt(std::pow(this->p1.getX() - this->p2.getX(), 2) + std::pow(this->p1.getY() - this->p2.getY(),2));
 }
-
 
 template class Segment<int>;
 template class Segment<Point>;
