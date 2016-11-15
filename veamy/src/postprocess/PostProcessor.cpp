@@ -21,7 +21,7 @@ void PostProcessor::displacementsProcess(std::unordered_map<Point, double, Point
 }
 
 void PostProcessor::printInFile(std::unordered_map<Point, double, PointHasher> map, std::string fileName) {
-    std::string path("C:\\Users\\Catalina");
+    std::string path = string_utils::getPath();
     path += "\\" + fileName;
 
     std::ofstream file;

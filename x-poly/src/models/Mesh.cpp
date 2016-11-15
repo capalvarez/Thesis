@@ -45,7 +45,7 @@ SegmentMap Mesh::getSegments() const {
 }
 
 void Mesh::printInFile(std::string fileName) {
-    std::string path("C:\\Users\\Catalina");
+    std::string path = string_utils::getPath();
     path += "\\" + fileName;
 
     std::ofstream file;

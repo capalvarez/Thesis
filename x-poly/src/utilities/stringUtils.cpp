@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sstream>
+#include <cstdlib>
 
 namespace string_utils{
     template <typename T>
@@ -12,4 +13,12 @@ namespace string_utils{
     }
 
     template std::string toString<double>(double a);
+
+    std::string getPath(){
+        #if defined(_WIN64) || defined(_WIN32)
+        return std::getenv("USERPROFILE");
+        #elif defined(__linux__)
+        return getenv("HOME");
+        #endif
+    }
 }

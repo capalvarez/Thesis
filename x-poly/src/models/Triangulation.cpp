@@ -8,7 +8,7 @@ Triangulation::Triangulation(std::vector <Point> &p, std::vector <Triangle> &t, 
 }
 
 void Triangulation::writeInFile(std::string fileName) {
-    std::string path("C:\\Users\\Catalina");
+    std::string path = string_utils::getPath();
     path += "\\" + fileName;
 
     std::ofstream file;
