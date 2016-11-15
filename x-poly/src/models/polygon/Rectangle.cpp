@@ -31,7 +31,7 @@ double Rectangle::yMin() {
 
 bool Rectangle::operator==(const Rectangle &other) const {
     return getFirst()==other.getFirst() && getSecond()==other.getSecond() ||
-            getSecond()==other.getFirst() && getFirst()==other.getSecond();
+           getSecond()==other.getFirst() && getFirst()==other.getSecond();
 }
 
 

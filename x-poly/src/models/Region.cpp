@@ -119,14 +119,11 @@ std::vector<Point> Region::getRegionPoints() {
 }
 
 void Region::getSegments(std::vector<Segment<int>> &s) {
-    //TODO: Manage border cases here!
-    // TODO: Don't quite remember the problem, needs studying
-
     Polygon::getSegments(s);
     int offset = (int) this->p.size();
 
-    for(int i=0;i<holes.size();i++){
-        holes[i]->getSegments(s, offset);
+    for(Hole* h : this->holes){
+        h->getSegments(s, offset);
     }
 }
 

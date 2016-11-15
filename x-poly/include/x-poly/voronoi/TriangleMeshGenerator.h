@@ -20,7 +20,6 @@ private:
     Region region;
     Mesh mesh;
 
-    //Delaunay Triangulation
     std::vector<Triangle> triangles;
     std::vector<Point> meshPoints;
     SegmentMap delaunayEdges;

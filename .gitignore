@@ -4,10 +4,9 @@ x-poly/src/voronoi/lib/triangle.o
 x-poly/src/voronoi/lib/triangle.c
 veamy/include/veamy/lib
 python-visualization/.idea/
-python-visualization/__pycache__
 test/dealii-test/
 test/libmesh-test/
-visualizer/
+
 
 
 x-poly/include/x-poly/models/hole/lib/

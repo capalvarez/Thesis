@@ -170,7 +170,7 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
         cellPoints.push_back(index1);
         EdgeData edge = this->edges[triangles[t1].nextEdge(index, init_edge, edgeMap)];
 
-        while(!edge.equals(init_edge)){
+        while(!(edge==init_edge)){
             t2 = t1;
             t1 = edge.t1!=t2? edge.t1 : edge.t2;
 

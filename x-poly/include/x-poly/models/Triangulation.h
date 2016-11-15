@@ -13,10 +13,9 @@ private:
     std::vector<Point> points;
     SegmentMap edgeMap;
 public:
-    Triangulation(std::vector<Point>& p, std::vector<Triangle>& t, SegmentMap edges);
+    Triangulation(std::vector<Point> p, std::vector<Triangle> t, SegmentMap edges);
     void writeInFile(std::string fileName);
 
-    std::vector<Triangle> getTriangles();
     std::vector<Point> getPoints();
     SegmentMap getSegments();
 };

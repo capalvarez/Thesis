@@ -16,11 +16,6 @@ void EdgeData::setTriangle(int t) {
     }
 }
 
-bool EdgeData::equals(EdgeData other) {
-   return this->p1 == other.p1 && this->p2 == other.p2 ||
-          this->p2 == other.p1 && this->p1 == other.p2;
-}
-
 std::string EdgeData::getString() {
     return string_utils::toString<double>(this->p1) + " " + string_utils::toString<double>(this->p2);
 }

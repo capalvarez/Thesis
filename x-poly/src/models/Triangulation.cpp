@@ -1,7 +1,7 @@
 #include <include/x-poly/models/Triangulation.h>
 #include <cstdlib>
 
-Triangulation::Triangulation(std::vector <Point> &p, std::vector <Triangle> &t, SegmentMap edges) {
+Triangulation::Triangulation(std::vector <Point> p, std::vector <Triangle> t, SegmentMap edges) {
     this->points.assign(p.begin(),p.end());
     this->triangles.assign(t.begin(),t.end());
     this->edgeMap = edges;
@@ -25,10 +25,6 @@ void Triangulation::writeInFile(std::string fileName) {
     }
 
     file.close();
-}
-
-std::vector<Triangle> Triangulation::getTriangles() {
-    return this->triangles;
 }
 
 std::vector<Point> Triangulation::getPoints() {
