@@ -3,7 +3,6 @@
 
 Region::Region(std::vector<Point>& points) : Polygon(points){
     this->p = points;
-    this->maxScale = 1000000;
 }
 
 void Region::mutate(std::vector<Point> &points) {
@@ -17,7 +16,6 @@ Region::Region() : Polygon(){}
 
 Region::Region(const Region &other) : Polygon(other){
     this->p = other.p;
-    this->maxScale =  1000000;
 }
 
 std::vector<Hole*> Region::getHoles() {
@@ -31,16 +29,19 @@ std::vector<Point> Region::getSeedPoints() {
 void Region::addHole(Hole* h) {
     //When we receive a hole we check whether the difference between the region and the hole is just
     //one path (according to the used library)
+    Config* config = Config::instance();
     ClipperLib::Path region, hole;
     ClipperLib::Paths solution;
 
     for(int i=0;i<this->p.size(); i++){
-        region << ClipperLib::IntPoint((int)(maxScale*this->p[i].getX()), (int)(maxScale*this->p[i].getY()));
+        region << ClipperLib::IntPoint((int)(config->getScale()*this->p[i].getX()),
+                                       (int)(config->getScale()*this->p[i].getY()));
     }
 
     std::vector<Point> holePoints = h->getPoints();
     for(int i=0;i<holePoints.size();i++){
-        hole << ClipperLib::IntPoint((int)(maxScale*holePoints[i].getX()), (int)(maxScale*holePoints[i].getY()));
+        hole << ClipperLib::IntPoint((int)(config->getScale()*holePoints[i].getX()),
+                                     (int)(config->getScale()*holePoints[i].getY()));
     }
 
     ClipperLib::Clipper clipper;
@@ -53,7 +54,8 @@ void Region::addHole(Hole* h) {
         std::vector<Point> newPoints;
 
         for(int i=0;i<solution[0].size();i++){
-            newPoints.push_back(Point(solution[0][i].X/(1.0*maxScale), solution[0][i].Y/(1.0*maxScale)));
+            newPoints.push_back(Point(solution[0][i].X/(1.0*config->getScale()),
+                                      solution[0][i].Y/(1.0*config->getScale())));
         }
 
         this->mutate(newPoints);

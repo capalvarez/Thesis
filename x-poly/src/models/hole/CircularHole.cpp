@@ -1,7 +1,7 @@
 #include <x-poly/models/hole/CircularHole.h>
 
-CircularHole::CircularHole(Point p, double r, int grade) : Circle(r,p){
-    this->HolePoints = discretizeCircle(grade);
+CircularHole::CircularHole(Point p, double r) : Circle(r, p){
+    this->HolePoints = discretizeCircle();
 }
 
 Point CircularHole::getCenter() {

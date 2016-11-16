@@ -176,8 +176,8 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
 
             int currentEdge = edgeMap[Key(edge.p1, edge.p2)];
 
-            Point c1 = getCircumcenter(t1,currentEdge,meshPoints);
-            Point c2 = getCircumcenter(t2,currentEdge,meshPoints);
+            c1 = getCircumcenter(t1,currentEdge,meshPoints);
+            c2 = getCircumcenter(t2,currentEdge,meshPoints);
 
             index1 = voronoiPoints.push_back(c1);
             index2 = voronoiPoints.push_back(c2);

@@ -1,4 +1,5 @@
 #include <x-poly/utilities/Pair.h>
+#include <cmath>
 
 template <typename T>
 Pair<T>::Pair(T first, T second) {
@@ -17,7 +18,10 @@ Pair<T>::Pair() {}
 
 template <typename T>
 bool Pair<T>::operator==(const Pair &other) const{
-    return this->first == other.first && this->second == other.second;
+    Config* config = Config::instance();
+
+    return std::abs(this->first - other.first) < config->getTolerance() &&
+           std::abs(this->second - other.second) < config->getTolerance();
 }
 
 template <typename T>

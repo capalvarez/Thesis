@@ -2,7 +2,7 @@
 #define THESIS_VECTOR_H
 
 #include <x-poly/models/basic/Point3D.h>
-#include <math.h>
+#include <cmath>
 
 class Point3D;
 

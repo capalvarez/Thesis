@@ -31,12 +31,14 @@ bool Segment<T>::operator==(const Segment<T> other) const{
 
 template <>
 bool Segment<Point>::contains(std::vector<Point>& p, Point point) {
+    Config* config = Config::instance();
+
     Point p1 = this->p1;
     Point p2 = this->p2;
 
     return  ((point.getX()>=p1.getX() && point.getX()<=p2.getX()) || (point.getX()>=p2.getX() && point.getX()<=p1.getX())) &&
             ((point.getY()>=p1.getY() && point.getY()<=p2.getY()) || (point.getY()>=p2.getY() && point.getY()<=p1.getY())) &&
-            std::abs(p1.getX()*(p2.getY()-point.getY()) + p2.getX()*(point.getY()-p1.getY()) + point.getX()*(p1.getY()-p2.getY()))<0.0001;
+            std::abs(p1.getX()*(p2.getY()-point.getY()) + p2.getX()*(point.getY()-p1.getY()) + point.getX()*(p1.getY()-p2.getY()))<config->getTolerance();
 }
 
 template <>

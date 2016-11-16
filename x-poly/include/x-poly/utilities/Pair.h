@@ -1,6 +1,8 @@
 #ifndef THESIS_PAIR_H
 #define THESIS_PAIR_H
 
+#include <x-poly/config/Config.h>
+
 template <typename T>
 class Pair {
 public:

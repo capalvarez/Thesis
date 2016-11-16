@@ -9,7 +9,7 @@ Triangulation::Triangulation(std::vector <Point> p, std::vector <Triangle> t, Se
 
 void Triangulation::writeInFile(std::string fileName) {
     std::string path = string_utils::getPath();
-    path += "\\" + fileName;
+    path +=  fileName;
 
     std::ofstream file;
     file.open(path, std::ios::out);

@@ -17,7 +17,6 @@ private:
     std::vector<Hole*> holes;
     std::vector<Point> p;
     std::vector<Point> seedPoints;
-    int maxScale;
 
     void clean();
 public:

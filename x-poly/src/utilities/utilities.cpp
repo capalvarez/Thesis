@@ -1,6 +1,5 @@
 #define _USE_MATH_DEFINES
 
-
 #include <vector>
 #include <math.h>
 #include <x-poly/models/basic/Point.h>

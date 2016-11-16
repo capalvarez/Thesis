@@ -7,7 +7,7 @@ Vector::Vector(Point3D* p) {
 Vector::~Vector() {}
 
 double Vector::norm() {
-    return sqrt(pow(this->p->getX(),2) + pow(this->p->getY(),2) + pow(this->p->getZ(),2));
+    return std::sqrt(std::pow(this->p->getX(),2) + std::pow(this->p->getY(),2) + std::pow(this->p->getZ(),2));
 }
 
 Point3D* Vector::getPoint() const{

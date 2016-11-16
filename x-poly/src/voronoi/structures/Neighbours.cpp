@@ -1,5 +1,4 @@
 #include <x-poly/voronoi/structures/Neighbours.h>
-#include <assert.h>
 #include <stdexcept>
 
 Neighbours::Neighbours() {}

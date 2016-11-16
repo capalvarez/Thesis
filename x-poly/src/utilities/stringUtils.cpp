@@ -16,9 +16,11 @@ namespace string_utils{
 
     std::string getPath(){
         #if defined(_WIN64) || defined(_WIN32)
-        return std::getenv("USERPROFILE");
+        std::string path = std::getenv("USERPROFILE");
+        return  path + "\\";
         #elif defined(__linux__)
-        return getenv("HOME");
+        std::string psth = std::getenv("HOME");
+        return path + "/";
         #endif
     }
 }

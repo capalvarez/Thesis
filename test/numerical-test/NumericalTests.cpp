@@ -37,7 +37,7 @@ NumericalTests::NumericalTests(int order) {
     random_voronoi_square = meshGenerator.getMesh();
 
     /*Rectangle hole with squares*/
-    Hole* circle = new CircularHole(Point(0.5,0.5),0.25, 10);
+    Hole* circle = new CircularHole(Point(0.5, 0.5), 0.25);
     region1.addHole(circle);
 
     region1.generatePoints(generator_uniform, 10, 10);
