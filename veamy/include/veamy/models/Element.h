@@ -16,14 +16,14 @@
 class Element {
 private:
     std::vector<int> dofs;
-    Eigen::MatrixXd K;
+
     Eigen::VectorXd f;
 
     void initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemConditions& conditions);
 public:
+    Eigen::MatrixXd K;
     Element(ProblemConditions& conditions, Polygon p, List<Point>& points, DOFS& out);
-    void assembleK(DOFS out, Eigen::MatrixXd& Kglobal);
-    void assembleF(DOFS out, Eigen::VectorXd& Fglobal);
+    void assemble(DOFS out, Eigen::MatrixXd& Kglobal,  Eigen::VectorXd& Fglobal);
 };
 
 

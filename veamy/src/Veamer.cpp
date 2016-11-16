@@ -30,28 +30,26 @@ Eigen::VectorXd Veamer::simulate() {
     f = Eigen::VectorXd::Zero(n);
 
     for(int i=0;i<elements.size();i++){
-        elements[i].assembleK(DOFs, K);
-        elements[i].assembleF(DOFs, f);
+        elements[i].assemble(DOFs, K, f);
     }
 
     //Apply constrained_points
     EssentialConstraints essential = this->conditions.constraints.getEssentialConstraints();
     std::vector<int> c = essential.getConstrainedDOF();
 
-    Eigen::MatrixXd K_b;
-    K_b= matrixOps::getColumns(K, c);
-
     Eigen::VectorXd boundary_values = essential.getBoundaryValues(this->points.getList(), this->DOFs.getDOFS());
 
-    for (int i = 0; i < K.rows(); ++i) {
-        f(i) = f(i) - (K_b.row(i)*boundary_values);
-    }
+    std::cout << boundary_values << std::endl << std::endl;
 
     for (int j = 0; j < c.size(); ++j) {
-        K.row(c[j]).setZero();
-        K.col(c[j]).setZero();
-        K(c[j], c[j]) = 1;
+        for (int i = 0; i < K.rows(); ++i) {
+            f(i) = f(i) - (K(i,c[j])*boundary_values(j));
 
+            K(c[j],i) = 0;
+            K(i,c[j]) = 0;
+        }
+
+        K(c[j], c[j]) = 1;
         f(c[j]) = boundary_values(j);
     }
 

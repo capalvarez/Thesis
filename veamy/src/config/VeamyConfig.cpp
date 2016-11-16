@@ -1,5 +1,7 @@
 #include <veamy/config/VeamyConfig.h>
 
+VeamyConfig* VeamyConfig::s_instance = nullptr;
+
 VeamyConfig::VeamyConfig() {
     this->double_comparison_tolerance = 0.001;
 }

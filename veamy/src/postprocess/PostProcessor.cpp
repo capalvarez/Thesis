@@ -1,6 +1,8 @@
 #include <veamy/postprocess/PostProcessor.h>
 
 PostProcessor::PostProcessor(Eigen::VectorXd u, Veamer veamer) {
+    std::cout << u << std::endl;
+
     this->u = u;
     this->veamer = veamer;
 }
@@ -10,6 +12,8 @@ void PostProcessor::displacementsProcess(std::unordered_map<Point, double, Point
 
     std::unordered_map<int, Pair<int>> point_to_dofs = this->veamer.DOFs.point_to_dofs;
     List<Point> points = this->veamer.getPoints();
+
+
 
     for(auto d: point_to_dofs){
         Point p = points.get(d.first);

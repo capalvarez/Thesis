@@ -50,28 +50,28 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemCo
         double xDiff = vertex.getX() - average.getX();
         double yDiff = vertex.getY() - average.getY();
 
-        double Qi_x = (prevNormal.first*prevLength + nextNormal.first*nextLength)/2;
-        double Qi_y = (prevNormal.second*prevLength + nextNormal.second*nextLength)/2;
+        double Qi_x = (prevNormal.first*prevLength + nextNormal.first*nextLength)/(2*area);
+        double Qi_y = (prevNormal.second*prevLength + nextNormal.second*nextLength)/(2*area);
 
         Nr(2*vertex_id, 0) = 1;
-        Nr(2*vertex_id, 2) = yDiff/std::sqrt(2);
+        Nr(2*vertex_id, 2) = yDiff;
         Nr(2*vertex_id+1, 1) = 1;
-        Nr(2*vertex_id+1, 2) = -xDiff/std::sqrt(2);
+        Nr(2*vertex_id+1, 2) = -xDiff;
 
         Wr(2*vertex_id, 0) = 1.0/n;
-        Wr(2*vertex_id, 2) = Qi_y/std::sqrt(2);
+        Wr(2*vertex_id, 2) = Qi_y;
         Wr(2*vertex_id+1, 1) = 1.0/n;
-        Wr(2*vertex_id+1, 2) = -Qi_x/std::sqrt(2);
+        Wr(2*vertex_id+1, 2) = -Qi_x;
 
         Nc(2*vertex_id, 0) = xDiff;
-        Nc(2*vertex_id, 2) = yDiff/std::sqrt(2);
+        Nc(2*vertex_id, 2) = yDiff;
         Nc(2*vertex_id+1, 1) = yDiff;
-        Nc(2*vertex_id+1, 2) = xDiff/std::sqrt(2);
+        Nc(2*vertex_id+1, 2) = xDiff;
 
-        Wc(2*vertex_id, 0) = Qi_x;
-        Wc(2*vertex_id, 2) = Qi_y/std::sqrt(2);
-        Wc(2*vertex_id+1, 1) = Qi_y;
-        Wc(2*vertex_id+1, 2) = Qi_x/std::sqrt(2);
+        Wc(2*vertex_id, 0) = 2*Qi_x;
+        Wc(2*vertex_id, 2) = Qi_y;
+        Wc(2*vertex_id+1, 1) = 2*Qi_y;
+        Wc(2*vertex_id+1, 2) = Qi_x;
     }
 
     Eigen::MatrixXd Pr;
@@ -107,7 +107,7 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemCo
     }
 }
 
-void Element::assembleK(DOFS out, Eigen::MatrixXd& Kglobal) {
+void Element::assemble(DOFS out, Eigen::MatrixXd& Kglobal, Eigen::VectorXd& Fglobal) {
     for (int i = 0; i < this->K.rows(); i++) {
         int globalI = out.get(this->dofs[i]).globalIndex();
 
@@ -116,16 +116,11 @@ void Element::assembleK(DOFS out, Eigen::MatrixXd& Kglobal) {
 
             Kglobal(globalI, globalJ) = Kglobal(globalI, globalJ) + this->K(i, j);
         }
-    }
-}
-
-void Element::assembleF(DOFS out, Eigen::VectorXd &Fglobal) {
-    for (int i = 0; i < this->K.rows(); i++) {
-        int globalI = out.get(this->dofs[i]).globalIndex();
 
         Fglobal(globalI) = Fglobal(globalI) + this->f(i);
     }
 }
+
 
 
 

@@ -24,13 +24,14 @@ private:
     //TODO: Check for inconsistencies (cannot have natural and essential conditions on the same segments)
     ProblemConditions conditions;
 
-    std::vector<Element> elements;
+
     std::unordered_map<Polygon, int, PolygonHasher> polygon_to_element;
     List<Point> points;
 
     void createElement(Polygon p);
 public:
     DOFS DOFs;
+    std::vector<Element> elements;
     Veamer();
 
     void initProblem(Mesh m, ProblemConditions conditions);
