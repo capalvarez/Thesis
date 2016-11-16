@@ -18,7 +18,7 @@ Pair<T>::Pair() {}
 
 template <typename T>
 bool Pair<T>::operator==(const Pair &other) const{
-    Config* config = Config::instance();
+    XPolyConfig* config = XPolyConfig::instance();
 
     return std::abs(this->first - other.first) < config->getTolerance() &&
            std::abs(this->second - other.second) < config->getTolerance();

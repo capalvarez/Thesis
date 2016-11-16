@@ -5,10 +5,7 @@
 #include "x-poly/utilities/Pair.h"
 
 namespace operations{
-    extern Pair<double> gradient(Pair<int> polinomial, Polygon p, Point point);
-    extern double laplacian(Pair<int> polinomial, Polygon p);
     extern double power(double base, double exp);
-    extern int kronecker(int i, int j);
 }
 
 #endif

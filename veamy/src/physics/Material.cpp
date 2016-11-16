@@ -1,4 +1,5 @@
 #include <veamy/physics/Material.h>
+#include <veamy/config/VeamyConfig.h>
 
 Material::Material(double E, double v) {
     this->v = v;
@@ -42,7 +43,9 @@ double Material::stressIntensityFactor() {
 }
 
 bool Material::operator==(const Material &other) const{
-    return std::abs(this->E-other.E)<0.01 && std::abs(this->v-other.v)<0.01;
+    VeamyConfig* config = VeamyConfig::instance();
+    return std::abs(this->E-other.E) < config->getTolerance() &&
+            std::abs(this->v-other.v) < config->getTolerance();
 }
 
 

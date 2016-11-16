@@ -5,7 +5,7 @@
 #include <x-poly/utilities/List.h>
 #include <veamy/models/dof/DOFS.h>
 #include <veamy/models/constraints/EssentialConstraints.h>
-#include <veamy/matrix/matrixOps.h>
+#include <include/veamy/utilities/matrixOps.h>
 #include <veamy/models/Element.h>
 #include <veamy/lib/Eigen/Dense>
 #include <veamy/physics/ProblemConditions.h>
@@ -35,7 +35,6 @@ public:
 
     void initProblem(Mesh m, ProblemConditions conditions);
     Eigen::VectorXd simulate();
-    std::vector<Element> getElements();
 
     void replaceElement(Polygon old, std::vector<Polygon> newPolygons);
     void replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons, List<Point> points);

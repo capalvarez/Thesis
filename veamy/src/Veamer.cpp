@@ -2,7 +2,6 @@
 #include <iostream>
 #include <veamy/Veamer.h>
 
-
 Veamer::Veamer() {}
 
 void Veamer::initProblem(Mesh m, ProblemConditions conditions) {
@@ -60,10 +59,6 @@ Eigen::VectorXd Veamer::simulate() {
     Eigen::VectorXd x = K.inverse()*f;
 
     return x;
-}
-
-std::vector<Element> Veamer::getElements() {
-    return this->elements;
 }
 
 void Veamer::replaceElement(Polygon old, std::vector<Polygon> newPolygons) {

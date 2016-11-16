@@ -31,7 +31,7 @@ bool Segment<T>::operator==(const Segment<T> other) const{
 
 template <>
 bool Segment<Point>::contains(std::vector<Point>& p, Point point) {
-    Config* config = Config::instance();
+    XPolyConfig* config = XPolyConfig::instance();
 
     Point p1 = this->p1;
     Point p2 = this->p2;

@@ -9,7 +9,6 @@
 #include <veamy/utilities/SegmentPair.h>
 #include <veamy/physics/BodyForce.h>
 #include <iostream>
-#include <veamy/matrix/integration/IntegrationFunction.h>
 #include <veamy/models/constraints/NaturalConstraints.h>
 #include <veamy/models/constraints/ConstraintsContainer.h>
 #include <veamy/physics/ProblemConditions.h>
@@ -23,8 +22,6 @@ private:
     void initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemConditions& conditions);
 public:
     Element(ProblemConditions& conditions, Polygon p, List<Point>& points, DOFS& out);
-    Eigen::MatrixXd getK();
-    Eigen::VectorXd getF();
     void assembleK(DOFS out, Eigen::MatrixXd& Kglobal);
     void assembleF(DOFS out, Eigen::VectorXd& Fglobal);
 };

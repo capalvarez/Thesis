@@ -1,38 +1,38 @@
-#include <x-poly/config/Config.h>
+#include <x-poly/config/XPolyConfig.h>
 
-Config::Config() {
+XPolyConfig::XPolyConfig() {
     this->circle_discretization_grade = 12;
     this->double_comparison_tolerance = 0.001;
     this->scale_for_clipper = 100000;
 }
 
-void Config::setDiscretizationGrade(int d) {
+void XPolyConfig::setDiscretizationGrade(int d) {
     this->circle_discretization_grade = d;
 }
 
-void Config::setTolerance(double t) {
+void XPolyConfig::setTolerance(double t) {
     this->double_comparison_tolerance = t;
 }
 
-void Config::setScale(int s) {
+void XPolyConfig::setScale(int s) {
     this->scale_for_clipper = s;
 }
 
-int Config::getDiscretizationGrade() {
+int XPolyConfig::getDiscretizationGrade() {
     return this->circle_discretization_grade;
 }
 
-double Config::getTolerance() {
+double XPolyConfig::getTolerance() {
     return this->double_comparison_tolerance;
 }
 
-int Config::getScale() {
+int XPolyConfig::getScale() {
     return this->scale_for_clipper;
 }
 
-Config *Config::instance() {
+XPolyConfig *XPolyConfig::instance() {
     if(!s_instance){
-        s_instance = new Config;
+        s_instance = new XPolyConfig;
     }
 
     return s_instance;

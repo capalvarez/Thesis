@@ -1,6 +1,6 @@
 #include <x-poly/models/basic/Point3D.h>
 #include <cmath>
-#include <include/x-poly/config/Config.h>
+#include <include/x-poly/config/XPolyConfig.h>
 
 double Point3D::getX() const {
     return this->x;
@@ -32,7 +32,7 @@ Vector Point3D::operator-(Point3D p) {
 
 
 bool Point3D::operator==(const Point3D &other) const {
-    Config* config = Config::instance();
+    XPolyConfig* config = XPolyConfig::instance();
 
     return std::abs(this->x - other.getX()) < config->getTolerance() &&
            std::abs(this->y - other.getY()) < config->getTolerance() &&

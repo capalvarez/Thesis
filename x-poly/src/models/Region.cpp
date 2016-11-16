@@ -29,7 +29,7 @@ std::vector<Point> Region::getSeedPoints() {
 void Region::addHole(Hole* h) {
     //When we receive a hole we check whether the difference between the region and the hole is just
     //one path (according to the used library)
-    Config* config = Config::instance();
+    XPolyConfig* config = XPolyConfig::instance();
     ClipperLib::Path region, hole;
     ClipperLib::Paths solution;
 

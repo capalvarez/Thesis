@@ -1,5 +1,5 @@
 #include <x-poly/models/basic/Point.h>
-#include <include/x-poly/config/Config.h>
+#include <include/x-poly/config/XPolyConfig.h>
 
 Point::Point(double x, double y) {
     this->x = x;
@@ -28,7 +28,7 @@ double Point::squareNorm() {
 }
 
 bool Point::operator==(const Point &other) const{
-    Config* config = Config::instance();
+    XPolyConfig* config = XPolyConfig::instance();
 
     return std::abs(this->x-other.x)<config->getTolerance() &&
            std::abs(this->y-other.y)<config->getTolerance();

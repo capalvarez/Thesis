@@ -27,7 +27,7 @@ set_target_properties(libgtest PROPERTIES
 include_directories("${source_dir}/include")
 
 add_subdirectory(xpoly-test)
-add_subdirectory(vem-test)
+add_subdirectory(veamy-test)
 add_subdirectory(numerical-test)
 
 

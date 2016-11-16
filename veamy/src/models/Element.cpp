@@ -1,7 +1,7 @@
 #include <veamy/models/Element.h>
 #include <veamy/models/Edge.h>
 #include <veamy/physics/Material.h>
-#include <veamy/matrix/quadrature/QuadraturePolygon.h>
+#include <veamy/quadrature/QuadraturePolygon.h>
 
 Element::Element(ProblemConditions& conditions, Polygon p, List<Point>& points, DOFS& out) {
     std::vector<int> vertex = p.getPoints();
@@ -105,14 +105,6 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemCo
     for (int i = 0; i < dofs.size(); ++i) {
         this->f(i) = polygon.integrate(conditions.f, points) + natural.lineIntegral(points,p,i/2,dofs[i]);
     }
-}
-
-Eigen::MatrixXd Element::getK() {
-    return this->K;
-}
-
-Eigen::VectorXd Element::getF() {
-    return this->f;
 }
 
 void Element::assembleK(DOFS out, Eigen::MatrixXd& Kglobal) {

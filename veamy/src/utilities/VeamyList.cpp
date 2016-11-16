@@ -11,7 +11,7 @@ int VeamyList<T>::push_back(T item) {
     index = std::find(list.begin(), list.end(), item);
 
     if(index!=list.end()){
-        return (int) std::distance(list.begin(),index);
+        return std::distance(list.begin(),index);
     }
 
     list.push_back(item);

@@ -1,6 +1,6 @@
 #include <x-poly/utilities/utilities.h>
 #include <x-poly/models/polygon/Circle.h>
-#include <include/x-poly/config/Config.h>
+#include <include/x-poly/config/XPolyConfig.h>
 
 Circle::Circle(double r, Point c) {
     this->radius = r;
@@ -8,7 +8,7 @@ Circle::Circle(double r, Point c) {
 }
 
 std::vector<Point> Circle::discretizeCircle() {
-    Config* config = Config::instance();
+    XPolyConfig* config = XPolyConfig::instance();
 
     std::vector<Point> points;
     double delta = 360 / config->getDiscretizationGrade();

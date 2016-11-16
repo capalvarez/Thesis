@@ -1,6 +1,6 @@
 #include <x-poly/models/basic/Point.h>
 #include <vector>
-#include <include/x-poly/config/Config.h>
+#include <include/x-poly/config/XPolyConfig.h>
 
 namespace geometry_functions{
     double area2(Point p1, Point p2, Point p3){
@@ -11,7 +11,7 @@ namespace geometry_functions{
     }
 
     bool collinear(Point p1, Point p2, Point p3){
-        Config* config = Config::instance();
+        XPolyConfig* config = XPolyConfig::instance();
 
         return std::abs(area2(p1,p2,p3))<config->getTolerance();
     }
