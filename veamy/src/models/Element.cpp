@@ -50,28 +50,28 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemCo
         double xDiff = vertex.getX() - average.getX();
         double yDiff = vertex.getY() - average.getY();
 
-        double Qi_x = 1/(2*area)*(prevNormal.first*prevLength + nextNormal.first*nextLength);
-        double Qi_y = 1/(2*area)*(prevNormal.second*prevLength + nextNormal.second*nextLength);
+        double Qi_x = (prevNormal.first*prevLength + nextNormal.first*nextLength)/2;
+        double Qi_y = (prevNormal.second*prevLength + nextNormal.second*nextLength)/2;
 
         Nr(2*vertex_id, 0) = 1;
-        Nr(2*vertex_id, 2) = yDiff;
+        Nr(2*vertex_id, 2) = yDiff/std::sqrt(2);
         Nr(2*vertex_id+1, 1) = 1;
-        Nr(2*vertex_id+1, 2) = -xDiff;
+        Nr(2*vertex_id+1, 2) = -xDiff/std::sqrt(2);
 
         Wr(2*vertex_id, 0) = 1.0/n;
-        Wr(2*vertex_id, 2) = Qi_y;
+        Wr(2*vertex_id, 2) = Qi_y/std::sqrt(2);
         Wr(2*vertex_id+1, 1) = 1.0/n;
-        Wr(2*vertex_id+1, 2) = -Qi_x;
+        Wr(2*vertex_id+1, 2) = -Qi_x/std::sqrt(2);
 
         Nc(2*vertex_id, 0) = xDiff;
-        Nc(2*vertex_id, 2) = yDiff;
+        Nc(2*vertex_id, 2) = yDiff/std::sqrt(2);
         Nc(2*vertex_id+1, 1) = yDiff;
-        Nc(2*vertex_id+1, 2) = xDiff;
+        Nc(2*vertex_id+1, 2) = xDiff/std::sqrt(2);
 
-        Wc(2*vertex_id, 0) = 2*Qi_x;
-        Wc(2*vertex_id, 2) = Qi_y;
-        Wc(2*vertex_id+1, 1) = 2*Qi_y;
-        Wc(2*vertex_id+1, 2) = Qi_x;
+        Wc(2*vertex_id, 0) = Qi_x;
+        Wc(2*vertex_id, 2) = Qi_y/std::sqrt(2);
+        Wc(2*vertex_id+1, 1) = Qi_y;
+        Wc(2*vertex_id+1, 2) = Qi_x/std::sqrt(2);
     }
 
     Eigen::MatrixXd Pr;

@@ -8,7 +8,10 @@ private:
     int scale_for_clipper;
 
     static XPolyConfig* s_instance;
+
     XPolyConfig();
+    XPolyConfig(const XPolyConfig& other) = delete;
+    XPolyConfig& operator=(const XPolyConfig& copy) = delete;
 public:
     void setDiscretizationGrade(int d);
     void setTolerance(double t);

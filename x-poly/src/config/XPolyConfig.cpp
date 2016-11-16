@@ -1,5 +1,7 @@
 #include <x-poly/config/XPolyConfig.h>
 
+XPolyConfig* XPolyConfig::s_instance = nullptr;
+
 XPolyConfig::XPolyConfig() {
     this->circle_discretization_grade = 12;
     this->double_comparison_tolerance = 0.001;

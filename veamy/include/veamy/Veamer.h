@@ -5,7 +5,7 @@
 #include <x-poly/utilities/List.h>
 #include <veamy/models/dof/DOFS.h>
 #include <veamy/models/constraints/EssentialConstraints.h>
-#include <include/veamy/utilities/matrixOps.h>
+#include <veamy/utilities/matrixOps.h>
 #include <veamy/models/Element.h>
 #include <veamy/lib/Eigen/Dense>
 #include <veamy/physics/ProblemConditions.h>
