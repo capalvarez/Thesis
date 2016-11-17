@@ -21,7 +21,7 @@ Element::Element(ProblemConditions& conditions, Polygon p, List<Point>& points, 
 
 void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemConditions& conditions) {
     std::vector<int> polygonPoints = p.getPoints();
-    int n = (int) polygonPoints.size();
+    int n = p.numberOfSides();
     Point average = p.getAverageVertex(points);
     double area = p.getArea();
 
@@ -41,8 +41,8 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemCo
         Edge prev (polygonPoints[(n+vertex_id-1)%n], polygonPoints[vertex_id]);
         Edge next (polygonPoints[vertex_id], polygonPoints[(n+vertex_id+1)%n]);
 
-        Pair<double> prevNormal = utilities::normalize(prev.getNormal(polygonPoints,points));
-        Pair<double> nextNormal = utilities::normalize(next.getNormal(polygonPoints,points));
+        Pair<double> prevNormal = utilities::normalize(prev.getNormal(points));
+        Pair<double> nextNormal = utilities::normalize(next.getNormal(points));
 
         double prevLength = prev.getLength(points);
         double nextLength = next.getLength(points);
@@ -58,9 +58,9 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemCo
         Nr(2*vertex_id+1, 1) = 1;
         Nr(2*vertex_id+1, 2) = -xDiff;
 
-        Wr(2*vertex_id, 0) = 1.0/n;
+        Wr(2*vertex_id, 0) = 2.0/n;
         Wr(2*vertex_id, 2) = Qi_y;
-        Wr(2*vertex_id+1, 1) = 1.0/n;
+        Wr(2*vertex_id+1, 1) = 2.0/n;
         Wr(2*vertex_id+1, 2) = -Qi_x;
 
         Nc(2*vertex_id, 0) = xDiff;
@@ -72,6 +72,7 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemCo
         Wc(2*vertex_id, 2) = Qi_y;
         Wc(2*vertex_id+1, 1) = 2*Qi_y;
         Wc(2*vertex_id+1, 2) = Qi_x;
+
     }
 
     Eigen::MatrixXd Pr;

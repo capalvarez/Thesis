@@ -1,8 +1,6 @@
 #include <veamy/postprocess/PostProcessor.h>
 
 PostProcessor::PostProcessor(Eigen::VectorXd u, Veamer veamer) {
-    std::cout << u << std::endl;
-
     this->u = u;
     this->veamer = veamer;
 }

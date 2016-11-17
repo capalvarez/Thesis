@@ -1,5 +1,6 @@
 #include <veamy/physics/Material.h>
 #include <veamy/config/VeamyConfig.h>
+#include <iostream>
 
 Material::Material(double E, double v) {
     this->v = v;
@@ -23,11 +24,19 @@ Eigen::MatrixXd Material::getMaterialMatrix() {
 
     D(0,0) = c*(1 - this->v);
     D(0,1) = c*this->v;
+  //  D(0,2) = c*this->v;
 
     D(1,0) = c*this->v;
     D(1,1) = c*(1 - this->v);
+    //D(1,2) = c*this->v;
 
-    D(2,2) = 2*c*(1 - 2*this->v);
+    //D(2,0) = c*this->v;
+    //D(2,1) = c*this->v;
+    //D(2,2) = c*(1 - this->v);
+
+    D(2,2) = c*(1 - 2*this->v);
+    //D(4,4) = 2*c*(1 - 2*this->v);
+    //D(5,5) = 2*c*(1 - 2*this->v);
 
     return D;
 }

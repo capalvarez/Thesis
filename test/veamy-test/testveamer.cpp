@@ -5,12 +5,13 @@
 #include <x-poly/models/Region.h>
 #include <x-poly/models/generator/functions.h>
 #include <x-poly/voronoi/TriangleMeshGenerator.h>
+#include <veamy/postprocess/PostProcessor.h>
 
 TEST(VeamerTest, LoadDataFirstOrderTest){
     Veamer v;
     std::vector<Point> points = {Point(0,0), Point(2,0), Point(2,1), Point(0,1)};
     Region region(points);
-    region.generatePoints(PointGenerator(functions::constant(), functions::constant()), 4, 4);
+    region.generatePoints(PointGenerator(functions::constant(), functions::constant()), 5, 5);
 
     class Sum : public BodyForce{
     private:
@@ -38,12 +39,14 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     ConstraintsContainer container;
     container.addConstraints(c);
 
-    ProblemConditions conditions(container, f, Material());
+    ProblemConditions conditions(container, f, Material(Materials::material::Steel));
 
     v.initProblem(m, conditions);
 
     Eigen::VectorXd x = v.simulate();
+    std::string files[2] = {"ux_simple.txt", "uy_simple.txt"};
 
-    std::cout << x << std::endl << std::endl;
+    PostProcessor postProcessor (x, v);
+    postProcessor.writeDisplacements(files);
 }
 
