@@ -6,7 +6,7 @@
 #include <x-poly/models/basic/Segment.h>
 #include <x-poly/utilities/geometryFunctions.h>
 #include <x-poly/utilities/convexHull.h>
-#include <include/x-poly/utilities/Pair.h>
+#include <x-poly/utilities/Pair.h>
 
 class Polygon {
 protected:

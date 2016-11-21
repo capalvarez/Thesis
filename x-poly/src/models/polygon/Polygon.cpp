@@ -284,17 +284,18 @@ std::vector<Point> Polygon::getPoints(std::vector<Point> p) {
 
 Pair<int> Polygon::commonEdgesBorder(Polygon p) {
     std::map<int,int> thisPoints;
-    std::vector<Segment<int>> segments;
 
     for (int i = 0; i < this->points.size(); ++i) {
-        thisPoints[this->points[i]]++;
+        thisPoints[this->points[i]] = 1;
     }
 
     int j,k, n = p.numberOfSides();
     std::vector<int> poly_points = p.getPoints();
 
     for (j = 0; j < poly_points.size(); ++j) {
-        if(thisPoints[poly_points[j]]!=0){
+        auto search = thisPoints.find(poly_points[j]);
+
+        if(search != thisPoints.end()) {
             break;
         }
     }

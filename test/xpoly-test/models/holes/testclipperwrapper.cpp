@@ -11,19 +11,7 @@ TEST(ClipperWrapperTest, PolygonUnionTest){
 
     std::vector<Polygon> polys = {Polygon(poly1, points), Polygon(poly2, points)};
 
-    ClipperLib::Paths merged = ClipperWrapper::polyUnion(polys, points, 1000000);
 
-    EXPECT_EQ(merged[0][0].X, 0);
-    EXPECT_EQ(merged[0][0].Y, 0);
-
-    EXPECT_EQ(merged[0][1].X, 2000000);
-    EXPECT_EQ(merged[0][1].Y, 0);
-
-    EXPECT_EQ(merged[0][2].X, 2000000);
-    EXPECT_EQ(merged[0][2].Y, 1000000);
-
-    EXPECT_EQ(merged[0][3].X, 0);
-    EXPECT_EQ(merged[0][3].Y, 1000000);
 
 
 

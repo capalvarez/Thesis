@@ -47,8 +47,4 @@ Polygon SimplePolygonMerger::mergePolygons(std::vector<Polygon> polygons, std::v
     return merged;
 }
 
-bool SimplePolygonMerger::isCommonEdge(std::vector<Segment<int>> commonEdges, Segment<int> edge) {
-    return std::find(commonEdges.begin(), commonEdges.end(), edge) != commonEdges.end();
-}
-
 

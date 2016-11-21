@@ -114,15 +114,6 @@ bool Segment<int>::intersection(std::vector<Point> points, Segment<Point> other,
 }
 
 template <>
-void Segment<int>::orderCCW(std::vector<Point> points, Point center) {
-    if(this->isCCW(points, center)){
-        int tmp = this->p1;
-        this->p1 = this->p2;
-        this->p2 = tmp;
-    }
-}
-
-template <>
 bool Segment<int>::isCCW(std::vector<Point> points, Point center) {
     Point p1 = points[this->p1];
     Point p2 = points[this->p2];
@@ -132,6 +123,14 @@ bool Segment<int>::isCCW(std::vector<Point> points, Point center) {
     return z>0;
 }
 
+template <>
+void Segment<int>::orderCCW(std::vector<Point> points, Point center) {
+    if(this->isCCW(points, center)){
+        int tmp = this->p1;
+        this->p1 = this->p2;
+        this->p2 = tmp;
+    }
+}
 
 template <>
 double Segment<int>::cartesianAngle(std::vector<Point> points) {

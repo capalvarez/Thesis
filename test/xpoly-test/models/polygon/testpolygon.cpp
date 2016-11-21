@@ -102,7 +102,12 @@ TEST_F(PolygonTest, NonConformingTest){
     EXPECT_EQ(nonConforming.getCentroid(), Point(1,0.5));
     EXPECT_EQ(nonConforming.getDiameter(), std::sqrt(5));
    // EXPECT_EQ(nonConforming.getAverageVertex(points), Point(1,0.5));
+}
 
+TEST_F(PolygonTest, CommonEdgeTest){
+    std::vector<int> secondSquarePoints = {1,7,8,2};
+    Polygon secondSquare(secondSquarePoints, points);
 
+    EXPECT_EQ(secondSquare.commonEdgesBorder(*square), Pair<int>(1,2));
 
 }
