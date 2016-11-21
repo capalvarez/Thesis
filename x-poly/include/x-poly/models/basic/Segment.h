@@ -28,6 +28,7 @@ public:
     bool isBoundary(std::vector<Point> p);
     bool intersection(std::vector<Point> points, Segment<Point> other, Point &inter);
     void orderCCW(std::vector<Point> points, Point center);
+    bool isCCW(std::vector<Point> points, Point center);
     double cartesianAngle(std::vector<Point> p);
 };
 

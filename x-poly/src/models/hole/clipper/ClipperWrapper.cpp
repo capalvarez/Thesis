@@ -1,4 +1,6 @@
 #include <x-poly/models/hole/clipper/ClipperWrapper.h>
+#include <include/x-poly/utilities/Pair.h>
+#include <algorithm>
 
 ClipperLib::Paths ClipperWrapper::polyIntersection(std::vector<Point> parent, std::vector<Point> child, int maxScale) {
     ClipperLib::Path region, hole;
@@ -45,7 +47,11 @@ ClipperLib::IntPoint ClipperWrapper::scalePoint(Point point, int maxScale) {
 }
 
 ClipperLib::Paths ClipperWrapper::polyUnion(Polygon p1, Polygon p2, std::vector<Point> points, int maxScale) {
-    std::vector<Polygon> polygons = {p1, p2};
 
-    return ClipperWrapper::polyUnion(polygons, points, maxScale);
+
+
+
+
+
 }
+

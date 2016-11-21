@@ -1,5 +1,7 @@
 #include <algorithm>
 #include <x-poly/models/polygon/Polygon.h>
+#include <map>
+#include <include/x-poly/utilities/Pair.h>
 
 
 Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
@@ -280,8 +282,44 @@ std::vector<Point> Polygon::getPoints(std::vector<Point> p) {
     return returnPoints;
 }
 
+Pair<int> Polygon::commonEdgesBorder(Polygon p) {
+    std::map<int,int> thisPoints;
+    std::vector<Segment<int>> segments;
 
+    for (int i = 0; i < this->points.size(); ++i) {
+        thisPoints[this->points[i]]++;
+    }
 
+    int j,k, n = p.numberOfSides();
+    std::vector<int> poly_points = p.getPoints();
+
+    for (j = 0; j < poly_points.size(); ++j) {
+        if(thisPoints[poly_points[j]]!=0){
+            break;
+        }
+    }
+
+    k = (j + 1)%n;
+    bool last = true;
+    std::vector<int> border;
+
+    while (k!=j){
+        bool now = thisPoints[poly_points[k]]==0;
+
+        if(now && last){
+            border.push_back((k-1+n)%n);
+        }
+
+        last = now;
+        k++;
+    }
+
+    return Pair<int>(border[0], border[1]);
+}
+
+bool Polygon::isPoint(int index) {
+    return std::find(this->points.begin(), this->points.end(), index)!=this->points.end();
+}
 
 
 

@@ -6,6 +6,7 @@
 #include <x-poly/models/basic/Segment.h>
 #include <x-poly/utilities/geometryFunctions.h>
 #include <x-poly/utilities/convexHull.h>
+#include <include/x-poly/utilities/Pair.h>
 
 class Polygon {
 protected:
@@ -54,6 +55,9 @@ public:
 
     Segment<int> containerEdge(std::vector<Point>& p, Point point);
     std::vector<Point> getPoints(std::vector<Point> p);
+
+    Pair<int> commonEdgesBorder(Polygon p);
+    bool isPoint(int index);
 };
 
 #endif
