@@ -301,18 +301,24 @@ Pair<int> Polygon::commonEdgesBorder(Polygon p) {
     }
 
     k = (j + 1)%n;
+    int i = 0;
     bool last = true;
     std::vector<int> border;
 
-    while (k!=j){
+    while (i<n+1){
         bool now = thisPoints[poly_points[k]]==0;
 
         if(now && last){
-            border.push_back((k-1+n)%n);
+            border.push_back(poly_points[(k-1+n)%n]);
         }
 
-        last = now;
-        k++;
+        if(!now && !last){
+            border.push_back(poly_points[k]);
+        }
+
+        last = thisPoints[poly_points[k]]==1;
+        k = (k+1)%n;
+        i++;
     }
 
     return Pair<int>(border[0], border[1]);

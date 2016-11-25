@@ -108,6 +108,10 @@ TEST_F(PolygonTest, CommonEdgeTest){
     std::vector<int> secondSquarePoints = {1,7,8,2};
     Polygon secondSquare(secondSquarePoints, points);
 
-    EXPECT_EQ(secondSquare.commonEdgesBorder(*square), Pair<int>(1,2));
+    EXPECT_EQ(secondSquare.commonEdgesBorder(*square), Pair<int>(2,1));
 
+    std::vector<int> twoEdgesPoints = {9,10,8,2,1,0};
+    Polygon twoEdges(twoEdgesPoints, points);
+
+    EXPECT_EQ(twoEdges.commonEdgesBorder(*square), Pair<int>(2,0));
 }
