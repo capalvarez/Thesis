@@ -1,10 +1,6 @@
-#include <gtest/gtest.h>
-#include <x-poly/models/basic/Point.h>
-#include <fracture/geometry/mesh/SimplePolygonMerger.h>
+#include "testpolygonmerger.h"
 
-TEST(PolygonMergerTest, MergePolygonsTest){
-    std::vector<Point> points = {Point(0,0), Point(1,0), Point(1,1),Point(0,1), Point(1,2), Point(2,0),
-                                 Point(2,1)};
+TEST_F(PolygonMergerTest, TwoSquaresTest){
     std::vector<int> square1Points = {0,1,2,3};
     std::vector<int> square2Points = {1,5,6,2};
 
@@ -17,5 +13,19 @@ TEST(PolygonMergerTest, MergePolygonsTest){
     Polygon p = merger.mergePolygons(square1, square2, points);
 
     EXPECT_EQ(p, Polygon(expected, points));
+}
 
+TEST_F(PolygonMergerTest, LAndSquareTest){
+    std::vector<int> squarePoints = {0,1,2,3};
+    std::vector<int> LPoints = {1,5,8,7,3,2};
+
+    std::vector<int> expected = {2,3,0,1,5,6};
+
+    Polygon square (squarePoints, points);
+    Polygon L (LPoints, points);
+
+    SimplePolygonMerger merger;
+    Polygon p = merger.mergePolygons(square, L, points);
+
+    EXPECT_EQ(p, Polygon(expected, points));
 }
