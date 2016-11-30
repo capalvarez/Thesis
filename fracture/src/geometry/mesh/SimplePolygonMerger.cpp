@@ -22,16 +22,16 @@ Polygon SimplePolygonMerger::mergePolygons(Polygon p1, Polygon p2, std::vector<P
     }
 
     while(poly1_points[i]!=end){
-        mergedPolygon.push_back(poly1_points[i%p1.numberOfSides()]);
-        i++;
+        mergedPolygon.push_back(poly1_points[i]);
+        i = (i+1)%p1.numberOfSides();
     }
 
     int secondPointIndex = utilities::indexOf(poly2_points, end);
     i = secondPointIndex;
 
     while(poly2_points[i]!=init){
-        mergedPolygon.push_back(poly2_points[i%p2.numberOfSides()]);
-        i++;
+        mergedPolygon.push_back(poly2_points[i]);
+        i = (i+1)%p2.numberOfSides();
     }
 
     return Polygon(mergedPolygon, points);

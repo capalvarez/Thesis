@@ -1,5 +1,6 @@
 #include <fracture/geometry/mesh/RemeshAdapter.h>
 #include <x-poly/voronoi/TriangleMeshGenerator.h>
+#include <fracture/geometry/mesh/SimplePolygonMerger.h>
 
 RemeshAdapter::RemeshAdapter(Region region) {
     this->region = region;
@@ -10,17 +11,10 @@ RemeshAdapter::RemeshAdapter(std::vector<Polygon> remeshPolygons, std::vector<Po
 }
 
 Region RemeshAdapter::computeRemeshRegion(std::vector<Polygon> remeshPolygons, std::vector<Point> points) {
-    int maxScale = 100000;
-    ClipperLib::Paths merged = ClipperWrapper::polyUnion(remeshPolygons, points, maxScale);
-    std::vector<Point> containerPoints;
+    SimplePolygonMerger merger;
 
-    if(merged.size()==1){
-        for (int i = 0; i < merged[0].size(); ++i) {
-            containerPoints.push_back(Point(merged[0][i].X/(1.0*maxScale), merged[0][i].Y/(1.0*maxScale)));
-        }
-    }else{
-        throw std::uncaught_exception();
-    }
+    Polygon merged = merger.mergePolygons(remeshPolygons, points);
+    std::vector<Point> containerPoints = merged.getPoints(points);
 
     return  Region (containerPoints);
 }

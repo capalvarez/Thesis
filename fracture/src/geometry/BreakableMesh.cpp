@@ -1,5 +1,6 @@
 #include <fracture/geometry/BreakableMesh.h>
 #include <x-poly/models/structures/PointHasher.h>
+#include <fracture/geometry/mesh/SimplePolygonMerger.h>
 
 BreakableMesh::BreakableMesh() {}
 
@@ -138,31 +139,10 @@ void BreakableMesh::mergePolygons(int i1, int i2) {
     Polygon poly2 = getPolygon(this->polygons.size() - 1);
 
     int maxScale = 10000;
-    ClipperLib::Paths merged = ClipperWrapper::polyUnion(poly1, poly2, points.getList(), maxScale);
+    SimplePolygonMerger merger;
 
-    std::unordered_map<Point,int,PointHasher> oldPolygonPoints;
-
-    for (int p : poly1.getPoints()){
-        oldPolygonPoints.insert(std::make_pair(points.get(p),p));
-    }
-
-    for (int p : poly2.getPoints()){
-        oldPolygonPoints.insert(std::make_pair(points.get(p),p));
-    }
-
-    std::vector<int> newPolygonPoints;
-
-    if(merged.size()==1){
-        for (int i = 0; i < merged[0].size(); ++i) {
-            Point p (merged[0][i].X/(1.0*maxScale), merged[0][i].Y/(1.0*maxScale));
-
-            newPolygonPoints.push_back(oldPolygonPoints[p]);
-        }
-    }
-
-    Polygon newPolygon(newPolygonPoints, points.getList());
-
-    this->polygons[i1] = newPolygon;
+    Polygon merged =  merger.mergePolygons(poly1, poly2, points.getList());
+    this->polygons[i1] = merged;
 
     std::vector<Segment<int>> poly2Segments;
     poly2.getSegments(poly2Segments);
