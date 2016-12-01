@@ -3,6 +3,10 @@
 #include <map>
 
 Polygon SimplePolygonMerger::mergePolygons(Polygon p1, Polygon p2, std::vector<Point> points) {
+    if(p1==p2){
+        return p1;
+    }
+
     std::vector<int> mergedPolygon;
     std::vector<int> poly1_points = p1.getPoints();
     std::vector<int> poly2_points = p2.getPoints();

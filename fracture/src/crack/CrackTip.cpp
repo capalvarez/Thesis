@@ -57,6 +57,7 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
     addPointToPath(angle);
 
     reassignContainer(problem);
+    problem.mesh->printInFile("changed.txt");
 
     PolygonChangeData changeData = problem.mesh->breakMesh(this->container_polygon, Segment<Point>(lastPoint, crackPath.back()));
     assignLocation(changeData.lastPolygon);

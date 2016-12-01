@@ -77,10 +77,12 @@ PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
     std::vector<Polygon> oldP;
     std::vector<Polygon> newP;
 
-    this->grow(this->init, oldP, newP, problem, u);
-    this->grow(this->end, oldP, newP, problem, u);
-
     problem.mesh->printInFile("changed.txt");
+
+    this->grow(this->init, oldP, newP, problem, u);
+    //this->grow(this->end, oldP, newP, problem, u);
+
+
 
     return PolygonChangeData(oldP, newP);
 }

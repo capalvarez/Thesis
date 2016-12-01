@@ -138,7 +138,6 @@ void BreakableMesh::mergePolygons(int i1, int i2) {
     Polygon poly1 = getPolygon(i1);
     Polygon poly2 = getPolygon(this->polygons.size() - 1);
 
-    int maxScale = 10000;
     SimplePolygonMerger merger;
 
     Polygon merged =  merger.mergePolygons(poly1, poly2, points.getList());
