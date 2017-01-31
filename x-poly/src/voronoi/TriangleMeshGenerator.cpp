@@ -69,14 +69,13 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list) {
     out.pointmarkerlist = (int *) NULL;
     out.trianglelist = (int *) NULL;
     out.triangleattributelist = (REAL *) NULL;
-    out.neighborlist = (int *) NULL;
     out.segmentmarkerlist = (int *) NULL;
     out.segmentlist = (int *) NULL;
     out.edgelist = (int *) NULL;
     out.edgemarkerlist = (int *) NULL;
 
     char switches[5];
-    sprintf(switches,"pzneDQ");
+    sprintf(switches,"pzeDQ");
     triangulate(switches, &in, &out, (struct triangulateio *)NULL);
 
     for(int i=0;i<out.numberofpoints;i++){
@@ -135,7 +134,6 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list) {
     free(out.pointmarkerlist);
     free(out.trianglelist);
     free(out.triangleattributelist);
-    free(out.neighborlist);
     free(out.segmentmarkerlist);
     free(out.segmentlist);
     free(out.edgelist);

@@ -151,3 +151,7 @@ bool Mesh::isFull() {
 Region Mesh::getRegion() const{
     return this->region;
 }
+
+bool Mesh::areNeighbours(int poly1, int poly2) {
+    return false;
+}

@@ -96,4 +96,5 @@ int main(){
     square.generatePoints(PointGenerator(functions::random_double(0,1),functions::random_double(0,1)), 10, 10);
     generateTestNoHole("RandomTest", square, square.getSeedPoints());
 
+    return 0;
 }

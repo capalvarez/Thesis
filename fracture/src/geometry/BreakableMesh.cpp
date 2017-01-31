@@ -131,7 +131,12 @@ void BreakableMesh::swapPolygons(int first, int last) {
 }
 
 void BreakableMesh::mergePolygons(int i1, int i2) {
-    // TODO: Check if polygons are neighbours, if not, that's an error!
+    Polygon p = getPolygon(i1);
+
+    if(areNeighbours(i1,i2)){
+        //Todo: this is correct, but put a warning or error here
+        return;
+    }
 
     swapPolygons(i2, this->polygons.size()-1);
 

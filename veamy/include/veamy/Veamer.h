@@ -5,7 +5,7 @@
 #include <x-poly/utilities/List.h>
 #include <veamy/models/dof/DOFS.h>
 #include <veamy/models/constraints/EssentialConstraints.h>
-#include <veamy/matrix/matrixOps.h>
+#include <veamy/utilities/matrixOps.h>
 #include <veamy/models/Element.h>
 #include <veamy/lib/Eigen/Dense>
 #include <veamy/physics/ProblemConditions.h>
@@ -24,24 +24,24 @@ private:
     //TODO: Check for inconsistencies (cannot have natural and essential conditions on the same segments)
     ProblemConditions conditions;
 
-    std::vector<Element> elements;
     std::unordered_map<Polygon, int, PolygonHasher> polygon_to_element;
     List<Point> points;
 
     void createElement(Polygon p);
 public:
     DOFS DOFs;
+    std::vector<Element> elements;
     Veamer();
 
     void initProblem(Mesh m, ProblemConditions conditions);
     Eigen::VectorXd simulate();
-    std::vector<Element> getElements();
 
     void replaceElement(Polygon old, std::vector<Polygon> newPolygons);
     void replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons, List<Point> points);
 
     Pair<int> pointToDOFS(int point_index);
     Material getMaterial();
+    List<Point> getPoints();
 };
 
 

@@ -39,6 +39,7 @@ public:
     bool isInBoundary(Point p);
 
     bool isFull();
+    bool areNeighbours(int poly1, int poly2);
     int findContainerPolygon(Point p);
     int findContainerPolygon(Point p, int init_polygon);
     Polygon& getPolygon(int index);

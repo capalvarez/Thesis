@@ -156,7 +156,11 @@ bool Polygon::containsPoint(std::vector<Point>& p, Point point) {
         j = i;
     }
 
-    return oddNodes || inEdges(p,point);
+    if(oddNodes){
+        return true;
+    }
+
+    return inEdges(p,point);
 }
 
 Segment<int> Polygon::containerEdge(std::vector<Point>& p, Point point){
