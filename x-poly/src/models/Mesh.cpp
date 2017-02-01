@@ -20,7 +20,7 @@ Mesh::Mesh(const Mesh &m) {
     this->region = m.region;
 }
 
-List<Point>& Mesh::getPoints() {
+UniqueList<Point>& Mesh::getPoints() {
     return this->points;
 }
 
@@ -32,7 +32,7 @@ SegmentMap &Mesh::getSegments() {
     return this->edges;
 }
 
-List<Point> Mesh::getPoints() const {
+UniqueList<Point> Mesh::getPoints() const {
     return this->points;
 }
 

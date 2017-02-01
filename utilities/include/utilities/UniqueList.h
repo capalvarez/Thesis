@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <algorithm>
-#include <utilities/interfaces/Unificable.h>
 
 template <class T>
 class UniqueList {
@@ -79,10 +78,5 @@ template <class T>
 std::vector<T>& UniqueList<T>::getList() {
     return this->list;
 }
-
-
-
-
-
 
 #endif

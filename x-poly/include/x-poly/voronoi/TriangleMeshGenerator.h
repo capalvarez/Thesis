@@ -26,13 +26,13 @@ private:
     SegmentMap delaunayEdges;
 
     std::vector<PointData> points;
-    List<int> realPoints;
+    UniqueList<int> realPoints;
     std::vector<EdgeData> edges;
     std::unordered_map<Key, int, KeyHasher> edgeMap;
 
-    List<Point> voronoiPoints;
+    UniqueList<Point> voronoiPoints;
     SegmentMap voronoiEdges;
-    List<Polygon> voronoiCells;
+    UniqueList<Polygon> voronoiCells;
 
     Point getCircumcenter(int triangle, int edge, std::vector<Point>& points);
     void callTriangle(std::vector<Point> &point_list);

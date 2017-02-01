@@ -7,17 +7,17 @@
 #include <algorithm>
 #include <x-poly/voronoi/structures/EdgeData.h>
 #include <x-poly/voronoi/structures/mapdata.h>
-#include "../../../../utilities/include/utilities/Pair.h"
 #include <unordered_map>
 #include <x-poly/voronoi/structures/Neighbours.h>
 #include <x-poly/voronoi/structures/SegmentMap.h>
 #include <x-poly/models/structures/NeighbourInfo.h>
-#include "../../../../utilities/include/utilities/UniqueList.h"
+#include <utilities/UniqueList.h>
 #include "Region.h"
+
 
 class Mesh {
 protected:
-    List<Point> points;
+    UniqueList<Point> points;
     std::vector<Polygon> polygons;
     SegmentMap edges;
 
@@ -28,8 +28,8 @@ public:
     Mesh();
     ~Mesh();
 
-    List<Point>& getPoints();
-    List<Point> getPoints() const;
+    UniqueList<Point>& getPoints();
+    UniqueList<Point> getPoints() const;
     std::vector<Polygon>& getPolygons();
     std::vector<Polygon> getPolygons() const;
     SegmentMap& getSegments();
