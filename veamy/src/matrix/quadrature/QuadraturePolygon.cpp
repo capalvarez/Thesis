@@ -1,4 +1,4 @@
-#include <veamy/quadrature/QuadraturePolygon.h>
+#include <veamy/matrix/quadrature/QuadraturePolygon.h>
 
 QuadraturePolygon::QuadraturePolygon(Polygon p) {
     this->polygon = p;

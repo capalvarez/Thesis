@@ -2,10 +2,8 @@
 #define THESIS_VEAMER_H
 
 #include <x-poly/models/Mesh.h>
-#include "../../../utilities/include/utilities/UniqueList.h"
 #include <veamy/models/dof/DOFS.h>
 #include <veamy/models/constraints/EssentialConstraints.h>
-#include <veamy/utilities/matrixOps.h>
 #include <veamy/models/Element.h>
 #include <veamy/lib/Eigen/Dense>
 #include <veamy/physics/ProblemConditions.h>
@@ -25,7 +23,7 @@ private:
     ProblemConditions conditions;
 
     std::unordered_map<Polygon, int, PolygonHasher> polygon_to_element;
-    List<Point> points;
+    UniqueList<Point> points;
 
     void createElement(Polygon p);
 public:
@@ -37,11 +35,11 @@ public:
     Eigen::VectorXd simulate();
 
     void replaceElement(Polygon old, std::vector<Polygon> newPolygons);
-    void replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons, List<Point> points);
+    void replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons, UniqueList<Point> points);
 
     Pair<int> pointToDOFS(int point_index);
     Material getMaterial();
-    List<Point> getPoints();
+    UniqueList<Point> getPoints();
 };
 
 

@@ -16,7 +16,7 @@ protected:
 
     std::unordered_map<Segment<int>, Constraint, SegmentHasher> segment_map;
     std::unordered_map<int, Constraint, intHasher> constraints_map;
-    List<int> constrained_dofs;
+    UniqueList<int> constrained_dofs;
 public:
     void addConstraint(Constraint c);
     isConstrainedInfo isConstrained(std::vector<Point> points, Segment<int> p);

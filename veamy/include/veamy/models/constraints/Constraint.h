@@ -5,15 +5,15 @@
 #include <vector>
 #include <unordered_map>
 #include <veamy/models/constraints/values/ConstraintValue.h>
-#include "../../../../../utilities/include/utilities/UniqueList.h"
 #include <x-poly/models/basic/Segment.h>
-#include "../../../../../utilities/include/utilities/Pair.h"
+#include <utilities/UniqueList.h>
+#include <utilities/Pair.h>
 
 class Constraint{
 public:
     enum Direction {Vertical, Horizontal, Total};
 private:
-    List<Segment<int>> constraints;
+    UniqueList<Segment<int>> constraints;
     ConstraintValue* v;
     Direction direction;
 
@@ -26,7 +26,7 @@ public:
     Constraint(std::vector<Segment<Point>> s, std::vector<Point> points, Direction d, ConstraintValue* value);
 
     double getValue(Point p);
-    List<Segment<int>> getSegments();
+    UniqueList<Segment<int>> getSegments();
     Direction getDirection();
 
     Pair<int> getIndex(int point_index);

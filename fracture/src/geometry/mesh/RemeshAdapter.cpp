@@ -24,7 +24,7 @@ std::vector<Polygon> RemeshAdapter::adaptToMesh(Triangulation triangulation, std
                                                 std::unordered_map<int, int> pointMap) {
     std::vector<Polygon> newPolygons;
 
-    List<Point>& meshPoints = mesh.getPoints();
+    UniqueList<Point>& meshPoints = mesh.getPoints();
     std::vector<Polygon>& meshPolygons = mesh.getPolygons();
     SegmentMap& segments = mesh.getSegments();
 
@@ -97,7 +97,7 @@ Triangulation RemeshAdapter::triangulate(std::vector<Point> points) {
     return triangulation;
 }
 
-std::unordered_map<int, int> RemeshAdapter::includeNewPoints(List<Point> &meshPoints, Triangulation triangulation) {
+std::unordered_map<int, int> RemeshAdapter::includeNewPoints(UniqueList<Point> &meshPoints, Triangulation triangulation) {
     std::unordered_map<int,int> pointMap;
     std::vector<Point> trianglePoints = triangulation.getPoints();
 
