@@ -29,7 +29,7 @@ TEST(ElementTest, KMatrixTest){
 
     ConstraintsContainer container;
     DOFS dofs;
-    List<Point> p;
+    UniqueList<Point> p;
     p.push_list(points);
 
     ProblemConditions conditions(container, f, Material());

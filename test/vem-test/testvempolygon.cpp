@@ -1,4 +1,3 @@
-#include <veamy/utilities/operations.h>
 #include <veamy/matrix/integration/IntegrationTriangle.h>
 #include "testvempolygon.h"
 
