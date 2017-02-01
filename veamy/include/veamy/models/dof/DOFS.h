@@ -3,7 +3,7 @@
 
 #include <array>
 #include <veamy/utilities/VeamyList.h>
-#include <x-poly/utilities/Pair.h>
+#include "../../../../../utilities/include/utilities/Pair.h"
 #include <algorithm>
 #include <veamy/utilities/SegmentPair.h>
 #include <veamy/models/constraints/ConstraintsContainer.h>

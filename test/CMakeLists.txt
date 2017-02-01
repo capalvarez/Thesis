@@ -30,6 +30,7 @@ add_subdirectory(xpoly-test)
 add_subdirectory(vem-test)
 add_subdirectory(numerical-test)
 add_subdirectory(fracture-test)
+add_subdirectory(utilities-test)
 
 
 

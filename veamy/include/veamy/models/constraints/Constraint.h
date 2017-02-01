@@ -5,9 +5,9 @@
 #include <vector>
 #include <unordered_map>
 #include <veamy/models/constraints/values/ConstraintValue.h>
-#include <x-poly/utilities/List.h>
+#include "../../../../../utilities/include/utilities/UniqueList.h"
 #include <x-poly/models/basic/Segment.h>
-#include <x-poly/utilities/Pair.h>
+#include "../../../../../utilities/include/utilities/Pair.h"
 
 class Constraint{
 public:

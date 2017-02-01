@@ -2,7 +2,7 @@
 #define THESIS_VEAMER_H
 
 #include <x-poly/models/Mesh.h>
-#include <x-poly/utilities/List.h>
+#include "../../../utilities/include/utilities/UniqueList.h"
 #include <veamy/models/dof/DOFS.h>
 #include <veamy/models/constraints/EssentialConstraints.h>
 #include <veamy/utilities/matrixOps.h>

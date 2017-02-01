@@ -2,7 +2,7 @@
 #define THESIS_ELEMENT_H
 
 #include <veamy/models/dof/DOF.h>
-#include <x-poly/utilities/List.h>
+#include "../../../../utilities/include/utilities/UniqueList.h"
 #include <veamy/models/dof/DOFS.h>
 #include <x-poly/models/polygon/Polygon.h>
 #include <veamy/lib/Eigen/Dense>

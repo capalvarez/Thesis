@@ -4,7 +4,7 @@
 #include <x-poly/models/basic/Segment.h>
 #include <veamy/models/dof/DOF.h>
 #include <veamy/utilities/SegmentPair.h>
-#include <x-poly/utilities/List.h>
+#include "../../../../../utilities/include/utilities/UniqueList.h"
 #include <veamy/models/constraints/Constraint.h>
 #include <veamy/models/constraints/structures/constrained_seg_mapdata.h>
 #include <veamy/models/constraints/structures/isConstrainedInfo.h>

@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <x-poly/voronoi/structures/EdgeData.h>
 #include <x-poly/voronoi/structures/PointData.h>
-#include <x-poly/utilities/List.h>
+#include "../../../../utilities/include/utilities/UniqueList.h"
 #include <x-poly/models/Region.h>
 #include <x-poly/voronoi/structures/mapdata.h>
 #include <x-poly/models/Triangulation.h>

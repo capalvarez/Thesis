@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 #include <x-poly/models/basic/Point.h>
-#include <x-poly/utilities/List.h>
+#include "../../../../utilities/include/utilities/UniqueList.h"
 
 class ListTest : public ::testing::Test{
 protected:

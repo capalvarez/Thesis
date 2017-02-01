@@ -7,12 +7,12 @@
 #include <algorithm>
 #include <x-poly/voronoi/structures/EdgeData.h>
 #include <x-poly/voronoi/structures/mapdata.h>
-#include <x-poly/utilities/Pair.h>
+#include "../../../../utilities/include/utilities/Pair.h"
 #include <unordered_map>
 #include <x-poly/voronoi/structures/Neighbours.h>
 #include <x-poly/voronoi/structures/SegmentMap.h>
 #include <x-poly/models/structures/NeighbourInfo.h>
-#include <x-poly/utilities/List.h>
+#include "../../../../utilities/include/utilities/UniqueList.h"
 #include "Region.h"
 
 class Mesh {
