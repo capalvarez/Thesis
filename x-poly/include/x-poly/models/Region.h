@@ -6,7 +6,7 @@
 #include <x-poly/models/hole/Hole.h>
 #include <x-poly/models/polygon/Polygon.h>
 #include <algorithm>
-#include <x-poly/utilities/utilities.h>
+#include <x-poly/utilities/xpolyutilities.h>
 #include <x-poly/models/generator/PointGenerator.h>
 #include <climits>
 #include <x-poly/models/hole/PolygonalHole.h>

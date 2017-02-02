@@ -12,6 +12,7 @@
 #include <x-poly/voronoi/structures/SegmentMap.h>
 #include <x-poly/models/structures/NeighbourInfo.h>
 #include <utilities/UniqueList.h>
+#include <utilities/utilities.h>
 #include "Region.h"
 
 

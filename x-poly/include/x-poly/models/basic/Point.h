@@ -6,7 +6,7 @@
 #include <math.h>
 #include <cmath>
 #include <sstream>
-#include <x-poly/utilities/stringUtils.h>
+#include <utilities/utilities.h>
 
 class Point {
 private:

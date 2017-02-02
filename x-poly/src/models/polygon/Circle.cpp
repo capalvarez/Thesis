@@ -1,4 +1,4 @@
-#include <x-poly/utilities/utilities.h>
+#include <x-poly/utilities/xpolyutilities.h>
 #include <x-poly/models/polygon/Circle.h>
 
 Circle::Circle(double r, Point c) {
@@ -12,8 +12,8 @@ std::vector<Point> Circle::discretizeCircle(int grade) {
 
     double angle = 0;
     while (angle < 360) {
-        double x = center.getX() + radius * cos(utilities::radian(angle));
-        double y = center.getY() + radius * sin(utilities::radian(angle));
+        double x = center.getX() + radius * cos(xpoly_utilities::radian(angle));
+        double y = center.getY() + radius * sin(xpoly_utilities::radian(angle));
 
         points.push_back(Point(x, y));
 

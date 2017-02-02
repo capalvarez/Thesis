@@ -1,7 +1,6 @@
 #include <fstream>
 #include <x-poly/models/Mesh.h>
 
-
 Mesh::Mesh(std::vector<Point> &p, std::vector<Polygon> &e, SegmentMap s, Region r) {
     this->points.push_list(p);
     this->polygons.assign(e.begin(), e.end());

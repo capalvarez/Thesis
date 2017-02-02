@@ -2,7 +2,7 @@
 #define THESIS_NEIGHBOURS_H
 
 #include <iostream>
-#include <x-poly/utilities/stringUtils.h>
+#include <utilities/utilities.h>
 
 class Neighbours {
 private:

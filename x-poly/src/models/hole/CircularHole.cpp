@@ -10,7 +10,7 @@ Point CircularHole::getCenter() {
 
 void CircularHole::getSegments(std::vector<Segment<int>>& segments, int offset) {
     std::vector<int> indexes;
-    utilities::TrivialIndexVector(indexes, (int) this->HolePoints.size());
+    xpoly_utilities::TrivialIndexVector(indexes, (int) this->HolePoints.size());
 
     Polygon discretePolygon (indexes, this->HolePoints);
     discretePolygon.getSegments(segments, offset);
