@@ -4,7 +4,7 @@
 #include <x-poly/models/basic/Segment.h>
 #include <veamy/models/dof/DOF.h>
 #include <veamy/utilities/SegmentPair.h>
-#include <x-poly/utilities/List.h>
+#include "../../../../../utilities/include/utilities/UniqueList.h"
 #include <veamy/models/constraints/Constraint.h>
 #include <veamy/models/constraints/structures/constrained_seg_mapdata.h>
 #include <veamy/models/constraints/structures/isConstrainedInfo.h>
@@ -16,7 +16,7 @@ protected:
 
     std::unordered_map<Segment<int>, Constraint, SegmentHasher> segment_map;
     std::unordered_map<int, Constraint, intHasher> constraints_map;
-    List<int> constrained_dofs;
+    UniqueList<int> constrained_dofs;
 public:
     void addConstraint(Constraint c);
     isConstrainedInfo isConstrained(std::vector<Point> points, Segment<int> p);

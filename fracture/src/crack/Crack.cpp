@@ -16,7 +16,7 @@ Crack::Crack(const Crack& c) {
 }
 
 PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
-    List<Polygon> oldP;
+    UniqueList<Polygon> oldP;
     std::vector<Polygon> newP;
 
     std::set<int> tip1 = this->init.generateTipPoints(m);
@@ -87,7 +87,7 @@ PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
     return PolygonChangeData(oldP, newP);
 }
 
-void Crack::prepareTip(CrackTip tip, List<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh) {
+void Crack::prepareTip(CrackTip tip, UniqueList<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh) {
     if(!tip.isFinished(mesh)){
         PolygonChangeData data = tip.prepareTip(mesh);
 

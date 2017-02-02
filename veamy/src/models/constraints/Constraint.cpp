@@ -1,6 +1,7 @@
 #include <veamy/models/constraints/Constraint.h>
 #include <assert.h>
 
+
 Constraint::Constraint() {}
 
 Constraint::Constraint(Segment<int> s, Constraint::Direction d, ConstraintValue *value) {
@@ -41,7 +42,7 @@ Constraint::Direction Constraint::getDirection() {
     return direction;
 }
 
-List<Segment<int>> Constraint::getSegments() {
+UniqueList<Segment<int>> Constraint::getSegments() {
     return this->constraints;
 }
 

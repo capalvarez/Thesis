@@ -1,6 +1,8 @@
 #ifndef THESIS_SEGMENTPAIR_H
 #define THESIS_SEGMENTPAIR_H
 
+#include <x-poly/models/basic/Segment.h>
+
 template <typename T>
 struct SegmentPair{
     Segment<T> s1;

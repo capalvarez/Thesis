@@ -3,7 +3,7 @@
 
 #include <x-poly/models/basic/Segment.h>
 #include <x-poly/voronoi/structures/mapdata.h>
-#include <x-poly/utilities/Pair.h>
+#include "../../../../../utilities/include/utilities/Pair.h"
 #include <unordered_map>
 #include "Neighbours.h"
 #include <fstream>

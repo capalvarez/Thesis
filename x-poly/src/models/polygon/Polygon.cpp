@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <x-poly/models/polygon/Polygon.h>
 #include <map>
-#include <include/x-poly/utilities/Pair.h>
+#include "../../../../utilities/include/utilities/Pair.h"
 
 
 Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
@@ -19,7 +19,7 @@ Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
 
 void Polygon::mutate(std::vector<Point> &p) {
     this->points.clear();
-    utilities::TrivialIndexVector(this->points,p.size());
+    xpoly_utilities::TrivialIndexVector(this->points,p.size());
     calculateHash();
 
     std::vector<Point> this_points;
@@ -33,7 +33,7 @@ void Polygon::mutate(std::vector<Point> &p) {
 }
 
 Polygon::Polygon(std::vector<Point> &p) {
-    utilities::TrivialIndexVector(this->points,p.size());
+    xpoly_utilities::TrivialIndexVector(this->points,p.size());
 
     std::vector<Point> this_points;
     for(int i=0;i<points.size();i++){
@@ -231,10 +231,10 @@ bool Polygon::operator==(const Polygon &other) const{
 }
 
 std::string Polygon::getString() {
-    std::string base = string_utils::toString<double>(this->points[0]);
+    std::string base = utilities::toString<double>(this->points[0]);
 
     for(int i=1;i<this->points.size();i++){
-        base += " " + string_utils::toString<double>(this->points[i]);
+        base += " " + utilities::toString<double>(this->points[i]);
     }
 
     return base + " " + getCentroid().getString();

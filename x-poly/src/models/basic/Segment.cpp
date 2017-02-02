@@ -1,6 +1,5 @@
 #include <x-poly/models/basic/Segment.h>
 
-
 template <class T>
 Segment<T>::Segment(T p1, T p2) {
     this->p1 = p1;
@@ -61,7 +60,7 @@ Point Segment<Point>::middlePoint(std::vector<Point> p) {
 
 template <>
 std::string Segment<int>::getString() const{
-    return string_utils::toString<double>(this->getFirst()) + " " + string_utils::toString<double>(this->getSecond());
+    return utilities::toString<double>(this->getFirst()) + " " + utilities::toString<double>(this->getSecond());
 }
 
 template <>
@@ -140,7 +139,7 @@ double Segment<int>::cartesianAngle(std::vector<Point> points) {
     double dY = p2.getY() - p1.getY();
     double dX = p2.getX() - p1.getX();
 
-    return utilities::degrees(atan2(dY, dX));
+    return xpoly_utilities::degrees(atan2(dY, dX));
 }
 
 template <>
@@ -151,7 +150,7 @@ double Segment<Point>::cartesianAngle(std::vector<Point> points) {
     double dY = p2.getY() - p1.getY();
     double dX = p2.getX() - p1.getX();
 
-    return utilities::degrees(atan2(dY, dX));
+    return xpoly_utilities::degrees(atan2(dY, dX));
 }
 
 template <>
