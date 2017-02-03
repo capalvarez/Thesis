@@ -4,7 +4,7 @@
 Triangulation::Triangulation(std::vector <Point> &p, std::vector <Triangle> &t, SegmentMap edges) {
     this->points.assign(p.begin(),p.end());
     this->triangles.assign(t.begin(),t.end());
-    this->edgeMap = edges;
+    this->edges = edges;
 }
 
 void Triangulation::writeInFile(std::string fileName) {
@@ -31,10 +31,3 @@ std::vector<Triangle> Triangulation::getTriangles() {
     return this->triangles;
 }
 
-std::vector<Point> Triangulation::getPoints() {
-    return this->points;
-}
-
-SegmentMap Triangulation::getSegments() {
-    return this->edgeMap;
-}

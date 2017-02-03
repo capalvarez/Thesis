@@ -5,7 +5,7 @@
 
 Veamer::Veamer() {}
 
-void Veamer::initProblem(Mesh m, ProblemConditions conditions) {
+void Veamer::initProblem(PolygonalMesh m, ProblemConditions conditions) {
     std::vector<Point> meshPoints = m.getPoints().getList();
     this->points.push_list(meshPoints);
     this->conditions = conditions;

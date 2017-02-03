@@ -1,7 +1,7 @@
 #ifndef THESIS_VEAMER_H
 #define THESIS_VEAMER_H
 
-#include <x-poly/models/Mesh.h>
+#include <x-poly/models/PolygonalMesh.h>
 #include <x-poly/utilities/List.h>
 #include <veamy/models/dof/DOFS.h>
 #include <veamy/models/constraints/EssentialConstraints.h>
@@ -33,7 +33,7 @@ public:
     std::vector<Element> elements;
     Veamer();
 
-    void initProblem(Mesh m, ProblemConditions conditions);
+    void initProblem(PolygonalMesh m, ProblemConditions conditions);
     Eigen::VectorXd simulate();
 
     void replaceElement(Polygon old, std::vector<Polygon> newPolygons);

@@ -11,7 +11,7 @@ void generateTest(std::string testName, Region r, Hole* h, std::vector<Point> po
     Triangulation t = g.getDelaunayTriangulation();
     t.writeInFile(testName + "_triangles.txt");
 
-    Mesh m = g.getMesh();
+    PolygonalMesh m = g.getMesh();
     m.printInFile(testName + ".txt");
 }
 
@@ -20,7 +20,7 @@ void generateTestNoHole(std::string testName, Region r, std::vector<Point> point
     Triangulation t = g.getDelaunayTriangulation();
     t.writeInFile(testName + "_triangles.txt");
 
-    Mesh m = g.getMesh();
+    PolygonalMesh m = g.getMesh();
     m.printInFile(testName + ".txt");
 }
 

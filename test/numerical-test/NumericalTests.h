@@ -1,7 +1,7 @@
 #ifndef THESIS_TESTS_H
 #define THESIS_TESTS_H
 
-#include <x-poly/models/Mesh.h>
+#include <x-poly/models/PolygonalMesh.h>
 #include <veamy/lib/Eigen/Dense>
 #include <x-poly/models/Region.h>
 #include <x-poly/models/generator/functions.h>
@@ -19,12 +19,12 @@ class NumericalTests{
 private:
     int order;
 
-    Mesh two_squares;
-    Mesh hundred_square;
-    Mesh random_voronoi_square;
-    Mesh rectangle_hole;
-    Mesh trapezoid;
-    Mesh L;
+    PolygonalMesh two_squares;
+    PolygonalMesh hundred_square;
+    PolygonalMesh random_voronoi_square;
+    PolygonalMesh rectangle_hole;
+    PolygonalMesh trapezoid;
+    PolygonalMesh L;
 
     Eigen::VectorXd two_squares_rightforceX();
     Eigen::VectorXd two_squares_rightforceY();
@@ -43,10 +43,10 @@ private:
     Eigen::VectorXd hole_twoforceX();
 
 
-    void loadRightForceX(Mesh m, Veamer& v, Segment leftSide, Segment rightSide);
-    void loadRightForceY(Mesh m, Veamer& v, Segment leftSide, Segment rightSide);
-    void loadNoForces(Mesh m, Veamer& v, Segment leftSide, Segment rightSide);
-    void loadTwoForcesX(Mesh m, Veamer& v, Segment leftSide, Segment rightSide);
+    void loadRightForceX(PolygonalMesh m, Veamer& v, Segment leftSide, Segment rightSide);
+    void loadRightForceY(PolygonalMesh m, Veamer& v, Segment leftSide, Segment rightSide);
+    void loadNoForces(PolygonalMesh m, Veamer& v, Segment leftSide, Segment rightSide);
+    void loadTwoForcesX(PolygonalMesh m, Veamer& v, Segment leftSide, Segment rightSide);
 public:
     NumericalTests(int order);
 

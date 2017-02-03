@@ -1,5 +1,5 @@
-#ifndef THESIS_MESH_H
-#define THESIS_MESH_H
+#ifndef THESIS_POLYGONALMESH_H
+#define THESIS_POLYGONALMESH_H
 
 #include <x-poly/models/polygon/Polygon.h>
 #include <x-poly/models/basic/Point.h>
@@ -13,29 +13,23 @@
 #include <x-poly/voronoi/structures/SegmentMap.h>
 #include <x-poly/models/structures/NeighbourInfo.h>
 #include <x-poly/utilities/List.h>
+#include <x-poly/models/mesh/Mesh.h>
 #include "Region.h"
 
-class Mesh {
+class PolygonalMesh : public Mesh{
 protected:
-    List<Point> points;
     std::vector<Polygon> polygons;
-    SegmentMap edges;
 
     Region region;
 public:
-    Mesh(std::vector<Point> &p, std::vector<Polygon> &e, SegmentMap s, Region r);
-    Mesh(const Mesh& m);
-    Mesh();
-    ~Mesh();
+    PolygonalMesh(std::vector<Point> &p, std::vector<Polygon> &e, SegmentMap s, Region r);
+    PolygonalMesh(const PolygonalMesh& m);
+    PolygonalMesh();
+    ~PolygonalMesh();
 
-    List<Point>& getPoints();
-    List<Point> getPoints() const;
     std::vector<Polygon>& getPolygons();
     std::vector<Polygon> getPolygons() const;
-    SegmentMap& getSegments();
-    SegmentMap getSegments() const ;
 
-    void printInFile(std::string fileName);
     bool isInBoundary(Point p);
 
     bool isFull();

@@ -23,7 +23,7 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
 
     std::vector<Point> seeds = region.getSeedPoints();
     TriangleMeshGenerator g(seeds, region);
-    Mesh m = g.getMesh();
+    PolygonalMesh m = g.getMesh();
     m.printInFile("Idontgetit.txt");
 
     EssentialConstraints c;

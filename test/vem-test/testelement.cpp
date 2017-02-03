@@ -3,7 +3,7 @@
 #include <x-poly/models/basic/Segment.h>
 #include <x-poly/models/polygon/Polygon.h>
 #include <veamy/physics/BodyForce.h>
-#include <x-poly/models/Mesh.h>
+#include <x-poly/models/PolygonalMesh.h>
 #include <veamy/models/constraints/ConstraintsContainer.h>
 #include <veamy/models/dof/DOFS.h>
 #include <veamy/models/Element.h>
@@ -25,7 +25,7 @@ TEST(ElementTest, KMatrixTest){
     };
 
     BodyForce* f = new Sum();
-    Mesh m(points, polygons, segments, region);
+    PolygonalMesh m(points, polygons, segments, region);
 
     ConstraintsContainer container;
     DOFS dofs;

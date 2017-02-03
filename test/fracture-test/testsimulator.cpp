@@ -12,7 +12,7 @@ TEST(FractureSimulatorTest, InitTest){
     std::vector<Point> seeds = square.getSeedPoints();
 
     TriangleMeshGenerator meshGenerator(seeds, square);
-    Mesh mesh = meshGenerator.getMesh();
+    PolygonalMesh mesh = meshGenerator.getMesh();
 
     Crack crack(Point(0.25,1.5), Point(2.75,1.5), 0.1, 0.8);
 
@@ -41,7 +41,7 @@ TEST(FractureSimulatorTest, SimulateTest){
     std::vector<Point> seeds = square.getSeedPoints();
 
     TriangleMeshGenerator meshGenerator(seeds, square);
-    Mesh mesh = meshGenerator.getMesh();
+    PolygonalMesh mesh = meshGenerator.getMesh();
 
     Crack crack(Point(0.3,1.5), Point(0.7,1.5), 0.1, 1);
 

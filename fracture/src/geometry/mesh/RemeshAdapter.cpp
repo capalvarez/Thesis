@@ -20,7 +20,7 @@ Region RemeshAdapter::computeRemeshRegion(std::vector<Polygon> remeshPolygons, s
 }
 
 std::vector<Polygon> RemeshAdapter::adaptToMesh(Triangulation triangulation, std::vector<int> changedPolygons,
-                                                Mesh &mesh,
+                                                PolygonalMesh &mesh,
                                                 std::unordered_map<int, int> pointMap) {
     std::vector<Polygon> newPolygons;
 
@@ -109,7 +109,7 @@ std::unordered_map<int, int> RemeshAdapter::includeNewPoints(List<Point> &meshPo
     return pointMap;
 }
 
-std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, std::vector<int> changedPolygons, Mesh &m) {
+std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, std::vector<int> changedPolygons, PolygonalMesh &m) {
     Triangulation t = this->triangulate(points);
     t.writeInFile("testing.txt");
 

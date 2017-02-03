@@ -5,7 +5,7 @@ TriangleMeshGenerator::TriangleMeshGenerator(std::vector<Point>& point_list, Reg
     callTriangle(point_list);
 }
 
-Mesh TriangleMeshGenerator::getMesh() {
+PolygonalMesh TriangleMeshGenerator::getMesh() {
     if(!this->mesh.isFull()){
         this->mesh = delaunayToVoronoi();
     }
@@ -140,7 +140,7 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list) {
     free(out.edgemarkerlist);
 }
 
-Mesh TriangleMeshGenerator::delaunayToVoronoi() {
+PolygonalMesh TriangleMeshGenerator::delaunayToVoronoi() {
     for(int i=0;i<this->realPoints.size(); i++) {
         std::vector<Segment<int>> thisEdges;
 
@@ -237,7 +237,7 @@ Mesh TriangleMeshGenerator::delaunayToVoronoi() {
     realPoints.getList().clear();
     edgeMap.clear();
 
-    return Mesh(points, cells, voronoiEdges, this->region);
+    return PolygonalMesh(points, cells, voronoiEdges, this->region);
 }
 
 Point TriangleMeshGenerator::getCircumcenter(int triangle, int edge, std::vector<Point> &points) {

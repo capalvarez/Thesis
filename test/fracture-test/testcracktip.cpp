@@ -12,7 +12,7 @@ TEST(CrackTipTest, PrepareTipTest){
     std::vector<Point> seeds = square.getSeedPoints();
 
     TriangleMeshGenerator meshGenerator(seeds, square);
-    Mesh mesh = meshGenerator.getMesh();
+    PolygonalMesh mesh = meshGenerator.getMesh();
 
     BreakableMesh breakableMesh(mesh);
 

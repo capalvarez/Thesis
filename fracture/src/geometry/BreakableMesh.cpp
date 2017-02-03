@@ -4,7 +4,7 @@
 
 BreakableMesh::BreakableMesh() {}
 
-BreakableMesh::BreakableMesh(const Mesh& m) {
+BreakableMesh::BreakableMesh(const PolygonalMesh& m) {
     this->points = m.getPoints();
     this->polygons = m.getPolygons();
     this->edges = m.getSegments();

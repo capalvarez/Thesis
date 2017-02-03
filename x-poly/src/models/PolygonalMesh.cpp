@@ -1,50 +1,34 @@
 #include <fstream>
-#include <x-poly/models/Mesh.h>
+#include <x-poly/models/PolygonalMesh.h>
 
 
-Mesh::Mesh(std::vector<Point> &p, std::vector<Polygon> &e, SegmentMap s, Region r) {
+PolygonalMesh::PolygonalMesh(std::vector<Point> &p, std::vector<Polygon> &e, SegmentMap s, Region r) {
     this->points.push_list(p);
     this->polygons.assign(e.begin(), e.end());
     this->edges = s;
     this->region = r;
 }
 
-Mesh::Mesh() {}
+PolygonalMesh::PolygonalMesh() {}
 
-Mesh::~Mesh() {}
+PolygonalMesh::~PolygonalMesh() {}
 
-Mesh::Mesh(const Mesh &m) {
+PolygonalMesh::PolygonalMesh(const PolygonalMesh &m) {
     this->points = m.getPoints();
     this->polygons = m.getPolygons();
     this->edges = m.getSegments();
     this->region = m.region;
 }
 
-List<Point>& Mesh::getPoints() {
-    return this->points;
-}
-
-std::vector<Polygon>& Mesh::getPolygons() {
+std::vector<Polygon>& PolygonalMesh::getPolygons() {
     return this->polygons;
 }
 
-SegmentMap &Mesh::getSegments() {
-    return this->edges;
-}
-
-List<Point> Mesh::getPoints() const {
-    return this->points;
-}
-
-std::vector<Polygon> Mesh::getPolygons() const {
+std::vector<Polygon> PolygonalMesh::getPolygons() const {
     return this->polygons;
 }
 
-SegmentMap Mesh::getSegments() const {
-    return this->edges;
-}
-
-void Mesh::printInFile(std::string fileName) {
+void PolygonalMesh::printInFile(std::string fileName) {
     std::string path("C:\\Users\\Catalina");
     path += "\\" + fileName;
 
@@ -71,13 +55,13 @@ void Mesh::printInFile(std::string fileName) {
     file.close();
 }
 
-int Mesh::findContainerPolygon(Point p) {
+int PolygonalMesh::findContainerPolygon(Point p) {
     int i = utilities::random_integer(0,this->polygons.size()-1);
 
     return this->findContainerPolygon(p, i);
 }
 
-int Mesh::findContainerPolygon(Point p, int i) {
+int PolygonalMesh::findContainerPolygon(Point p, int i) {
     while(true){
         bool found = false;
         Polygon poly = this->polygons[i];
@@ -100,7 +84,7 @@ int Mesh::findContainerPolygon(Point p, int i) {
     }
 }
 
-bool Mesh::isInBoundary(Point p) {
+bool PolygonalMesh::isInBoundary(Point p) {
     Polygon& container = this->polygons[findContainerPolygon(p)];
 
     if(container.inEdges(this->points.getList(), p)){
@@ -112,15 +96,15 @@ bool Mesh::isInBoundary(Point p) {
     return false;
 }
 
-Polygon& Mesh::getPolygon(int index) {
+Polygon& PolygonalMesh::getPolygon(int index) {
     return this->polygons[index];
 }
 
-NeighbourInfo Mesh::getNeighbour(int poly_index, Segment<Point> direction) {
+NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, Segment<Point> direction) {
     return getNeighbour(poly_index, direction, -1);
 }
 
-NeighbourInfo Mesh::getNeighbour(int poly_index, Segment<Point> direction, int previous) {
+NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, Segment<Point> direction, int previous) {
     Polygon& poly = getPolygon(poly_index);
 
     std::vector<Segment<int>> polySeg;
@@ -144,14 +128,14 @@ NeighbourInfo Mesh::getNeighbour(int poly_index, Segment<Point> direction, int p
     return NeighbourInfo(-1,Segment<int>(),Point());
 }
 
-bool Mesh::isFull() {
+bool PolygonalMesh::isFull() {
     return this->points.size()>0;
 }
 
-Region Mesh::getRegion() const{
+Region PolygonalMesh::getRegion() const{
     return this->region;
 }
 
-bool Mesh::areNeighbours(int poly1, int poly2) {
+bool PolygonalMesh::areNeighbours(int poly1, int poly2) {
     return false;
 }
