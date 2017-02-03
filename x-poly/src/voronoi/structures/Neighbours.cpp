@@ -38,6 +38,6 @@ int Neighbours::getSecond() {
 }
 
 std::string Neighbours::getString() const {
-    return string_utils::toString<double>(this->n1) + " " + string_utils::toString<double>(this->n2);
+    return utilities::toString<double>(this->n1) + " " + utilities::toString<double>(this->n2);
 
 }

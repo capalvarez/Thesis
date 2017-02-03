@@ -3,7 +3,7 @@
 
 #include <x-poly/models/basic/Point.h>
 #include <vector>
-#include <x-poly/utilities/utilities.h>
+#include <x-poly/utilities/xpolyutilities.h>
 #include <x-poly/models/Region.h>
 #include <fracture/geometry/BreakableMesh.h>
 

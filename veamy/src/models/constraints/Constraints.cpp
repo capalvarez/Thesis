@@ -1,7 +1,7 @@
 #include <veamy/models/constraints/Constraints.h>
 
 void Constraints::addConstraint(Constraint c) {
-    List<Segment<int>> segments = c.getSegments();
+    UniqueList<Segment<int>> segments = c.getSegments();
 
     for (int i = 0; i < segments.size(); ++i) {
         constrained_segments.push_back(segments.get(i));

@@ -21,7 +21,7 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list) {
     struct triangulateio in, out;
 
     std::vector<Point> regionPoints = region.getRegionPoints();
-    List<Point> pointList;
+    UniqueList<Point> pointList;
     pointList.push_list(point_list);
     std::vector<int> regionIndex = pointList.push_list(regionPoints);
 
@@ -145,7 +145,7 @@ PolygonalMesh TriangleMeshGenerator::delaunayToVoronoi() {
         std::vector<Segment<int>> thisEdges;
 
         int index = this->realPoints.get(i);
-        List<int> cellPoints;
+        UniqueList<int> cellPoints;
         Point regionCenter = this->meshPoints[index];
         EdgeData init_edge = this->edges[this->points[index].edge];
 

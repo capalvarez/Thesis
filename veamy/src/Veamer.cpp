@@ -1,7 +1,7 @@
 #include <veamy/lib/Eigen/Dense>
 #include <iostream>
 #include <veamy/Veamer.h>
-
+#include <veamy/matrix/matrixOps.h>
 
 Veamer::Veamer() {}
 
@@ -62,10 +62,6 @@ Eigen::VectorXd Veamer::simulate() {
     return x;
 }
 
-std::vector<Element> Veamer::getElements() {
-    return this->elements;
-}
-
 void Veamer::replaceElement(Polygon old, std::vector<Polygon> newPolygons) {
     int to_remove = polygon_to_element[old];
     polygon_to_element.erase(old);
@@ -77,7 +73,7 @@ void Veamer::replaceElement(Polygon old, std::vector<Polygon> newPolygons) {
     }
 }
 
-void Veamer::replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons, List<Point> points) {
+void Veamer::replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons, UniqueList<Point> points) {
     this->points = points;
 
     for (int i = 0; i < old.size(); ++i) {

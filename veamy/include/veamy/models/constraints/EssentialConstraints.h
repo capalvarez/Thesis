@@ -4,7 +4,6 @@
 #include <x-poly/models/basic/Point.h>
 #include <unordered_map>
 #include <vector>
-#include <veamy/utilities/VeamyList.h>
 #include <veamy/lib/Eigen/Dense>
 #include <veamy/models/constraints/values/ConstraintValue.h>
 #include <veamy/models/dof/DOF.h>
@@ -15,7 +14,7 @@
 class EssentialConstraints : public Constraints{
 public:
     EssentialConstraints();
-    Eigen::VectorXd getBoundaryValues(std::vector<Point> points, VeamyList<DOF> dofs);
+    Eigen::VectorXd getBoundaryValues(std::vector<Point> points, UniqueList<DOF> dofs);
 };
 
 
