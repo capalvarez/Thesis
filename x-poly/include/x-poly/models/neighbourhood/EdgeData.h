@@ -4,7 +4,6 @@
 #include <iostream>
 #include <utilities/utilities.h>
 
-
 class EdgeData{
 public:
     int p1;

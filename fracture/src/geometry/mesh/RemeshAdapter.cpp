@@ -62,7 +62,7 @@ std::vector<Polygon> RemeshAdapter::adaptToMesh(Triangulation triangulation, std
             Segment<int> edge(newTrianglePoints[j], newTrianglePoints[(j+1)%n]);
             Segment<int> originalEdge(oldTrianglePoints[j],oldTrianglePoints[(j+1)%n]);
 
-            if(originalEdge.isBoundary(triangulation.getPoints())){
+            if(originalEdge.isBoundary(triangulation.getPoints().getList())){
                 for (int k = 0; k < containerSegments.size(); ++k) {
                     if(containerSegments[k].contains(meshPoints.getList(),edge)){
                         Neighbours n = segments.get(containerSegments[k]);
@@ -99,7 +99,7 @@ Triangulation RemeshAdapter::triangulate(std::vector<Point> points) {
 
 std::unordered_map<int, int> RemeshAdapter::includeNewPoints(UniqueList<Point> &meshPoints, Triangulation triangulation) {
     std::unordered_map<int,int> pointMap;
-    std::vector<Point> trianglePoints = triangulation.getPoints();
+    std::vector<Point> trianglePoints = triangulation.getPoints().getList();
 
     for (int j = 0; j < trianglePoints.size() ; ++j) {
         int pointIndex = meshPoints.push_back(trianglePoints[j]);
@@ -111,7 +111,7 @@ std::unordered_map<int, int> RemeshAdapter::includeNewPoints(UniqueList<Point> &
 
 std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, std::vector<int> changedPolygons, PolygonalMesh &m) {
     Triangulation t = this->triangulate(points);
-    t.writeInFile("testing.txt");
+    t.printInFile("testing.txt");
 
     std::unordered_map<int,int> pointMap = this->includeNewPoints(m.getPoints(), t);
 

@@ -18,7 +18,7 @@ public:
     std::vector<Polygon> adaptToMesh(Triangulation triangulation, std::vector<int> changedPolygons, PolygonalMesh &m,
                                      std::unordered_map<int, int> pointMap);
     Triangulation triangulate(std::vector<Point> points);
-    std::unordered_map<int, int> includeNewPoints(List<Point> &meshPoints, Triangulation triangulation);
+    std::unordered_map<int, int> includeNewPoints(UniqueList<Point> &meshPoints, Triangulation triangulation);
     std::vector<Polygon> remesh(std::vector<Point> points, std::vector<int> changedPolygons, PolygonalMesh &m);
 };
 

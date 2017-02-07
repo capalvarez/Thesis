@@ -1,6 +1,4 @@
-#include <fstream>
 #include <x-poly/models/PolygonalMesh.h>
-
 
 PolygonalMesh::PolygonalMesh(std::vector<Point> &p, std::vector<Polygon> &e, SegmentMap s, Region r) {
     this->points.push_list(p);
@@ -26,33 +24,6 @@ std::vector<Polygon>& PolygonalMesh::getPolygons() {
 
 std::vector<Polygon> PolygonalMesh::getPolygons() const {
     return this->polygons;
-}
-
-void PolygonalMesh::printInFile(std::string fileName) {
-    std::string path("C:\\Users\\Catalina");
-    path += "\\" + fileName;
-
-    std::ofstream file;
-    file.open(path, std::ios::out);
-
-    file << this->points.size() << std::endl;
-    for(int i=0;i<this->points.size();i++){
-        file << this->points.get(i).getString() << std::endl;
-    }
-
-
-    file << this->edges.size() << std::endl;
-    for(auto e: this->edges.getMap()){
-        Segment<int> edge = e.first;
-        file << edge.getString() << std::endl;
-    }
-
-    file << this->polygons.size() << std::endl;
-    for(int i=0;i<this->polygons.size();i++){
-        file << this->polygons[i].getString() << std::endl;
-    }
-
-    file.close();
 }
 
 int PolygonalMesh::findContainerPolygon(Point p) {
@@ -128,14 +99,17 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, Segment<Point> directi
     return NeighbourInfo(-1,Segment<int>(),Point());
 }
 
-bool PolygonalMesh::isFull() {
-    return this->points.size()>0;
-}
-
 Region PolygonalMesh::getRegion() const{
     return this->region;
 }
 
 bool PolygonalMesh::areNeighbours(int poly1, int poly2) {
     return false;
+}
+
+void PolygonalMesh::writeElements(std::ofstream &file) {
+    file << this->polygons.size() << std::endl;
+    for(int i=0;i<this->polygons.size();i++){
+        file << this->polygons[i].getString() << std::endl;
+    }
 }

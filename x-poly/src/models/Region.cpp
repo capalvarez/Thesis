@@ -55,12 +55,12 @@ void Region::addHole(Hole* h) {
 }
 
 void Region::generatePoints(PointGenerator p, int nX, int nY){
-    Rectangle box = this->getBox();
+    BoundingBox box = this->getBox();
     p.generate(this->seedPoints, box, nX, nY);
     this->clean();
 }
 
-Rectangle Region::getBox() {
+BoundingBox Region::getBox() {
     double xMin = LLONG_MAX;
     double xMax = LLONG_MIN;
     double yMin = LLONG_MAX;
@@ -73,7 +73,7 @@ Rectangle Region::getBox() {
         yMax = v.getY()>yMax? v.getY(): yMax;
     }
 
-    return Rectangle(Point(xMin,yMin), Point(xMax,yMax));
+    return BoundingBox(Point(xMin,yMin), Point(xMax,yMax));
 }
 
 void Region::clean() {

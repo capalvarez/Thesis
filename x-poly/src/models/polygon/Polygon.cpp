@@ -65,7 +65,7 @@ double Polygon::calculateDiameter(std::vector<Point>& p) {
     double max = -1;
 
     for(int i=0;i<rotatingCalipers.size();i++){
-        double distance = (rotatingCalipers[i].first - rotatingCalipers[i].second).norm();
+        double distance =xpoly_utilities::norm (rotatingCalipers[i].first - rotatingCalipers[i].second);
         if(distance>max){
             max = distance;
         }

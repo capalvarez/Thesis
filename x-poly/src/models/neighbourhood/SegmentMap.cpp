@@ -1,4 +1,4 @@
-#include <x-poly/voronoi/structures/SegmentMap.h>
+#include <include/x-poly/models/neighbourhood/SegmentMap.h>
 
 SegmentMap::SegmentMap() {}
 

@@ -1,7 +1,10 @@
 #ifndef THESIS_MESH_H
 #define THESIS_MESH_H
 
-#include <x-poly/voronoi/structures/SegmentMap.h>
+#include <x-poly/models/neighbourhood/SegmentMap.h>
+#include <utilities/UniqueList.h>
+#include <fstream>
+#include <x-poly/utilities/hash/xpolyhashfunctions.h>
 
 class Mesh{
 protected:
@@ -9,12 +12,15 @@ protected:
     UniqueList<Point> points;
 public:
     void printInFile(std::string fileName);
+    virtual void writeElements(std::ofstream& file) = 0;
 
     SegmentMap& getSegments();
     SegmentMap getSegments() const ;
 
     UniqueList<Point>& getPoints();
     UniqueList<Point> getPoints() const;
+
+    bool isFull();
 };
 
 

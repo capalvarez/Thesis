@@ -1,4 +1,4 @@
-#include <x-poly/voronoi/structures/Neighbours.h>
+#include <include/x-poly/models/neighbourhood/Neighbours.h>
 
 Neighbours::Neighbours() {}
 
