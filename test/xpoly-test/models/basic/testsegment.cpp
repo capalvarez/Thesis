@@ -1,11 +1,11 @@
 #include "testsegment.h"
 
 TEST_F(SegmentTest, ContainsPointTest){
-	EXPECT_TRUE(segment->contains(segment_points, Point(0.3,0.3)));
-	EXPECT_FALSE(segment->contains(segment_points, Point(0,1)));
-	EXPECT_TRUE(segment->contains(segment_points, Point(0,0)));
-    EXPECT_TRUE(segment->contains(segment_points, Point(1,1)));
-	EXPECT_FALSE(segment->contains(segment_points, Point(2,2)));
+	EXPECT_TRUE(segment->contains(Point(0.3, 0.3), Point(), Point()));
+	EXPECT_FALSE(segment->contains(Point(0, 1), Point(), Point()));
+	EXPECT_TRUE(segment->contains(Point(0, 0), Point(), Point()));
+    EXPECT_TRUE(segment->contains(Point(1, 1), Point(), Point()));
+	EXPECT_FALSE(segment->contains(Point(2, 2), Point(), Point()));
 }
 
 TEST_F(SegmentTest, MiddlePointTest){

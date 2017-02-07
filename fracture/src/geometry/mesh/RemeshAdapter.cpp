@@ -64,7 +64,7 @@ std::vector<Polygon> RemeshAdapter::adaptToMesh(Triangulation triangulation, std
 
             if(originalEdge.isBoundary(triangulation.getPoints().getList())){
                 for (int k = 0; k < containerSegments.size(); ++k) {
-                    if(containerSegments[k].contains(meshPoints.getList(),edge)){
+                    if(containerSegments[k].contains(edge, Point(), Point())){
                         Neighbours n = segments.get(containerSegments[k]);
 
                         bool is_first = std::find(changedPolygons.begin(), changedPolygons.end(), n.getFirst())

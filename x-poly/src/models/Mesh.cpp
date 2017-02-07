@@ -15,7 +15,7 @@ void Mesh::printInFile(std::string fileName) {
 
     file << this->edges.size() << std::endl;
     for(auto e: this->edges.getMap()){
-        Segment<int> edge = e.first;
+        IndexSegment edge = e.first;
         file << edge.getString() << std::endl;
     }
 

@@ -1,9 +1,10 @@
 #include <include/x-poly/models/neighbourhood/SegmentMap.h>
 
+
 SegmentMap::SegmentMap() {}
 
-void SegmentMap::insert(Segment<int> s, int polygonIndex) {
-    std::unordered_map<Segment<int>,Neighbours,SegmentHasher>::iterator got = this->map.find(s);
+void SegmentMap::insert(IndexSegment s, int polygonIndex) {
+    std::unordered_map<IndexSegment,Neighbours,SegmentHasher>::iterator got = this->map.find(s);
 
     if(got == this->map.end()){
         Neighbours n (polygonIndex);
@@ -13,12 +14,12 @@ void SegmentMap::insert(Segment<int> s, int polygonIndex) {
     }
 }
 
-void SegmentMap::insert(Segment<int> s, Neighbours n) {
+void SegmentMap::insert(IndexSegment s, Neighbours n) {
     this->map.insert(std::make_pair(s,n));
 }
 
-void SegmentMap::replace_neighbour(Segment<int> s, int oldNeighbour, int newNeighbour) {
-    std::unordered_map<Segment<int>,Neighbours,SegmentHasher>::iterator got = this->map.find(s);
+void SegmentMap::replace_neighbour(IndexSegment s, int oldNeighbour, int newNeighbour) {
+    std::unordered_map<IndexSegment,Neighbours,SegmentHasher>::iterator got = this->map.find(s);
 
     if(got == this->map.end()){
         this->insert(s, newNeighbour);
@@ -27,11 +28,11 @@ void SegmentMap::replace_neighbour(Segment<int> s, int oldNeighbour, int newNeig
     }
 }
 
-Neighbours& SegmentMap::get(Segment<int> s) {
+Neighbours& SegmentMap::get(IndexSegment s) {
     return map[s];
 }
 
-std::unordered_map<Segment<int>,Neighbours, SegmentHasher>& SegmentMap::getMap() {
+std::unordered_map<IndexSegment,Neighbours, SegmentHasher>& SegmentMap::getMap() {
     return this->map;
 }
 
@@ -39,7 +40,7 @@ int SegmentMap::size() {
     return this->map.size();
 }
 
-void SegmentMap::delete_element(Segment<int> key) {
+void SegmentMap::delete_element(IndexSegment key) {
     this->map.erase(key);
 }
 

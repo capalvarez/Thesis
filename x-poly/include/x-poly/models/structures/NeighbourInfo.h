@@ -7,9 +7,9 @@
 struct NeighbourInfo {
     int neighbour;
     Point intersection;
-    Segment<int> edge;
+    IndexSegment edge;
 
-    NeighbourInfo(int n, Segment<int> e, Point i){
+    NeighbourInfo(int n, IndexSegment e, Point i){
         neighbour = n;
         edge = e;
         intersection = i;

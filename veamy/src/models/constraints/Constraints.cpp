@@ -13,7 +13,7 @@ isConstrainedInfo Constraints::isConstrained(std::vector<Point> points, Segment<
    // TODO: Some data structure is necessary to optimize this, is slow as a snail
 
     for (int i = 0; i < constrained_segments.size(); ++i) {
-        if(constrained_segments[i].contains(points, s))
+        if(constrained_segments[i].contains(s, Point(), Point()))
             return isConstrainedInfo(constrained_segments[i]);
     }
 

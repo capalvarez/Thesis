@@ -104,7 +104,7 @@ std::vector<Point> Region::getRegionPoints() {
     return points;
 }
 
-void Region::getSegments(std::vector<Segment<int>> &s) {
+void Region::getSegments(std::vector<IndexSegment> &s) {
     //TODO: Manage border cases here!
     // TODO: Don't quite remember the problem, needs studying
 

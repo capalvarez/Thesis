@@ -101,20 +101,20 @@ double Polygon::signedArea(std::vector<Point>& p) {
     return 0.5*area;
 }
 
-void Polygon::getSegments(std::vector<Segment<int>>& segments) {
+void Polygon::getSegments(std::vector<IndexSegment>& segments) {
     int n = (int) this->points.size();
 
     for(int i=0;i<n; i++){
-        Segment<int> s (this->points[i%n], this->points[(i+1)%n]);
+        IndexSegment s (this->points[i%n], this->points[(i+1)%n]);
         segments.push_back(s);
     }
 }
 
-void Polygon::getSegments(std::vector<Segment<int>> &segments, int offset) {
+void Polygon::getSegments(std::vector<IndexSegment> &segments, int offset) {
     int n = (int) this->points.size();
 
     for(int i=0;i<n; i++){
-        segments.push_back(Segment<int>(this->points[i%n] + offset , this->points[(i+1)%n] + offset));
+        segments.push_back(IndexSegment(this->points[i%n] + offset , this->points[(i+1)%n] + offset));
     }
 }
 
@@ -163,8 +163,8 @@ bool Polygon::containsPoint(std::vector<Point>& p, Point point) {
     return inEdges(p,point);
 }
 
-Segment<int> Polygon::containerEdge(std::vector<Point>& p, Point point){
-    std::vector<Segment<int>> segments;
+IndexSegment Polygon::containerEdge(std::vector<Point>& p, Point point){
+    std::vector<IndexSegment> segments;
     this->getSegments(segments);
 
     for(int i=0; i<segments.size(); i++){
@@ -173,11 +173,11 @@ Segment<int> Polygon::containerEdge(std::vector<Point>& p, Point point){
         }
     }
 
-    return Segment<int>(-1, -1);
+    return IndexSegment(-1, -1);
 }
 
 bool Polygon::inEdges(std::vector<Point>& p, Point point) {
-    Segment<int> container = containerEdge(p, point);
+    IndexSegment container = containerEdge(p, point);
 
     return container.getFirst()!= -1 && container.getSecond()!= -1;
 }
@@ -240,7 +240,7 @@ std::string Polygon::getString() {
     return base + " " + getCentroid().getString();
 }
 
-bool Polygon::containsEdge(Segment<int> s) {
+bool Polygon::containsEdge(IndexSegment s) {
     return isVertex(s.getFirst()) && isVertex(s.getSecond());
 }
 

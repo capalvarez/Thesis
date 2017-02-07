@@ -37,8 +37,8 @@ public:
     int findContainerPolygon(Point p);
     int findContainerPolygon(Point p, int init_polygon);
 
-    NeighbourInfo getNeighbour(int poly_index, Segment<Point> direction);
-    NeighbourInfo getNeighbour(int poly_index, Segment<Point> direction, int previous);
+    NeighbourInfo getNeighbour(int poly_index, PointSegment direction);
+    NeighbourInfo getNeighbour(int poly_index, PointSegment direction, int previous);
 
     Region getRegion() const;
 };

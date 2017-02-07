@@ -1,25 +1,26 @@
 #ifndef THESIS_SEGMENTMAP_H
 #define THESIS_SEGMENTMAP_H
 
-#include <x-poly/models/basic/Segment.h>
+
 #include <x-poly/voronoi/structures/mapdata.h>
 #include "utilities/Pair.h"
 #include <unordered_map>
 #include "Neighbours.h"
 #include <fstream>
+#include <x-poly/models/basic/IndexSegment.h>
 
 class SegmentMap{
 private:
-    std::unordered_map<Segment<int>,Neighbours,SegmentHasher> map;
+    std::unordered_map<IndexSegment,Neighbours,SegmentHasher> map;
 public:
     SegmentMap();
-    void insert(Segment<int> s, int polygonIndex);
-    void insert(Segment<int> s, Neighbours n);
-    void replace_neighbour(Segment<int> s, int oldNeighbour, int newNeighbour);
-    Neighbours& get(Segment<int> s);
-    std::unordered_map<Segment<int>,Neighbours,SegmentHasher>& getMap();
+    void insert(IndexSegment s, int polygonIndex);
+    void insert(IndexSegment s, Neighbours n);
+    void replace_neighbour(IndexSegment s, int oldNeighbour, int newNeighbour);
+    Neighbours& get(IndexSegment s);
+    std::unordered_map<IndexSegment,Neighbours,SegmentHasher>& getMap();
     int size();
-    void delete_element(Segment<int> key);
+    void delete_element(IndexSegment key);
     void printInFile(std::string fileName);
 
 };

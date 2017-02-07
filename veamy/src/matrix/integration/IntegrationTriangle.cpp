@@ -94,7 +94,7 @@ bool IntegrationTriangle::inEdges(Point p, std::vector<Point> points) {
 
     bool inEdge = false;
     for(int i=0; i<segments.size(); i++){
-        inEdge = inEdge || segments[i].contains(points, p);
+        inEdge = inEdge || segments[i].contains(p, Point(), Point());
     }
 
     return inEdge;

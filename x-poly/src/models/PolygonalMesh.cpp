@@ -40,7 +40,7 @@ int PolygonalMesh::findContainerPolygon(Point p, int i) {
         if(poly.containsPoint(this->points.getList(), p)){
             return i;
         }else {
-            Segment<Point> lookup(poly.getCentroid(), p);
+            PointSegment lookup(poly.getCentroid(), p);
             NeighbourInfo neighbour = getNeighbour(i,lookup);
 
             if(neighbour.neighbour>-1) {
@@ -59,7 +59,7 @@ bool PolygonalMesh::isInBoundary(Point p) {
     Polygon& container = this->polygons[findContainerPolygon(p)];
 
     if(container.inEdges(this->points.getList(), p)){
-        Segment<int> containerEdge = container.containerEdge(this->points.getList(), p);
+        IndexSegment containerEdge = container.containerEdge(this->points.getList(), p);
 
         return containerEdge.isBoundary(this->points.getList());
     }
@@ -71,14 +71,14 @@ Polygon& PolygonalMesh::getPolygon(int index) {
     return this->polygons[index];
 }
 
-NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, Segment<Point> direction) {
+NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction) {
     return getNeighbour(poly_index, direction, -1);
 }
 
-NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, Segment<Point> direction, int previous) {
+NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction, int previous) {
     Polygon& poly = getPolygon(poly_index);
 
-    std::vector<Segment<int>> polySeg;
+    std::vector<IndexSegment> polySeg;
     poly.getSegments(polySeg);
 
     for (int j = 0; j < polySeg.size() ; ++j) {
@@ -96,7 +96,7 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, Segment<Point> directi
         }
     }
 
-    return NeighbourInfo(-1,Segment<int>(),Point());
+    return NeighbourInfo(-1,IndexSegment(),Point());
 }
 
 Region PolygonalMesh::getRegion() const{

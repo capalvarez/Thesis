@@ -6,6 +6,7 @@
 #include <x-poly/models/basic/Segment.h>
 #include <x-poly/utilities/geometryFunctions.h>
 #include <x-poly/utilities/convexHull.h>
+#include <x-poly/models/basic/IndexSegment.h>
 #include "../../../../../utilities/include/utilities/Pair.h"
 
 class Polygon {
@@ -33,13 +34,13 @@ public:
     Point getCentroid();
 
     void mutate(std::vector<Point>& p);
-    void getSegments(std::vector<Segment<int>>& segments);
-    void getSegments(std::vector<Segment<int>> &segments, int offset);
+    void getSegments(std::vector<IndexSegment>& segments);
+    void getSegments(std::vector<IndexSegment> &segments, int offset);
 
     bool containsPoint(std::vector<Point>& p, Point point);
     bool inEdges(std::vector<Point>& p, Point point);
     double signedArea(std::vector<Point>& p);
-    bool containsEdge(Segment<int> s);
+    bool containsEdge(IndexSegment s);
 
     bool isConvex(std::vector<Point>& p);
     bool isClockwise(std::vector<Point>& p);
@@ -53,7 +54,7 @@ public:
     std::size_t hash;
     void fixCCW(std::vector<Point> p);
 
-    Segment<int> containerEdge(std::vector<Point>& p, Point point);
+    IndexSegment containerEdge(std::vector<Point>& p, Point point);
     std::vector<Point> getPoints(std::vector<Point> p);
 
     Pair<int> commonEdgesBorder(Polygon p);

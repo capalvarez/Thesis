@@ -43,7 +43,7 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list) {
 
     in.pointmarkerlist = (int *)NULL;
 
-    std::vector<Segment<int>> segments;
+    std::vector<IndexSegment> segments;
     region.getSegments(segments);
 
     in.numberofsegments = (int) segments.size();
