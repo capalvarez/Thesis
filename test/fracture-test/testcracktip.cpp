@@ -16,7 +16,7 @@ TEST(CrackTipTest, PrepareTipTest){
 
     BreakableMesh breakableMesh(mesh);
 
-    Segment<Point> crack(Point(0.25,0.25), Point(2.75,1.5));
+    PointSegment crack(Point(0.25,0.25), Point(2.75,1.5));
 
     CrackTip tip(crack, 0.1, 0.1);
     tip.assignLocation(breakableMesh.findContainerPolygon(crack.getFirst()));
@@ -25,7 +25,7 @@ TEST(CrackTipTest, PrepareTipTest){
 }
 
 TEST(CrackTipTest, AddPointToPathTest){
-    Segment<Point> crack (Point(1,1), Point(0,0));
+    PointSegment crack (Point(1,1), Point(0,0));
 
     CrackTip tip(crack, 0.1, 0.1);
 

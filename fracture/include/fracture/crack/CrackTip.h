@@ -30,7 +30,7 @@ private:
     void reassignContainer(Problem problem);
 public:
     CrackTip();
-    CrackTip(Segment<Point> crack, double length, double radius);
+    CrackTip(PointSegment crack, double length, double radius);
     CrackTip(const CrackTip& t);
 
     void addPointToPath(double angle);

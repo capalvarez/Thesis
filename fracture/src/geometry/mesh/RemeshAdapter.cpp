@@ -30,7 +30,7 @@ std::vector<Polygon> RemeshAdapter::adaptToMesh(Triangulation triangulation, std
 
     std::vector<Triangle> triangles = triangulation.getTriangles();
 
-    std::vector<Segment<int>> containerSegments;
+    std::vector<IndexSegment> containerSegments;
     for (int l = 0; l < changedPolygons.size(); ++l) {
         mesh.getPolygon(changedPolygons[l]).getSegments(containerSegments);
     }
@@ -59,12 +59,12 @@ std::vector<Polygon> RemeshAdapter::adaptToMesh(Triangulation triangulation, std
         newPolygons.push_back(newPolygon);
 
         for (int j = 0; j < n; ++j) {
-            Segment<int> edge(newTrianglePoints[j], newTrianglePoints[(j+1)%n]);
-            Segment<int> originalEdge(oldTrianglePoints[j],oldTrianglePoints[(j+1)%n]);
+            IndexSegment edge(newTrianglePoints[j], newTrianglePoints[(j+1)%n]);
+            IndexSegment originalEdge(oldTrianglePoints[j],oldTrianglePoints[(j+1)%n]);
 
             if(originalEdge.isBoundary(triangulation.getPoints().getList())){
                 for (int k = 0; k < containerSegments.size(); ++k) {
-                    if(containerSegments[k].contains(edge, Point(), Point())){
+                    if(containerSegments[k].contains(meshPoints.getList(),edge)){
                         Neighbours n = segments.get(containerSegments[k]);
 
                         bool is_first = std::find(changedPolygons.begin(), changedPolygons.end(), n.getFirst())

@@ -4,10 +4,10 @@
 Crack::Crack() {}
 
 Crack::Crack(Point init, Point end, double speed, double ratio) {
-    Segment<Point> crack (init, end);
+    PointSegment crack (init, end);
 
     this->init = CrackTip(crack, speed, crack.length()*ratio);
-    this->end = CrackTip(Segment<Point>(end, init), speed, crack.length()*ratio);
+    this->end = CrackTip(PointSegment(end, init), speed, crack.length()*ratio);
 }
 
 Crack::Crack(const Crack& c) {
@@ -67,7 +67,7 @@ PolygonChangeData Crack::initializeCrack(BreakableMesh& mesh) {
     int poly1 = mesh.findContainerPolygon(this->init.getPoint());
     init.assignLocation(poly1);
 
-    PolygonChangeData change = mesh.breakMesh(poly1, Segment<Point>(this->init.getPoint(), this->end.getPoint()));
+    PolygonChangeData change = mesh.breakMesh(poly1, PointSegment(this->init.getPoint(), this->end.getPoint()));
     end.assignLocation(change.lastPolygon);
 
     return change;

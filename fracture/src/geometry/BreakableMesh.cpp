@@ -1,5 +1,4 @@
 #include <fracture/geometry/BreakableMesh.h>
-#include <x-poly/models/structures/PointHasher.h>
 #include <fracture/geometry/mesh/SimplePolygonMerger.h>
 
 BreakableMesh::BreakableMesh() {}
@@ -11,7 +10,7 @@ BreakableMesh::BreakableMesh(const PolygonalMesh& m) {
     this->region = m.getRegion();
 }
 
-PolygonChangeData BreakableMesh::breakMesh(int init, Segment<Point> crack) {
+PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
     std::vector<Polygon> oldPolygons;
     std::vector<Polygon> newPolygons;
 
@@ -83,8 +82,8 @@ PolygonChangeData BreakableMesh::breakMesh(int init, Segment<Point> crack) {
         this->edges.delete_element(n1.edge);
         this->edges.delete_element(n2.edge);
 
-        std::vector<Segment<int>> segments1;
-        std::vector<Segment<int>> segments2;
+        std::vector<IndexSegment> segments1;
+        std::vector<IndexSegment> segments2;
 
         newPolygon1.getSegments(segments1);
         newPolygon2.getSegments(segments2);
@@ -97,10 +96,10 @@ PolygonChangeData BreakableMesh::breakMesh(int init, Segment<Point> crack) {
             this->edges.replace_neighbour(segments2[i], n1.neighbour, new_index2);
         }
 
-        this->edges.replace_neighbour(Segment<int>(p1,n1.edge.getFirst()), -1, init);
-        this->edges.replace_neighbour(Segment<int>(p1,n1.edge.getSecond()), -1, init);
-        this->edges.replace_neighbour(Segment<int>(p2,n2.edge.getFirst()), -1, n2.neighbour);
-        this->edges.replace_neighbour(Segment<int>(p2,n2.edge.getSecond()), -1, n2.neighbour);
+        this->edges.replace_neighbour(IndexSegment(p1,n1.edge.getFirst()), -1, init);
+        this->edges.replace_neighbour(IndexSegment(p1,n1.edge.getSecond()), -1, init);
+        this->edges.replace_neighbour(IndexSegment(p2,n2.edge.getFirst()), -1, n2.neighbour);
+        this->edges.replace_neighbour(IndexSegment(p2,n2.edge.getSecond()), -1, n2.neighbour);
 
         // Iterate
         init = n1.neighbour;
@@ -112,17 +111,17 @@ void BreakableMesh::swapPolygons(int first, int last) {
     Polygon p1 = getPolygon(first);
     Polygon p2 = getPolygon(last);
 
-    std::vector<Segment<int>> firstSegments;
+    std::vector<IndexSegment> firstSegments;
     p1.getSegments(firstSegments);
 
-    std::vector<Segment<int>> lastSegments;
+    std::vector<IndexSegment> lastSegments;
     p2.getSegments(lastSegments);
 
-    for(Segment<int> s: firstSegments){
+    for(IndexSegment s: firstSegments){
         edges.get(s).changeNeighbour(first, last);
     }
 
-    for(Segment<int> s: lastSegments){
+    for(IndexSegment s: lastSegments){
         edges.get(s).changeNeighbour(last, first);
     }
 
@@ -148,10 +147,10 @@ void BreakableMesh::mergePolygons(int i1, int i2) {
     Polygon merged =  merger.mergePolygons(poly1, poly2, points.getList());
     this->polygons[i1] = merged;
 
-    std::vector<Segment<int>> poly2Segments;
+    std::vector<IndexSegment> poly2Segments;
     poly2.getSegments(poly2Segments);
 
-    for(Segment<int> s: poly2Segments){
+    for(IndexSegment s: poly2Segments){
         edges.replace_neighbour(s, this->polygons.size() - 1, i1);
     }
 

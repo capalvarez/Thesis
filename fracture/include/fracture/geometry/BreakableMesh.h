@@ -13,7 +13,7 @@ private:
 public:
     BreakableMesh();
     BreakableMesh(const PolygonalMesh& m);
-    PolygonChangeData breakMesh(int init, Segment<Point> crack);
+    PolygonChangeData breakMesh(int init, PointSegment crack);
     void swapPolygons(int first, int last);
     void mergePolygons(int i1, int i2);
 };
