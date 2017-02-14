@@ -32,10 +32,15 @@ public:
     double getDiameter();
     double getArea();
     Point getCentroid();
-
-    void mutate(std::vector<Point>& p);
     void getSegments(std::vector<IndexSegment>& segments);
     void getSegments(std::vector<IndexSegment> &segments, int offset);
+    std::vector<int> getPoints() const;
+    std::vector<Point> getPoints(std::vector<Point> p);
+    int numberOfSides();
+    bool operator==(const Polygon& other) const;
+    std::string getString();
+
+    void mutate(std::vector<Point>& p);
 
     bool containsPoint(std::vector<Point>& p, Point point);
     bool inEdges(std::vector<Point>& p, Point point);
@@ -44,18 +49,12 @@ public:
 
     bool isConvex(std::vector<Point>& p);
     bool isClockwise(std::vector<Point>& p);
-    std::vector<int> getPoints() const;
-    int numberOfSides();
-
-    bool operator==(const Polygon& other) const;
-    std::string getString();
 
     Point getAverageVertex(std::vector<Point> p);
     std::size_t hash;
     void fixCCW(std::vector<Point> p);
 
     IndexSegment containerEdge(std::vector<Point>& p, Point point);
-    std::vector<Point> getPoints(std::vector<Point> p);
 
     Pair<int> commonEdgesBorder(Polygon p);
     bool isPoint(int index);
