@@ -1,7 +1,7 @@
 #include <veamy/models/dof/DOFS.h>
 
 Pair<int> DOFS::addDOF(ConstraintsContainer &constraints, std::vector<Point> points, int point_index,
-                       SegmentPair<int> pair) {
+                       SegmentPair pair) {
     typename std::vector<int>::iterator it;
     it = std::find(occupied_point_indexes.begin(), occupied_point_indexes.end(), point_index);
 

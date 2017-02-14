@@ -17,6 +17,13 @@ namespace std{
             return k.hash;
         }
     };
+
+    template <>
+    struct hash<IndexSegment>{
+        size_t operator()(const IndexSegment &k) const {
+            return hash<int>()(k.getFirst()) + hash<int>()(k.getSecond());
+        }
+    };
 }
 
 
