@@ -22,7 +22,7 @@ Element::Element(ProblemConditions& conditions, Polygon p, UniqueList<Point>& po
 void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemConditions& conditions) {
     std::vector<int> polygonPoints = p.getPoints();
     int n = (int) polygonPoints.size();
-    Point average = p.getAverageVertex(points);
+    Point average = p.getCentroid();
     double area = p.getArea();
 
     Eigen::MatrixXd Nr;

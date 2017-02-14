@@ -248,18 +248,6 @@ bool Polygon::isVertex(int index) {
     return std::find(points.begin(), points.end(), index) != points.end();
 }
 
-Point Polygon::getAverageVertex(std::vector<Point> p) {
-    double x = 0;
-    double y = 0;
-
-    for (int i = 0; i < this->points.size(); ++i) {
-        x += p[this->points[i]].getX();
-        y += p[this->points[i]].getY();
-    }
-
-    return Point(x/this->numberOfSides(), y/this->numberOfSides());
-}
-
 void Polygon::calculateHash() {
     std::size_t hash = 0;
 

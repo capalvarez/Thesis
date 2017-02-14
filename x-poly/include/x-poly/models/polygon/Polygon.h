@@ -50,7 +50,6 @@ public:
     bool isConvex(std::vector<Point>& p);
     bool isClockwise(std::vector<Point>& p);
 
-    Point getAverageVertex(std::vector<Point> p);
     std::size_t hash;
     void fixCCW(std::vector<Point> p);
 
