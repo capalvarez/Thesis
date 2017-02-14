@@ -1,6 +1,7 @@
 #include <vector>
 #include <x-poly/models/basic/Point.h>
 #include <algorithm>
+#include <x-poly/utilities/xpolyutilities.h>
 
 namespace convex {
     struct PointComparator{
@@ -14,7 +15,7 @@ namespace convex {
     } comparator;
 
     double orientation(Point p, Point q, Point r){
-        return ((q-p)^(r-p)).getPoint()->getZ();
+        return xpoly_utilities::crossProduct((q-p),(r-p));
     }
 
     void convexHull(std::vector<Point> points, std::vector<Point>& upper, std::vector<Point>& lower){

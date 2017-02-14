@@ -1,4 +1,4 @@
-#include <x-poly/voronoi/structures/EdgeData.h>
+#include <include/x-poly/models/neighbourhood/EdgeData.h>
 
 
 EdgeData::EdgeData(int p1, int p2) {

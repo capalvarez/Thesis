@@ -1,54 +1,27 @@
 #ifndef THESIS_MESH_H
 #define THESIS_MESH_H
 
-#include <x-poly/models/polygon/Polygon.h>
-#include <x-poly/models/basic/Point.h>
-#include <x-poly/models/basic/Segment.h>
-#include <algorithm>
-#include <x-poly/voronoi/structures/EdgeData.h>
-#include <x-poly/voronoi/structures/mapdata.h>
-#include <unordered_map>
-#include <x-poly/voronoi/structures/Neighbours.h>
-#include <x-poly/voronoi/structures/SegmentMap.h>
-#include <x-poly/models/structures/NeighbourInfo.h>
+#include <x-poly/models/neighbourhood/SegmentMap.h>
 #include <utilities/UniqueList.h>
-#include <utilities/utilities.h>
-#include "Region.h"
+#include <fstream>
+#include <x-poly/utilities/hash/xpolyhashfunctions.h>
 
-
-class Mesh {
+class Mesh{
 protected:
-    UniqueList<Point> points;
-    std::vector<Polygon> polygons;
     SegmentMap edges;
-
-    Region region;
+    UniqueList<Point> points;
 public:
-    Mesh(std::vector<Point> &p, std::vector<Polygon> &e, SegmentMap s, Region r);
-    Mesh(const Mesh& m);
-    Mesh();
-    ~Mesh();
+    void printInFile(std::string fileName);
+    virtual void writeElements(std::ofstream& file) = 0;
 
-    UniqueList<Point>& getPoints();
-    UniqueList<Point> getPoints() const;
-    std::vector<Polygon>& getPolygons();
-    std::vector<Polygon> getPolygons() const;
     SegmentMap& getSegments();
     SegmentMap getSegments() const ;
 
-    void printInFile(std::string fileName);
-    bool isInBoundary(Point p);
+    UniqueList<Point>& getPoints();
+    UniqueList<Point> getPoints() const;
 
     bool isFull();
-    bool areNeighbours(int poly1, int poly2);
-    int findContainerPolygon(Point p);
-    int findContainerPolygon(Point p, int init_polygon);
-    Polygon& getPolygon(int index);
-    NeighbourInfo getNeighbour(int poly_index, Segment<Point> direction);
-    NeighbourInfo getNeighbour(int poly_index, Segment<Point> direction, int previous);
-    Region getRegion() const;
 };
 
 
 #endif
-

@@ -8,7 +8,7 @@
 
 template <class T>
 class Segment {
-private:
+protected:
     T p1;
     T p2;
 public:
@@ -19,18 +19,9 @@ public:
     T getFirst() const;
     T getSecond() const;
 
-    double length();
-    bool operator==(const Segment<T> other) const;
-    std::string getString() const;
-
-    bool contains(std::vector<Point>& p, Point point);
-    bool contains(std::vector<Point> p, Segment<int> s);
-    Point middlePoint(std::vector<Point> p);
-    bool isBoundary(std::vector<Point> p);
-    bool intersection(std::vector<Point> points, Segment<Point> other, Point &inter);
-    void orderCCW(std::vector<Point> points, Point center);
-    bool isCCW(std::vector<Point> points, Point center);
-    double cartesianAngle(std::vector<Point> p);
+    virtual std::string getString() const = 0;
+    bool contains(Point point, Point p1, Point p2);
+    virtual bool isBoundary(std::vector<Point> p) = 0;
 };
 
 #endif

@@ -19,5 +19,13 @@ namespace xpoly_utilities {
         return (angle > 0 ? angle : (2*M_PI + angle)) * 360 / (2*M_PI);
     }
 
+    double crossProduct(Point a, Point b){
+        return a.getX()*b.getY() - a.getY()*b.getX();
+    }
+
+    double norm(Point p){
+        return sqrt(pow(p.getX(),2) + pow(p.getY(),2));
+    }
+
 }
 

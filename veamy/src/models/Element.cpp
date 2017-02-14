@@ -8,7 +8,7 @@ Element::Element(ProblemConditions& conditions, Polygon p, UniqueList<Point>& po
     int n = vertex.size();
 
     for(int i=0;i<n;i++){
-        SegmentPair<int> pair(Segment<int>(vertex[(i-1+n)%n],vertex[i]), Segment<int>(vertex[i],vertex[(i+1)%n]));
+        SegmentPair pair(IndexSegment(vertex[(i-1+n)%n],vertex[i]), IndexSegment(vertex[i],vertex[(i+1)%n]));
         Pair<int> indexes = out.addDOF(conditions.constraints, points.getList(), vertex[i], pair);
 
         dofs.push_back(indexes.first);
@@ -22,7 +22,7 @@ Element::Element(ProblemConditions& conditions, Polygon p, UniqueList<Point>& po
 void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemConditions& conditions) {
     std::vector<int> polygonPoints = p.getPoints();
     int n = (int) polygonPoints.size();
-    Point average = p.getAverageVertex(points);
+    Point average = p.getCentroid();
     double area = p.getArea();
 
     Eigen::MatrixXd Nr;

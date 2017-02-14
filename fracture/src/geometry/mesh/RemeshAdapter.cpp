@@ -20,7 +20,7 @@ Region RemeshAdapter::computeRemeshRegion(std::vector<Polygon> remeshPolygons, s
 }
 
 std::vector<Polygon> RemeshAdapter::adaptToMesh(Triangulation triangulation, std::vector<int> changedPolygons,
-                                                Mesh &mesh,
+                                                PolygonalMesh &mesh,
                                                 std::unordered_map<int, int> pointMap) {
     std::vector<Polygon> newPolygons;
 
@@ -30,7 +30,7 @@ std::vector<Polygon> RemeshAdapter::adaptToMesh(Triangulation triangulation, std
 
     std::vector<Triangle> triangles = triangulation.getTriangles();
 
-    std::vector<Segment<int>> containerSegments;
+    std::vector<IndexSegment> containerSegments;
     for (int l = 0; l < changedPolygons.size(); ++l) {
         mesh.getPolygon(changedPolygons[l]).getSegments(containerSegments);
     }
@@ -59,10 +59,10 @@ std::vector<Polygon> RemeshAdapter::adaptToMesh(Triangulation triangulation, std
         newPolygons.push_back(newPolygon);
 
         for (int j = 0; j < n; ++j) {
-            Segment<int> edge(newTrianglePoints[j], newTrianglePoints[(j+1)%n]);
-            Segment<int> originalEdge(oldTrianglePoints[j],oldTrianglePoints[(j+1)%n]);
+            IndexSegment edge(newTrianglePoints[j], newTrianglePoints[(j+1)%n]);
+            IndexSegment originalEdge(oldTrianglePoints[j],oldTrianglePoints[(j+1)%n]);
 
-            if(originalEdge.isBoundary(triangulation.getPoints())){
+            if(originalEdge.isBoundary(triangulation.getPoints().getList())){
                 for (int k = 0; k < containerSegments.size(); ++k) {
                     if(containerSegments[k].contains(meshPoints.getList(),edge)){
                         Neighbours n = segments.get(containerSegments[k]);
@@ -99,7 +99,7 @@ Triangulation RemeshAdapter::triangulate(std::vector<Point> points) {
 
 std::unordered_map<int, int> RemeshAdapter::includeNewPoints(UniqueList<Point> &meshPoints, Triangulation triangulation) {
     std::unordered_map<int,int> pointMap;
-    std::vector<Point> trianglePoints = triangulation.getPoints();
+    std::vector<Point> trianglePoints = triangulation.getPoints().getList();
 
     for (int j = 0; j < trianglePoints.size() ; ++j) {
         int pointIndex = meshPoints.push_back(trianglePoints[j]);
@@ -109,9 +109,9 @@ std::unordered_map<int, int> RemeshAdapter::includeNewPoints(UniqueList<Point> &
     return pointMap;
 }
 
-std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, std::vector<int> changedPolygons, Mesh &m) {
+std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, std::vector<int> changedPolygons, PolygonalMesh &m) {
     Triangulation t = this->triangulate(points);
-    t.writeInFile("testing.txt");
+    t.printInFile("testing.txt");
 
     std::unordered_map<int,int> pointMap = this->includeNewPoints(m.getPoints(), t);
 

@@ -10,7 +10,7 @@ NumericalTests::NumericalTests(int order) {
     std::vector<Polygon> polygons = {Polygon(p1,points), Polygon(p2,points)};
     std::vector<Segment> segments;
 
-    two_squares = Mesh(points, polygons, segments, Region(std::vector<Point>()));
+    two_squares = PolygonalMesh(points, polygons, segments, Region(std::vector<Point>()));
 
     /*Hundred Square*/
     std::vector<Point> hundred_square_points = {Point(0, 0), Point(20, 0), Point(20, 5), Point(0, 5)};
@@ -34,7 +34,7 @@ NumericalTests::NumericalTests(int order) {
     meshGenerator = TriangleMeshGenerator(seeds, region1);
     random_voronoi_square = meshGenerator.getMesh();
 
-    /*Rectangle hole with squares*/
+    /*BoundingBox hole with squares*/
     Hole* circle = new CircularHole(Point(0.5,0.5),0.25, 10);
     region1.addHole(circle);
 
@@ -122,7 +122,7 @@ Eigen::VectorXd NumericalTests::hole_twoforceX() {
     return Eigen::Matrix<double, -1, 1, 0, -1, 1>();
 }
 
-void NumericalTests::loadRightForceX(Mesh m, Veamer &v, Segment leftSide, Segment rightSide) {
+void NumericalTests::loadRightForceX(PolygonalMesh m, Veamer &v, Segment leftSide, Segment rightSide) {
     class None : public BodyForce {
         double apply (double x, double y){
             return 0;
@@ -146,7 +146,7 @@ void NumericalTests::loadRightForceX(Mesh m, Veamer &v, Segment leftSide, Segmen
     v.initProblem(m, container, f);
 }
 
-void NumericalTests::loadRightForceY(Mesh m, Veamer &v, Segment leftSide, Segment rightSide) {
+void NumericalTests::loadRightForceY(PolygonalMesh m, Veamer &v, Segment leftSide, Segment rightSide) {
     class None : public BodyForce {
         double apply (double x, double y){
             return 0;
@@ -170,7 +170,7 @@ void NumericalTests::loadRightForceY(Mesh m, Veamer &v, Segment leftSide, Segmen
     v.initProblem(m, container, f);
 }
 
-void NumericalTests::loadNoForces(Mesh m, Veamer &v, Segment leftSide, Segment rightSide) {
+void NumericalTests::loadNoForces(PolygonalMesh m, Veamer &v, Segment leftSide, Segment rightSide) {
     class None : public BodyForce {
         double apply (double x, double y){
             return 0;
@@ -191,7 +191,7 @@ void NumericalTests::loadNoForces(Mesh m, Veamer &v, Segment leftSide, Segment r
     v.initProblem(m, container, f);
 }
 
-void NumericalTests::loadTwoForcesX(Mesh m, Veamer &v, Segment leftSide, Segment rightSide) {
+void NumericalTests::loadTwoForcesX(PolygonalMesh m, Veamer &v, Segment leftSide, Segment rightSide) {
 
 }
 

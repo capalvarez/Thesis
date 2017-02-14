@@ -9,7 +9,7 @@ public:
     enum Axis {x, y};
 
     DOF(int index, int point_index, DOF::Axis a);
-    int globalIndex();
+    int globalIndex() const;
     int pointIndex();
     bool operator==(const DOF& other) const;
 protected:

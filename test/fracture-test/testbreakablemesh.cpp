@@ -15,12 +15,12 @@ TEST(BreakableMeshTest, BreakMeshTest){
     std::vector<Point> seeds = square.getSeedPoints();
 
     TriangleMeshGenerator meshGenerator(seeds, square);
-    Mesh mesh = meshGenerator.getMesh();
+    PolygonalMesh mesh = meshGenerator.getMesh();
 
     BreakableMesh breakableMesh(mesh);
     Polygon& poly = breakableMesh.getPolygon(2);
 
-    Segment<Point> crack(Point(0.25,1.5), Point(2.75,1.5));
+    PointSegment crack(Point(0.25,1.5), Point(2.75,1.5));
 
     breakableMesh.breakMesh(2, crack);
 
@@ -37,7 +37,7 @@ TEST(BreakableMeshTest, SwapPolygonsTest){
     std::vector<Point> seeds = square.getSeedPoints();
 
     TriangleMeshGenerator meshGenerator(seeds, square);
-    Mesh mesh = meshGenerator.getMesh();
+    PolygonalMesh mesh = meshGenerator.getMesh();
 
     BreakableMesh breakableMesh(mesh);
 
@@ -57,7 +57,7 @@ TEST(BreakableMeshTest, MergePolygonsTest){
     std::vector<Point> seeds = square.getSeedPoints();
 
     TriangleMeshGenerator meshGenerator(seeds, square);
-    Mesh mesh = meshGenerator.getMesh();
+    PolygonalMesh mesh = meshGenerator.getMesh();
 
     BreakableMesh breakableMesh(mesh);
 

@@ -5,20 +5,20 @@
 #include <vector>
 #include <x-poly/voronoi/lib/triangle.h>
 #include <unordered_map>
-#include <x-poly/voronoi/structures/EdgeData.h>
+#include <x-poly/models/neighbourhood/EdgeData.h>
 #include <x-poly/voronoi/structures/PointData.h>
 #include "../../../../utilities/include/utilities/UniqueList.h"
 #include <x-poly/models/Region.h>
 #include <x-poly/voronoi/structures/mapdata.h>
 #include <x-poly/models/Triangulation.h>
 #include <x-poly/models/Triangulation.h>
-#include <x-poly/voronoi/structures/Neighbours.h>
-#include <x-poly/voronoi/structures/SegmentMap.h>
+#include <x-poly/models/neighbourhood/Neighbours.h>
+#include <x-poly/models/neighbourhood/SegmentMap.h>
 
 class TriangleMeshGenerator : public MeshGenerator{
 private:
     Region region;
-    Mesh mesh;
+    PolygonalMesh mesh;
 
     //Delaunay Triangulation
     std::vector<Triangle> triangles;
@@ -36,10 +36,10 @@ private:
 
     Point getCircumcenter(int triangle, int edge, std::vector<Point>& points);
     void callTriangle(std::vector<Point> &point_list);
-    Mesh delaunayToVoronoi();
+    PolygonalMesh delaunayToVoronoi();
 public:
     TriangleMeshGenerator(std::vector<Point>& point_list, Region region);
-    Mesh getMesh();
+    PolygonalMesh getMesh();
     Triangulation getDelaunayTriangulation();
 };
 

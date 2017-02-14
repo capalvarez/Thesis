@@ -3,12 +3,12 @@
 
 #include <x-poly/models/basic/Point.h>
 
-class Rectangle {
+class BoundingBox {
 private:
     Point p1;
     Point p2;
 public:
-    Rectangle(Point p1, Point p2);
+    BoundingBox(Point p1, Point p2);
 
     Point getFirst() const;
     Point getSecond() const;
@@ -18,7 +18,7 @@ public:
     double xMin();
     double yMin();
 
-    bool operator==(const Rectangle& other) const;
+    bool operator==(const BoundingBox& other) const;
 };
 
 

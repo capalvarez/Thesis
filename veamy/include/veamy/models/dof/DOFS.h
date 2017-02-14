@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <veamy/utilities/SegmentPair.h>
 #include <veamy/models/constraints/ConstraintsContainer.h>
+#include <veamy/utilities/hash/veamyhashfunctions.h>
 
 class DOFS {
 private:
@@ -15,7 +16,7 @@ private:
     std::unordered_map<int, Pair<int>> point_to_dofs;
 public:
     Pair<int> addDOF(ConstraintsContainer &constraints, std::vector<Point> points, int point_index,
-                     SegmentPair<int> pair);
+                     SegmentPair pair);
     UniqueList<DOF> getDOFS();
     int size();
     DOF get(int i);

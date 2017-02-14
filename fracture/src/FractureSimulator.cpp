@@ -1,6 +1,6 @@
 #include <fracture/FractureSimulator.h>
 
-FractureSimulator::FractureSimulator(const Mesh& mesh, const Crack& initial, const ProblemConditions& conditions) {
+FractureSimulator::FractureSimulator(const PolygonalMesh& mesh, const Crack& initial, const ProblemConditions& conditions) {
     this->mesh = BreakableMesh(mesh);
     this->crack = initial;
     this->veamer = Veamer();

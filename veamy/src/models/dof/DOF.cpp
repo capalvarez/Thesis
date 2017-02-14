@@ -7,7 +7,7 @@ DOF::DOF(int index, int point_index, DOF::Axis a) {
     this->d = a;
 }
 
-int DOF::globalIndex() {
+int DOF::globalIndex() const{
     return this->index;
 }
 

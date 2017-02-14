@@ -3,11 +3,13 @@
 
 #include <vector>
 #include <algorithm>
+#include <unordered_map>
 
 template <class T>
 class UniqueList {
 private:
     std::vector<T> list;
+    std::unordered_map<T,int> map;
 public:
     UniqueList();
     int push_back(T& item);
@@ -26,13 +28,12 @@ UniqueList<T>::UniqueList() {}
 
 template <class T>
 int UniqueList<T>::push_back(T& item) {
-    typename std::vector<T>::iterator index;
-    index = std::find(list.begin(), list.end(), item);
+    auto iter = map.find(item);
 
-    if(index!=list.end()){
-        return std::distance(list.begin(),index);
-    }
+    if(iter != map.end())
+        return iter->second;
 
+    map.insert(std::make_pair(item, list.size()));
     list.push_back(item);
 
     return (int) list.size()-1;
@@ -71,7 +72,9 @@ std::vector<int> UniqueList<T>::push_list(std::vector<T> list) {
 
 template <class T>
 bool UniqueList<T>::contains(T elem) {
-    return std::find(list.begin(), list.end(), elem) != list.end();;
+    auto iter = map.find(elem);
+
+    return iter != map.end();
 }
 
 template <class T>

@@ -33,8 +33,8 @@ public:
     std::vector<Hole*> getHoles();
     void addHole(Hole* h);
     void generatePoints(PointGenerator p, int nX, int nY);
-    Rectangle getBox();
-    void getSegments(std::vector<Segment<int>>& s);
+    BoundingBox getBox();
+    void getSegments(std::vector<IndexSegment>& s);
     bool containsPoint(Point p);
 
 };

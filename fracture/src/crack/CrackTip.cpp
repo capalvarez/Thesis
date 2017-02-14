@@ -1,7 +1,7 @@
 #include <fracture/crack/CrackTip.h>
 #include <fracture/geometry/mesh/RemeshAdapter.h>
 
-CrackTip::CrackTip(Segment<Point> crack, double speed, double radius) {
+CrackTip::CrackTip(PointSegment crack, double speed, double radius) {
     this->speed = speed;
     this->radius = radius;
     crackPath.push_back(crack.getSecond());
@@ -59,7 +59,7 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
     reassignContainer(problem);
     problem.mesh->printInFile("changed.txt");
 
-    PolygonChangeData changeData = problem.mesh->breakMesh(this->container_polygon, Segment<Point>(lastPoint, crackPath.back()));
+    PolygonChangeData changeData = problem.mesh->breakMesh(this->container_polygon, PointSegment(lastPoint, crackPath.back()));
     assignLocation(changeData.lastPolygon);
 
     return changeData;
@@ -93,7 +93,7 @@ Point CrackTip::getPoint() {
 }
 
 std::set<int> CrackTip::generateTipPoints(BreakableMesh mesh) {
-    this->crackAngle = Segment<Point>(crackPath[crackPath.size() - 2],crackPath.back()).cartesianAngle(crackPath);
+    this->crackAngle = PointSegment(crackPath[crackPath.size() - 2],crackPath.back()).cartesianAngle(crackPath);
     Polygon container = mesh.getPolygon(this->container_polygon);
 
      // TODO: I know 45 is about right, but don't hardcode it
@@ -112,7 +112,7 @@ void CrackTip::reassignContainer(Problem problem) {
     int container = problem.mesh->findContainerPolygon(this->getPoint());
     Polygon poly = problem.mesh->getPolygon(container);
 
-    Segment<int> container_edge = poly.containerEdge(problem.mesh->getPoints().getList(), this->getPoint());
+    IndexSegment container_edge = poly.containerEdge(problem.mesh->getPoints().getList(), this->getPoint());
 
     if(container_edge.getFirst()!=-1){
         SegmentMap edges = problem.mesh->getSegments();

@@ -10,7 +10,7 @@ Point PolygonalHole::getCenter() {
     return Polygon::getCentroid();
 }
 
-void PolygonalHole::getSegments(std::vector<Segment<int>> &s, int offset) {
+void PolygonalHole::getSegments(std::vector<IndexSegment> &s, int offset) {
     Polygon::getSegments(s, offset);
 }
 
