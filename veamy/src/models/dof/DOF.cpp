@@ -16,10 +16,14 @@ int DOF::pointIndex() {
 }
 
 bool DOF::operator==(const DOF &other) const {
-    return this->index == other.index;
+    return this->index == other.index && this->d == other.d;
 }
 
 bool DOF::operator<(const DOF &other) const {
+    if(this->index==other.index){
+        return this->d<other.d;
+    }
+
     return this->index<other.index;
 }
 
