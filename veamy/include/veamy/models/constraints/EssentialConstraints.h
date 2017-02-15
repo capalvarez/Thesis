@@ -10,7 +10,7 @@
 #include "Constraint.h"
 #include "Constraints.h"
 #include <veamy/utilities/SegmentPair.h>
-#include <veamy/utilities/hash/veamyhashfunctions.h>
+
 
 class EssentialConstraints : public Constraints{
 public:

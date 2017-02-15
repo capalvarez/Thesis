@@ -29,6 +29,7 @@ namespace utilities{
     }
 
     extern int random_integer(int min, int max);
+    extern double truncate(double number, int precision);
 }
 
 #endif 

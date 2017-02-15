@@ -89,10 +89,6 @@ TEST_F(PolygonTest, IsClockwise){
     EXPECT_TRUE(nonclockwise->isClockwise(points));
 }
 
-TEST_F(PolygonTest, AverageTest){
-    EXPECT_EQ(square->getAverageVertex(points), Point(0.5,0.5));
-}
-
 TEST_F(PolygonTest, NonConformingTest){
     std::vector<Point> points = {Point(0,0), Point(1,0), Point(2,0), Point(2,1), Point(0,1)};
     std::vector<int> p = {0,1,2,3,4};
@@ -101,7 +97,6 @@ TEST_F(PolygonTest, NonConformingTest){
     EXPECT_EQ(nonConforming.getArea(), 2);
     EXPECT_EQ(nonConforming.getCentroid(), Point(1,0.5));
     EXPECT_EQ(nonConforming.getDiameter(), std::sqrt(5));
-   // EXPECT_EQ(nonConforming.getAverageVertex(points), Point(1,0.5));
 }
 
 TEST_F(PolygonTest, CommonEdgeTest){

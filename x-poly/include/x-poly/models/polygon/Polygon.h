@@ -38,6 +38,7 @@ public:
     std::vector<Point> getPoints(std::vector<Point> p);
     int numberOfSides();
     bool operator==(const Polygon& other) const;
+    bool operator<(const Polygon& other) const;
     std::string getString();
 
     void mutate(std::vector<Point>& p);

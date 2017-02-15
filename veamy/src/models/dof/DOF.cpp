@@ -19,6 +19,10 @@ bool DOF::operator==(const DOF &other) const {
     return this->index == other.index;
 }
 
+bool DOF::operator<(const DOF &other) const {
+    return this->index<other.index;
+}
+
 
 
 

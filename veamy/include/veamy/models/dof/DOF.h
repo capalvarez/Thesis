@@ -12,6 +12,7 @@ public:
     int globalIndex() const;
     int pointIndex();
     bool operator==(const DOF& other) const;
+    bool operator<(const DOF& other) const;
 protected:
     int index;
     int point_index;

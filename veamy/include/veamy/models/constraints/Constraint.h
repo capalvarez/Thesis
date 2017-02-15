@@ -8,7 +8,6 @@
 #include <x-poly/models/basic/IndexSegment.h>
 #include <utilities/UniqueList.h>
 #include <utilities/Pair.h>
-#include <x-poly/utilities/hash/xpolyhashfunctions.h>
 
 class Constraint{
 public:

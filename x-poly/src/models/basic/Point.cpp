@@ -27,7 +27,7 @@ double Point::squareNorm() {
 }
 
 bool Point::operator==(const Point &other) const{
-    return std::abs(this->x-other.x)<0.01 && std::abs(this->y-other.y)<0.01;
+    return std::abs(this->x-other.x)<0.01 && std::abs(this->y-other.y)<0.001;
 }
 
 Point Point::operator-(const Point &other) {
@@ -50,3 +50,13 @@ void Point::setY(double newY) {
     this->y = newY;
 }
 
+bool Point::operator<(const Point &other) const {
+    if(std::abs(this->x-other.x)<0.001){
+        if(std::abs(this->y-other.y)<0.001){
+            return false;
+        }
+        return this->y<other.y;
+    }
+
+    return this->x<other.x;
+}

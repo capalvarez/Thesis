@@ -320,5 +320,7 @@ bool Polygon::isPoint(int index) {
     return std::find(this->points.begin(), this->points.end(), index)!=this->points.end();
 }
 
-
+bool Polygon::operator<(const Polygon &other) const {
+    return this->area<other.area;
+}
 

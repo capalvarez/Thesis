@@ -4,7 +4,6 @@
 #include <x-poly/models/neighbourhood/SegmentMap.h>
 #include <utilities/UniqueList.h>
 #include <fstream>
-#include <x-poly/utilities/hash/xpolyhashfunctions.h>
 
 class Mesh{
 protected:

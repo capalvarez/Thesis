@@ -8,6 +8,12 @@ namespace utilities {
 
         return uni(rng);
     }
+
+    double truncate(double number, int precision){
+        double p = std::pow(10,precision);
+
+        return ((double)((int) (number*p)))/p;
+    }
 }
 
 

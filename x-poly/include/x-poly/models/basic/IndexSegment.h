@@ -18,7 +18,8 @@ public:
     void orderCCW(std::vector<Point> points, Point center);
     bool isCCW(std::vector<Point> points, Point center);
     std::string getString() const;
-    bool operator==(const IndexSegment other) const;
+    bool operator==(const IndexSegment& other) const;
+    bool operator<(const IndexSegment& other) const;
 };
 
 

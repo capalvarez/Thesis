@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <veamy/utilities/SegmentPair.h>
 #include <veamy/models/constraints/ConstraintsContainer.h>
-#include <veamy/utilities/hash/veamyhashfunctions.h>
 
 class DOFS {
 private:

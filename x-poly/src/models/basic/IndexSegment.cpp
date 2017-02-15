@@ -69,7 +69,15 @@ std::string IndexSegment::getString() const {
     return utilities::toString<double>(this->getFirst()) + " " + utilities::toString<double>(this->getSecond());
 }
 
-bool IndexSegment::operator==(const IndexSegment other) const {
+bool IndexSegment::operator==(const IndexSegment& other) const {
     return getFirst()==other.getFirst() && getSecond()==other.getSecond() ||
            getFirst()==other.getSecond() && getSecond()==other.getFirst();
+}
+
+bool IndexSegment::operator<(const IndexSegment &other) const {
+    if(this->p1==other.p1){
+        return this->p2<other.p2;
+    }
+
+    return this->p1<other.p1;
 }
