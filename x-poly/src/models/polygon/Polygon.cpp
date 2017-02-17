@@ -65,7 +65,7 @@ double Polygon::calculateDiameter(std::vector<Point>& p) {
     double max = -1;
 
     for(int i=0;i<rotatingCalipers.size();i++){
-        double distance =xpoly_utilities::norm (rotatingCalipers[i].first - rotatingCalipers[i].second);
+        double distance = xpoly_utilities::norm (rotatingCalipers[i].first - rotatingCalipers[i].second);
         if(distance>max){
             max = distance;
         }
@@ -321,6 +321,6 @@ bool Polygon::isPoint(int index) {
 }
 
 bool Polygon::operator<(const Polygon &other) const {
-    return this->area<other.area;
+    return this->hash<other.hash;
 }
 
