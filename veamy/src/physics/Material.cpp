@@ -14,7 +14,7 @@ Eigen::MatrixXd Material::getMaterialMatrix() {
 
     D(0,0) = c*(1 - this->v);
     D(1,1) = c*(1 - this->v);
-    D(2,2) = 2*c*(1 - this->v);
+    D(2,2) = 2*c*(1 - 2*this->v);
 
     return D;
 }
@@ -22,7 +22,7 @@ Eigen::MatrixXd Material::getMaterialMatrix() {
 double Material::trace() {
     double c = (this->E)/((1 + this->v)*(1 - 2*this->v));
 
-    return 4*c*(1 - this->v);
+    return 2*c*((1 - this->v)+(1 - 2*this->v));
 }
 
 double Material::stressIntensityFactor() {
