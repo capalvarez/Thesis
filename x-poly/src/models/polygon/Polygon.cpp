@@ -261,6 +261,7 @@ void Polygon::calculateHash() {
 void Polygon::fixCCW(std::vector<Point> p) {
     if(isClockwise(p)){
         std::reverse(this->points.begin(), this->points.end());
+        this->area = -this->area;
     }
 }
 
