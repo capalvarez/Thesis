@@ -12,13 +12,13 @@
 #include <x-poly/models/hole/PolygonalHole.h>
 #include <x-poly/models/hole/clipper/lib/clipper.hpp>
 #include <x-poly/models/hole/clipper/ClipperWrapper.h>
+#include <x-poly/config/XPolyConfig.h>
 
 class Region: public Polygon {
 private:
     std::vector<Hole*> holes;
     std::vector<Point> p;
     std::vector<Point> seedPoints;
-    int maxScale;
 
     void clean();
 public:

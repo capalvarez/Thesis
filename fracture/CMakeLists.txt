@@ -4,3 +4,5 @@ add_library(libfracture STATIC ${SRCS})
 target_include_directories(libfracture PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(libfracture libxpoly libvem)
 
+
+

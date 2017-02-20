@@ -13,7 +13,6 @@ public:
 
     EdgeData(int p1, int p2);
     void setTriangle(int t);
-    bool equals(EdgeData other);
     std::string getString();
     bool operator==(const EdgeData& other) const;
 };

@@ -4,6 +4,7 @@
 #include <x-poly/models/PolygonalMesh.h>
 #include <veamy/models/dof/DOFS.h>
 #include <veamy/models/constraints/EssentialConstraints.h>
+#include <veamy/utilities/matrixOps.h>
 #include <veamy/models/Element.h>
 #include <veamy/lib/Eigen/Dense>
 #include <veamy/physics/ProblemConditions.h>
@@ -21,7 +22,6 @@ class Veamer {
 private:
     //TODO: Check for inconsistencies (cannot have natural and essential conditions on the same segments)
     ProblemConditions conditions;
-
     std::unordered_map<Polygon, int, PolygonHasher> polygon_to_element;
     UniqueList<Point> points;
 
@@ -40,6 +40,7 @@ public:
     Pair<int> pointToDOFS(int point_index);
     Material getMaterial();
     UniqueList<Point> getPoints();
+
 };
 
 

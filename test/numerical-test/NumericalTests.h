@@ -43,10 +43,17 @@ private:
     Eigen::VectorXd hole_twoforceX();
 
 
+<<<<<<< HEAD
+    void loadRightForceX(Mesh m, Veamer& v, Segment<int> leftSide, Segment<int> rightSide);
+    void loadRightForceY(Mesh m, Veamer& v, Segment<int> leftSide, Segment<int> rightSide);
+    void loadNoForces(Mesh m, Veamer& v, Segment<int> leftSide, Segment<int> rightSide);
+    void loadTwoForcesX(Mesh m, Veamer& v, Segment<int> leftSide, Segment<int> rightSide);
+=======
     void loadRightForceX(PolygonalMesh m, Veamer& v, Segment leftSide, Segment rightSide);
     void loadRightForceY(PolygonalMesh m, Veamer& v, Segment leftSide, Segment rightSide);
     void loadNoForces(PolygonalMesh m, Veamer& v, Segment leftSide, Segment rightSide);
     void loadTwoForcesX(PolygonalMesh m, Veamer& v, Segment leftSide, Segment rightSide);
+>>>>>>> fracture_all_neighbours
 public:
     NumericalTests(int order);
 

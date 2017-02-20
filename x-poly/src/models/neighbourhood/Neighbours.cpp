@@ -1,4 +1,4 @@
-#include <include/x-poly/models/neighbourhood/Neighbours.h>
+#include <x-poly/models/neighbourhood/Neighbours.h>
 
 Neighbours::Neighbours() {}
 

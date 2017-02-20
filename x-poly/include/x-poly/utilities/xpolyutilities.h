@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <x-poly/models/basic/Point.h>
+#include <utilities/Pair.h>
 
 namespace xpoly_utilities {
     extern void TrivialIndexVector(std::vector<int>& index_vector, int n);

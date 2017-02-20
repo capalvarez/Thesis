@@ -14,7 +14,7 @@ protected:
     Point center;
 public:
     Circle(double r, Point c);
-    std::vector<Point> discretizeCircle(int grade);
+    std::vector<Point> discretizeCircle();
 };
 
 

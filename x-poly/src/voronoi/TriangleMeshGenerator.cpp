@@ -168,14 +168,14 @@ PolygonalMesh TriangleMeshGenerator::delaunayToVoronoi() {
         cellPoints.push_back(index1);
         EdgeData edge = this->edges[triangles[t1].nextEdge(index, init_edge, edgeMap)];
 
-        while(!edge.equals(init_edge)){
+        while(!(edge==init_edge)){
             t2 = t1;
             t1 = edge.t1!=t2? edge.t1 : edge.t2;
 
             int currentEdge = edgeMap[Key(edge.p1, edge.p2)];
 
-            Point c1 = getCircumcenter(t1,currentEdge,meshPoints);
-            Point c2 = getCircumcenter(t2,currentEdge,meshPoints);
+            c1 = getCircumcenter(t1,currentEdge,meshPoints);
+            c2 = getCircumcenter(t2,currentEdge,meshPoints);
 
             index1 = voronoiPoints.push_back(c1);
             index2 = voronoiPoints.push_back(c2);

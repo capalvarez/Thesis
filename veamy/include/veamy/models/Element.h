@@ -8,7 +8,6 @@
 #include <veamy/utilities/SegmentPair.h>
 #include <veamy/physics/BodyForce.h>
 #include <iostream>
-#include <veamy/matrix/integration/IntegrationFunction.h>
 #include <veamy/models/constraints/NaturalConstraints.h>
 #include <veamy/models/constraints/ConstraintsContainer.h>
 #include <veamy/physics/ProblemConditions.h>
@@ -16,16 +15,13 @@
 class Element {
 private:
     std::vector<int> dofs;
-    Eigen::MatrixXd K;
     Eigen::VectorXd f;
 
     void initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemConditions& conditions);
 public:
+    Eigen::MatrixXd K;
     Element(ProblemConditions& conditions, Polygon p, UniqueList<Point>& points, DOFS& out);
-    Eigen::MatrixXd getK();
-    Eigen::VectorXd getF();
-    void assembleK(DOFS out, Eigen::MatrixXd& Kglobal);
-    void assembleF(DOFS out, Eigen::VectorXd& Fglobal);
+    void assemble(DOFS out, Eigen::MatrixXd& Kglobal,  Eigen::VectorXd& Fglobal);
 };
 
 
