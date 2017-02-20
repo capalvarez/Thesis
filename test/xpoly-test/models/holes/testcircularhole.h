@@ -9,7 +9,7 @@ class CircularHoleTest : public ::testing::Test {
 protected:
     virtual void SetUp(){
         square = new Region(squarePoints);
-        hole = new CircularHole(Point(0.5,0.5), 0.25, 4);
+        hole = new CircularHole(Point(0.5, 0.5), 0.25);
         square->addHole(hole);
     }
 

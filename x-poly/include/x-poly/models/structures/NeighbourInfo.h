@@ -18,7 +18,6 @@ struct NeighbourInfo {
     void orderCCW(std::vector<Point> points, Point center){
         edge.orderCCW(points, center);
     }
-
 };
 
 #endif 

@@ -1,7 +1,7 @@
 #include <x-poly/models/hole/CircularHole.h>
 
-CircularHole::CircularHole(Point p, double r, int grade) : Circle(r,p){
-    this->HolePoints = discretizeCircle(grade);
+CircularHole::CircularHole(Point p, double r) : Circle(r, p){
+    this->HolePoints = discretizeCircle();
 }
 
 Point CircularHole::getCenter() {
@@ -16,9 +16,6 @@ void CircularHole::getSegments(std::vector<IndexSegment>& segments, int offset) 
     discretePolygon.getSegments(segments, offset);
 }
 
-std::vector<Point> CircularHole::getPoints() {
-    return this->HolePoints;
-}
 
 
 

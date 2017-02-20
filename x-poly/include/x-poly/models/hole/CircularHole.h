@@ -10,11 +10,10 @@
 
 class CircularHole: public Hole, public Circle {
 public:
-    CircularHole(Point p, double r, int grade);
+    CircularHole(Point p, double r);
 
     Point getCenter();
     void getSegments(std::vector<IndexSegment>& segments, int offset);
-    std::vector<Point> getPoints();
 };
 
 

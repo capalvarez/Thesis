@@ -63,14 +63,14 @@ int main(){
     generateTest("PolygonalHoleHalfTest", square, half, points);
 
     /*-----------------------------------------------------------------------------------------------------*/
-    Hole* circle = new CircularHole(Point(0.5,0.5),0.25,20);
+    Hole* circle = new CircularHole(Point(0.5, 0.5), 0.25);
     points = {Point(0.5,0), Point(1,0.5), Point(0.5,0), Point(0,0.5)};
 
     generateTest("CircularHoleInside", square, circle, points);
 
     /*-----------------------------------------------------------------------------------------------------*/
 
-    border = new CircularHole(Point(0.5, 1), 0.25, 20);
+    border = new CircularHole(Point(0.5, 1), 0.25);
     points = {};
 
     generateTest("CircularHoleBorderTest", square, border, points);

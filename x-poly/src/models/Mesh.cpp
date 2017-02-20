@@ -1,8 +1,8 @@
 #include <x-poly/models/Mesh.h>
 
 void Mesh::printInFile(std::string fileName) {
-    std::string path("C:\\Users\\Catalina");
-    path += "\\" + fileName;
+    std::string path = utilities::getPath();
+    path +=  fileName;
 
     std::ofstream file;
     file.open(path, std::ios::out);

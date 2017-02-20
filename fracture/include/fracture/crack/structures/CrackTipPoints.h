@@ -17,5 +17,4 @@ struct CrackTipPoints {
     CrackTipPoints(){};
 };
 
-
-#endif 
+#endif

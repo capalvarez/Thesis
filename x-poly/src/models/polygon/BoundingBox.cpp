@@ -31,7 +31,7 @@ double BoundingBox::yMin() {
 
 bool BoundingBox::operator==(const BoundingBox &other) const {
     return getFirst()==other.getFirst() && getSecond()==other.getSecond() ||
-            getSecond()==other.getFirst() && getFirst()==other.getSecond();
+           getSecond()==other.getFirst() && getFirst()==other.getSecond();
 }
 
 

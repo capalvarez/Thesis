@@ -4,7 +4,7 @@
 #include <vector>
 #include <x-poly/models/basic/Point.h>
 #include <x-poly/utilities/xpolyutilities.h>
-
+#include <x-poly/config/XPolyConfig.h>
 
 template <class T>
 class Segment {

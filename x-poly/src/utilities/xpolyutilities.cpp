@@ -3,6 +3,7 @@
 #include <vector>
 #include <math.h>
 #include <x-poly/models/basic/Point.h>
+#include <utilities/Pair.h>
 
 namespace xpoly_utilities {
     void TrivialIndexVector(std::vector<int>& index_vector, int n){
@@ -26,6 +27,5 @@ namespace xpoly_utilities {
     double norm(Point p){
         return sqrt(pow(p.getX(),2) + pow(p.getY(),2));
     }
-
 }
 

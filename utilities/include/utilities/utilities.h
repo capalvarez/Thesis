@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include "Pair.h"
 
 namespace utilities{
     template <typename T>
@@ -30,6 +31,8 @@ namespace utilities{
 
     extern int random_integer(int min, int max);
     extern double truncate(double number, int precision);
+    extern std::string getPath();
+    extern Pair<double> normalize(Pair<double> vector);
 }
 
 #endif 

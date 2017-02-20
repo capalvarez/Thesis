@@ -1,6 +1,5 @@
 #include <veamy/models/dof/DOF.h>
 
-
 DOF::DOF(int index, int point_index, DOF::Axis a) {
     this->index = index;
     this->point_index = point_index;

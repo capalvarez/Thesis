@@ -1,7 +1,6 @@
 #include <veamy/lib/Eigen/Dense>
 #include <iostream>
 #include <veamy/Veamer.h>
-#include <veamy/matrix/matrixOps.h>
 
 Veamer::Veamer() {}
 
@@ -31,35 +30,29 @@ Eigen::VectorXd Veamer::simulate() {
     f = Eigen::VectorXd::Zero(n);
 
     for(int i=0;i<elements.size();i++){
-        elements[i].assembleK(DOFs, K);
-        elements[i].assembleF(DOFs, f);
+        elements[i].assemble(DOFs, K, f);
     }
 
     //Apply constrained_points
     EssentialConstraints essential = this->conditions.constraints.getEssentialConstraints();
     std::vector<int> c = essential.getConstrainedDOF();
 
-    Eigen::MatrixXd K_b;
-    K_b= matrixOps::getColumns(K, c);
-
     Eigen::VectorXd boundary_values = essential.getBoundaryValues(this->points.getList(), this->DOFs.getDOFS());
 
-    for (int i = 0; i < K.rows(); ++i) {
-        f(i) = f(i) - (K_b.row(i)*boundary_values);
-    }
-
     for (int j = 0; j < c.size(); ++j) {
-        K.row(c[j]).setZero();
-        K.col(c[j]).setZero();
-        K(c[j], c[j]) = 1;
+        for (int i = 0; i < K.rows(); ++i) {
+            f(i) = f(i) - (K(i,c[j])*boundary_values(j));
 
+            K(c[j],i) = 0;
+            K(i,c[j]) = 0;
+        }
+
+        K(c[j], c[j]) = 1;
         f(c[j]) = boundary_values(j);
     }
 
-    std::cout << K << std::endl << std::endl;
-    std::cout << K.inverse() << std::endl << std::endl;
-
-    //Solve the system
+     //Solve the system
+    //Eigen::VectorXd x = K.colPivHouseholderQr().solve(f);
     Eigen::VectorXd x = K.inverse()*f;
 
     return x;
@@ -99,4 +92,7 @@ Material Veamer::getMaterial() {
     return conditions.material;
 }
 
+UniqueList<Point> Veamer::getPoints() {
+    return this->points;
+}
 
