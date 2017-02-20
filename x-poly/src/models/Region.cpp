@@ -16,6 +16,7 @@ Region::Region() : Polygon(){}
 
 Region::Region(const Region &other) : Polygon(other){
     this->p = other.p;
+    this->holes = other.holes;
 }
 
 std::vector<Hole*> Region::getHoles() {
@@ -71,12 +72,12 @@ void Region::addHole(Hole* h) {
 }
 
 void Region::generatePoints(PointGenerator p, int nX, int nY){
-    Rectangle box = this->getBox();
+    BoundingBox box = this->getBox();
     p.generate(this->seedPoints, box, nX, nY);
     this->clean();
 }
 
-Rectangle Region::getBox() {
+BoundingBox Region::getBox() {
     double xMin = LLONG_MAX;
     double xMax = LLONG_MIN;
     double yMin = LLONG_MAX;
@@ -89,7 +90,7 @@ Rectangle Region::getBox() {
         yMax = v.getY()>yMax? v.getY(): yMax;
     }
 
-    return Rectangle(Point(xMin,yMin), Point(xMax,yMax));
+    return BoundingBox(Point(xMin,yMin), Point(xMax,yMax));
 }
 
 void Region::clean() {
@@ -120,7 +121,9 @@ std::vector<Point> Region::getRegionPoints() {
     return points;
 }
 
-void Region::getSegments(std::vector<Segment<int>> &s) {
+void Region::getSegments(std::vector<IndexSegment> &s) {
+    //TODO: Manage border cases here!
+    // TODO: Don't quite remember the problem, needs studying
     Polygon::getSegments(s);
     int offset = (int) this->p.size();
 

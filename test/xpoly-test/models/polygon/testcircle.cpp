@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <x-poly/models/polygon/Circle.h>
+#include <x-poly/config/XPolyConfig.h>
 
 TEST(CircleTest, DiscretizeTest){
     XPolyConfig* config = XPolyConfig::instance();

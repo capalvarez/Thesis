@@ -13,20 +13,20 @@ TEST_F(PolygonTest, IsConvexTest){
 }
 
 TEST_F(PolygonTest, GetSegmentsTest){
-    std::vector<Segment<int>> expectedT = {Segment<int>(0,1), Segment<int>(1,4), Segment<int>(4,0)};
-    std::vector<Segment<int>> result;
+    std::vector<IndexSegment> expectedT = {IndexSegment(0,1), IndexSegment(1,4), IndexSegment(4,0)};
+    std::vector<IndexSegment> result;
 
     triangle->getSegments(result);
     EXPECT_EQ(result,expectedT);
     result.clear();
 
-    std::vector<Segment<int>> expectedS = {Segment<int>(0,1), Segment<int>(1,2), Segment<int>(2,4), Segment<int>(4,0)};
+    std::vector<IndexSegment> expectedS = {IndexSegment(0,1), IndexSegment(1,2), IndexSegment(2,4), IndexSegment(4,0)};
     square->getSegments(result);
     EXPECT_EQ(result,expectedS);
     result.clear();
 
-    std::vector<Segment<int>> expectedN = {Segment<int>(0,1), Segment<int>(1,6), Segment<int>(6,3), Segment<int>(3,5),
-                                           Segment<int>(5,0)};
+    std::vector<IndexSegment> expectedN = {IndexSegment(0,1), IndexSegment(1,6), IndexSegment(6,3), IndexSegment(3,5),
+                                           IndexSegment(5,0)};
     nonconvex->getSegments(result);
     EXPECT_EQ(result,expectedN);
 }
@@ -89,6 +89,25 @@ TEST_F(PolygonTest, IsClockwise){
     EXPECT_TRUE(nonclockwise->isClockwise(points));
 }
 
-TEST_F(PolygonTest, AverageTest){
-    EXPECT_EQ(square->getAverageVertex(points), Point(0.5,0.5));
+TEST_F(PolygonTest, NonConformingTest){
+    std::vector<Point> points = {Point(0,0), Point(1,0), Point(2,0), Point(2,1), Point(0,1)};
+    std::vector<int> p = {0,1,2,3,4};
+
+    Polygon nonConforming(p,points);
+    EXPECT_EQ(nonConforming.getArea(), 2);
+    EXPECT_EQ(nonConforming.getCentroid(), Point(1,0.5));
+    EXPECT_EQ(nonConforming.getDiameter(), std::sqrt(5));
 }
+
+TEST_F(PolygonTest, CommonEdgeTest){
+    std::vector<int> secondSquarePoints = {1,7,8,2};
+    Polygon secondSquare(secondSquarePoints, points);
+
+    EXPECT_EQ(secondSquare.commonEdgesBorder(*square), Pair<int>(2,1));
+
+    std::vector<int> twoEdgesPoints = {9,10,8,2,1,0};
+    Polygon twoEdges(twoEdgesPoints, points);
+
+    EXPECT_EQ(twoEdges.commonEdgesBorder(*square), Pair<int>(2,0));
+}
+

@@ -10,7 +10,7 @@ void ConstraintsContainer::addConstraints(EssentialConstraints c) {
     this->essential = c;
 }
 
-void ConstraintsContainer::addConstrainedDOF(std::vector<Point> points, int DOF_index, DOF::Axis axis, SegmentPair<int> pair) {
+void ConstraintsContainer::addConstrainedDOF(std::vector<Point> points, int DOF_index, DOF::Axis axis, SegmentPair pair) {
     natural.addConstrainedDOF(points, DOF_index,axis,pair);
     essential.addConstrainedDOF(points, DOF_index,axis,pair);
 }

@@ -1,13 +1,13 @@
 #ifndef THESIS_ISCONSTRAINEDINFO_H
 #define THESIS_ISCONSTRAINEDINFO_H
 
-#include <x-poly/models/basic/Segment.h>
+#include <x-poly/models/basic/IndexSegment.h>
 
 struct isConstrainedInfo{
     bool isConstrained;
-    Segment<int> container;
+    IndexSegment container;
 
-    isConstrainedInfo(Segment<int> c){
+    isConstrainedInfo(IndexSegment c){
         isConstrained = true;
         container = c;
     }

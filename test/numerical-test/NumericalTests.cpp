@@ -12,7 +12,11 @@ NumericalTests::NumericalTests(int order) {
     SegmentMap segments;
     Region r(regionPoints);
 
+<<<<<<< HEAD
     two_squares = Mesh(points, polygons, segments, r);
+=======
+    two_squares = PolygonalMesh(points, polygons, segments, Region(std::vector<Point>()));
+>>>>>>> fracture_all_neighbours
 
     /*Hundred Square*/
     std::vector<Point> hundred_square_points = {Point(0, 0), Point(20, 0), Point(20, 5), Point(0, 5)};
@@ -36,8 +40,13 @@ NumericalTests::NumericalTests(int order) {
     meshGenerator = TriangleMeshGenerator(seeds, region1);
     random_voronoi_square = meshGenerator.getMesh();
 
+<<<<<<< HEAD
     /*Rectangle hole with squares*/
     Hole* circle = new CircularHole(Point(0.5, 0.5), 0.25);
+=======
+    /*BoundingBox hole with squares*/
+    Hole* circle = new CircularHole(Point(0.5,0.5),0.25, 10);
+>>>>>>> fracture_all_neighbours
     region1.addHole(circle);
 
     region1.generatePoints(generator_uniform, 10, 10);
@@ -124,7 +133,11 @@ Eigen::VectorXd NumericalTests::hole_twoforceX() {
     return Eigen::Matrix<double, -1, 1, 0, -1, 1>();
 }
 
+<<<<<<< HEAD
 void NumericalTests::loadRightForceX(Mesh m, Veamer &v, Segment<int> leftSide, Segment<int> rightSide) {
+=======
+void NumericalTests::loadRightForceX(PolygonalMesh m, Veamer &v, Segment leftSide, Segment rightSide) {
+>>>>>>> fracture_all_neighbours
     class None : public BodyForce {
         double apply (double x, double y){
             return 0;
@@ -150,7 +163,11 @@ void NumericalTests::loadRightForceX(Mesh m, Veamer &v, Segment<int> leftSide, S
     v.initProblem(m, p);
 }
 
+<<<<<<< HEAD
 void NumericalTests::loadRightForceY(Mesh m, Veamer &v, Segment<int> leftSide, Segment<int> rightSide) {
+=======
+void NumericalTests::loadRightForceY(PolygonalMesh m, Veamer &v, Segment leftSide, Segment rightSide) {
+>>>>>>> fracture_all_neighbours
     class None : public BodyForce {
         double apply (double x, double y){
             return 0;
@@ -176,7 +193,11 @@ void NumericalTests::loadRightForceY(Mesh m, Veamer &v, Segment<int> leftSide, S
     v.initProblem(m, p);
 }
 
+<<<<<<< HEAD
 void NumericalTests::loadNoForces(Mesh m, Veamer &v, Segment<int> leftSide, Segment<int> rightSide) {
+=======
+void NumericalTests::loadNoForces(PolygonalMesh m, Veamer &v, Segment leftSide, Segment rightSide) {
+>>>>>>> fracture_all_neighbours
     class None : public BodyForce {
         double apply (double x, double y){
             return 0;
@@ -199,7 +220,11 @@ void NumericalTests::loadNoForces(Mesh m, Veamer &v, Segment<int> leftSide, Segm
     v.initProblem(m, p);
 }
 
+<<<<<<< HEAD
 void NumericalTests::loadTwoForcesX(Mesh m, Veamer &v, Segment<int> leftSide, Segment<int> rightSide) {
+=======
+void NumericalTests::loadTwoForcesX(PolygonalMesh m, Veamer &v, Segment leftSide, Segment rightSide) {
+>>>>>>> fracture_all_neighbours
 
 }
 

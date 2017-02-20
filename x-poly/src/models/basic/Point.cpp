@@ -20,7 +20,7 @@ double Point::getY() const{
 }
 
 std::string Point::getString() const{
-    return string_utils::toString<double>(this->getX()) + " " + string_utils::toString<double>(this->getY());
+    return utilities::toString<double>(this->getX()) + " " + utilities::toString<double>(this->getY());
 }
 
 double Point::squareNorm() {
@@ -34,14 +34,6 @@ bool Point::operator==(const Point &other) const{
            std::abs(this->y-other.y)<config->getTolerance();
 }
 
-Point3D Point::get3DPoint() {
-    return Point3D(this->x, this->y, 0);
-}
-
-Vector Point::operator-(Point &other) {
-    Point3D* newPoint = new Point3D(this->x - other.getX(), this->y - other.getY(),0);
-    return Vector(newPoint);
-}
 
 Point Point::operator-(const Point &other) {
     return Point(this->x - other.x, this->y - other.y);
@@ -63,3 +55,13 @@ void Point::setY(double newY) {
     this->y = newY;
 }
 
+bool Point::operator<(const Point &other) const {
+    if(std::abs(this->x-other.x)<0.001){
+        if(std::abs(this->y-other.y)<0.001){
+            return false;
+        }
+        return this->y<other.y;
+    }
+
+    return this->x<other.x;
+}

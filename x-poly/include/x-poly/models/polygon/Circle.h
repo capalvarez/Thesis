@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <x-poly/utilities/geometryFunctions.h>
-#include <x-poly/utilities/utilities.h>
+#include <x-poly/utilities/xpolyutilities.h>
 
 class Circle {
 protected:

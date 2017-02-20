@@ -4,7 +4,7 @@
 
 Veamer::Veamer() {}
 
-void Veamer::initProblem(Mesh m, ProblemConditions conditions) {
+void Veamer::initProblem(PolygonalMesh m, ProblemConditions conditions) {
     std::vector<Point> meshPoints = m.getPoints().getList();
     this->points.push_list(meshPoints);
     this->conditions = conditions;
@@ -51,7 +51,7 @@ Eigen::VectorXd Veamer::simulate() {
         f(c[j]) = boundary_values(j);
     }
 
-    //Solve the system
+     //Solve the system
     //Eigen::VectorXd x = K.colPivHouseholderQr().solve(f);
     Eigen::VectorXd x = K.inverse()*f;
 
@@ -69,7 +69,7 @@ void Veamer::replaceElement(Polygon old, std::vector<Polygon> newPolygons) {
     }
 }
 
-void Veamer::replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons, List<Point> points) {
+void Veamer::replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons, UniqueList<Point> points) {
     this->points = points;
 
     for (int i = 0; i < old.size(); ++i) {
@@ -85,14 +85,14 @@ void Veamer::replaceElements(std::vector<Polygon> old, std::vector<Polygon> newP
 }
 
 Pair<int> Veamer::pointToDOFS(int point_index) {
-    this->DOFs.pointToDOFS(point_index);
+    return this->DOFs.pointToDOFS(point_index);
 }
 
 Material Veamer::getMaterial() {
     return conditions.material;
 }
 
-List<Point> Veamer::getPoints() {
+UniqueList<Point> Veamer::getPoints() {
     return this->points;
 }
 

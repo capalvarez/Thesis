@@ -16,8 +16,13 @@ frame.pack()
 
 canvas = Canvas(window, width=900, height=700, bg="white")
 
+<<<<<<< HEAD:python-visualization/mesh-visualizator/visualizer.py
 points, segments, polygons, limits = read_file("Idontgetit.txt")
 #t_points, triangles, t_limits = read_triangulation("rosette.txt")
+=======
+points, segments, polygons, limits = read_file("idontgetit.txt")
+t_points, triangles, t_limits = read_triangulation("PolygonalInside_triangles.txt")
+>>>>>>> fracture_all_neighbours:visualizer/visualizer.py
 
 button = Button(frame, text="Draw Polygons", command=lambda p=polygons, c=canvas, ps=points: draw_polygons(p, c, ps))
 button2 = Button(frame, text="Draw Segments", command=lambda s=segments, c=canvas, p=points: draw_segments(s, c, p))

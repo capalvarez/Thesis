@@ -7,8 +7,8 @@
 class PolygonTest: public ::testing::Test{
 protected:
     virtual void SetUp(){
-        points = {Point(0,0), Point(1,0), Point(1,1), Point(0.5,1),
-                  Point(0,1), Point(0,2), Point(1,2)};
+        points = {Point(0,0), Point(1,0), Point(1,1), Point(0.5,1),Point(0,1),Point(0,2), Point(1,2), Point(2,0),
+                  Point(2,1), Point(0,-1), Point(2,-1)};
 
         std::vector<int> t = {0,1,4};
         triangle = new Polygon(t,points);

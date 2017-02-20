@@ -1,5 +1,7 @@
 #include <algorithm>
 #include <x-poly/models/polygon/Polygon.h>
+#include <map>
+#include "../../../../utilities/include/utilities/Pair.h"
 
 
 Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
@@ -17,7 +19,7 @@ Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
 
 void Polygon::mutate(std::vector<Point> &p) {
     this->points.clear();
-    utilities::TrivialIndexVector(this->points,p.size());
+    xpoly_utilities::TrivialIndexVector(this->points,p.size());
     calculateHash();
 
     std::vector<Point> this_points;
@@ -31,7 +33,7 @@ void Polygon::mutate(std::vector<Point> &p) {
 }
 
 Polygon::Polygon(std::vector<Point> &p) {
-    utilities::TrivialIndexVector(this->points,p.size());
+    xpoly_utilities::TrivialIndexVector(this->points,p.size());
 
     std::vector<Point> this_points;
     for(int i=0;i<points.size();i++){
@@ -63,7 +65,7 @@ double Polygon::calculateDiameter(std::vector<Point>& p) {
     double max = -1;
 
     for(int i=0;i<rotatingCalipers.size();i++){
-        double distance = (rotatingCalipers[i].first - rotatingCalipers[i].second).norm();
+        double distance = xpoly_utilities::norm (rotatingCalipers[i].first - rotatingCalipers[i].second);
         if(distance>max){
             max = distance;
         }
@@ -99,20 +101,20 @@ double Polygon::signedArea(std::vector<Point>& p) {
     return 0.5*area;
 }
 
-void Polygon::getSegments(std::vector<Segment<int>>& segments) {
+void Polygon::getSegments(std::vector<IndexSegment>& segments) {
     int n = (int) this->points.size();
 
     for(int i=0;i<n; i++){
-        Segment<int> s (this->points[i%n], this->points[(i+1)%n]);
+        IndexSegment s (this->points[i%n], this->points[(i+1)%n]);
         segments.push_back(s);
     }
 }
 
-void Polygon::getSegments(std::vector<Segment<int>> &segments, int offset) {
+void Polygon::getSegments(std::vector<IndexSegment> &segments, int offset) {
     int n = (int) this->points.size();
 
     for(int i=0;i<n; i++){
-        segments.push_back(Segment<int>(this->points[i%n] + offset , this->points[(i+1)%n] + offset));
+        segments.push_back(IndexSegment(this->points[i%n] + offset , this->points[(i+1)%n] + offset));
     }
 }
 
@@ -154,11 +156,15 @@ bool Polygon::containsPoint(std::vector<Point>& p, Point point) {
         j = i;
     }
 
-    return oddNodes || inEdges(p,point);
+    if(oddNodes){
+        return true;
+    }
+
+    return inEdges(p,point);
 }
 
-Segment<int> Polygon::containerEdge(std::vector<Point>& p, Point point){
-    std::vector<Segment<int>> segments;
+IndexSegment Polygon::containerEdge(std::vector<Point>& p, Point point){
+    std::vector<IndexSegment> segments;
     this->getSegments(segments);
 
     for(int i=0; i<segments.size(); i++){
@@ -167,11 +173,11 @@ Segment<int> Polygon::containerEdge(std::vector<Point>& p, Point point){
         }
     }
 
-    return Segment<int>(-1, -1);
+    return IndexSegment(-1, -1);
 }
 
 bool Polygon::inEdges(std::vector<Point>& p, Point point) {
-    Segment<int> container = containerEdge(p, point);
+    IndexSegment container = containerEdge(p, point);
 
     return container.getFirst()!= -1 && container.getSecond()!= -1;
 }
@@ -225,33 +231,21 @@ bool Polygon::operator==(const Polygon &other) const{
 }
 
 std::string Polygon::getString() {
-    std::string base = string_utils::toString<double>(this->points[0]);
+    std::string base = utilities::toString<double>(this->points[0]);
 
     for(int i=1;i<this->points.size();i++){
-        base += " " + string_utils::toString<double>(this->points[i]);
+        base += " " + utilities::toString<double>(this->points[i]);
     }
 
     return base + " " + getCentroid().getString();
 }
 
-bool Polygon::containsEdge(Segment<int> s) {
+bool Polygon::containsEdge(IndexSegment s) {
     return isVertex(s.getFirst()) && isVertex(s.getSecond());
 }
 
 bool Polygon::isVertex(int index) {
     return std::find(points.begin(), points.end(), index) != points.end();
-}
-
-Point Polygon::getAverageVertex(std::vector<Point> p) {
-    double x = 0;
-    double y = 0;
-
-    for (int i = 0; i < this->points.size(); ++i) {
-        x += p[this->points[i]].getX();
-        y += p[this->points[i]].getY();
-    }
-
-    return Point(x/this->numberOfSides(), y/this->numberOfSides());
 }
 
 void Polygon::calculateHash() {
@@ -267,6 +261,7 @@ void Polygon::calculateHash() {
 void Polygon::fixCCW(std::vector<Point> p) {
     if(isClockwise(p)){
         std::reverse(this->points.begin(), this->points.end());
+        this->area = -this->area;
     }
 }
 
@@ -280,8 +275,53 @@ std::vector<Point> Polygon::getPoints(std::vector<Point> p) {
     return returnPoints;
 }
 
+Pair<int> Polygon::commonEdgesBorder(Polygon p) {
+    std::map<int,int> thisPoints;
 
+    for (int i = 0; i < this->points.size(); ++i) {
+        thisPoints[this->points[i]] = 1;
+    }
 
+    int j,k, n = p.numberOfSides();
+    std::vector<int> poly_points = p.getPoints();
 
+    for (j = 0; j < poly_points.size(); ++j) {
+        auto search = thisPoints.find(poly_points[j]);
 
+        if(search != thisPoints.end()) {
+            break;
+        }
+    }
+
+    k = (j + 1)%n;
+    int i = 0;
+    bool last = true;
+    std::vector<int> border;
+
+    while (i<n+1){
+        bool now = thisPoints[poly_points[k]]==0;
+
+        if(now && last){
+            border.push_back(poly_points[(k-1+n)%n]);
+        }
+
+        if(!now && !last){
+            border.push_back(poly_points[k]);
+        }
+
+        last = thisPoints[poly_points[k]]==1;
+        k = (k+1)%n;
+        i++;
+    }
+
+    return Pair<int>(border[0], border[1]);
+}
+
+bool Polygon::isPoint(int index) {
+    return std::find(this->points.begin(), this->points.end(), index)!=this->points.end();
+}
+
+bool Polygon::operator<(const Polygon &other) const {
+    return this->hash<other.hash;
+}
 

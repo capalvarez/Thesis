@@ -2,7 +2,6 @@
 #define THESIS_ELEMENT_H
 
 #include <veamy/models/dof/DOF.h>
-#include <x-poly/utilities/List.h>
 #include <veamy/models/dof/DOFS.h>
 #include <x-poly/models/polygon/Polygon.h>
 #include <veamy/lib/Eigen/Dense>
@@ -16,13 +15,12 @@
 class Element {
 private:
     std::vector<int> dofs;
-
     Eigen::VectorXd f;
 
     void initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemConditions& conditions);
 public:
     Eigen::MatrixXd K;
-    Element(ProblemConditions& conditions, Polygon p, List<Point>& points, DOFS& out);
+    Element(ProblemConditions& conditions, Polygon p, UniqueList<Point>& points, DOFS& out);
     void assemble(DOFS out, Eigen::MatrixXd& Kglobal,  Eigen::VectorXd& Fglobal);
 };
 
