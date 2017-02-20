@@ -8,7 +8,6 @@ veamy/include/veamy/lib
 python-visualization/.idea/
 test/dealii-test/
 test/libmesh-test/
-
 x-poly/include/x-poly/models/hole/lib/
 x-poly/src/models/hole/lib/
 python-visualization/displacement-visualizator/__init__.py
@@ -21,3 +20,7 @@ python-visualization/mesh-visualizator/Point.pyc
 python-visualization/mesh-visualizator/Polygon.pyc
 python-visualization/mesh-visualizator/Segment.pyc
 pycalculix-test/
+git-author-rewrite.sh
+cmake-build-debug/
+
+
