@@ -1,0 +1,37 @@
+#include <x-poly/models/polygon/BoundingBox.h>
+
+BoundingBox::BoundingBox(Point p1, Point p2) {
+    this->p1 = p1;
+    this->p2 = p2;
+}
+
+Point BoundingBox::getFirst() const {
+    return this->p1;
+}
+
+Point BoundingBox::getSecond() const {
+    return this->p2;
+}
+
+double BoundingBox::getWidth() {
+    return std::abs(p1.getX() - p2.getX());
+}
+
+double BoundingBox::getHeight() {
+    return std::abs(p1.getY() - p2.getY());
+}
+
+double BoundingBox::xMin() {
+    return std::min(p1.getX(), p2.getX());
+}
+
+double BoundingBox::yMin() {
+    return std::min(p1.getY(), p2.getY());
+}
+
+bool BoundingBox::operator==(const BoundingBox &other) const {
+    return getFirst()==other.getFirst() && getSecond()==other.getSecond() ||
+           getSecond()==other.getFirst() && getFirst()==other.getSecond();
+}
+
+

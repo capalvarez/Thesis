@@ -1,0 +1,26 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/libvem.dir/src/Veamer.cpp.obj"
+  "CMakeFiles/libvem.dir/src/config/VeamyConfig.cpp.obj"
+  "CMakeFiles/libvem.dir/src/models/Edge.cpp.obj"
+  "CMakeFiles/libvem.dir/src/models/Element.cpp.obj"
+  "CMakeFiles/libvem.dir/src/models/constraints/Constraint.cpp.obj"
+  "CMakeFiles/libvem.dir/src/models/constraints/Constraints.cpp.obj"
+  "CMakeFiles/libvem.dir/src/models/constraints/ConstraintsContainer.cpp.obj"
+  "CMakeFiles/libvem.dir/src/models/constraints/EssentialConstraints.cpp.obj"
+  "CMakeFiles/libvem.dir/src/models/constraints/NaturalConstraints.cpp.obj"
+  "CMakeFiles/libvem.dir/src/models/constraints/values/Constant.cpp.obj"
+  "CMakeFiles/libvem.dir/src/models/constraints/values/Function.cpp.obj"
+  "CMakeFiles/libvem.dir/src/models/dof/DOF.cpp.obj"
+  "CMakeFiles/libvem.dir/src/models/dof/DOFS.cpp.obj"
+  "CMakeFiles/libvem.dir/src/physics/Material.cpp.obj"
+  "CMakeFiles/libvem.dir/src/postprocess/PostProcessor.cpp.obj"
+  "CMakeFiles/libvem.dir/src/quadrature/QuadraturePolygon.cpp.obj"
+  "CMakeFiles/libvem.dir/src/utilities/matrixOps.cpp.obj"
+  "liblibvem.pdb"
+  "liblibvem.a"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/libvem.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

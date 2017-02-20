@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/Catalina/ClionProjects/Thesis/x-poly/main/Stack.h
+
+C:/Users/Catalina/ClionProjects/Thesis/x-poly/main/main.cpp
+iostream
+-
+string
+-
+Stack.h
+C:/Users/Catalina/ClionProjects/Thesis/x-poly/main/Stack.h
+

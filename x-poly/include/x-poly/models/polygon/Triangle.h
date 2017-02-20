@@ -2,7 +2,7 @@
 #define THESIS_TRIANGLE_H
 
 #include <x-poly/models/polygon/Polygon.h>
-#include <x-poly/voronoi/structures/EdgeData.h>
+#include <x-poly/models/neighbourhood/EdgeData.h>
 #include <x-poly/voronoi/structures/mapdata.h>
 #include <unordered_map>
 

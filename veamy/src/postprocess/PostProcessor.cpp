@@ -9,9 +9,7 @@ void PostProcessor::displacementsProcess(std::unordered_map<Point, double, Point
                                          std::unordered_map<Point, double, PointHasher> &dispY) {
 
     std::unordered_map<int, Pair<int>> point_to_dofs = this->veamer.DOFs.point_to_dofs;
-    List<Point> points = this->veamer.getPoints();
-
-
+    UniqueList<Point> points = this->veamer.getPoints();
 
     for(auto d: point_to_dofs){
         Point p = points.get(d.first);
@@ -23,7 +21,7 @@ void PostProcessor::displacementsProcess(std::unordered_map<Point, double, Point
 }
 
 void PostProcessor::printInFile(std::unordered_map<Point, double, PointHasher> map, std::string fileName) {
-    std::string path = string_utils::getPath();
+    std::string path = utilities::getPath();
     path += fileName;
 
     std::ofstream file;

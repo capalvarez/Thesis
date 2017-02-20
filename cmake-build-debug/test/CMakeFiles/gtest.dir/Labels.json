@@ -1,0 +1,51 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/CMakeFiles/gtest"
+		},
+		
+		{
+			"file" : "C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/CMakeFiles/gtest.rule"
+		},
+		
+		{
+			"file" : "C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/CMakeFiles/gtest-complete.rule"
+		},
+		
+		{
+			"file" : "C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/gtest/src/gtest-stamp/gtest-install.rule"
+		},
+		
+		{
+			"file" : "C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/gtest/src/gtest-stamp/gtest-mkdir.rule"
+		},
+		
+		{
+			"file" : "C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/gtest/src/gtest-stamp/gtest-download.rule"
+		},
+		
+		{
+			"file" : "C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/gtest/src/gtest-stamp/gtest-update.rule"
+		},
+		
+		{
+			"file" : "C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/gtest/src/gtest-stamp/gtest-patch.rule"
+		},
+		
+		{
+			"file" : "C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/gtest/src/gtest-stamp/gtest-configure.rule"
+		},
+		
+		{
+			"file" : "C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/gtest/src/gtest-stamp/gtest-build.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "gtest" ],
+		"name" : "gtest"
+	}
+}

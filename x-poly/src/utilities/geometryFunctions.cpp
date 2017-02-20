@@ -1,13 +1,14 @@
 #include <x-poly/models/basic/Point.h>
 #include <vector>
 #include <include/x-poly/config/XPolyConfig.h>
+#include <x-poly/utilities/xpolyutilities.h>
 
 namespace geometry_functions{
     double area2(Point p1, Point p2, Point p3){
-        Vector v1 = p2.get3DPoint() - p1.get3DPoint();
-        Vector v2 = p3.get3DPoint() - p1.get3DPoint();
+        Point v1 = p2 - p1;
+        Point v2 = p3 - p1;
 
-        return (v1^v2).norm();
+        return xpoly_utilities::crossProduct(v1,v2);
     }
 
     bool collinear(Point p1, Point p2, Point p3){

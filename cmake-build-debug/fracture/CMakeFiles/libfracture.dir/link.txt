@@ -1,0 +1,2 @@
+C:\MinGW\bin\ar.exe qc liblibfracture.a  CMakeFiles/libfracture.dir/src/FractureSimulator.cpp.obj CMakeFiles/libfracture.dir/src/crack/Crack.cpp.obj CMakeFiles/libfracture.dir/src/crack/CrackTip.cpp.obj CMakeFiles/libfracture.dir/src/geometry/BreakableMesh.cpp.obj CMakeFiles/libfracture.dir/src/geometry/generator/RosetteGroupGenerator.cpp.obj CMakeFiles/libfracture.dir/src/geometry/mesh/RemeshAdapter.cpp.obj CMakeFiles/libfracture.dir/src/geometry/mesh/SimplePolygonMerger.cpp.obj
+C:\MinGW\bin\ranlib.exe liblibfracture.a

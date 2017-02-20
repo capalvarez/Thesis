@@ -1,0 +1,2 @@
+C:\MinGW\bin\ar.exe qc liblibutilities.a  CMakeFiles/libutilities.dir/src/utilities.cpp.obj
+C:\MinGW\bin\ranlib.exe liblibutilities.a

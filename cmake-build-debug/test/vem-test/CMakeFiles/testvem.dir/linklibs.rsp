@@ -1,0 +1,1 @@
+ ../../veamy/liblibvem.a ../gtest/src/gtest-build/libgtest.a ../../x-poly/liblibxpoly.a ../../x-poly/src/voronoi/lib/libtriangle.a ../../utilities/liblibutilities.a -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 

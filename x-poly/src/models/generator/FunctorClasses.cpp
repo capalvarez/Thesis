@@ -1,4 +1,4 @@
-#include <x-poly/utilities/utilities.h>
+#include <x-poly/utilities/xpolyutilities.h>
 #include <cmath>
 #include <random>
 #include <x-poly/models/generator/Functor.h>
@@ -30,7 +30,7 @@ public:
     }
 
     inline double apply(double x){
-        return amplitude*std::sin(frecuency*utilities::radian(x) + utilities::radian(phase));
+        return amplitude*std::sin(frecuency*xpoly_utilities::radian(x) + xpoly_utilities::radian(phase));
     };
 };
 
@@ -47,7 +47,7 @@ public:
     }
 
     inline double apply(double x){
-        return amplitude*std::cos(frecuency*utilities::radian(x) + utilities::radian(phase));
+        return amplitude*std::cos(frecuency*xpoly_utilities::radian(x) + xpoly_utilities::radian(phase));
     };
 };
 

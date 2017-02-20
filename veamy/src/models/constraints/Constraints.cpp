@@ -1,7 +1,7 @@
 #include <veamy/models/constraints/Constraints.h>
 
 void Constraints::addConstraint(Constraint c) {
-    List<Segment<int>> segments = c.getSegments();
+    UniqueList<IndexSegment> segments = c.getSegments();
 
     for (int i = 0; i < segments.size(); ++i) {
         constrained_segments.push_back(segments.get(i));
@@ -9,12 +9,13 @@ void Constraints::addConstraint(Constraint c) {
     }
 }
 
-isConstrainedInfo Constraints::isConstrained(std::vector<Point> points, Segment<int> s) {
+isConstrainedInfo Constraints::isConstrained(std::vector<Point> points, IndexSegment s) {
    // TODO: Some data structure is necessary to optimize this, is slow as a snail
 
     for (int i = 0; i < constrained_segments.size(); ++i) {
-        if(constrained_segments[i].contains(points, s))
+        if(constrained_segments[i].contains(points,s)){
             return isConstrainedInfo(constrained_segments[i]);
+        }
     }
 
     return isConstrainedInfo();
@@ -28,7 +29,7 @@ std::vector<int> Constraints::getConstrainedDOF() {
     return constrained_dofs.getList();
 }
 
-void Constraints::addConstrainedDOF(std::vector<Point> points, int DOF_index, DOF::Axis axis, SegmentPair<int> pair) {
+void Constraints::addConstrainedDOF(std::vector<Point> points, int DOF_index, DOF::Axis axis, SegmentPair pair) {
     addConstrainedDOFBySegment(points, DOF_index, axis, pair.s1);
 
     if(pair.number!=1){
@@ -36,7 +37,7 @@ void Constraints::addConstrainedDOF(std::vector<Point> points, int DOF_index, DO
     }
 }
 
-void Constraints::addConstrainedDOFBySegment(std::vector<Point> points, int DOF_index, DOF::Axis axis, Segment<int> s) {
+void Constraints::addConstrainedDOFBySegment(std::vector<Point> points, int DOF_index, DOF::Axis axis, IndexSegment s) {
     isConstrainedInfo info = isConstrained(points, s);
 
     if(info.isConstrained){

@@ -1,0 +1,4 @@
+C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/gtest/src/gtest-build/CMakeFiles/gtest.dir
+C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/gtest/src/gtest-build/CMakeFiles/gtest_main.dir
+C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/gtest/src/gtest-build/CMakeFiles/edit_cache.dir
+C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/gtest/src/gtest-build/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../utilities/include/utilities/Pair.h
+
+C:/Users/Catalina/ClionProjects/Thesis/utilities/src/utilities.cpp
+algorithm
+-
+utilities/Pair.h
+-
+

@@ -1,8 +1,7 @@
 #ifndef THESIS_VEAMER_H
 #define THESIS_VEAMER_H
 
-#include <x-poly/models/Mesh.h>
-#include <x-poly/utilities/List.h>
+#include <x-poly/models/PolygonalMesh.h>
 #include <veamy/models/dof/DOFS.h>
 #include <veamy/models/constraints/EssentialConstraints.h>
 #include <veamy/utilities/matrixOps.h>
@@ -23,10 +22,8 @@ class Veamer {
 private:
     //TODO: Check for inconsistencies (cannot have natural and essential conditions on the same segments)
     ProblemConditions conditions;
-
-
     std::unordered_map<Polygon, int, PolygonHasher> polygon_to_element;
-    List<Point> points;
+    UniqueList<Point> points;
 
     void createElement(Polygon p);
 public:
@@ -34,15 +31,16 @@ public:
     std::vector<Element> elements;
     Veamer();
 
-    void initProblem(Mesh m, ProblemConditions conditions);
+    void initProblem(PolygonalMesh m, ProblemConditions conditions);
     Eigen::VectorXd simulate();
 
     void replaceElement(Polygon old, std::vector<Polygon> newPolygons);
-    void replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons, List<Point> points);
+    void replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons, UniqueList<Point> points);
 
     Pair<int> pointToDOFS(int point_index);
     Material getMaterial();
-    List<Point> getPoints();
+    UniqueList<Point> getPoints();
+
 };
 
 

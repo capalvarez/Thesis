@@ -23,12 +23,12 @@ TEST(PostProcessorTest, DisplacementTest){
 
     std::vector<Point> seeds = region.getSeedPoints();
     TriangleMeshGenerator g(seeds, region);
-    Mesh m = g.getMesh();
+    PolygonalMesh m = g.getMesh();
     m.printInFile("Idontgetit.txt");
 
     EssentialConstraints c;
-    Segment<Point> constrained(Point(0,0),Point(0,1));
-    Segment<Point> constrained2 (Point(3,0),Point(3,1));
+    PointSegment constrained(Point(0,0),Point(0,1));
+    PointSegment constrained2 (Point(3,0),Point(3,1));
     Constraint const1 (constrained, m.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
 
     c.addConstraint(const1);

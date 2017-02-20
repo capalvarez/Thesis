@@ -35,8 +35,6 @@ Eigen::MatrixXd Material::getMaterialMatrix() {
     //D(2,2) = c*(1 - this->v);
 
     D(2,2) = c*(1 - 2*this->v);
-    //D(4,4) = 2*c*(1 - 2*this->v);
-    //D(5,5) = 2*c*(1 - 2*this->v);
 
     return D;
 }

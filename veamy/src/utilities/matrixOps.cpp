@@ -1,5 +1,5 @@
 #include <iostream>
-#include <include/veamy/utilities/matrixOps.h>
+#include <veamy/utilities/matrixOps.h>
 
 namespace matrixOps {
     Eigen::MatrixXd getColumns(Eigen::MatrixXd& matrix, std::vector<int> cols){

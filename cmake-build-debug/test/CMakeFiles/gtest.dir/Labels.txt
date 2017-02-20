@@ -1,0 +1,13 @@
+# Target labels
+ gtest
+# Source files and their labels
+C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/CMakeFiles/gtest
+C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/CMakeFiles/gtest.rule
+C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/CMakeFiles/gtest-complete.rule
+C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/gtest/src/gtest-stamp/gtest-install.rule
+C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/gtest/src/gtest-stamp/gtest-mkdir.rule
+C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/gtest/src/gtest-stamp/gtest-download.rule
+C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/gtest/src/gtest-stamp/gtest-update.rule
+C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/gtest/src/gtest-stamp/gtest-patch.rule
+C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/gtest/src/gtest-stamp/gtest-configure.rule
+C:/Users/Catalina/ClionProjects/Thesis/cmake-build-debug/test/gtest/src/gtest-stamp/gtest-build.rule

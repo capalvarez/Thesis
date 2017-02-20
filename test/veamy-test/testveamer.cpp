@@ -11,7 +11,7 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     Veamer v;
     std::vector<Point> points = {Point(0,0), Point(2,0), Point(2,1), Point(0,1)};
     Region region(points);
-    region.generatePoints(PointGenerator(functions::constant(), functions::constant()), 5, 5);
+    region.generatePoints(PointGenerator(functions::constant(), functions::constant()), 2, 2);
 
     class Sum : public BodyForce{
     private:
@@ -24,12 +24,12 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
 
     std::vector<Point> seeds = region.getSeedPoints();
     TriangleMeshGenerator g(seeds, region);
-    Mesh m = g.getMesh();
+    PolygonalMesh m = g.getMesh();
     m.printInFile("Idontgetit.txt");
 
     EssentialConstraints c;
-    Segment<Point> constrained(Point(0,0),Point(0,1));
-    Segment<Point> constrained2 (Point(2,0),Point(2,1));
+    PointSegment constrained(Point(0,0),Point(0,1));
+    PointSegment constrained2 (Point(2,0),Point(2,1));
     Constraint const1 (constrained, m.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
 
     c.addConstraint(const1);

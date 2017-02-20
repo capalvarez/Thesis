@@ -1,7 +1,7 @@
 #include "testregion.h"
 
 TEST_F(RegionTest, BoxTest){
-    Rectangle box (Point(0,0),Point(10,10));
+    BoundingBox box (Point(0,0),Point(10,10));
 
     EXPECT_EQ(rectangle->getBox(),box);
     EXPECT_EQ(nonconvex->getBox(),box);

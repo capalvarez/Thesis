@@ -1,36 +1,21 @@
-#include <include/x-poly/models/Triangulation.h>
-#include <cstdlib>
+#include <x-poly/models/Triangulation.h>
 
-Triangulation::Triangulation(std::vector <Point> p, std::vector <Triangle> t, SegmentMap edges) {
-    this->points.assign(p.begin(),p.end());
+
+Triangulation::Triangulation(std::vector <Point> &p, std::vector <Triangle> &t, SegmentMap edges) {
+    this->points.push_list(p);
     this->triangles.assign(t.begin(),t.end());
-    this->edgeMap = edges;
+    this->edges = edges;
 }
 
-void Triangulation::writeInFile(std::string fileName) {
-    std::string path = string_utils::getPath();
-    path +=  fileName;
+std::vector<Triangle> Triangulation::getTriangles() {
+    return this->triangles;
+}
 
-    std::ofstream file;
-    file.open(path, std::ios::out);
-
-    file << this->points.size() << std::endl;
-    for(int i=0;i<this->points.size();i++){
-        file << this->points[i].getString() << std::endl;
-    }
-
+void Triangulation::writeElements(std::ofstream &file) {
     file << this->triangles.size() << std::endl;
     for(int i=0;i<this->triangles.size();i++){
         file << this->triangles[i].getString() << std::endl;
     }
-
     file.close();
 }
 
-std::vector<Point> Triangulation::getPoints() {
-    return this->points;
-}
-
-SegmentMap Triangulation::getSegments() {
-    return this->edgeMap;
-}

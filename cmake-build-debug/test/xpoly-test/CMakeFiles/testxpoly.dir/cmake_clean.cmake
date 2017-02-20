@@ -1,0 +1,25 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/testxpoly.dir/models/basic/testsegment.cpp.obj"
+  "CMakeFiles/testxpoly.dir/models/generator/testfunctions.cpp.obj"
+  "CMakeFiles/testxpoly.dir/models/generator/testpointgenerator.cpp.obj"
+  "CMakeFiles/testxpoly.dir/models/holes/testcircularhole.cpp.obj"
+  "CMakeFiles/testxpoly.dir/models/holes/testclipperwrapper.cpp.obj"
+  "CMakeFiles/testxpoly.dir/models/holes/testpolygonalhole.cpp.obj"
+  "CMakeFiles/testxpoly.dir/models/polygon/testcircle.cpp.obj"
+  "CMakeFiles/testxpoly.dir/models/polygon/testpolygon.cpp.obj"
+  "CMakeFiles/testxpoly.dir/models/polygon/testtriangle.cpp.obj"
+  "CMakeFiles/testxpoly.dir/models/testregion.cpp.obj"
+  "CMakeFiles/testxpoly.dir/testmesh.cpp.obj"
+  "CMakeFiles/testxpoly.dir/tests.cpp.obj"
+  "CMakeFiles/testxpoly.dir/utilities/testconvexhull.cpp.obj"
+  "CMakeFiles/testxpoly.dir/utilities/testgeometryfunctions.cpp.obj"
+  "testxpoly.pdb"
+  "testxpoly.exe"
+  "testxpoly.exe.manifest"
+  "libtestxpoly.dll.a"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/testxpoly.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()
