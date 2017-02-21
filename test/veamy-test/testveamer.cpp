@@ -44,6 +44,9 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     v.initProblem(m, conditions);
 
     Eigen::VectorXd x = v.simulate();
+
+    std::cout << x << std::endl;
+
     std::string files[2] = {"ux_simple.txt", "uy_simple.txt"};
 
     PostProcessor postProcessor (x, v);

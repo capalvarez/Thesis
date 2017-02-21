@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <fracture/FractureSimulator.h>
 #include <x-poly/models/generator/functions.h>
+#include <veamy/models/constraints/values/Constant.h>
 
 TEST(FractureSimulatorTest, InitTest){
     std::vector<Point> squarePoints = {Point(0,0),Point(3,0),Point(3,3),Point(0,3)};
@@ -53,10 +54,20 @@ TEST(FractureSimulatorTest, SimulateTest){
     };
 
     BodyForce* f = new Sum();
-    ConstraintsContainer container;
-    Material m;
+    EssentialConstraints c;
+    PointSegment constrained(Point(0,0),Point(0,3));
+    PointSegment constrained2 (Point(3,0),Point(3,3));
+    Constraint const1 (constrained, mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
 
-    ProblemConditions conditions(container, f, m);
+    c.addConstraint(const1);
+    Constraint const2 (constrained2, mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(1));
+    c.addConstraint(const2);
+
+    ConstraintsContainer container;
+    container.addConstraints(c);
+
+    ProblemConditions conditions(container, f, Material(Materials::material::Steel));
+
     FractureSimulator simulator(mesh, crack, conditions);
 
     simulator.simulate(0.1,100);

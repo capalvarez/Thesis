@@ -52,8 +52,8 @@ Eigen::VectorXd Veamer::simulate() {
     }
 
      //Solve the system
-    //Eigen::VectorXd x = K.colPivHouseholderQr().solve(f);
-    Eigen::VectorXd x = K.inverse()*f;
+    Eigen::VectorXd x = K.colPivHouseholderQr().solve(f);
+    /*Eigen::VectorXd x = K.inverse()*f;*/
 
     return x;
 }

@@ -51,17 +51,17 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemCo
         double xDiff = vertex.getX() - average.getX();
         double yDiff = vertex.getY() - average.getY();
 
-        double Qi_x = (prevNormal.first*prevLength + nextNormal.first*nextLength)/(2*area);
-        double Qi_y = (prevNormal.second*prevLength + nextNormal.second*nextLength)/(2*area);
+        double Qi_x = (prevNormal.first*prevLength + nextNormal.first*nextLength)/(4*area);
+        double Qi_y = (prevNormal.second*prevLength + nextNormal.second*nextLength)/(4*area);
 
         Nr(2*vertex_id, 0) = 1;
         Nr(2*vertex_id, 2) = yDiff;
         Nr(2*vertex_id+1, 1) = 1;
         Nr(2*vertex_id+1, 2) = -xDiff;
 
-        Wr(2*vertex_id, 0) = 2.0/n;
+        Wr(2*vertex_id, 0) = 1.0/n;
         Wr(2*vertex_id, 2) = Qi_y;
-        Wr(2*vertex_id+1, 1) = 2.0/n;
+        Wr(2*vertex_id+1, 1) = 1.0/n;
         Wr(2*vertex_id+1, 2) = -Qi_x;
 
         Nc(2*vertex_id, 0) = xDiff;
@@ -107,6 +107,7 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemCo
     for (int i = 0; i < dofs.size(); ++i) {
         this->f(i) = polygon.integrate(conditions.f, points) + natural.lineIntegral(points,p,i/2,dofs[i]);
     }
+
 }
 
 void Element::assemble(DOFS out, Eigen::MatrixXd& Kglobal, Eigen::VectorXd& Fglobal) {
