@@ -23,6 +23,7 @@ TEST(BreakableMeshTest, BreakMeshTest){
     PointSegment crack(Point(0.25,1.5), Point(2.75,1.5));
 
     breakableMesh.breakMesh(2, crack);
+    breakableMesh.getSegments().printInFile("segments.txt");
 
     breakableMesh.printInFile("broken.txt");
 }

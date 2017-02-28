@@ -27,5 +27,9 @@ namespace xpoly_utilities {
     double norm(Point p){
         return sqrt(pow(p.getX(),2) + pow(p.getY(),2));
     }
+
+    double orientation(Point p, Point q, Point r){
+        return xpoly_utilities::crossProduct((q-p),(r-p));
+    }
 }
 

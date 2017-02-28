@@ -14,19 +14,15 @@ namespace convex {
         }
     } comparator;
 
-    double orientation(Point p, Point q, Point r){
-        return xpoly_utilities::crossProduct((q-p),(r-p));
-    }
-
     void convexHull(std::vector<Point> points, std::vector<Point>& upper, std::vector<Point>& lower){
         std::sort(points.begin(), points.end(), comparator);
         for(int i=0;i<points.size();i++){
 
-            while(upper.size()>1 && orientation(upper[upper.size()-2], upper[upper.size()-1],points[i])>=0){
+            while(upper.size()>1 && xpoly_utilities::orientation(upper[upper.size()-2], upper[upper.size()-1],points[i])<=0){
                 upper.pop_back();
             }
 
-            while(lower.size()>1 && orientation(lower[lower.size()-2], lower[lower.size()-1],points[i])<=0){
+            while(lower.size()>1 && xpoly_utilities::orientation(lower[lower.size()-2], lower[lower.size()-1],points[i])>=0){
                 lower.pop_back();
             }
 

@@ -185,10 +185,10 @@ bool Polygon::inEdges(std::vector<Point>& p, Point point) {
 bool Polygon::isConvex(std::vector<Point>& p) {
     int n = (int) this->points.size();
 
-    double determinant = convex::orientation(p[0],p[1],p[2]);
+    double determinant = xpoly_utilities::orientation(p[0],p[1],p[2]);
 
     for(int i=1;i<n; i++){
-        double newResult = convex::orientation(p[this->points[i]],p[this->points[(i+1)%n]],p[this->points[(i+2)%n]]);
+        double newResult = xpoly_utilities::orientation(p[this->points[i]],p[this->points[(i+1)%n]],p[this->points[(i+2)%n]]);
 
         if(determinant*newResult<0){
             return false;

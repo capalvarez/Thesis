@@ -46,17 +46,44 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
         n1.orderCCW(this->points.getList(), poly1.getCentroid());
         n2.orderCCW(this->points.getList(), poly1.getCentroid());
 
-        int indexOfStart = utilities::indexOf(poly1_points, n2.edge.getSecond());
-        int point = n2.edge.getSecond();
+        int indexOfStart,point;
 
-        while(point!=n1.edge.getSecond()){
+        if(xpoly_utilities::orientation(points.get(p1),points.get(p2),points.get(n2.edge.getFirst()))>=0){
+            indexOfStart = utilities::indexOf(poly1_points, n2.edge.getFirst());
+            point = n2.edge.getFirst();
+        }else{
+            indexOfStart = utilities::indexOf(poly1_points, n2.edge.getSecond());
+            point = n2.edge.getSecond();
+        }
+
+        bool edgePointsPassed = false;
+
+        while(true){
+            if(point==n1.edge.getFirst() || point==n1.edge.getSecond()) {
+                if (edgePointsPassed){
+                    break;
+                } else{
+                    edgePointsPassed = true;
+                }
+            }
+
             new1.push_back(point);
             point = poly1_points[(indexOfStart+1)%poly1_points.size()];
 
             indexOfStart++;
         }
 
-        while (point!=n2.edge.getSecond()){
+        edgePointsPassed = false;
+
+        while (true){
+            if(point==n2.edge.getFirst() || point==n2.edge.getSecond()) {
+                if (edgePointsPassed){
+                    break;
+                } else{
+                    edgePointsPassed = true;
+                }
+            }
+
             new2.push_back(point);
             point = poly1_points[(indexOfStart+1)%poly1_points.size()];
 
@@ -88,6 +115,8 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
         newPolygon1.getSegments(segments1);
         newPolygon2.getSegments(segments2);
 
+        this->edges.insert(IndexSegment(p1,p2),Neighbours(n1.neighbour,n1.neighbour));
+
         for (int i = 0; i < segments1.size() ; ++i) {
             this->edges.replace_neighbour(segments1[i], n1.neighbour, new_index1);
         }
@@ -96,10 +125,10 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
             this->edges.replace_neighbour(segments2[i], n1.neighbour, new_index2);
         }
 
-        this->edges.replace_neighbour(IndexSegment(p1,n1.edge.getFirst()), -1, init);
-        this->edges.replace_neighbour(IndexSegment(p1,n1.edge.getSecond()), -1, init);
-        this->edges.replace_neighbour(IndexSegment(p2,n2.edge.getFirst()), -1, n2.neighbour);
-        this->edges.replace_neighbour(IndexSegment(p2,n2.edge.getSecond()), -1, n2.neighbour);
+        this->edges.insert(IndexSegment(p1,n1.edge.getFirst()), init);
+        this->edges.insert(IndexSegment(p1,n1.edge.getSecond()), init);
+        this->edges.insert(IndexSegment(p2,n2.edge.getFirst()), n2.neighbour);
+        this->edges.insert(IndexSegment(p2,n2.edge.getSecond()), n2.neighbour);
 
         // Iterate
         init = n1.neighbour;
