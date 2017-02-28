@@ -1,3 +1,7 @@
+#include <x-poly/models/Region.h>
+#include <x-poly/models/generator/functions.h>
+#include <x-poly/voronoi/TriangleMeshGenerator.h>
+#include <fracture/geometry/BreakableMesh.h>
 #include "testpolygonmerger.h"
 
 TEST_F(PolygonMergerTest, TwoSquaresTest){
@@ -28,4 +32,19 @@ TEST_F(PolygonMergerTest, LAndSquareTest){
     Polygon p = merger.mergePolygons(square, L, points);
 
     EXPECT_EQ(p, Polygon(expected, points));
+}
+
+TEST_F(PolygonMergerTest, InMeshTest){
+    std::vector<Point> points = {Point(0,0), Point(2,0), Point(2,1), Point(0,1)};
+    Region region(points);
+    region.generatePoints(PointGenerator(functions::constant(), functions::constant()), 2, 2);
+
+    std::vector<Point> seeds = region.getSeedPoints();
+    TriangleMeshGenerator g(seeds, region);
+    PolygonalMesh m = g.getMesh();
+
+    BreakableMesh mesh(m);
+    mesh.mergePolygons(0,1);
+
+    mesh.printInFile("merged.txt");
 }

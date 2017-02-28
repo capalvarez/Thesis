@@ -28,6 +28,17 @@ void SegmentMap::replace_neighbour(IndexSegment s, int oldNeighbour, int newNeig
     }
 }
 
+void SegmentMap::replace_or_delete(IndexSegment s, int oldNeighbour, int newNeighbour) {
+    Neighbours n = get(s);
+    Neighbours toDelete(oldNeighbour,newNeighbour);
+
+    if(n==toDelete){
+        this->delete_element(s);
+    } else{
+        this->replace_neighbour(s,oldNeighbour,newNeighbour);
+    }
+}
+
 Neighbours& SegmentMap::get(IndexSegment s) {
     return map[s];
 }

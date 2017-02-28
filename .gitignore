@@ -23,4 +23,4 @@ pycalculix-test/
 git-author-rewrite.sh
 cmake-build-debug
 
-
+x-poly/include/x-poly/voronoi/lib/

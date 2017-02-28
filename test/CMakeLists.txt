@@ -21,9 +21,8 @@ ExternalProject_Get_Property(gtest source_dir binary_dir)
 set_target_properties(libgtest PROPERTIES
         "IMPORTED_LOCATION" "${binary_dir}/libgtest.a"
         "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
-        #    "INTERFACE_INCLUDE_DIRECTORIES" "${source_dir}/include"
         )
-# I couldn't make it work with INTERFACE_INCLUDE_DIRECTORIES
+
 include_directories("${source_dir}/include")
 
 add_subdirectory(xpoly-test)

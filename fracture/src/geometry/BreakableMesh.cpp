@@ -151,7 +151,7 @@ void BreakableMesh::mergePolygons(int i1, int i2) {
     poly2.getSegments(poly2Segments);
 
     for(IndexSegment s: poly2Segments){
-        edges.replace_neighbour(s, this->polygons.size() - 1, i1);
+        edges.replace_or_delete(s, this->polygons.size() - 1, i1);
     }
 
     this->polygons.pop_back();

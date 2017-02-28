@@ -14,9 +14,10 @@ public:
     Neighbours(int i1, int i2);
     void setNeighbour(int i);
     void changeNeighbour(int oldN, int newN);
-    int getFirst();
-    int getSecond();
+    int getFirst() const;
+    int getSecond() const;
     std::string getString() const;
+    bool operator==(const Neighbours& other);
 };
 
 

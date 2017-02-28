@@ -29,15 +29,19 @@ void Neighbours::changeNeighbour(int oldN, int newN) {
     throw std::invalid_argument("Please assign an existant neighbour");
 }
 
-int Neighbours::getFirst() {
+int Neighbours::getFirst() const{
     return this->n1;
 }
 
-int Neighbours::getSecond() {
+int Neighbours::getSecond() const{
     return this->n2;
 }
 
 std::string Neighbours::getString() const {
     return utilities::toString<double>(this->n1) + " " + utilities::toString<double>(this->n2);
+}
 
+bool Neighbours::operator==(const Neighbours &other) {
+    return this->getFirst()==other.getFirst() && this->getSecond()==other.getSecond() ||
+           this->getFirst()==other.getSecond() && this->getSecond()==other.getFirst();
 }
