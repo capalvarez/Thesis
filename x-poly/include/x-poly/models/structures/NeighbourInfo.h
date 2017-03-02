@@ -8,11 +8,13 @@ struct NeighbourInfo {
     int neighbour;
     Point intersection;
     IndexSegment edge;
+    bool isEdge;
 
-    NeighbourInfo(int n, IndexSegment e, Point i){
+    NeighbourInfo(int n, IndexSegment e, Point i, bool is){
         neighbour = n;
         edge = e;
         intersection = i;
+        isEdge = is;
     }
 
     void orderCCW(std::vector<Point> points, Point center){

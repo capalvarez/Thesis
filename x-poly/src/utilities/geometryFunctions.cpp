@@ -1,7 +1,7 @@
 #include <x-poly/models/basic/Point.h>
-#include <vector>
-#include <include/x-poly/config/XPolyConfig.h>
+#include <x-poly/config/XPolyConfig.h>
 #include <x-poly/utilities/xpolyutilities.h>
+#include <x-poly/models/basic/PointSegment.h>
 
 namespace geometry_functions{
     double area2(Point p1, Point p2, Point p3){
@@ -15,6 +15,11 @@ namespace geometry_functions{
         XPolyConfig* config = XPolyConfig::instance();
 
         return std::abs(area2(p1,p2,p3))<config->getTolerance();
+    }
+
+    bool collinear(PointSegment seg1, PointSegment seg2){
+        return collinear(seg1.getFirst(), seg1.getSecond(), seg2.getFirst()) &&
+                collinear(seg1.getFirst(), seg1.getSecond(), seg2.getSecond());
     }
 
     double triangleArea(Point p1, Point p2, Point origin){

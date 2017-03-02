@@ -91,12 +91,14 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
             int next_poly = edge.getFirst()!=poly_index? edge.getFirst() : edge.getSecond();
 
             if(next_poly!=previous) {
-                return NeighbourInfo(next_poly, polySeg[j], p);
+                return NeighbourInfo(next_poly, polySeg[j], p,
+                                     geometry_functions::collinear(direction,PointSegment(this->points.get(polySeg[j].getFirst()),
+                                                                                          this->points.get(polySeg[j].getSecond()))));
             }
         }
     }
 
-    return NeighbourInfo(-1,IndexSegment(),Point());
+    return NeighbourInfo(-1,IndexSegment(),Point(), false);
 }
 
 Region PolygonalMesh::getRegion() const{
