@@ -39,6 +39,7 @@ public:
 
     NeighbourInfo getNeighbour(int poly_index, PointSegment direction);
     NeighbourInfo getNeighbour(int poly_index, PointSegment direction, int previous);
+    NeighbourInfo getNeighbour(std::vector<int> index, PointSegment direction);
 
     Region getRegion() const;
 };

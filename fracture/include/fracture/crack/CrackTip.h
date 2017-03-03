@@ -26,8 +26,11 @@ private:
     std::vector<Point> tipPoints;
     std::vector<Polygon> changedPolygons;
     std::vector<int> changedIndex;
+    std::vector<int> container_polygons;
 
     void reassignContainer(Problem problem);
+    bool findContainerPolygons(std::vector<Polygon> centerPolygons, std::vector<int> indexes,
+                                   std::vector<Point> points);
 public:
     CrackTip();
     CrackTip(PointSegment crack, double length, double radius);

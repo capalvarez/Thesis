@@ -1,5 +1,5 @@
-#ifndef THESIS_POINTCONSTRAINT_H
-#define THESIS_POINTCONSTRAINT_H
+#ifndef THESIS_CONSTRAINT_H
+#define THESIS_CONSTRAINT_H
 
 #include <x-poly/models/basic/Point.h>
 #include <vector>

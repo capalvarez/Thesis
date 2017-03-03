@@ -101,6 +101,17 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
     return NeighbourInfo(-1,IndexSegment(),Point(), false);
 }
 
+NeighbourInfo PolygonalMesh::getNeighbour(std::vector<int> index, PointSegment direction) {
+    for (int i = 0; i < index.size(); ++i) {
+        NeighbourInfo n = getNeighbour(index[i], direction, -1);
+        if(n.neighbour>0){
+            return n;
+        }
+    }
+
+    return NeighbourInfo(-1, IndexSegment(), Point(), false);
+}
+
 Region PolygonalMesh::getRegion() const{
     return this->region;
 }

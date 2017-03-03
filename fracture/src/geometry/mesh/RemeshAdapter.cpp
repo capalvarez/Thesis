@@ -19,9 +19,9 @@ Region RemeshAdapter::computeRemeshRegion(std::vector<Polygon> remeshPolygons, s
     return  Region (containerPoints);
 }
 
-std::vector<Polygon> RemeshAdapter::adaptToMesh(Triangulation triangulation, std::vector<int> changedPolygons,
-                                                PolygonalMesh &mesh,
-                                                std::unordered_map<int, int> pointMap) {
+std::vector<Polygon>
+RemeshAdapter::adaptToMesh(Triangulation triangulation, std::vector<int> changedPolygons, PolygonalMesh &mesh,
+                           std::unordered_map<int, int> pointMap, std::vector<int> &indexes) {
     std::vector<Polygon> newPolygons;
 
     UniqueList<Point>& meshPoints = mesh.getPoints();
@@ -56,6 +56,7 @@ std::vector<Polygon> RemeshAdapter::adaptToMesh(Triangulation triangulation, std
             index = meshPolygons.size() - 1;
         }
 
+        indexes.push_back(newPolygons.size());
         newPolygons.push_back(newPolygon);
 
         for (int j = 0; j < n; ++j) {
@@ -110,10 +111,12 @@ std::unordered_map<int, int> RemeshAdapter::includeNewPoints(UniqueList<Point> &
 }
 
 std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, std::vector<int> changedPolygons, PolygonalMesh &m) {
+    std::vector<int> indexes;
     Triangulation t = this->triangulate(points);
     t.printInFile("testing.txt");
 
     std::unordered_map<int,int> pointMap = this->includeNewPoints(m.getPoints(), t);
 
-    return adaptToMesh(t, changedPolygons, m, pointMap);
+    return adaptToMesh(t, changedPolygons,
+                       m, pointMap, indexes);
 }

@@ -45,7 +45,9 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         this->end.points = CrackTipPoints(pointMap[tip_points1.size()+1], pointMap[tip_points1.size()+2],
                                           pointMap[tip_points1.size()+3], pointMap[tip_points1.size()+4]);
 
-        std::vector<Polygon> newPolygons = remesher.adaptToMesh(t,changedPolygons,m,pointMap);
+        std::vector<int> indexes;
+        std::vector<Polygon> newPolygons = remesher.adaptToMesh(t, changedPolygons,
+                                                                m, pointMap, indexes);
 
         newP.insert(newP.end(), newPolygons.begin(), newPolygons.end());
         oldP.push_list(changed1);

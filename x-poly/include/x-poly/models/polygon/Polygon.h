@@ -20,7 +20,6 @@ private:
     double calculateDiameter(std::vector<Point>& p);
     double calculateArea(std::vector<Point>& p);
     Point calculateCentroid(std::vector<Point>& p);
-    bool isVertex(int index);
     void calculateHash();
 
 public:
@@ -50,7 +49,7 @@ public:
 
     bool isConvex(std::vector<Point>& p);
     bool isClockwise(std::vector<Point>& p);
-
+    bool isVertex(int index);
     std::size_t hash;
     void fixCCW(std::vector<Point> p);
 

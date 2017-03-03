@@ -58,14 +58,17 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
 
     reassignContainer(problem);
     problem.mesh->printInFile("changed.txt");
+    PointSegment direction(lastPoint, crackPath.back());
+    NeighbourInfo n = problem.mesh->getNeighbour(this->container_polygons, direction);
 
-    PolygonChangeData changeData = problem.mesh->breakMesh(this->container_polygon, PointSegment(lastPoint, crackPath.back()));
+    PolygonChangeData changeData = problem.mesh->breakMesh(n.neighbour, direction);
     assignLocation(changeData.lastPolygon);
 
     return changeData;
 }
 
 PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
+    std::vector<int> indexes;
     RemeshAdapter remesher(this->changedPolygons, mesh.getPoints().getList());
 
     Triangulation t = remesher.triangulate(tipPoints);
@@ -73,7 +76,8 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
 
     this->points = CrackTipPoints(pointMap[1], pointMap[2], pointMap[3], pointMap[4]);
 
-    std::vector<Polygon> newPolygons = remesher.adaptToMesh(t, this->changedIndex, mesh, pointMap);
+    std::vector<Polygon> newPolygons = remesher.adaptToMesh(t, this->changedIndex, mesh, pointMap, indexes);
+    findContainerPolygons(newPolygons, indexes, mesh.getPoints().getList());
 
     return PolygonChangeData(this->changedPolygons, newPolygons);
 }
@@ -124,4 +128,19 @@ void CrackTip::reassignContainer(Problem problem) {
     }
 
     this->container_polygon = container;
+}
+
+bool CrackTip::findContainerPolygons(std::vector<Polygon> centerPolygons, std::vector<int> indexes,
+                                     std::vector<Point> points) {
+    //TODO: Check for an optimal way of obtaining this index
+    int tip = utilities::indexOf(points,crackPath.back());
+
+    for (int i = 0; i < centerPolygons.size(); ++i) {
+        Polygon p = centerPolygons[i];
+
+        if(p.isVertex(tip)){
+            container_polygons.push_back(indexes[i]);
+        }
+    }
+
 }
