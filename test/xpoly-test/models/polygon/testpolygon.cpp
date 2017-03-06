@@ -112,4 +112,9 @@ TEST_F(PolygonTest, CommonEdgeTest){
 }
 
 TEST_F(PolygonTest, ReplaceNeighbourTest){
+    std::vector<IndexSegment> seg = {IndexSegment(2,6), IndexSegment(1,2)};
+
+    nonconvex->replace_segment(IndexSegment(1,6),seg, points);
+
+    nonconvex->getArea();
 }

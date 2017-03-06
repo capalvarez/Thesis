@@ -49,7 +49,7 @@ bool IndexSegment::intersection(std::vector<Point> points, PointSegment other, P
 }
 
 void IndexSegment::orderCCW(std::vector<Point> points, Point center) {
-    if(this->isCCW(points, center)){
+    if(!this->isCCW(points, center)){
         int tmp = this->p1;
         this->p1 = this->p2;
         this->p2 = tmp;
@@ -60,9 +60,7 @@ bool IndexSegment::isCCW(std::vector<Point> points, Point center) {
     Point p1 = points[this->p1];
     Point p2 = points[this->p2];
 
-    double z = (p2.getX()-center.getX())*(p1.getY()-center.getY())-(p2.getY()-center.getY())*(p1.getX()-center.getX());
-
-    return z>0;
+    return xpoly_utilities::orientation(p1,p2,center)>0;
 }
 
 std::string IndexSegment::getString() const {
