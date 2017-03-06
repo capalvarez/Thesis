@@ -56,7 +56,6 @@ public:
     IndexSegment containerEdge(std::vector<Point>& p, Point point);
 
     Pair<int> commonEdgesBorder(Polygon p);
-    bool isPoint(int index);
 };
 
 #endif

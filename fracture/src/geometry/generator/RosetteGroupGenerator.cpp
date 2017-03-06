@@ -36,8 +36,8 @@ std::vector<Point> RosetteGroupGenerator::getPoints(double initAngle, BreakableM
 }
 
 void RosetteGroupGenerator::generatePoint(double angle, double radius, BreakableMesh mesh) {
-    double x = center.getX() - radius*std::cos(xpoly_utilities::radian(angle));
-    double y = center.getY() + radius*std::sin(xpoly_utilities::radian(angle));
+    double x = center.getX() - radius*std::cos(utilities::radian(angle));
+    double y = center.getY() + radius*std::sin(utilities::radian(angle));
 
     Point point (x, y);
 

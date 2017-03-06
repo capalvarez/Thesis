@@ -5,7 +5,7 @@ PointGenerator::PointGenerator(Functor* lX, Functor* lY) {
     this->lY = lY;
 }
 
-void PointGenerator::generate(std::vector <Point> &vector, BoundingBox& box, int nX, int nY) {
+void PointGenerator::generate(std::vector <Point> &vector, BoundingBox box, int nX, int nY) {
     double dX = box.getWidth()/(nX-1);
     double dY = box.getHeight()/(nY-1);
 

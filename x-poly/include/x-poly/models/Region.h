@@ -32,10 +32,10 @@ public:
     std::vector<Point> getRegionPoints();
     std::vector<Hole*> getHoles();
     void addHole(Hole* h);
-    void generatePoints(PointGenerator p, int nX, int nY);
+    void generateSeedPoints(PointGenerator p, int nX, int nY);
+    void addSeedPoints(std::vector<Point> seeds);
     BoundingBox getBox();
     void getSegments(std::vector<IndexSegment>& s);
-    bool containsPoint(Point p);
 
 };
 

@@ -18,14 +18,14 @@ std::string PointSegment::getString() const {
     return this->getFirst().getString() + " " + this->getSecond().getString();
 }
 
-double PointSegment::cartesianAngle(std::vector<Point> p) {
+double PointSegment::cartesianAngle() {
     Point p1 = this->p1;
     Point p2 = this->p2;
 
     double dY = p2.getY() - p1.getY();
     double dX = p2.getX() - p1.getX();
 
-    return xpoly_utilities::degrees(atan2(dY, dX));
+    return utilities::degrees(atan2(dY, dX));
 }
 
 bool PointSegment::operator==(const PointSegment other) const {

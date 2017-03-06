@@ -12,16 +12,16 @@ TEST_F(RegionTest, GeneratePointsTest){
     std::vector<Point> rectangleRes = {Point(0,0),Point(5,0),Point(10,0),Point(0,5),Point(5,5),Point(10,5),
                                        Point(0,10),Point(5,10),Point(10,10)};
 
-    rectangle->generatePoints(PointGenerator(functions::constant(),functions::constant()),3,3);
+    rectangle->generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 3, 3);
     EXPECT_EQ(rectangleRes,rectangle->getSeedPoints());
 
     std::vector<Point> nonconvexRes = {Point(0,0),Point(5,0),Point(10,0),Point(5,5),Point(10,5),
                                       Point(0,10),Point(5,10),Point(10,10)};
-    nonconvex->generatePoints(PointGenerator(functions::constant(),functions::constant()),3,3);
+    nonconvex->generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 3, 3);
     EXPECT_EQ(nonconvexRes,nonconvex->getSeedPoints());
 
     std::vector<Point> polygonRes = {Point(5,5)};
-    polygon->generatePoints(PointGenerator(functions::constant(),functions::constant()),3,3);
+    polygon->generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 3, 3);
     EXPECT_EQ(polygonRes,polygon->getSeedPoints());
 }
 

@@ -12,7 +12,7 @@ private:
     Functor* lY;
 public:
     PointGenerator(Functor* lX, Functor* lY);
-    void generate(std::vector<Point>& vector, BoundingBox& box, int nX, int nY);
+    void generate(std::vector<Point>& vector, BoundingBox box, int nX, int nY);
 };
 
 #endif

@@ -11,8 +11,8 @@ CrackTip::CrackTip(PointSegment crack, double speed, double radius) {
 void CrackTip::addPointToPath(double angle) {
     Point last = crackPath.back();
 
-    Point newPoint(last.getX() + this->speed*std::cos(xpoly_utilities::radian(angle)),
-                   last.getY() + this->speed*std::sin(xpoly_utilities::radian(angle)));
+    Point newPoint(last.getX() + this->speed*std::cos(utilities::radian(angle)),
+                   last.getY() + this->speed*std::sin(utilities::radian(angle)));
 
     this->crackPath.push_back(newPoint);
 }
@@ -36,7 +36,7 @@ double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
     Pair<int> dofE = problem.veamer->pointToDOFS(this->points.e);
 
     double factor = problem.veamer->getMaterial().stressIntensityFactor()*std::sqrt(2*M_PI/this->radius)*
-                    1/std::cos(xpoly_utilities::radian(this->crackAngle));
+                    1/std::cos(utilities::radian(this->crackAngle));
 
     double kI = factor * (4*(u[dofB.second] - u[dofD.second]) - (u[dofC.second] - u[dofE.second])/2);
     double kII = factor * (4*(u[dofB.first] - u[dofD.first]) - (u[dofC.first] - u[dofE.first])/2);
@@ -97,7 +97,7 @@ Point CrackTip::getPoint() {
 }
 
 std::set<int> CrackTip::generateTipPoints(BreakableMesh mesh) {
-    this->crackAngle = PointSegment(crackPath[crackPath.size() - 2],crackPath.back()).cartesianAngle(crackPath);
+    this->crackAngle = PointSegment(crackPath[crackPath.size() - 2],crackPath.back()).cartesianAngle();
     Polygon container = mesh.getPolygon(this->container_polygon);
 
      // TODO: I know 45 is about right, but don't hardcode it

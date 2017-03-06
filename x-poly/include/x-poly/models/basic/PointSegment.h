@@ -12,7 +12,7 @@ public:
     bool isBoundary(std::vector<Point> p);
     bool contains(Point point);
     std::string getString() const;
-    double cartesianAngle(std::vector<Point> p);
+    double cartesianAngle();
     bool operator==(const PointSegment other) const;
 };
 

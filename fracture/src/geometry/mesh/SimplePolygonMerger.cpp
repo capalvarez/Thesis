@@ -15,7 +15,7 @@ Polygon SimplePolygonMerger::mergePolygons(Polygon p1, Polygon p2, std::vector<P
     int firstPointIndex = utilities::indexOf(poly1_points, endPoints.first);
     int i, init, end;
 
-    if(p2.isPoint(poly1_points[(firstPointIndex+1)%p1.numberOfSides()])) {
+    if(p2.isVertex(poly1_points[(firstPointIndex+1)%p1.numberOfSides()])) {
         i = utilities::indexOf(poly1_points, endPoints.second);
         init = endPoints.second;
         end = endPoints.first;

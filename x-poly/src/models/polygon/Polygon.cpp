@@ -317,10 +317,6 @@ Pair<int> Polygon::commonEdgesBorder(Polygon p) {
     return Pair<int>(border[0], border[1]);
 }
 
-bool Polygon::isPoint(int index) {
-    return std::find(this->points.begin(), this->points.end(), index)!=this->points.end();
-}
-
 bool Polygon::operator<(const Polygon &other) const {
     return this->hash<other.hash;
 }

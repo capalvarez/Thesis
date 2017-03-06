@@ -23,7 +23,7 @@ NumericalTests::NumericalTests(int order) {
     Region region(hundred_square_points);
     PointGenerator generator_uniform (functions::uniform(1), functions::uniform(1));
 
-    region.generatePoints(generator_uniform, 20, 5);
+    region.generateSeedPoints(generator_uniform, 20, 5);
     std::vector<Point> seeds = region.getSeedPoints();
 
     TriangleMeshGenerator meshGenerator(seeds, region);
@@ -34,7 +34,7 @@ NumericalTests::NumericalTests(int order) {
     Region region1(points_square);
     PointGenerator generator_random(functions::random_double(0,1), functions::random_double(0,1));
 
-    region1.generatePoints(generator_random, 10, 10);
+    region1.generateSeedPoints(generator_random, 10, 10);
     seeds = region1.getSeedPoints();
 
     meshGenerator = TriangleMeshGenerator(seeds, region1);
@@ -49,7 +49,7 @@ NumericalTests::NumericalTests(int order) {
 >>>>>>> fracture_all_neighbours
     region1.addHole(circle);
 
-    region1.generatePoints(generator_uniform, 10, 10);
+    region1.generateSeedPoints(generator_uniform, 10, 10);
     seeds = region1.getSeedPoints();
 
     meshGenerator = TriangleMeshGenerator(seeds, region1);
@@ -59,7 +59,7 @@ NumericalTests::NumericalTests(int order) {
     std::vector<Point> trapezoid_points = {Point(0,0), Point(10,3), Point(10,7), Point(0,10)};
     Region trapezoid_region (trapezoid_points);
 
-    trapezoid_region.generatePoints(generator_uniform, 10, 10);
+    trapezoid_region.generateSeedPoints(generator_uniform, 10, 10);
     seeds = trapezoid_region.getSeedPoints();
 
     meshGenerator = TriangleMeshGenerator(seeds, trapezoid_region);
@@ -69,7 +69,7 @@ NumericalTests::NumericalTests(int order) {
     std::vector<Point> l_points = {Point(10,0), Point(20,0), Point(20,20), Point(0,20), Point(0,10), Point(10,10)};
     Region l_region(l_points);
 
-    l_region.generatePoints(generator_uniform, 10, 10);
+    l_region.generateSeedPoints(generator_uniform, 10, 10);
     seeds = l_region.getSeedPoints();
 
     meshGenerator = TriangleMeshGenerator(seeds, l_region);

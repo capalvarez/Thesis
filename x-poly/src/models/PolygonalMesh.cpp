@@ -36,6 +36,7 @@ int PolygonalMesh::findContainerPolygon(Point p, int i) {
     while(true){
         bool found = false;
         Polygon poly = this->polygons[i];
+        this->printInFile("mesh.txt");
 
         if(poly.containsPoint(this->points.getList(), p)){
             return i;

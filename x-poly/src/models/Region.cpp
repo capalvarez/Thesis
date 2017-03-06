@@ -71,10 +71,14 @@ void Region::addHole(Hole* h) {
     }
 }
 
-void Region::generatePoints(PointGenerator p, int nX, int nY){
+void Region::generateSeedPoints(PointGenerator p, int nX, int nY){
     BoundingBox box = this->getBox();
     p.generate(this->seedPoints, box, nX, nY);
     this->clean();
+}
+
+void Region::addSeedPoints(std::vector<Point> seeds) {
+    this->seedPoints.assign(seeds.begin(), seeds.end());
 }
 
 BoundingBox Region::getBox() {
@@ -130,10 +134,6 @@ void Region::getSegments(std::vector<IndexSegment> &s) {
     for(Hole* h : this->holes){
         h->getSegments(s, offset);
     }
-}
-
-bool Region::containsPoint(Point p) {
-    return Polygon::containsPoint(this->p, p);
 }
 
 

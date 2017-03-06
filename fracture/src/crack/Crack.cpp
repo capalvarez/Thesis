@@ -48,6 +48,8 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         std::vector<int> indexes;
         std::vector<Polygon> newPolygons = remesher.adaptToMesh(t, changedPolygons,
                                                                 m, pointMap, indexes);
+        this->init.findContainerPolygons(newPolygons, indexes, m.getPoints().getList());
+        this->end.findContainerPolygons(newPolygons, indexes, m.getPoints().getList());
 
         newP.insert(newP.end(), newPolygons.begin(), newPolygons.end());
         oldP.push_list(changed1);
@@ -82,9 +84,7 @@ PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
     problem.mesh->printInFile("changed.txt");
 
     this->grow(this->init, oldP, newP, problem, u);
-    //this->grow(this->end, oldP, newP, problem, u);
-
-
+    this->grow(this->end, oldP, newP, problem, u);
 
     return PolygonChangeData(oldP, newP);
 }

@@ -12,14 +12,6 @@ namespace xpoly_utilities {
         }
     }
 
-    double radian(double angle){
-        return angle*M_PI/180;
-    }
-
-    double degrees(double angle){
-        return (angle > 0 ? angle : (2*M_PI + angle)) * 360 / (2*M_PI);
-    }
-
     double crossProduct(Point a, Point b){
         return a.getX()*b.getY() - a.getY()*b.getX();
     }

@@ -8,7 +8,7 @@ TEST(CrackTipTest, PrepareTipTest){
 
     PointGenerator generator (functions::uniform(1), functions::uniform(1));
 
-    square.generatePoints(generator, 3, 3);
+    square.generateSeedPoints(generator, 3, 3);
     std::vector<Point> seeds = square.getSeedPoints();
 
     TriangleMeshGenerator meshGenerator(seeds, square);

@@ -10,12 +10,6 @@ namespace utilities {
         return uni(rng);
     }
 
-    double truncate(double number, int precision){
-        double p = std::pow(10,precision);
-
-        return ((double)((int) (number*p)))/p;
-    }
-
     std::string getPath(){
         #if defined(_WIN64) || defined(_WIN32)
                 std::string path = std::getenv("USERPROFILE");
@@ -30,6 +24,14 @@ namespace utilities {
         double norm = std::sqrt(std::pow(vector.first,2) + std::pow(vector.second,2));
 
         return Pair<double>(vector.first/norm, vector.second/norm);
+    }
+
+    double radian(double angle){
+        return angle*M_PI/180;
+    }
+
+    double degrees(double angle){
+        return (angle > 0 ? angle : (2*M_PI + angle)) * 360 / (2*M_PI);
     }
 }
 

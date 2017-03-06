@@ -93,7 +93,7 @@ int main(){
     generateTestNoHole("UnicornTest", unicorn, points);
 
     /*-------------------------------------------------------------------------------------------------*/
-    square.generatePoints(PointGenerator(functions::random_double(0,1),functions::random_double(0,1)), 10, 10);
+    square.generateSeedPoints(PointGenerator(functions::random_double(0, 1), functions::random_double(0, 1)), 10, 10);
     generateTestNoHole("RandomTest", square, square.getSeedPoints());
 
 }

@@ -12,7 +12,6 @@ public:
     Pair();
     bool operator==(const Pair& other) const;
     T dot(Pair other);
-    Pair<T> average(Pair<T> other);
     Pair<T> operator*(const double other);
     Pair<T> operator+(const Pair& other) const;
 };
@@ -40,11 +39,6 @@ bool Pair<T>::operator==(const Pair &other) const{
 template <typename T>
 T Pair<T>::dot(Pair other) {
     return this->first*other.first + this->second*other.second;
-}
-
-template <typename T>
-Pair<T> Pair<T>::average(Pair<T> other) {
-    return Pair<T>((this->first+other.first)/2, (this->second+other.second)/2);
 }
 
 template <typename T>
