@@ -21,6 +21,7 @@ public:
 
     virtual std::string getString() const = 0;
     bool contains(Point point, Point p1, Point p2);
+    bool isVertex(T p);
     virtual bool isBoundary(std::vector<Point> p) = 0;
 };
 

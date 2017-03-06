@@ -1,6 +1,7 @@
 #include <fracture/geometry/mesh/RemeshAdapter.h>
 #include <x-poly/voronoi/TriangleMeshGenerator.h>
 #include <fracture/geometry/mesh/SimplePolygonMerger.h>
+#include <fracture/geometry/mesh/structures/IndexSegmentHasher.h>
 
 RemeshAdapter::RemeshAdapter(Region region) {
     this->region = region;
@@ -22,6 +23,7 @@ Region RemeshAdapter::computeRemeshRegion(std::vector<Polygon> remeshPolygons, s
 std::vector<Polygon>
 RemeshAdapter::adaptToMesh(Triangulation triangulation, std::vector<int> changedPolygons, PolygonalMesh &mesh,
                            std::unordered_map<int, int> pointMap, std::vector<int> &indexes) {
+    std::unordered_map<int,std::unordered_map<IndexSegment,std::vector<IndexSegment>,IndexSegmentHasher>> changesInNeighbours;
     std::vector<Polygon> newPolygons;
 
     UniqueList<Point>& meshPoints = mesh.getPoints();
@@ -56,6 +58,7 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, std::vector<int> changed
             index = meshPolygons.size() - 1;
         }
 
+        //TODO: Check if this does what it needs to
         indexes.push_back(newPolygons.size());
         newPolygons.push_back(newPolygon);
 
@@ -75,6 +78,11 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, std::vector<int> changed
 
                         segments.insert(edge, index);
                         segments.insert(edge, otherNeighbour);
+
+                        std::unordered_map<IndexSegment,std::vector<IndexSegment>,IndexSegmentHasher> polyInfo =
+                                changesInNeighbours[otherNeighbour];
+                        polyInfo[containerSegments[k]].push_back(edge);
+
                         break;
                     }
                 }
@@ -84,8 +92,12 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, std::vector<int> changed
         }
     }
 
-    for (int i = 0; i < containerSegments.size(); ++i) {
-        segments.delete_element(containerSegments[i]);
+    for(auto value: changesInNeighbours){
+        Polygon& poly = meshPolygons[value.first];
+
+        for(auto s: value.second){
+            poly.replace_segment(s.first, s.second, meshPoints.getList());
+        }
     }
 
     return newPolygons;

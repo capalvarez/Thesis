@@ -111,3 +111,5 @@ TEST_F(PolygonTest, CommonEdgeTest){
     EXPECT_EQ(twoEdges.commonEdgesBorder(*square), Pair<int>(2,0));
 }
 
+TEST_F(PolygonTest, ReplaceNeighbourTest){
+}

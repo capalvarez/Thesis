@@ -31,5 +31,11 @@ bool Segment<T>::contains(Point point, Point p1, Point p2) {
             std::abs(p1.getX()*(p2.getY()-point.getY()) + p2.getX()*(point.getY()-p1.getY()) + point.getX()*(p1.getY()-p2.getY()))<0.0001;
 }
 
+template <class T>
+bool Segment<T>::isVertex(T p) {
+    return this->p1==p || this->p2==p;
+}
+
+
 template class Segment<int>;
 template class Segment<Point>;

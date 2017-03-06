@@ -32,6 +32,19 @@ void Polygon::mutate(std::vector<Point> &p) {
     this->centroid = this->calculateCentroid(p);
 }
 
+void Polygon::mutate(std::vector<int> points, std::vector<Point> p) {
+    this->points.assign(points.begin(), points.end());
+
+    std::vector<Point> this_points;
+    for (int i = 0; i < points.size(); i++) {
+        this_points.push_back(p[points[i]]);
+    }
+
+    this->diameter = this->calculateDiameter(this_points);
+    this->area = this->calculateArea(p);
+    this->centroid = this->calculateCentroid(p);
+}
+
 Polygon::Polygon(std::vector<Point> &p) {
     xpoly_utilities::TrivialIndexVector(this->points,p.size());
 
@@ -321,3 +334,47 @@ bool Polygon::operator<(const Polygon &other) const {
     return this->hash<other.hash;
 }
 
+void Polygon::replace_segment(IndexSegment seg, std::vector<IndexSegment> segs, std::vector<Point> points) {
+    std::vector<int> orderedSegments;
+    IndexSegment segment = segs[segs.size()-1];
+
+    if(segment.isCCW(points,this->centroid)){
+        orderedSegments.push_back(segment.getFirst());
+        orderedSegments.push_back(segment.getSecond());
+    }else{
+        orderedSegments.push_back(segment.getSecond());
+        orderedSegments.push_back(segment.getFirst());
+    }
+
+    segs.pop_back();
+    int i = segs.size()-1;
+
+    while(segs.size()==0) {
+        if(i<0){
+            i = segs.size()-1;
+        }
+
+        segment = segs[i];
+        segment.orderCCW(points,this->centroid);
+
+        if(segment.isVertex(orderedSegments.front())){
+            orderedSegments.insert(orderedSegments.begin(), segment.getFirst());
+            segs.pop_back();
+            i--;
+            continue;
+        }
+
+        if(segment.isVertex(orderedSegments.back())){
+            orderedSegments.push_back(segment.getSecond());
+            segs.pop_back();
+            i--;
+            continue;
+        }
+
+        i--;
+    }
+
+    int indexOfStart = utilities::indexOf(this->points, seg.getFirst());
+    this->points.insert(this->points.begin()+indexOfStart, orderedSegments.begin(), orderedSegments.end()-1);
+    this->mutate(this->points,points);
+}

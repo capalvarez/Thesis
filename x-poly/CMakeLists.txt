@@ -12,5 +12,6 @@ target_link_libraries(libxpoly libutilities)
 
 target_include_directories(libxpoly PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+add_subdirectory(main)
 
 

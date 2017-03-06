@@ -41,6 +41,7 @@ public:
     std::string getString();
 
     void mutate(std::vector<Point>& p);
+    void mutate(std::vector<int> points, std::vector<Point> p);
 
     bool containsPoint(std::vector<Point>& p, Point point);
     bool inEdges(std::vector<Point>& p, Point point);
@@ -54,6 +55,7 @@ public:
     void fixCCW(std::vector<Point> p);
 
     IndexSegment containerEdge(std::vector<Point>& p, Point point);
+    void replace_segment(IndexSegment seg, std::vector<IndexSegment> segs, std::vector<Point> points);
 
     Pair<int> commonEdgesBorder(Polygon p);
 };
