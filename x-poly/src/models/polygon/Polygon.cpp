@@ -374,8 +374,20 @@ void Polygon::replace_segment(IndexSegment seg, std::vector<IndexSegment> segs, 
         i--;
     }
 
+    //TODO:Fix border cases
     int indexOfStart = utilities::indexOf(this->points, seg.getFirst());
-    this->points.erase(this->points.begin()+indexOfStart, this->points.begin()+indexOfStart+2);
-    this->points.insert(this->points.begin()+indexOfStart, orderedSegments.begin(), orderedSegments.end());
+    bool atEnd = indexOfStart!=this->points.size()-1;
+
+    this->points.insert(this->points.begin()+indexOfStart+1, orderedSegments.begin(), orderedSegments.end());
+
+    if(atEnd){
+        this->points.erase(this->points.begin()+indexOfStart+orderedSegments.size());
+        this->points.erase(this->points.begin()+indexOfStart);
+    }else{
+        this->points.erase(this->points.end()-orderedSegments.size()-1);
+        this->points.erase(this->points.begin());
+    }
+
+
     this->mutate(this->points,points);
 }

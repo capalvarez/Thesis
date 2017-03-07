@@ -111,10 +111,19 @@ TEST_F(PolygonTest, CommonEdgeTest){
     EXPECT_EQ(twoEdges.commonEdgesBorder(*square), Pair<int>(2,0));
 }
 
-TEST_F(PolygonTest, ReplaceNeighbourTest){
+TEST_F(PolygonTest, ReplaceNeighbourBorderTest){
+    std::vector<IndexSegment> seg = {IndexSegment(0,4), IndexSegment(5,4)};
+
+    nonconvex->replace_segment(IndexSegment(5,0),seg, points);
+    nonconvex->getArea();
+}
+
+
+TEST_F(PolygonTest, ReplaceNeighbourSimpleTest){
     std::vector<IndexSegment> seg = {IndexSegment(2,6), IndexSegment(1,2)};
 
     nonconvex->replace_segment(IndexSegment(1,6),seg, points);
-
     nonconvex->getArea();
 }
+
+
