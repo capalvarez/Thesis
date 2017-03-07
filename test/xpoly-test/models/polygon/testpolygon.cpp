@@ -127,3 +127,9 @@ TEST_F(PolygonTest, ReplaceNeighbourSimpleTest){
 }
 
 
+TEST_F(PolygonTest, ReplaceNeighbourMultipleTest){
+    std::vector<IndexSegment> seg = {IndexSegment(12,2), IndexSegment(11,2), IndexSegment(6,12), IndexSegment(1,11)};
+
+    nonconvex->replace_segment(IndexSegment(1,6),seg, points);
+    nonconvex->getArea();
+}

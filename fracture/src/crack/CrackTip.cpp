@@ -27,6 +27,7 @@ CrackTip::CrackTip(const CrackTip &t) {
     this->changedPolygons = t.changedPolygons;
     this->changedIndex = t.changedIndex;
     this->tipPoints = t.tipPoints;
+    this->container_polygons.assign(t.container_polygons.begin(),t.container_polygons.end());
 }
 
 double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {

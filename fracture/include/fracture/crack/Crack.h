@@ -13,7 +13,7 @@ private:
     CrackTip end;
 
     void prepareTip(CrackTip tip, UniqueList<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh);
-    void grow(CrackTip tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, Problem problem, Eigen::VectorXd u);
+    void grow(CrackTip &tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, Problem problem, Eigen::VectorXd u);
 public:
     Crack();
     Crack(Point init, Point end, double speed, double ratio);

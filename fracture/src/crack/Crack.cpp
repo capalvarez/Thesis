@@ -98,7 +98,8 @@ void Crack::prepareTip(CrackTip tip, UniqueList<Polygon> &oldP, std::vector<Poly
     }
 }
 
-void Crack::grow(CrackTip tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, Problem problem, Eigen::VectorXd u) {
+void Crack::grow(CrackTip &tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, Problem problem,
+                 Eigen::VectorXd u) {
     if(!tip.isFinished(*problem.mesh)){
         PolygonChangeData data = tip.grow(u, problem);
 
