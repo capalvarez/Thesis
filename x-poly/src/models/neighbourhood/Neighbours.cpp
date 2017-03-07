@@ -29,6 +29,10 @@ void Neighbours::changeNeighbour(int oldN, int newN) {
     throw std::invalid_argument("Please assign an existant neighbour");
 }
 
+bool Neighbours::isNeighbour(int i) {
+    return this->n1==i || this->n2==i;
+}
+
 int Neighbours::getFirst() const{
     return this->n1;
 }

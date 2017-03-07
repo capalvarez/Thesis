@@ -7,14 +7,14 @@ RemeshAdapter::RemeshAdapter(Region region) {
     this->region = region;
 }
 
-RemeshAdapter::RemeshAdapter(std::vector<Polygon> remeshPolygons, std::vector<Point> points) {
-    this->region = computeRemeshRegion(remeshPolygons, points);
+RemeshAdapter::RemeshAdapter(std::set<int> remeshPolygons, std::vector<Point> points, BreakableMesh mesh) {
+    this->region = computeRemeshRegion(remeshPolygons, points, mesh);
 }
 
-Region RemeshAdapter::computeRemeshRegion(std::vector<Polygon> remeshPolygons, std::vector<Point> points) {
+Region RemeshAdapter::computeRemeshRegion(std::set<int> remeshPolygons, std::vector<Point> points, BreakableMesh mesh) {
     SimplePolygonMerger merger;
 
-    Polygon merged = merger.mergePolygons(remeshPolygons, points);
+    Polygon merged = merger.mergePolygons(remeshPolygons, points, mesh);
     std::vector<Point> containerPoints = merged.getPoints(points);
 
     return  Region (containerPoints);
@@ -59,7 +59,7 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, std::vector<int> changed
         }
 
         //TODO: Check if this does what it needs to
-        indexes.push_back(newPolygons.size());
+        indexes.push_back(index);
         newPolygons.push_back(newPolygon);
 
         for (int j = 0; j < n; ++j) {

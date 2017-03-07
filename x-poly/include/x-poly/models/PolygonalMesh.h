@@ -33,13 +33,14 @@ public:
     bool isInBoundary(Point p);
 
     bool areNeighbours(int poly1, int poly2);
+    bool areNeighbours(Polygon poly, int poly2);
 
     int findContainerPolygon(Point p);
     int findContainerPolygon(Point p, int init_polygon);
 
     NeighbourInfo getNeighbour(int poly_index, PointSegment direction);
     NeighbourInfo getNeighbour(int poly_index, PointSegment direction, int previous);
-    NeighbourInfo getNeighbour(std::vector<int> index, PointSegment direction);
+    int getPolygonInDirection(std::vector<int> index, PointSegment direction);
 
     Region getRegion() const;
 };

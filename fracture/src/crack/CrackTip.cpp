@@ -1,6 +1,7 @@
 #include <fracture/crack/CrackTip.h>
 #include <fracture/geometry/mesh/RemeshAdapter.h>
 
+
 CrackTip::CrackTip(PointSegment crack, double speed, double radius) {
     this->speed = speed;
     this->radius = radius;
@@ -60,9 +61,9 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
     reassignContainer(problem);
     problem.mesh->printInFile("changed.txt");
     PointSegment direction(lastPoint, crackPath.back());
-    NeighbourInfo n = problem.mesh->getNeighbour(this->container_polygons, direction);
+    int n = problem.mesh->getPolygonInDirection(this->container_polygons, direction);
 
-    PolygonChangeData changeData = problem.mesh->breakMesh(n.neighbour, direction);
+    PolygonChangeData changeData = problem.mesh->breakMesh(n, direction);
     assignLocation(changeData.lastPolygon);
 
     return changeData;
@@ -70,7 +71,7 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
 
 PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
     std::vector<int> indexes;
-    RemeshAdapter remesher(this->changedPolygons, mesh.getPoints().getList());
+    RemeshAdapter remesher(this->changedPolygons, mesh.getPoints().getList(), BreakableMesh());
 
     Triangulation t = remesher.triangulate(tipPoints);
     std::unordered_map<int,int> pointMap = remesher.includeNewPoints(mesh.getPoints(), t);
@@ -80,7 +81,9 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
     std::vector<Polygon> newPolygons = remesher.adaptToMesh(t, this->changedIndex, mesh, pointMap, indexes);
     findContainerPolygons(newPolygons, indexes, mesh.getPoints().getList());
 
-    return PolygonChangeData(this->changedPolygons, newPolygons);
+    std::vector<Polygon> polys = fracture_utilities::setToVector(this->changedPolygons, mesh);
+
+    return PolygonChangeData(polys, newPolygons);
 }
 
 bool CrackTip::isFinished(BreakableMesh mesh) {
@@ -101,16 +104,14 @@ std::set<int> CrackTip::generateTipPoints(BreakableMesh mesh) {
     this->crackAngle = PointSegment(crackPath[crackPath.size() - 2],crackPath.back()).cartesianAngle();
     Polygon container = mesh.getPolygon(this->container_polygon);
 
-     // TODO: I know 45 is about right, but don't hardcode it
+    // TODO: I know 45 is about right, but don't hardcode it
     RosetteGroupGenerator rosette = RosetteGroupGenerator(this->getPoint(), this->radius, 45, container_polygon, container);
     tipPoints = rosette.getPoints(this->crackAngle, mesh);
 
-    this->changedPolygons = rosette.getChangedPolygons(mesh);
-    std::set<int> indexes = rosette.getChangedPolygons();
+    this->changedPolygons = rosette.getChangedPolygons();
+    std::copy(this->changedPolygons.begin(), this->changedPolygons.end(), std::back_inserter(this->changedIndex));
 
-    std::copy(indexes.begin(), indexes.end(), std::back_inserter(this->changedIndex));
-
-    return indexes;
+    return this->changedPolygons;
 }
 
 void CrackTip::reassignContainer(Problem problem) {
@@ -131,7 +132,7 @@ void CrackTip::reassignContainer(Problem problem) {
     this->container_polygon = container;
 }
 
-bool CrackTip::findContainerPolygons(std::vector<Polygon> centerPolygons, std::vector<int> indexes,
+void CrackTip::findContainerPolygons(std::vector<Polygon> centerPolygons, std::vector<int> indexes,
                                      std::vector<Point> points) {
     //TODO: Check for an optimal way of obtaining this index
     int tip = utilities::indexOf(points,crackPath.back());
@@ -143,5 +144,4 @@ bool CrackTip::findContainerPolygons(std::vector<Polygon> centerPolygons, std::v
             container_polygons.push_back(indexes[i]);
         }
     }
-
 }

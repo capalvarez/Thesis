@@ -25,7 +25,6 @@ public:
     RosetteGroupGenerator(Point c, double outer, double angle, int center_container,
                               Polygon container);
     std::vector<Point> getPoints(double initAngle, BreakableMesh mesh);
-    std::vector<Polygon> getChangedPolygons(BreakableMesh mesh);
     std::set<int> getChangedPolygons();
 };
 

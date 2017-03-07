@@ -5,15 +5,16 @@
 #include <x-poly/models/Region.h>
 #include <x-poly/models/PolygonalMesh.h>
 #include <x-poly/models/Triangulation.h>
+#include <fracture/geometry/BreakableMesh.h>
 
 class RemeshAdapter {
 private:
     Region region;
 
-    Region computeRemeshRegion(std::vector<Polygon> remeshPolygons, std::vector<Point> points);
+    Region computeRemeshRegion(std::set<int> remeshPolygons, std::vector<Point> points, BreakableMesh mesh);
 public:
     RemeshAdapter(Region region);
-    RemeshAdapter(std::vector<Polygon> remeshPolygons, std::vector<Point> points);
+    RemeshAdapter(std::set<int> remeshPolygons, std::vector<Point> points, BreakableMesh mesh);
 
     std::vector<Polygon> adaptToMesh(Triangulation triangulation, std::vector<int> changedPolygons, PolygonalMesh &m,
                                          std::unordered_map<int, int> pointMap, std::vector<int> &indexes);

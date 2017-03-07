@@ -102,15 +102,15 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
     return NeighbourInfo(-1,IndexSegment(),Point(), false);
 }
 
-NeighbourInfo PolygonalMesh::getNeighbour(std::vector<int> index, PointSegment direction) {
+int PolygonalMesh::getPolygonInDirection(std::vector<int> index, PointSegment direction) {
     for (int i = 0; i < index.size(); ++i) {
         NeighbourInfo n = getNeighbour(index[i], direction, -1);
-        if(n.neighbour>0){
-            return n;
+        if(utilities::indexOf(index,n.neighbour)<0){
+            return index[i];
         }
     }
 
-    return NeighbourInfo(-1, IndexSegment(), Point(), false);
+    return -1;
 }
 
 Region PolygonalMesh::getRegion() const{
@@ -118,6 +118,20 @@ Region PolygonalMesh::getRegion() const{
 }
 
 bool PolygonalMesh::areNeighbours(int poly1, int poly2) {
+    return areNeighbours(polygons[poly1], poly2);
+}
+
+bool PolygonalMesh::areNeighbours(Polygon poly1, int poly2) {
+    std::vector<IndexSegment> poly1_segments;
+    poly1.getSegments(poly1_segments);
+
+    for(IndexSegment s: poly1_segments){
+        Neighbours n = edges.get(s);
+        if(n.isNeighbour(poly2)){
+            return true;
+        }
+    }
+
     return false;
 }
 

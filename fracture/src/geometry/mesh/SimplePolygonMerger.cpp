@@ -1,6 +1,7 @@
 #include <fracture/geometry/mesh/SimplePolygonMerger.h>
 #include <algorithm>
 #include <map>
+#include <fracture/geometry/BreakableMesh.h>
 
 Polygon SimplePolygonMerger::mergePolygons(Polygon p1, Polygon p2, std::vector<Point> points) {
     if(p1==p2){
@@ -41,11 +42,35 @@ Polygon SimplePolygonMerger::mergePolygons(Polygon p1, Polygon p2, std::vector<P
     return Polygon(mergedPolygon, points);
 }
 
-Polygon SimplePolygonMerger::mergePolygons(std::vector<Polygon> polygons, std::vector<Point> points) {
-    Polygon merged = this->mergePolygons(polygons[0], polygons[1], points);
+Polygon SimplePolygonMerger::mergePolygons(std::set<int> polygons, std::vector<Point> points,
+                                           BreakableMesh &mesh) {
+    Polygon merged;
+    std::set<int>::iterator i = polygons.end();
+    std::set<int>::iterator j = polygons.begin();
 
-    for(int i=2; i<polygons.size(); i++){
-        merged = this->mergePolygons(merged, polygons[i], points);
+    while(true){
+        if(mesh.areNeighbours(*i, *j)){
+            merged = this->mergePolygons(mesh.getPolygon(*i), mesh.getPolygon(*j),points);
+            polygons.erase(i);
+            polygons.erase(j);
+            break;
+        }else{
+            j--;
+        }
+    }
+
+    j = polygons.end();
+
+    while(polygons.size()!=0){
+        while(!mesh.areNeighbours(merged, *j)){
+            if(j==polygons.begin()){
+                throw std::invalid_argument("Impossible to merge polygons");
+            }
+            j--;
+        }
+        merged = this->mergePolygons(merged, mesh.getPolygon(*j) ,points);
+        polygons.erase(j);
+        j = polygons.end();
     }
 
     return merged;

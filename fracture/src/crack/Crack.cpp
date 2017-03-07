@@ -29,11 +29,10 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         std::vector<Point> tip_points2 = this->end.tipPoints;
         tip_points1.insert(tip_points1.end(), tip_points2.begin(), tip_points2.end());
 
-        std::vector<Polygon> changed1 = this->init.changedPolygons;
-        std::vector<Polygon> changed2 = this->end.changedPolygons;
-        changed1.insert(changed1.end(), changed2.begin(), changed2.end());
+        std::set<int> tip;
+        std::set_union(tip1.begin(), tip1.end(), tip2.begin(), tip2.end(), std::inserter(tip,tip.begin()));
 
-        RemeshAdapter remesher (changed1, m.getPoints().getList());
+        RemeshAdapter remesher(tip1, m.getPoints().getList(), m);
 
         std::vector<int> changedPolygons;
         std::set_union(tip1.begin(), tip1.end(), tip2.begin(), tip2.end(), std::back_inserter(changedPolygons));
@@ -52,7 +51,14 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         this->end.findContainerPolygons(newPolygons, indexes, m.getPoints().getList());
 
         newP.insert(newP.end(), newPolygons.begin(), newPolygons.end());
-        oldP.push_list(changed1);
+
+        std::vector<Polygon> polys;
+
+        for(int i: changedPolygons){
+            polys.push_back(m.getPolygon(i));
+        }
+
+        oldP.push_list(polys);
 
     }else{
         this->prepareTip(this->init, oldP, newP, m);
@@ -84,7 +90,7 @@ PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
     problem.mesh->printInFile("changed.txt");
 
     this->grow(this->init, oldP, newP, problem, u);
-    //this->grow(this->end, oldP, newP, problem, u);
+    this->grow(this->end, oldP, newP, problem, u);
 
     return PolygonChangeData(oldP, newP);
 }

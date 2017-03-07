@@ -58,16 +58,6 @@ void RosetteGroupGenerator::generatePoint(double angle, double radius, Breakable
     this->points.push_back(point);
 }
 
-std::vector<Polygon> RosetteGroupGenerator::getChangedPolygons(BreakableMesh mesh) {
-    std::vector<Polygon> polys;
-
-    for(auto p : changedPolygons) {
-        polys.push_back(mesh.getPolygon(p));
-    }
-
-    return polys;
-}
-
 std::set<int> RosetteGroupGenerator::getChangedPolygons() {
     return this->changedPolygons;
 }
