@@ -69,6 +69,7 @@ TEST(FractureSimulatorTest, SimulateTest){
     ProblemConditions conditions(container, f, Material(Materials::material::Steel));
 
     FractureSimulator simulator(mesh, crack, conditions);
+    mesh.printInFile("init.txt");
 
     simulator.simulate(0.1,100);
 

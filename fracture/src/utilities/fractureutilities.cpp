@@ -3,11 +3,11 @@
 #include <fracture/geometry/BreakableMesh.h>
 
 namespace fracture_utilities{
-    std::vector<Polygon> setToVector(std::set<int> index, BreakableMesh mesh){
-        std::vector<Polygon> polys;
+     std::vector<int> setToVector(std::set<int> index){
+        std::vector<int> polys;
 
         for(auto p : index) {
-            polys.push_back(mesh.getPolygon(p));
+            polys.push_back(p);
         }
 
         return polys;

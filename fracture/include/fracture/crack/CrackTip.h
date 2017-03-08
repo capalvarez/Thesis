@@ -24,7 +24,7 @@ private:
     double crackAngle;
 
     std::vector<Point> tipPoints;
-    std::set<int> changedPolygons;
+    std::vector<int> changedPolygons;
     std::vector<int> changedIndex;
     std::vector<int> container_polygons;
 

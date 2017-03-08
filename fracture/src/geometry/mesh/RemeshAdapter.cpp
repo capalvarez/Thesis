@@ -7,11 +7,12 @@ RemeshAdapter::RemeshAdapter(Region region) {
     this->region = region;
 }
 
-RemeshAdapter::RemeshAdapter(std::set<int> remeshPolygons, std::vector<Point> points, BreakableMesh mesh) {
+RemeshAdapter::RemeshAdapter(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh mesh) {
     this->region = computeRemeshRegion(remeshPolygons, points, mesh);
 }
 
-Region RemeshAdapter::computeRemeshRegion(std::set<int> remeshPolygons, std::vector<Point> points, BreakableMesh mesh) {
+Region RemeshAdapter::computeRemeshRegion(std::vector<int> remeshPolygons, std::vector<Point> points,
+                                          BreakableMesh mesh) {
     SimplePolygonMerger merger;
 
     Polygon merged = merger.mergePolygons(remeshPolygons, points, mesh);

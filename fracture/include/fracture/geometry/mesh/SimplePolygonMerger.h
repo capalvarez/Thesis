@@ -7,7 +7,7 @@
 class SimplePolygonMerger: public PolygonMerger{
 public:
     Polygon mergePolygons(Polygon p1, Polygon p2, std::vector<Point> points);
-    Polygon mergePolygons(std::set<int> polygons, std::vector<Point> points, BreakableMesh &mesh);
+    Polygon mergePolygons(std::vector<int> polygons, std::vector<Point> points, BreakableMesh &mesh);
 };
 
 #endif 

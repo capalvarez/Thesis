@@ -8,7 +8,7 @@
 class PolygonMerger{
 public:
     virtual Polygon mergePolygons(Polygon p1, Polygon p2, std::vector<Point> points) = 0;
-    virtual Polygon mergePolygons(std::set<int> polygons, std::vector<Point> points, BreakableMesh &mesh) = 0;
+    virtual Polygon mergePolygons(std::vector<int> polygons, std::vector<Point> points, BreakableMesh &mesh) = 0;
 };
 
 #endif 

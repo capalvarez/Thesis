@@ -71,7 +71,7 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
 
 PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
     std::vector<int> indexes;
-    RemeshAdapter remesher(this->changedPolygons, mesh.getPoints().getList(), BreakableMesh());
+    RemeshAdapter remesher(this->changedPolygons, mesh.getPoints().getList(), mesh);
 
     Triangulation t = remesher.triangulate(tipPoints);
     std::unordered_map<int,int> pointMap = remesher.includeNewPoints(mesh.getPoints(), t);
@@ -81,7 +81,10 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
     std::vector<Polygon> newPolygons = remesher.adaptToMesh(t, this->changedIndex, mesh, pointMap, indexes);
     findContainerPolygons(newPolygons, indexes, mesh.getPoints().getList());
 
-    std::vector<Polygon> polys = fracture_utilities::setToVector(this->changedPolygons, mesh);
+    std::vector<Polygon> polys;
+    for(int i: this->changedPolygons){
+        polys.push_back(mesh.getPolygon(i));
+    }
 
     return PolygonChangeData(polys, newPolygons);
 }
@@ -108,10 +111,10 @@ std::set<int> CrackTip::generateTipPoints(BreakableMesh mesh) {
     RosetteGroupGenerator rosette = RosetteGroupGenerator(this->getPoint(), this->radius, 45, container_polygon, container);
     tipPoints = rosette.getPoints(this->crackAngle, mesh);
 
-    this->changedPolygons = rosette.getChangedPolygons();
+    this->changedPolygons = fracture_utilities::setToVector(rosette.getChangedPolygons());
     std::copy(this->changedPolygons.begin(), this->changedPolygons.end(), std::back_inserter(this->changedIndex));
 
-    return this->changedPolygons;
+    return rosette.getChangedPolygons();
 }
 
 void CrackTip::reassignContainer(Problem problem) {

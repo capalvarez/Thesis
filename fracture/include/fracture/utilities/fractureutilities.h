@@ -6,7 +6,7 @@
 #include <fracture/geometry/BreakableMesh.h>
 
 namespace fracture_utilities{
-    extern std::vector<Polygon> setToVector(std::set<int> index, BreakableMesh mesh);
+    extern std::vector<int> setToVector(std::set<int> index);
 }
 
 #endif 

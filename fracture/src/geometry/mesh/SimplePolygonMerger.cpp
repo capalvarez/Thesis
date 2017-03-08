@@ -42,35 +42,39 @@ Polygon SimplePolygonMerger::mergePolygons(Polygon p1, Polygon p2, std::vector<P
     return Polygon(mergedPolygon, points);
 }
 
-Polygon SimplePolygonMerger::mergePolygons(std::set<int> polygons, std::vector<Point> points,
+Polygon SimplePolygonMerger::mergePolygons(std::vector<int> polygons, std::vector<Point> points,
                                            BreakableMesh &mesh) {
     Polygon merged;
-    std::set<int>::iterator i = polygons.end();
-    std::set<int>::iterator j = polygons.begin();
+    int i = polygons.size()-1;
+    int j = polygons.size()-2;
 
     while(true){
-        if(mesh.areNeighbours(*i, *j)){
-            merged = this->mergePolygons(mesh.getPolygon(*i), mesh.getPolygon(*j),points);
-            polygons.erase(i);
-            polygons.erase(j);
+        if(j<0){
+            throw std::invalid_argument("Impossible to merge polygons");
+        }
+
+        if(mesh.areNeighbours(polygons[i], polygons[j])){
+            merged = this->mergePolygons(mesh.getPolygon(polygons[i]), mesh.getPolygon(polygons[j]),points);
+            polygons.erase(polygons.begin()+i);
+            polygons.erase(polygons.begin()+j);
             break;
         }else{
             j--;
         }
     }
 
-    j = polygons.end();
+    j = polygons.size()-1;
 
     while(polygons.size()!=0){
-        while(!mesh.areNeighbours(merged, *j)){
-            if(j==polygons.begin()){
+        while(!mesh.areNeighbours(merged, polygons[j])){
+            if(j<0){
                 throw std::invalid_argument("Impossible to merge polygons");
             }
             j--;
         }
-        merged = this->mergePolygons(merged, mesh.getPolygon(*j) ,points);
-        polygons.erase(j);
-        j = polygons.end();
+        merged = this->mergePolygons(merged, mesh.getPolygon(polygons[j]) ,points);
+        polygons.erase(polygons.begin()+j);
+        j = polygons.size()-1;
     }
 
     return merged;

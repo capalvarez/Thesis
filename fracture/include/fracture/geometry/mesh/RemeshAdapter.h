@@ -11,10 +11,10 @@ class RemeshAdapter {
 private:
     Region region;
 
-    Region computeRemeshRegion(std::set<int> remeshPolygons, std::vector<Point> points, BreakableMesh mesh);
+    Region computeRemeshRegion(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh mesh);
 public:
     RemeshAdapter(Region region);
-    RemeshAdapter(std::set<int> remeshPolygons, std::vector<Point> points, BreakableMesh mesh);
+    RemeshAdapter(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh mesh);
 
     std::vector<Polygon> adaptToMesh(Triangulation triangulation, std::vector<int> changedPolygons, PolygonalMesh &m,
                                          std::unordered_map<int, int> pointMap, std::vector<int> &indexes);

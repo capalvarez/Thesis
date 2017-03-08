@@ -29,13 +29,10 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         std::vector<Point> tip_points2 = this->end.tipPoints;
         tip_points1.insert(tip_points1.end(), tip_points2.begin(), tip_points2.end());
 
-        std::set<int> tip;
-        std::set_union(tip1.begin(), tip1.end(), tip2.begin(), tip2.end(), std::inserter(tip,tip.begin()));
-
-        RemeshAdapter remesher(tip1, m.getPoints().getList(), m);
-
         std::vector<int> changedPolygons;
         std::set_union(tip1.begin(), tip1.end(), tip2.begin(), tip2.end(), std::back_inserter(changedPolygons));
+
+        RemeshAdapter remesher(changedPolygons, m.getPoints().getList(), m);
 
         Triangulation t = remesher.triangulate(tip_points1);
         std::unordered_map<int,int> pointMap = remesher.includeNewPoints(m.getPoints(), t);
