@@ -16,6 +16,7 @@ private:
     void grow(CrackTip &tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, Problem problem, Eigen::VectorXd u);
 public:
     Crack();
+    Crack(Point init, Point end);
     Crack(Point init, Point end, double speed, double ratio);
     Crack(const Crack& c);
 

@@ -1,18 +1,30 @@
 #include <fracture/crack/Crack.h>
 #include <fracture/geometry/mesh/RemeshAdapter.h>
+#include <fracture/config/FractureConfig.h>
 
 Crack::Crack() {}
 
 Crack::Crack(Point init, Point end, double speed, double ratio) {
+    FractureConfig* config = FractureConfig::instance();
+    config->setGrowthSpeed(speed);
+    config->setCrackRatio(ratio);
+
     PointSegment crack (init, end);
 
-    this->init = CrackTip(crack, speed, crack.length()*ratio);
-    this->end = CrackTip(PointSegment(end, init), speed, crack.length()*ratio);
+    this->init = CrackTip(crack);
+    this->end = CrackTip(PointSegment(end, init));
 }
 
 Crack::Crack(const Crack& c) {
     this->init = c.init;
     this->end = c.end;
+}
+
+Crack::Crack(Point init, Point end) {
+    PointSegment crack (init, end);
+
+    this->init = CrackTip(crack);
+    this->end = CrackTip(PointSegment(end, init));
 }
 
 PolygonChangeData Crack::prepareTip(BreakableMesh &m) {

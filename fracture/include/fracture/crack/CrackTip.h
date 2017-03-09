@@ -16,7 +16,6 @@
 
 class CrackTip {
 private:
-    double speed;
     double radius;
     std::vector<Point> crackPath;
     int container_polygon;
@@ -33,7 +32,7 @@ private:
                                std::vector<Point> points);
 public:
     CrackTip();
-    CrackTip(PointSegment crack, double length, double radius);
+    CrackTip(PointSegment crack);
     CrackTip(const CrackTip& t);
 
     void addPointToPath(double angle);

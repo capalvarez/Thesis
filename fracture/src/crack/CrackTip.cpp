@@ -1,30 +1,32 @@
 #include <fracture/crack/CrackTip.h>
 #include <fracture/geometry/mesh/RemeshAdapter.h>
+#include <fracture/config/FractureConfig.h>
 
 
-CrackTip::CrackTip(PointSegment crack, double speed, double radius) {
-    this->speed = speed;
-    this->radius = radius;
+CrackTip::CrackTip(PointSegment crack) {
+    FractureConfig* config = FractureConfig::instance();
+
+    this->radius = config->getRatio()*crack.length();
     crackPath.push_back(crack.getSecond());
     crackPath.push_back(crack.getFirst());
 }
 
 void CrackTip::addPointToPath(double angle) {
+    FractureConfig* config = FractureConfig::instance();
     Point last = crackPath.back();
 
-    Point newPoint(last.getX() + this->speed*std::cos(utilities::radian(angle)),
-                   last.getY() + this->speed*std::sin(utilities::radian(angle)));
+    Point newPoint(last.getX() + config->getSpeed()*std::cos(utilities::radian(angle)),
+                   last.getY() + config->getSpeed()*std::sin(utilities::radian(angle)));
 
     this->crackPath.push_back(newPoint);
 }
 
 CrackTip::CrackTip(const CrackTip &t) {
     this->points = t.points;
+    this->radius = t.radius;
     this->container_polygon = t.container_polygon;
     this->crackAngle = t.crackAngle;
     this->crackPath = t.crackPath;
-    this->speed = t.speed;
-    this->radius = t.radius;
     this->changedPolygons = t.changedPolygons;
     this->changedIndex = t.changedIndex;
     this->tipPoints = t.tipPoints;
@@ -104,11 +106,13 @@ Point CrackTip::getPoint() {
 }
 
 std::set<int> CrackTip::generateTipPoints(BreakableMesh mesh) {
+    FractureConfig* config = FractureConfig::instance();
+
     this->crackAngle = PointSegment(crackPath[crackPath.size() - 2],crackPath.back()).cartesianAngle();
     Polygon container = mesh.getPolygon(this->container_polygon);
 
-    // TODO: I know 45 is about right, but don't hardcode it
-    RosetteGroupGenerator rosette = RosetteGroupGenerator(this->getPoint(), this->radius, 45, container_polygon, container);
+    RosetteGroupGenerator rosette = RosetteGroupGenerator(this->getPoint(), this->radius, config->getRosetteAngle(),
+                                                          container_polygon, container);
     tipPoints = rosette.getPoints(this->crackAngle, mesh);
 
     this->changedPolygons = fracture_utilities::setToVector(rosette.getChangedPolygons());
