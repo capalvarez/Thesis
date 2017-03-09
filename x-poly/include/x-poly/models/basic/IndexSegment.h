@@ -14,6 +14,7 @@ public:
     bool contains(std::vector<Point>& p, Point point);
     bool contains(std::vector<Point> p, IndexSegment s);
     Point middlePoint(std::vector<Point> p);
+    double cartesianAngle(std::vector<Point> p);
     bool intersection(std::vector<Point> points, PointSegment other, Point &inter);
     void orderCCW(std::vector<Point> points, Point center);
     bool isCCW(std::vector<Point> points, Point center);

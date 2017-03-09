@@ -20,6 +20,10 @@ Point IndexSegment::middlePoint(std::vector<Point> p) {
     return Point((p[this->p1].getX() + p[this->p2].getX())/2, (p[this->p1].getY() + p[this->p2].getY())/2);
 }
 
+double IndexSegment::cartesianAngle(std::vector<Point> p) {
+    return Segment::cartesianAngle(p[this->p1], p[this->p2]);
+}
+
 bool IndexSegment::intersection(std::vector<Point> points, PointSegment other, Point &inter) {
     Point p1 = points[this->p1];
     Point p2 = points[this->p2];

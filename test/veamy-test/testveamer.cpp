@@ -31,9 +31,9 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     PointSegment constrained2 (Point(2,0),Point(2,1));
     Constraint const1 (constrained, m.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
 
-    c.addConstraint(const1);
+    c.addConstraint(const1, m.getPoints().getList());
     Constraint const2 (constrained2, m.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(1));
-    c.addConstraint(const2);
+    c.addConstraint(const2, m.getPoints().getList());
 
     ConstraintsContainer container;
     container.addConstraints(c);

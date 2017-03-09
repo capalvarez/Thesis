@@ -6,6 +6,10 @@
 struct Angle{
     double angle;
 
+    Angle(double a){
+        angle = a;
+    }
+
     bool operator<(const Angle& other) const{
         if(std::abs(angle-other.angle)<0.001){
             return false;

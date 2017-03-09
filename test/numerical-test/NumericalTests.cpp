@@ -148,11 +148,11 @@ void NumericalTests::loadRightForceX(PolygonalMesh m, Veamer &v, Segment leftSid
 
     EssentialConstraints c;
      Constraint const1 (leftSide, Constraint::Direction::Total, new Constant(0));
-    c.addConstraint(const1);
+    c.addConstraint(const1, std::vector<Point>());
 
     NaturalConstraints natural;
     Constraint const2 (rightSide, Constraint::Direction::Horizontal, new Constant(10));
-    natural.addConstraint(const2);
+    natural.addConstraint(const2, std::vector<Point>());
 
     ConstraintsContainer container;
     container.addConstraints(c);
@@ -178,11 +178,11 @@ void NumericalTests::loadRightForceY(PolygonalMesh m, Veamer &v, Segment leftSid
 
     EssentialConstraints c;
     Constraint const1 (leftSide, Constraint::Direction::Total, new Constant(0));
-    c.addConstraint(const1);
+    c.addConstraint(const1, std::vector<Point>());
 
     NaturalConstraints natural;
     Constraint const2 (rightSide, Constraint::Direction::Vertical, new Constant(10));
-    natural.addConstraint(const2);
+    natural.addConstraint(const2, std::vector<Point>());
 
     ConstraintsContainer container;
     container.addConstraints(c);
@@ -208,9 +208,9 @@ void NumericalTests::loadNoForces(PolygonalMesh m, Veamer &v, Segment leftSide, 
 
     EssentialConstraints c;
     Constraint const1 (leftSide, Constraint::Direction::Total, new Constant(0));
-    c.addConstraint(const1);
+    c.addConstraint(const1, std::vector<Point>());
     Constraint const2 (rightSide, Constraint::Direction::Total, new Constant(10));
-    c.addConstraint(const2);
+    c.addConstraint(const2, std::vector<Point>());
 
     ConstraintsContainer container;
     container.addConstraints(c);
