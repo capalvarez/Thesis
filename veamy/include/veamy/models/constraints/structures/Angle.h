@@ -2,6 +2,7 @@
 #define THESIS_ANGLE_H
 
 #include <cmath>
+#include <veamy/config/VeamyConfig.h>
 
 struct Angle{
     double angle;
@@ -23,7 +24,9 @@ struct Angle{
     }
 
     bool operator<(const Angle& other) const{
-        if(std::abs(angle-other.angle)<0.001){
+        VeamyConfig* config = VeamyConfig::instance();
+
+        if(std::abs(angle-other.angle)<config->getTolerance()){
             return false;
         }
 
