@@ -5,7 +5,6 @@
 #include <x-poly/models/Region.h>
 #include <x-poly/models/generator/functions.h>
 #include <x-poly/voronoi/TriangleMeshGenerator.h>
-#include <veamy/postprocess/PostProcessor.h>
 
 TEST(VeamerTest, LoadDataFirstOrderTest){
     Veamer v;
@@ -46,10 +45,5 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     Eigen::VectorXd x = v.simulate();
 
     std::cout << x << std::endl;
-
-    std::string files[2] = {"ux_simple.txt", "uy_simple.txt"};
-
-    PostProcessor postProcessor (x, v);
-    postProcessor.writeDisplacements(files);
 }
 

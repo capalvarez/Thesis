@@ -3,7 +3,7 @@
 #include <veamy/physics/Material.h>
 #include <veamy/quadrature/QuadraturePolygon.h>
 
-Element::Element(ProblemConditions& conditions, Polygon p, UniqueList<Point>& points, DOFS& out) {
+Element::Element(ProblemConditions &conditions, Polygon &p, UniqueList<Point> &points, DOFS &out) {
     std::vector<int> vertex = p.getPoints();
     int n = vertex.size();
 

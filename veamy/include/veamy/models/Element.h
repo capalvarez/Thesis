@@ -20,7 +20,7 @@ private:
     void initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemConditions& conditions);
 public:
     Eigen::MatrixXd K;
-    Element(ProblemConditions& conditions, Polygon p, UniqueList<Point>& points, DOFS& out);
+    Element(ProblemConditions &conditions, Polygon &p, UniqueList<Point> &points, DOFS &out);
     void assemble(DOFS out, Eigen::MatrixXd& Kglobal,  Eigen::VectorXd& Fglobal);
 };
 
