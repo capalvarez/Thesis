@@ -7,7 +7,7 @@ void Constraints::addConstraint(Constraint c, std::vector<Point> p) {
         IndexSegment s = segments.get(i);
         Angle angle(s.cartesianAngle(p));
 
-        std::vector<IndexSegment> v = constrained_segments[angle];
+        std::vector<IndexSegment>& v = constrained_segments[angle];
         v.push_back(s);
 
         segment_map.insert(std::make_pair(segments.get(i), c));
@@ -16,7 +16,12 @@ void Constraints::addConstraint(Constraint c, std::vector<Point> p) {
 
 isConstrainedInfo Constraints::isConstrained(std::vector<Point> points, IndexSegment s) {
     Angle angle(s.cartesianAngle(points));
-    std::vector<IndexSegment> segments = constrained_segments[angle];
+    auto iter = constrained_segments.find(angle);
+
+    if(iter == constrained_segments.end())
+        return isConstrainedInfo();
+
+    std::vector<IndexSegment> segments = iter->second;
 
     for (int i = 0; i < segments.size(); ++i) {
         if(segments[i].contains(points,s)){
