@@ -374,7 +374,6 @@ void Polygon::replace_segment(IndexSegment seg, std::vector<IndexSegment> segs, 
         i--;
     }
 
-    //TODO:Fix border cases
     int indexOfStart = utilities::indexOf(this->points, seg.getFirst());
     bool atEnd = indexOfStart!=this->points.size()-1;
 
