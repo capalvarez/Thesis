@@ -7,10 +7,11 @@
 #include <fracture/geometry/BreakableMesh.h>
 #include <veamy/physics/ProblemConditions.h>
 #include <fracture/geometry/structures/PolygonChangeData.h>
+#include <fracture/numeric/BreakableVeamer.h>
 
 class FractureSimulator {
 private:
-    Veamer veamer;
+    BreakableVeamer veamer;
     BreakableMesh mesh;
     Crack crack;
 public:

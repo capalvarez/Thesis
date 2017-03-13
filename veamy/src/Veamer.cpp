@@ -17,7 +17,6 @@ void Veamer::initProblem(PolygonalMesh m, ProblemConditions conditions) {
 }
 
 void Veamer::createElement(Polygon p) {
-    polygon_to_element.insert(std::make_pair(p,elements.size()));
     elements.push_back(Element(this->conditions, p, this->points, DOFs));
 }
 
@@ -52,37 +51,11 @@ Eigen::VectorXd Veamer::simulate() {
     }
 
      //Solve the system
-    Eigen::VectorXd x = K.colPivHouseholderQr().solve(f);
-    /*Eigen::VectorXd x = K.inverse()*f;*/
+    Eigen::VectorXd x = K.fullPivHouseholderQr().solve(f);
 
     return x;
 }
 
-void Veamer::replaceElement(Polygon old, std::vector<Polygon> newPolygons) {
-    int to_remove = polygon_to_element[old];
-    polygon_to_element.erase(old);
-
-    elements.erase(elements.begin() + to_remove);
-
-    for (int i = 0; i < newPolygons.size(); ++i) {
-        createElement(newPolygons[i]);
-    }
-}
-
-void Veamer::replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons, UniqueList<Point> points) {
-    this->points = points;
-
-    for (int i = 0; i < old.size(); ++i) {
-        int to_remove = polygon_to_element[old[i]];
-        polygon_to_element.erase(old[i]);
-
-        elements.erase(elements.begin() + to_remove);
-    }
-
-    for (int i = 0; i < newPolygons.size(); ++i) {
-        createElement(newPolygons[i]);
-    }
-}
 
 Pair<int> Veamer::pointToDOFS(int point_index) {
     return this->DOFs.pointToDOFS(point_index);

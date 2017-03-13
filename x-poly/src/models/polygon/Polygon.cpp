@@ -5,6 +5,10 @@
 
 
 Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
+    if(isSelfIntersecting()){
+        std::invalid_argument("Self intersecting polygons are not supported");
+    }
+
     this->points.assign(points.begin(), points.end());
 
     std::vector<Point> this_points;
@@ -18,6 +22,10 @@ Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
 }
 
 void Polygon::mutate(std::vector<Point> &p) {
+    if(isSelfIntersecting()){
+        std::invalid_argument("Self intersecting polygons are not supported");
+    }
+
     this->points.clear();
     xpoly_utilities::TrivialIndexVector(this->points,p.size());
     calculateHash();
@@ -33,6 +41,10 @@ void Polygon::mutate(std::vector<Point> &p) {
 }
 
 void Polygon::mutate(std::vector<int> points, std::vector<Point> p) {
+    if(isSelfIntersecting()){
+        std::invalid_argument("Self intersecting polygons are not supported");
+    }
+
     this->points.assign(points.begin(), points.end());
 
     std::vector<Point> this_points;
@@ -46,6 +58,10 @@ void Polygon::mutate(std::vector<int> points, std::vector<Point> p) {
 }
 
 Polygon::Polygon(std::vector<Point> &p) {
+    if(isSelfIntersecting()){
+        std::invalid_argument("Self intersecting polygons are not supported");
+    }
+
     xpoly_utilities::TrivialIndexVector(this->points,p.size());
 
     std::vector<Point> this_points;
@@ -60,9 +76,7 @@ Polygon::Polygon(std::vector<Point> &p) {
 }
 
 
-Polygon::Polygon() {
-
-}
+Polygon::Polygon() {}
 
 Polygon::Polygon(const Polygon &obj) {
     this->area = obj.area;
@@ -387,6 +401,9 @@ void Polygon::replace_segment(IndexSegment seg, std::vector<IndexSegment> segs, 
         this->points.erase(this->points.begin());
     }
 
-
     this->mutate(this->points,points);
+}
+
+bool Polygon::isSelfItersecting() {
+    return false;
 }

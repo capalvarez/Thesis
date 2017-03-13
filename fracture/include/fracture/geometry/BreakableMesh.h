@@ -7,9 +7,6 @@
 
 
 class BreakableMesh : public PolygonalMesh{
-private:
-
-
 public:
     BreakableMesh();
     BreakableMesh(const PolygonalMesh& m);

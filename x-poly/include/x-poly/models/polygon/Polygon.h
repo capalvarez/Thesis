@@ -51,6 +51,7 @@ public:
     bool isConvex(std::vector<Point>& p);
     bool isClockwise(std::vector<Point>& p);
     bool isVertex(int index);
+    bool isSelfItersecting();
     std::size_t hash;
     void fixCCW(std::vector<Point> p);
 

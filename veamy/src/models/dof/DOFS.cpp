@@ -26,7 +26,7 @@ Pair<int> DOFS::addDOF(ConstraintsContainer &constraints, std::vector<Point> poi
     return dofPair;
 }
 
-UniqueList<DOF> DOFS::getDOFS() {
+UniqueList<DOF> DOFS:: getDOFS() {
     return this->list;
 }
 

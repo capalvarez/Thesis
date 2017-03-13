@@ -3,7 +3,7 @@
 FractureSimulator::FractureSimulator(const PolygonalMesh& mesh, const Crack& initial, const ProblemConditions& conditions) {
     this->mesh = BreakableMesh(mesh);
     this->crack = initial;
-    this->veamer = Veamer();
+    this->veamer = BreakableVeamer();
 
     this->veamer.initProblem(this->mesh, conditions);
 

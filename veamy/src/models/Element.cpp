@@ -91,11 +91,11 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemCo
     Eigen::MatrixXd D = conditions.material.getMaterialMatrix();
 
     //TODO: Study this coefficient's influence
-    double gamma = 1;
+    VeamyConfig* config = VeamyConfig::instance();
     double c = (Nc.transpose()*Nc).trace();
     double alphaS = area*conditions.material.trace()/c;
     Eigen::MatrixXd Se;
-    Se = gamma*alphaS*I;
+    Se = config->getGamma()*alphaS*I;
 
     this->K = area*Wc*D*Wc.transpose() + (I - Pp).transpose()*Se*(I - Pp);
 
