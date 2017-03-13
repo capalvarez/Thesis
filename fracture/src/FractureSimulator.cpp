@@ -14,7 +14,7 @@ FractureSimulator::FractureSimulator(const PolygonalMesh& mesh, const Crack& ini
 void FractureSimulator::simulate(double crack_growth, int max_iter) {
     int n_iter = 0;
 
-    while(n_iter<max_iter && !this->crack.isFinished(this->mesh)){
+    while(n_iter<max_iter && !this->crack.isFinished()){
         PolygonChangeData refinedPolygons = this->crack.prepareTip(this->mesh);
 
         this->veamer.replaceElements(refinedPolygons.oldPolygons, refinedPolygons.newPolygons, this->mesh.getPoints());

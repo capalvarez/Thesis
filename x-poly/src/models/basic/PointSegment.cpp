@@ -26,3 +26,7 @@ bool PointSegment::operator==(const PointSegment other) const {
     return getFirst()==other.getFirst() && getSecond()==other.getSecond() ||
            getFirst()==other.getSecond() && getSecond()==other.getFirst();
 }
+
+bool PointSegment::intersection(PointSegment other, Point &inter) {
+    return Segment::intersects(this->p1, this->p2, other.getFirst(), other.getSecond(), inter);
+}

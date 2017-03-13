@@ -2,11 +2,11 @@
 
 BreakableVeamer::BreakableVeamer() {}
 
-BreakableVeamer::BreakableVeamer(const Veamer &veamer) {
+BreakableVeamer::BreakableVeamer(const Veamer& veamer) {
     this->DOFs = veamer.DOFs;
     this->elements = veamer.elements;
-    this->conditions = veamer.conditions;
-    this->points = veamer.points;
+    this->conditions = veamer.getConditions();
+    this->points = veamer.getPoints();
 }
 
 void BreakableVeamer::createElement(Polygon p) {

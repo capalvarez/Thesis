@@ -35,8 +35,14 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     Constraint const2 (constrained2, m.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(1));
     c.addConstraint(const2, m.getPoints().getList());
 
+   /* NaturalConstraints n;
+    PointSegment const3(Point(0,0),Point(2,0));
+    Constraint constraint3(const3,m.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(2));
+    n.addConstraint(constraint3, m.getPoints().getList());*/
+
     ConstraintsContainer container;
     container.addConstraints(c, m);
+    // container.addConstraints(n,m);
 
     ProblemConditions conditions(container, f, Material(Materials::material::Steel));
 

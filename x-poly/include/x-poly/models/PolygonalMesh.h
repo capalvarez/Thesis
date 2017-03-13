@@ -36,7 +36,8 @@ public:
     bool areNeighbours(Polygon poly, int poly2);
 
     int findContainerPolygon(Point p);
-    int findContainerPolygon(Point p, int init_polygon);
+    int findContainerPolygon(Point p, int& last);
+    int findContainerPolygon(Point p, int init_polygon, int &last);
 
     NeighbourInfo getNeighbour(int poly_index, PointSegment direction);
     NeighbourInfo getNeighbour(int poly_index, PointSegment direction, int previous);

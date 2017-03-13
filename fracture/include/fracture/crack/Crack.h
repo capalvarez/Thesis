@@ -22,7 +22,7 @@ public:
 
     PolygonChangeData grow(Problem problem, Eigen::VectorXd u);
     PolygonChangeData prepareTip(BreakableMesh &m);
-    bool isFinished(BreakableMesh mesh);
+    bool isFinished();
 
     PolygonChangeData initializeCrack(BreakableMesh &mesh);
 };

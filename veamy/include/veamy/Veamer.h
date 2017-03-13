@@ -19,7 +19,6 @@ struct PolygonHasher {
 
 class Veamer {
 protected:
-    //TODO: Check for inconsistencies (cannot have natural and essential conditions on the same segments)
     ProblemConditions conditions;
     UniqueList<Point> points;
 
@@ -34,7 +33,9 @@ public:
 
     Pair<int> pointToDOFS(int point_index);
     Material getMaterial();
+    UniqueList<Point> getPoints() const;
     UniqueList<Point> getPoints();
+    ProblemConditions getConditions() const;
 };
 
 

@@ -24,6 +24,7 @@ public:
     bool isVertex(T p);
     virtual bool isBoundary(std::vector<Point> p) = 0;
     double cartesianAngle(Point p1, Point p2);
+    bool intersects(Point p1, Point p2, Point o1, Point o2, Point& inter);
 
 };
 

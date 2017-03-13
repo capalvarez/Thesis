@@ -68,6 +68,43 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
     PolygonChangeData changeData = problem.mesh->breakMesh(n, direction);
     assignLocation(changeData.lastPolygon);
 
+
+    int last;
+    int isOutside = problem.mesh->findContainerPolygon(crackPath.back(), last);
+    if(isOutside==-1) {
+        Polygon& poly = problem.mesh->getPolygon(last);
+
+        std::vector<IndexSegment> polySeg;
+        poly.getSegments(polySeg);
+
+        for (int j = 0; j < polySeg.size() ; ++j) {
+            Point p;
+            bool intersects = polySeg[j].intersection(problem.mesh->getPoints().getList(), direction, p);
+
+            if(intersects){
+                hasFinished = true;
+                crackPath.pop_back();
+                crackPath.push_back(p);
+            }
+        }
+    }
+
+    PointSegment crack(crackPath[0], crackPath.back());
+    Point p;
+    if(crack.intersection(direction, p)){
+        for (int i = 0; i < crackPath.size() - 1; ++i) {
+            PointSegment section(crackPath[i], crackPath[i+1]);
+            
+            if(section.intersection(direction,p)){
+                hasFinished = true;
+                crackPath.pop_back();
+                crackPath.push_back(p);
+            }
+        }
+        
+        
+    }
+    
     return changeData;
 }
 
@@ -91,8 +128,8 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
     return PolygonChangeData(polys, newPolygons);
 }
 
-bool CrackTip::isFinished(BreakableMesh mesh) {
-    return mesh.isInBoundary(crackPath.back());
+bool CrackTip::isFinished() {
+    return this->hasFinished;
 }
 
 void CrackTip::assignLocation(int polygon) {

@@ -74,12 +74,11 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         this->prepareTip(this->end, oldP, newP, m);
     }
 
-    m.printInFile("test.txt");
     return PolygonChangeData(oldP.getList(), newP);
 }
 
-bool Crack::isFinished(BreakableMesh mesh) {
-    return init.isFinished(mesh) && end.isFinished(mesh);
+bool Crack::isFinished() {
+    return init.isFinished() && end.isFinished();
 }
 
 PolygonChangeData Crack::initializeCrack(BreakableMesh& mesh) {
@@ -105,7 +104,7 @@ PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
 }
 
 void Crack::prepareTip(CrackTip tip, UniqueList<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh) {
-    if(!tip.isFinished(mesh)){
+    if(!tip.isFinished()){
         PolygonChangeData data = tip.prepareTip(mesh);
 
         oldP.push_list(data.oldPolygons);
@@ -115,7 +114,7 @@ void Crack::prepareTip(CrackTip tip, UniqueList<Polygon> &oldP, std::vector<Poly
 
 void Crack::grow(CrackTip &tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, Problem problem,
                  Eigen::VectorXd u) {
-    if(!tip.isFinished(*problem.mesh)){
+    if(!tip.isFinished()){
         PolygonChangeData data = tip.grow(u, problem);
 
         oldP.insert(oldP.end(), data.oldPolygons.begin(), data.oldPolygons.end());

@@ -65,7 +65,14 @@ Material Veamer::getMaterial() {
     return conditions.material;
 }
 
+UniqueList<Point> Veamer::getPoints() const {
+    return this->points;
+}
+
 UniqueList<Point> Veamer::getPoints() {
     return this->points;
 }
 
+ProblemConditions Veamer::getConditions() const {
+    return this->conditions;
+}

@@ -25,37 +25,12 @@ double IndexSegment::cartesianAngle(std::vector<Point> p) {
 }
 
 bool IndexSegment::intersection(std::vector<Point> points, PointSegment other, Point &inter) {
-    Point p1 = points[this->p1];
-    Point p2 = points[this->p2];
-
-    Point o1 = other.getFirst();
-    Point o2 = other.getSecond();
-
-    double s1_x, s1_y, s2_x, s2_y;
-    s1_x = p2.getX() - p1.getX();     s1_y = p2.getY() - p1.getY();
-    s2_x = o2.getX() - o1.getX();     s2_y = o2.getY() - o1.getY();
-
-    double s, t;
-    s = (-s1_y * (p1.getX() - o1.getX()) + s1_x * (p1.getY() - o1.getY())) / (-s2_x * s1_y + s1_x * s2_y);
-    t = ( s2_x * (p1.getY() - o1.getY()) - s2_y * (p1.getX() - o1.getX())) / (-s2_x * s1_y + s1_x * s2_y);
-
-    if (s >= 0 && s <= 1 && t >= 0 && t <= 1){
-        double i_x = p1.getX() + (t * s1_x);
-        double i_y = p1.getY() + (t * s1_y);
-
-        inter.setX(i_x);
-        inter.setY(i_y);
-
-        return true;
-    }
-
-    return false;
+    return Segment::intersects(points[this->p1],points[this->p2],other.getFirst(),other.getSecond(), inter);
 }
 
 bool IndexSegment::intersection(std::vector<Point> points, IndexSegment other, Point &inter) {
-    return this->intersection(points, PointSegment(points[other.getFirst()], points[other.getSecond()]), inter);
+    return Segment::intersects(points[this->p1],points[this->p2], points[other.getFirst()], points[other.getSecond()], inter);
 }
-
 
 void IndexSegment::orderCCW(std::vector<Point> points, Point center) {
     if(!this->isCCW(points, center)){
