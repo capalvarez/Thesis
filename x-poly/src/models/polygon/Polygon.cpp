@@ -5,8 +5,8 @@
 
 
 Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
-    if(isSelfIntersecting(std::vector<Point>())){
-        std::invalid_argument("Self intersecting polygons are not supported");
+    if(isSelfIntersecting(p)){
+        throw std::invalid_argument("Self intersecting polygons are not supported");
     }
 
     this->points.assign(points.begin(), points.end());
@@ -22,12 +22,13 @@ Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
 }
 
 void Polygon::mutate(std::vector<Point> &p) {
-    if(isSelfIntersecting(std::vector<Point>())){
-        std::invalid_argument("Self intersecting polygons are not supported");
-    }
-
     this->points.clear();
     xpoly_utilities::TrivialIndexVector(this->points,p.size());
+
+    if(isSelfIntersecting(p)){
+        throw std::invalid_argument("Self intersecting polygons are not supported");
+    }
+
     calculateHash();
 
     std::vector<Point> this_points;
@@ -41,8 +42,8 @@ void Polygon::mutate(std::vector<Point> &p) {
 }
 
 void Polygon::mutate(std::vector<int> points, std::vector<Point> p) {
-    if(isSelfIntersecting(std::vector<Point>())){
-        std::invalid_argument("Self intersecting polygons are not supported");
+    if(isSelfIntersecting(p)){
+        throw std::invalid_argument("Self intersecting polygons are not supported");
     }
 
     this->points.assign(points.begin(), points.end());
@@ -58,7 +59,7 @@ void Polygon::mutate(std::vector<int> points, std::vector<Point> p) {
 }
 
 Polygon::Polygon(std::vector<Point> &p) {
-    if(isSelfIntersecting(std::vector<Point>())){
+    if(isSelfIntersecting(p)){
         std::invalid_argument("Self intersecting polygons are not supported");
     }
 
@@ -407,20 +408,21 @@ void Polygon::replace_segment(IndexSegment seg, std::vector<IndexSegment> segs, 
 bool Polygon::isSelfIntersecting(std::vector<Point> points) {
     std::vector<IndexSegment> segments;
     this->getSegments(segments);
+    int n = segments.size();
     Point intersection;
 
-    for (int i = 0; i < segments.size(); ++i) {
+    for (int i = 0; i < n; ++i) {
         IndexSegment s = segments[i];
 
-        for (int j = 0; j < segments.size(); ++j) {
-            if(i==j){
+        for (int j = 0; j < n; ++j) {
+            if(i==j || j==(i-1+n)%n || j==(i+1)%n){
                 continue;
             }
 
             if(s.intersection(points,segments[j],intersection)){
-                return false;
+                return true;
             }
         }
     }
-    return true;
+    return false;
 }

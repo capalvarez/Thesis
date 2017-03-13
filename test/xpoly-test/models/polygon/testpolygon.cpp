@@ -133,3 +133,10 @@ TEST_F(PolygonTest, ReplaceNeighbourMultipleTest){
     nonconvex->replace_segment(IndexSegment(1,6),seg, points);
     nonconvex->getArea();
 }
+
+TEST_F(PolygonTest, SelfIntersectingTestFalse){
+    EXPECT_FALSE(nonconvex->isSelfIntersecting(points));
+    EXPECT_FALSE(triangle->isSelfIntersecting(points));
+    EXPECT_FALSE(square->isSelfIntersecting(points));
+}
+

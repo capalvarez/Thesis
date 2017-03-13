@@ -27,6 +27,7 @@ public:
     std::vector<int> getConstrainedDOF();
     void addConstrainedDOF(std::vector<Point> points, int DOF_index, DOF::Axis axis, SegmentPair pair);
     void addConstrainedDOFBySegment(std::vector<Point> points, int DOF_index, DOF::Axis axis, IndexSegment s);
+    std::unordered_map<IndexSegment, Constraint, SegmentHasher> getConstrainedSegments();
 };
 
 

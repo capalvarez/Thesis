@@ -73,6 +73,9 @@ void Constraints::addConstrainedDOFBySegment(std::vector<Point> points, int DOF_
             constraints_map.insert(std::pair<int,Constraint>(DOF_index, constraint));
         }
     }
+}
 
+std::unordered_map<IndexSegment, Constraint, SegmentHasher> Constraints::getConstrainedSegments() {
+    return this->segment_map;
 }
 

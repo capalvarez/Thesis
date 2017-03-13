@@ -36,7 +36,7 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     c.addConstraint(const2, m.getPoints().getList());
 
     ConstraintsContainer container;
-    container.addConstraints(c);
+    container.addConstraints(c, m);
 
     ProblemConditions conditions(container, f, Material(Materials::material::Steel));
 

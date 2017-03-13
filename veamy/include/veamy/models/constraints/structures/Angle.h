@@ -24,6 +24,9 @@ struct Angle{
 
         return angle<other.angle;
     };
+
+
+
 };
 
 #endif 

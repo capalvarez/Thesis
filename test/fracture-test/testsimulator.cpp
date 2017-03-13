@@ -64,7 +64,7 @@ TEST(FractureSimulatorTest, SimulateTest){
     c.addConstraint(const2,  mesh.getPoints().getList());
 
     ConstraintsContainer container;
-    container.addConstraints(c);
+    container.addConstraints(c, PolygonalMesh());
 
     ProblemConditions conditions(container, f, Material(Materials::material::Steel));
 

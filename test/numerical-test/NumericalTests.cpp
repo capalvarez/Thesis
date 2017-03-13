@@ -155,8 +155,8 @@ void NumericalTests::loadRightForceX(PolygonalMesh m, Veamer &v, Segment leftSid
     natural.addConstraint(const2, std::vector<Point>());
 
     ConstraintsContainer container;
-    container.addConstraints(c);
-    container.addConstraints(natural);
+    container.addConstraints(c, PolygonalMesh());
+    container.addConstraints(natural, nullptr);
 
     ProblemConditions p (container, f, Material());
 
@@ -185,8 +185,8 @@ void NumericalTests::loadRightForceY(PolygonalMesh m, Veamer &v, Segment leftSid
     natural.addConstraint(const2, std::vector<Point>());
 
     ConstraintsContainer container;
-    container.addConstraints(c);
-    container.addConstraints(natural);
+    container.addConstraints(c, PolygonalMesh());
+    container.addConstraints(natural, nullptr);
 
     ProblemConditions p (container, f, Material());
 
@@ -213,7 +213,7 @@ void NumericalTests::loadNoForces(PolygonalMesh m, Veamer &v, Segment leftSide, 
     c.addConstraint(const2, std::vector<Point>());
 
     ConstraintsContainer container;
-    container.addConstraints(c);
+    container.addConstraints(c, PolygonalMesh());
 
     ProblemConditions p (container, f, Material());
 
