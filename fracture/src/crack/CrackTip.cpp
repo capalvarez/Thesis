@@ -89,22 +89,6 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
         }
     }
 
-    PointSegment crack(crackPath[0], crackPath.back());
-    Point p;
-    if(crack.intersection(direction, p)){
-        for (int i = 0; i < crackPath.size() - 1; ++i) {
-            PointSegment section(crackPath[i], crackPath[i+1]);
-            
-            if(section.intersection(direction,p)){
-                hasFinished = true;
-                crackPath.pop_back();
-                crackPath.push_back(p);
-            }
-        }
-        
-        
-    }
-    
     return changeData;
 }
 

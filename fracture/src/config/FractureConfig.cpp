@@ -42,5 +42,9 @@ double FractureConfig::getRosetteAngle() {
 }
 
 FractureConfig *FractureConfig::instance() {
+    if(!s_instance){
+        s_instance = new FractureConfig;
+    }
+
     return s_instance;
 }
