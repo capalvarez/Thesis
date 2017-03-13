@@ -52,6 +52,11 @@ bool IndexSegment::intersection(std::vector<Point> points, PointSegment other, P
     return false;
 }
 
+bool IndexSegment::intersection(std::vector<Point> points, IndexSegment other, Point &inter) {
+    return this->intersection(points, PointSegment(points[other.getFirst()], points[other.getSecond()]), inter);
+}
+
+
 void IndexSegment::orderCCW(std::vector<Point> points, Point center) {
     if(!this->isCCW(points, center)){
         int tmp = this->p1;

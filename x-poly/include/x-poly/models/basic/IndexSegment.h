@@ -16,6 +16,7 @@ public:
     Point middlePoint(std::vector<Point> p);
     double cartesianAngle(std::vector<Point> p);
     bool intersection(std::vector<Point> points, PointSegment other, Point &inter);
+    bool intersection(std::vector<Point> points, IndexSegment other, Point &inter);
     void orderCCW(std::vector<Point> points, Point center);
     bool isCCW(std::vector<Point> points, Point center);
     std::string getString() const;

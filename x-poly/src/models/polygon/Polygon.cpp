@@ -5,7 +5,7 @@
 
 
 Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
-    if(isSelfIntersecting()){
+    if(isSelfIntersecting(std::vector<Point>())){
         std::invalid_argument("Self intersecting polygons are not supported");
     }
 
@@ -22,7 +22,7 @@ Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
 }
 
 void Polygon::mutate(std::vector<Point> &p) {
-    if(isSelfIntersecting()){
+    if(isSelfIntersecting(std::vector<Point>())){
         std::invalid_argument("Self intersecting polygons are not supported");
     }
 
@@ -41,7 +41,7 @@ void Polygon::mutate(std::vector<Point> &p) {
 }
 
 void Polygon::mutate(std::vector<int> points, std::vector<Point> p) {
-    if(isSelfIntersecting()){
+    if(isSelfIntersecting(std::vector<Point>())){
         std::invalid_argument("Self intersecting polygons are not supported");
     }
 
@@ -58,7 +58,7 @@ void Polygon::mutate(std::vector<int> points, std::vector<Point> p) {
 }
 
 Polygon::Polygon(std::vector<Point> &p) {
-    if(isSelfIntersecting()){
+    if(isSelfIntersecting(std::vector<Point>())){
         std::invalid_argument("Self intersecting polygons are not supported");
     }
 
@@ -404,6 +404,23 @@ void Polygon::replace_segment(IndexSegment seg, std::vector<IndexSegment> segs, 
     this->mutate(this->points,points);
 }
 
-bool Polygon::isSelfItersecting() {
-    return false;
+bool Polygon::isSelfIntersecting(std::vector<Point> points) {
+    std::vector<IndexSegment> segments;
+    this->getSegments(segments);
+    Point intersection;
+
+    for (int i = 0; i < segments.size(); ++i) {
+        IndexSegment s = segments[i];
+
+        for (int j = 0; j < segments.size(); ++j) {
+            if(i==j){
+                continue;
+            }
+
+            if(s.intersection(points,segments[j],intersection)){
+                return false;
+            }
+        }
+    }
+    return true;
 }
