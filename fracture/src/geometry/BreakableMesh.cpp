@@ -16,7 +16,6 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
 
     NeighbourInfo n1 = getNeighbour(init, crack);
 
-    // TODO: Quick fix
     if(n1.neighbour<0){
         //If the crack is in one element, return the same element
         return PolygonChangeData(oldPolygons, newPolygons, init);
@@ -167,8 +166,7 @@ void BreakableMesh::swapPolygons(int first, int last) {
 void BreakableMesh::mergePolygons(int i1, int i2) {
     Polygon p = getPolygon(i1);
 
-    if(areNeighbours(i1,i2)){
-        //Todo: this is correct, but put a warning or error here
+    if(!areNeighbours(i1,i2)){
         return;
     }
 
