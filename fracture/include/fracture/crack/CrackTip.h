@@ -16,7 +16,6 @@
 
 class CrackTip {
 private:
-    double speed;
     double radius;
     std::vector<Point> crackPath;
     int container_polygon;
@@ -27,13 +26,16 @@ private:
     std::vector<int> changedPolygons;
     std::vector<int> changedIndex;
     std::vector<int> container_polygons;
+    bool hasFinished = false;
 
     void reassignContainer(Problem problem);
     void findContainerPolygons(std::vector<Polygon> centerPolygons, std::vector<int> indexes,
                                std::vector<Point> points);
+
+
 public:
     CrackTip();
-    CrackTip(PointSegment crack, double length, double radius);
+    CrackTip(PointSegment crack);
     CrackTip(const CrackTip& t);
 
     void addPointToPath(double angle);
@@ -41,7 +43,7 @@ public:
 
     PolygonChangeData grow(Eigen::VectorXd u, Problem problem);
     PolygonChangeData prepareTip(BreakableMesh& mesh);
-    bool isFinished(BreakableMesh mesh);
+    bool isFinished();
     void assignLocation(int polygon);
     Point getPoint();
 

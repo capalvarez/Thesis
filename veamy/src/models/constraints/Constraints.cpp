@@ -1,20 +1,31 @@
 #include <veamy/models/constraints/Constraints.h>
 
-void Constraints::addConstraint(Constraint c) {
+void Constraints::addConstraint(Constraint c, std::vector<Point> p) {
     UniqueList<IndexSegment> segments = c.getSegments();
 
     for (int i = 0; i < segments.size(); ++i) {
-        constrained_segments.push_back(segments.get(i));
+        IndexSegment s = segments.get(i);
+        Angle angle(s.cartesianAngle(p));
+
+        std::vector<IndexSegment>& v = constrained_segments[angle];
+        v.push_back(s);
+
         segment_map.insert(std::make_pair(segments.get(i), c));
     }
 }
 
 isConstrainedInfo Constraints::isConstrained(std::vector<Point> points, IndexSegment s) {
-   // TODO: Some data structure is necessary to optimize this, is slow as a snail
+    Angle angle(s.cartesianAngle(points));
+    auto iter = constrained_segments.find(angle);
 
-    for (int i = 0; i < constrained_segments.size(); ++i) {
-        if(constrained_segments[i].contains(points,s)){
-            return isConstrainedInfo(constrained_segments[i]);
+    if(iter == constrained_segments.end())
+        return isConstrainedInfo();
+
+    std::vector<IndexSegment> segments = iter->second;
+
+    for (int i = 0; i < segments.size(); ++i) {
+        if(segments[i].contains(points,s)){
+            return isConstrainedInfo(segments[i]);
         }
     }
 
@@ -62,6 +73,9 @@ void Constraints::addConstrainedDOFBySegment(std::vector<Point> points, int DOF_
             constraints_map.insert(std::pair<int,Constraint>(DOF_index, constraint));
         }
     }
+}
 
+std::unordered_map<IndexSegment, Constraint, SegmentHasher> Constraints::getConstrainedSegments() {
+    return this->segment_map;
 }
 

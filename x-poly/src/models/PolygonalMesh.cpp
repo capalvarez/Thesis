@@ -28,15 +28,21 @@ std::vector<Polygon> PolygonalMesh::getPolygons() const {
 
 int PolygonalMesh::findContainerPolygon(Point p) {
     int i = utilities::random_integer(0,this->polygons.size()-1);
+    int j;
 
-    return this->findContainerPolygon(p, i);
+    return this->findContainerPolygon(p, i, j);
 }
 
-int PolygonalMesh::findContainerPolygon(Point p, int i) {
+int PolygonalMesh::findContainerPolygon(Point p, int &last) {
+    int i = utilities::random_integer(0,this->polygons.size()-1);
+
+    return this->findContainerPolygon(p, i, last);
+}
+
+int PolygonalMesh::findContainerPolygon(Point p, int i, int &last) {
     while(true){
         bool found = false;
         Polygon poly = this->polygons[i];
-        this->edges.printInFile("neighbours.txt");
 
         if(poly.containsPoint(this->points.getList(), p)){
             return i;
@@ -51,6 +57,7 @@ int PolygonalMesh::findContainerPolygon(Point p, int i) {
         }
 
         if (!found) {
+            last = i;
             return -1;
         }
     }

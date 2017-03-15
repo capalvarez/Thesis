@@ -63,8 +63,9 @@ IndexSegment Constraint::fromPointToInt(PointSegment s, std::vector<Point> point
     int p1 = utilities::indexOf(points, s.getFirst());
     int p2 = utilities::indexOf(points, s.getSecond());
 
-    // TODO: Maybe use exceptions?
-    assert((p1>=0 && p2>=0) && "Please don't go around making up nonexistent points");
+    if(p1<0 || p2<0){
+        throw std::invalid_argument("Please don't go around making up nonexistent points");
+    }
 
     return IndexSegment(p1, p2);
 }

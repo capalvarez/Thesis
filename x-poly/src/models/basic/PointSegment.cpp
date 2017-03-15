@@ -19,16 +19,14 @@ std::string PointSegment::getString() const {
 }
 
 double PointSegment::cartesianAngle() {
-    Point p1 = this->p1;
-    Point p2 = this->p2;
-
-    double dY = p2.getY() - p1.getY();
-    double dX = p2.getX() - p1.getX();
-
-    return utilities::degrees(atan2(dY, dX));
+    return Segment::cartesianAngle(this->p1, this->p2);
 }
 
 bool PointSegment::operator==(const PointSegment other) const {
     return getFirst()==other.getFirst() && getSecond()==other.getSecond() ||
            getFirst()==other.getSecond() && getSecond()==other.getFirst();
+}
+
+bool PointSegment::intersection(PointSegment other, Point &inter) {
+    return Segment::intersects(this->p1, this->p2, other.getFirst(), other.getSecond(), inter);
 }

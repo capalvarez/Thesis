@@ -126,8 +126,6 @@ std::vector<Point> Region::getRegionPoints() {
 }
 
 void Region::getSegments(std::vector<IndexSegment> &s) {
-    //TODO: Manage border cases here!
-    // TODO: Don't quite remember the problem, needs studying
     Polygon::getSegments(s);
     int offset = (int) this->p.size();
 

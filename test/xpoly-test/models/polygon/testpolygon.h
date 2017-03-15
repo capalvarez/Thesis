@@ -21,6 +21,7 @@ protected:
 
         std::vector<int> ncw = {0,2,1};
         nonclockwise = new Polygon(ncw,points);
+
     }
 
     std::vector<Point> points;
@@ -29,4 +30,5 @@ protected:
     Polygon* square;
     Polygon* nonconvex;
     Polygon* nonclockwise;
+
 };

@@ -1,6 +1,7 @@
 #ifndef THESIS_CONSTRAINTSCONTAINER_H
 #define THESIS_CONSTRAINTSCONTAINER_H
 
+#include <x-poly/models/PolygonalMesh.h>
 #include "EssentialConstraints.h"
 #include "NaturalConstraints.h"
 
@@ -8,10 +9,12 @@ class ConstraintsContainer {
 private:
     EssentialConstraints essential;
     NaturalConstraints natural;
+
+    bool areConsistent(NaturalConstraints n, EssentialConstraints e, PolygonalMesh mesh);
 public:
     ConstraintsContainer();
-    void addConstraints(NaturalConstraints c);
-    void addConstraints(EssentialConstraints c);
+    void addConstraints(NaturalConstraints c, PolygonalMesh mesh);
+    void addConstraints(EssentialConstraints c, PolygonalMesh mesh);
 
     void addConstrainedDOF(std::vector<Point> points, int DOF_index,DOF::Axis axis, SegmentPair pair);
 

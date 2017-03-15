@@ -5,6 +5,10 @@
 
 
 Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
+    if(isSelfIntersecting(p)){
+        throw std::invalid_argument("Self intersecting polygons are not supported");
+    }
+
     this->points.assign(points.begin(), points.end());
 
     std::vector<Point> this_points;
@@ -20,6 +24,11 @@ Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
 void Polygon::mutate(std::vector<Point> &p) {
     this->points.clear();
     xpoly_utilities::TrivialIndexVector(this->points,p.size());
+
+    if(isSelfIntersecting(p)){
+        throw std::invalid_argument("Self intersecting polygons are not supported");
+    }
+
     calculateHash();
 
     std::vector<Point> this_points;
@@ -33,6 +42,10 @@ void Polygon::mutate(std::vector<Point> &p) {
 }
 
 void Polygon::mutate(std::vector<int> points, std::vector<Point> p) {
+    if(isSelfIntersecting(p)){
+        throw std::invalid_argument("Self intersecting polygons are not supported");
+    }
+
     this->points.assign(points.begin(), points.end());
 
     std::vector<Point> this_points;
@@ -46,6 +59,10 @@ void Polygon::mutate(std::vector<int> points, std::vector<Point> p) {
 }
 
 Polygon::Polygon(std::vector<Point> &p) {
+    if(isSelfIntersecting(p)){
+        std::invalid_argument("Self intersecting polygons are not supported");
+    }
+
     xpoly_utilities::TrivialIndexVector(this->points,p.size());
 
     std::vector<Point> this_points;
@@ -60,9 +77,7 @@ Polygon::Polygon(std::vector<Point> &p) {
 }
 
 
-Polygon::Polygon() {
-
-}
+Polygon::Polygon() {}
 
 Polygon::Polygon(const Polygon &obj) {
     this->area = obj.area;
@@ -374,7 +389,6 @@ void Polygon::replace_segment(IndexSegment seg, std::vector<IndexSegment> segs, 
         i--;
     }
 
-    //TODO:Fix border cases
     int indexOfStart = utilities::indexOf(this->points, seg.getFirst());
     bool atEnd = indexOfStart!=this->points.size()-1;
 
@@ -388,6 +402,27 @@ void Polygon::replace_segment(IndexSegment seg, std::vector<IndexSegment> segs, 
         this->points.erase(this->points.begin());
     }
 
-
     this->mutate(this->points,points);
+}
+
+bool Polygon::isSelfIntersecting(std::vector<Point> points) {
+    std::vector<IndexSegment> segments;
+    this->getSegments(segments);
+    int n = segments.size();
+    Point intersection;
+
+    for (int i = 0; i < n; ++i) {
+        IndexSegment s = segments[i];
+
+        for (int j = 0; j < n; ++j) {
+            if(i==j || j==(i-1+n)%n || j==(i+1)%n){
+                continue;
+            }
+
+            if(s.intersection(points,segments[j],intersection)){
+                return true;
+            }
+        }
+    }
+    return false;
 }

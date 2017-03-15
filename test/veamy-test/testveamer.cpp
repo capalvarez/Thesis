@@ -5,7 +5,6 @@
 #include <x-poly/models/Region.h>
 #include <x-poly/models/generator/functions.h>
 #include <x-poly/voronoi/TriangleMeshGenerator.h>
-#include <veamy/postprocess/PostProcessor.h>
 
 TEST(VeamerTest, LoadDataFirstOrderTest){
     Veamer v;
@@ -32,12 +31,18 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     PointSegment constrained2 (Point(2,0),Point(2,1));
     Constraint const1 (constrained, m.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
 
-    c.addConstraint(const1);
+    c.addConstraint(const1, m.getPoints().getList());
     Constraint const2 (constrained2, m.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(1));
-    c.addConstraint(const2);
+    c.addConstraint(const2, m.getPoints().getList());
+
+   /* NaturalConstraints n;
+    PointSegment const3(Point(0,0),Point(2,0));
+    Constraint constraint3(const3,m.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(2));
+    n.addConstraint(constraint3, m.getPoints().getList());*/
 
     ConstraintsContainer container;
-    container.addConstraints(c);
+    container.addConstraints(c, m);
+    // container.addConstraints(n,m);
 
     ProblemConditions conditions(container, f, Material(Materials::material::Steel));
 
@@ -46,10 +51,5 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     Eigen::VectorXd x = v.simulate();
 
     std::cout << x << std::endl;
-
-    std::string files[2] = {"ux_simple.txt", "uy_simple.txt"};
-
-    PostProcessor postProcessor (x, v);
-    postProcessor.writeDisplacements(files);
 }
 

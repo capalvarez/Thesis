@@ -16,8 +16,8 @@ TEST_F(ConvexHullTest, ConvexHullFunctionTest){
 
     convex::convexHull(diamond,upper,lower);
 
-    std::vector<Point> expectedL = {Point(0,2), Point(3,4), Point(6,2)};
-    std::vector<Point> expectedU = {Point(0,2), Point(3,0), Point(6,2)};
+    std::vector<Point> expectedU = {Point(0,2), Point(3,4), Point(6,2)};
+    std::vector<Point> expectedL = {Point(0,2), Point(3,0), Point(6,2)};
 
     EXPECT_EQ(upper,expectedU);
     EXPECT_EQ(lower, expectedL);
@@ -30,8 +30,8 @@ TEST_F(ConvexHullTest, ConvexHullFunctionTest){
     expectedU.clear();
     expectedL.clear();
 
-    expectedL = {Point(0,0), Point(0,1), Point(1,0)};
-    expectedU = {Point(0,0), Point(1,0)};
+    expectedU = {Point(0,0), Point(0,1), Point(1,0)};
+    expectedL = {Point(0,0), Point(1,0)};
 
     EXPECT_EQ(upper,expectedU);
     EXPECT_EQ(lower,expectedL);
@@ -44,8 +44,8 @@ TEST_F(ConvexHullTest, ConvexHullFunctionTest){
     expectedU.clear();
     expectedL.clear();
 
-    expectedL = {Point(0,0),Point(1,2),Point(2,0)};
-    expectedU = {Point(0,0), Point(2,0)};
+    expectedU = {Point(0,0),Point(1,2), Point(2,0)};
+    expectedL = {Point(0,0), Point(2,0)};
 
     EXPECT_EQ(upper,expectedU);
     EXPECT_EQ(lower,expectedL);
