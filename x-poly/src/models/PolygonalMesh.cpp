@@ -63,16 +63,16 @@ int PolygonalMesh::findContainerPolygon(Point p, int i, int &last) {
     }
 }
 
-bool PolygonalMesh::isInBoundary(Point p) {
-    Polygon& container = this->polygons[findContainerPolygon(p)];
+void PolygonalMesh::update() {
+    std::vector<Point> p = this->points.getList();
 
-    if(container.inEdges(this->points.getList(), p)){
-        IndexSegment containerEdge = container.containerEdge(this->points.getList(), p);
-
-        return containerEdge.isBoundary(this->points.getList());
+    for (int i = 0; i < this->polygons.size(); ++i) {
+        polygons[i].update(p);
     }
+}
 
-    return false;
+void PolygonalMesh::deformPoint(int point_index, double dX, double dY) {
+    this->points.get(point_index).deform(dX, dY);
 }
 
 Polygon& PolygonalMesh::getPolygon(int index) {

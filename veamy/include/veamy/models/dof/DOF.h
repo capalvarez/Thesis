@@ -1,7 +1,7 @@
 #ifndef THESIS_DOF_H
 #define THESIS_DOF_H
 
-#include "../../../../../utilities/include/utilities/Pair.h"
+#include <utilities/Pair.h>
 #include <x-poly/models/polygon/Polygon.h>
 
 class DOF {

@@ -24,7 +24,7 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     std::vector<Point> seeds = region.getSeedPoints();
     TriangleMeshGenerator g(seeds, region);
     PolygonalMesh m = g.getMesh();
-    m.printInFile("Idontgetit.txt");
+    m.printInFile("first.txt");
 
     EssentialConstraints c;
     PointSegment constrained(Point(0,0),Point(0,1));
@@ -48,8 +48,7 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
 
     v.initProblem(m, conditions);
 
-    Eigen::VectorXd x = v.simulate();
-
-    std::cout << x << std::endl;
+    Eigen::VectorXd x = v.simulate(m);
+    m.printInFile("second.txt");
 }
 

@@ -30,6 +30,8 @@ public:
 
     void setX(double newX);
     void setY(double newY);
+
+    void deform(double dX, double dY);
 };
 
 #endif

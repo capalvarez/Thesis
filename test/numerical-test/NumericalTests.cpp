@@ -81,28 +81,28 @@ Eigen::VectorXd NumericalTests::two_squares_rightforceX() {
     Veamer v;
     loadRightForceX(two_squares, v, Segment<int>(0,3), Segment<int>(2,5));
 
-    return v.simulate();
+    return v.simulate(<#initializer#>);
 }
 
 Eigen::VectorXd NumericalTests::two_squares_rightforceY() {
     Veamer v;
     loadRightForceY(two_squares, v, Segment<int>(0,3), Segment<int>(2,5));
 
-    return v.simulate();
+    return v.simulate(<#initializer#>);
 }
 
 Eigen::VectorXd NumericalTests::two_squares_noforces() {
     Veamer v;
     loadNoForces(two_squares, v, Segment<int>(0,3), Segment<int>(2,5));
 
-    return v.simulate();
+    return v.simulate(<#initializer#>);
 }
 
 Eigen::VectorXd NumericalTests::hundredsquare_rightforceX() {
     Veamer v;
     loadRightForceX(hundred_square, v, Segment<int>(0,3), Segment<int>(1,2));
 
-    return v.simulate();
+    return v.simulate(<#initializer#>);
 }
 
 Eigen::VectorXd NumericalTests::hundredsquare_rightforceY() {

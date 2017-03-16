@@ -19,6 +19,7 @@ Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
     this->diameter = this->calculateDiameter(this_points);
     this->area = this->calculateArea(p);
     this->centroid = this->calculateCentroid(p);
+    calculateHash();
 }
 
 void Polygon::mutate(std::vector<Point> &p) {
@@ -39,6 +40,7 @@ void Polygon::mutate(std::vector<Point> &p) {
     this->diameter = this->calculateDiameter(this_points);
     this->area = this->calculateArea(p);
     this->centroid = this->calculateCentroid(p);
+    calculateHash();
 }
 
 void Polygon::mutate(std::vector<int> points, std::vector<Point> p) {
@@ -56,6 +58,13 @@ void Polygon::mutate(std::vector<int> points, std::vector<Point> p) {
     this->diameter = this->calculateDiameter(this_points);
     this->area = this->calculateArea(p);
     this->centroid = this->calculateCentroid(p);
+    calculateHash();
+}
+
+void Polygon::update(std::vector<Point> points) {
+    this->area = calculateArea(points);
+    this->centroid = calculateCentroid(points);
+    this->diameter = calculateDiameter(points);
 }
 
 Polygon::Polygon(std::vector<Point> &p) {
@@ -75,7 +84,6 @@ Polygon::Polygon(std::vector<Point> &p) {
     this->centroid = this->calculateCentroid(p);
     calculateHash();
 }
-
 
 Polygon::Polygon() {}
 

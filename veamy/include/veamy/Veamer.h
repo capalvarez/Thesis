@@ -29,7 +29,7 @@ public:
     Veamer();
 
     void initProblem(PolygonalMesh m, ProblemConditions conditions);
-    Eigen::VectorXd simulate();
+    Eigen::VectorXd simulate(PolygonalMesh &mesh);
 
     Pair<int> pointToDOFS(int point_index);
     Material getMaterial();

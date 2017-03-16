@@ -19,7 +19,7 @@ void FractureSimulator::simulate(double crack_growth, int max_iter) {
 
         this->veamer.replaceElements(refinedPolygons.oldPolygons, refinedPolygons.newPolygons, this->mesh.getPoints());
 
-        Eigen::VectorXd u = this->veamer.simulate();
+        Eigen::VectorXd u = this->veamer.simulate(<#initializer#>);
         PolygonChangeData affectedPolygons = this->crack.grow(Problem(&this->veamer, &this->mesh), u);
         this->veamer.replaceElements(affectedPolygons.oldPolygons, affectedPolygons.newPolygons, this->mesh.getPoints());
         this->mesh.printInFile("after.txt");

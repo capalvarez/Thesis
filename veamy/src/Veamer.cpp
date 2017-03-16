@@ -20,7 +20,7 @@ void Veamer::createElement(Polygon p) {
     elements.push_back(Element(this->conditions, p, this->points, DOFs));
 }
 
-Eigen::VectorXd Veamer::simulate() {
+Eigen::VectorXd Veamer::simulate(PolygonalMesh &mesh) {
     Eigen::MatrixXd K;
     Eigen::VectorXd f;
     int n = this->DOFs.size();
@@ -29,6 +29,8 @@ Eigen::VectorXd Veamer::simulate() {
     f = Eigen::VectorXd::Zero(n);
 
     for(int i=0;i<elements.size();i++){
+        elements[i].computeK(DOFs, this->points, conditions);
+        elements[i].computeF(DOFs, this->points, conditions);
         elements[i].assemble(DOFs, K, f);
     }
 
@@ -52,6 +54,17 @@ Eigen::VectorXd Veamer::simulate() {
 
      //Solve the system
     Eigen::VectorXd x = K.fullPivHouseholderQr().solve(f);
+
+    // Deform mesh
+    for (int k = 0; k < x.rows(); k = k + 2) {
+        int point_index = DOFs.get(k).pointIndex();
+        double def_x = x[k];
+        double def_y = x[k+1];
+
+        mesh.deformPoint(point_index, def_x, def_y);
+    }
+
+    mesh.update();
 
     return x;
 }

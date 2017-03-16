@@ -21,7 +21,6 @@ private:
     double calculateArea(std::vector<Point>& p);
     Point calculateCentroid(std::vector<Point>& p);
     void calculateHash();
-
 public:
     Polygon(std::vector<int>& points, std::vector<Point>& p);
     Polygon(std::vector<Point>& p);
@@ -42,6 +41,7 @@ public:
 
     void mutate(std::vector<Point>& p);
     void mutate(std::vector<int> points, std::vector<Point> p);
+    void update(std::vector<Point> points);
 
     bool containsPoint(std::vector<Point>& p, Point point);
     bool inEdges(std::vector<Point>& p, Point point);

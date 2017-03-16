@@ -7,19 +7,19 @@ Element::Element(ProblemConditions &conditions, Polygon &p, UniqueList<Point> &p
     std::vector<int> vertex = p.getPoints();
     int n = vertex.size();
 
-    for(int i=0;i<n;i++){
-        SegmentPair pair(IndexSegment(vertex[(i-1+n)%n],vertex[i]), IndexSegment(vertex[i],vertex[(i+1)%n]));
+    for(int i=0;i<n;i++) {
+        SegmentPair pair(IndexSegment(vertex[(i - 1 + n) % n], vertex[i]),
+                         IndexSegment(vertex[i], vertex[(i + 1) % n]));
         Pair<int> indexes = out.addDOF(conditions.constraints, points.getList(), vertex[i], pair);
 
         dofs.push_back(indexes.first);
         dofs.push_back(indexes.second);
     }
 
-    std::vector<Point> pointVector = points.getList();
-    initMatrix(out, pointVector, p, conditions);
+    this->p = p;
 }
 
-void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemConditions& conditions) {
+void Element::computeK(DOFS d, UniqueList<Point> points, ProblemConditions &conditions) {
     std::vector<int> polygonPoints = p.getPoints();
     int n = (int) polygonPoints.size();
     Point average = p.getCentroid();
@@ -37,16 +37,16 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemCo
     Wc = Eigen::MatrixXd::Zero(2*n, 3);
 
     for(int vertex_id=0; vertex_id<n; vertex_id++){
-        Point vertex = points[polygonPoints[vertex_id]];
+        Point vertex = points.get(polygonPoints[vertex_id]);
 
         Edge prev (polygonPoints[(n+vertex_id-1)%n], polygonPoints[vertex_id]);
         Edge next (polygonPoints[vertex_id], polygonPoints[(n+vertex_id+1)%n]);
 
-        Pair<double> prevNormal = utilities::normalize(prev.getNormal(points));
-        Pair<double> nextNormal = utilities::normalize(next.getNormal(points));
+        Pair<double> prevNormal = utilities::normalize(prev.getNormal(points.getList()));
+        Pair<double> nextNormal = utilities::normalize(next.getNormal(points.getList()));
 
-        double prevLength = prev.getLength(points);
-        double nextLength = next.getLength(points);
+        double prevLength = prev.getLength(points.getList());
+        double nextLength = next.getLength(points.getList());
 
         double xDiff = vertex.getX() - average.getX();
         double yDiff = vertex.getY() - average.getY();
@@ -97,16 +97,17 @@ void Element::initMatrix(DOFS d, std::vector<Point> points, Polygon p, ProblemCo
     Se = config->getGamma()*alphaS*I;
 
     this->K = area*Wc*D*Wc.transpose() + (I - Pp).transpose()*Se*(I - Pp);
+}
 
-    this->f = Eigen::VectorXd::Zero(dofs.size());
+void Element::computeF(DOFS d, UniqueList<Point> points, ProblemConditions &conditions) {
+    this->f = Eigen::VectorXd::Zero(this->dofs.size());
     NaturalConstraints natural = conditions.constraints.getNaturalConstraints();
 
     QuadraturePolygon polygon(p);
 
-    for (int i = 0; i < dofs.size(); ++i) {
-        this->f(i) = polygon.integrate(conditions.f, points) + natural.lineIntegral(points,p,i/2,dofs[i]);
+    for (int i = 0; i < this->dofs.size(); ++i) {
+        this->f(i) = polygon.integrate(conditions.f, points.getList()) + natural.lineIntegral(points.getList(),p,i/2,this->dofs[i]);
     }
-
 }
 
 void Element::assemble(DOFS out, Eigen::MatrixXd& Kglobal, Eigen::VectorXd& Fglobal) {
