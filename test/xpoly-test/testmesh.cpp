@@ -17,6 +17,21 @@ TEST(MeshTest, FindPolygonTest) {
     EXPECT_EQ(m.findContainerPolygon(Point(0,0)), 1);
 }
 
+TEST(MeshTest, PolygonsTouchTest){
+    std::vector<Point> points = {Point(0,0), Point(2,0), Point(2,1), Point(0,1)};
+    Region region(points);
+    region.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 7, 7);
+
+    std::vector<Point> seeds = region.getSeedPoints();
+    TriangleMeshGenerator g(seeds, region);
+    PolygonalMesh m = g.getMesh();
+    Triangulation t = g.getDelaunayTriangulation();
+
+    EXPECT_TRUE(m.polygonsTouch(23,24));
+    EXPECT_FALSE(m.polygonsTouch(22,24));
+
+}
+
 TEST(MeshTest, GetAllNeighboursTest){
     std::vector<Point> points = {Point(0,0), Point(2,0), Point(2,1), Point(0,1)};
     Region region(points);
@@ -28,6 +43,6 @@ TEST(MeshTest, GetAllNeighboursTest){
     Triangulation t = g.getDelaunayTriangulation();
 
     UniqueList<int> neighbours = m.getAllNeighbours(24);
-    std::vector<int> expected = {23,28,33,32,13,12,6,14};
+    std::vector<int> expected = {28,32,12,14};
     EXPECT_EQ(neighbours.getList(), expected);
 }

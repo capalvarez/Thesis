@@ -252,7 +252,7 @@ bool Polygon::isClockwise(std::vector<Point> &p) {
 
     double sum = (pI.getX() - pI1.getX())*(pI.getY() + pI1.getY());
 
-    for(int i=0; i<n; i++){
+    for(int i=0; i<n-1; i++){
         pI1 = p[points[(i+1)%n]];
         pI = p[points[i]];
 
