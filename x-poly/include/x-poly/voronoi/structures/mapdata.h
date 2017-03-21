@@ -22,7 +22,7 @@ struct KeyHasher {
         using std::size_t;
         using std::hash;
 
-        return hash<int>()(k.first) + hash<int>()(k.second);
+        return utilities::hash32(k.first) + utilities::hash32(k.second);
     }
 };
 
@@ -31,7 +31,7 @@ struct SegmentHasher {
         using std::size_t;
         using std::hash;
 
-        return hash<int>()(k.getFirst()) + hash<int>()(k.getSecond());
+        return utilities::hash32(k.getFirst()) + utilities::hash32(k.getSecond());
     }
 };
 

@@ -8,7 +8,7 @@ struct IndexSegmentHasher{
         using std::size_t;
         using std::hash;
 
-        return hash<int>()(k.getFirst()) + hash<int>()(k.getSecond());
+        return utilities::hash32(k.getFirst()) + utilities::hash32(k.getSecond());
     }
 };
 

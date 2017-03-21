@@ -43,6 +43,6 @@ TEST(MeshTest, GetAllNeighboursTest){
     Triangulation t = g.getDelaunayTriangulation();
 
     UniqueList<int> neighbours = m.getAllNeighbours(24);
-    std::vector<int> expected = {28,32,12,14};
+    std::vector<int> expected = {14,12,32,28};
     EXPECT_EQ(neighbours.getList(), expected);
 }

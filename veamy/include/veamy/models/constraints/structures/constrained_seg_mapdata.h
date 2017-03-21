@@ -8,7 +8,7 @@ struct intHasher {
         using std::size_t;
         using std::hash;
 
-        return hash<int>()(k);
+        return utilities::hash32(k);
     }
 };
 
