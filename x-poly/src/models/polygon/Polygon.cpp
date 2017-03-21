@@ -288,7 +288,7 @@ void Polygon::calculateHash() {
     std::size_t hash = 0;
 
     for (int i = 0; i < points.size(); ++i) {
-        hash+= std::hash<int>()(points[i]);
+        hash+= utilities::hash32(points[i]);
     }
 
     this->hash = hash;

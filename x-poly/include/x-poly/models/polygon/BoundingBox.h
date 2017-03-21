@@ -3,6 +3,8 @@
 
 #include <x-poly/models/basic/Point.h>
 #include <x-poly/models/basic/PointSegment.h>
+#include <x-poly/models/Mesh.h>
+#include <x-poly/models/polygon/Polygon.h>
 
 class BoundingBox {
 private:
@@ -21,6 +23,7 @@ public:
 
     bool operator==(const BoundingBox& other) const;
     void getSegments(std::vector<PointSegment>& segments);
+    bool fitsInsidePolygon(Polygon poly, Mesh& mesh);
 };
 
 

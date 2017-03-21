@@ -33,6 +33,16 @@ namespace utilities {
     double degrees(double angle){
         return (angle > 0 ? angle : (2*M_PI + angle)) * 360 / (2*M_PI);
     }
+
+    int hash32(int key) {
+        int c2=0x27d4eb2d;
+        key = (key ^ 61) ^ (key >> 16);
+        key = key + (key << 3);
+        key = key ^ (key >> 4);
+        key = key * c2;
+        key = key ^ (key >> 15);
+        return key;
+    }
 }
 
 

@@ -60,7 +60,7 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
     problem.mesh->printInFile("changed.txt");
     PointSegment direction(lastPoint, crackPath.back());
 
-    PolygonChangeData changeData = problem.mesh->breakMesh(n, direction);
+    PolygonChangeData changeData = problem.mesh->breakMesh(this->container_polygon, direction);
     assignLocation(changeData.lastPolygon);
 
     checkIfFinished(problem, direction);
@@ -82,15 +82,15 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
 
     this->crackAngle = PointSegment(crackPath[crackPath.size() - 2],crackPath.back()).cartesianAngle();
 
-    if(fitsInside(box1, poly, mesh)){
+    if(box1.fitsInsidePolygon(poly, mesh)){
         affected.push_back(this->container_polygon);
         remeshAndAdapt(StandardRadius, newPolygons, poly, affected, mesh);
     }else{
         double radius = FractureConfig::instance()->getRatio()*poly.getDiameter()/2;
         BoundingBox box2 = BoundingBox(Point(last.getX()-radius, last.getY()-radius),
-                          Point(last.getX()+radius, last.getY()+radius));
+                                       Point(last.getX()+radius, last.getY()+radius));
 
-        if(fitsInside(box2, poly, mesh)){
+        if(box2.fitsInsidePolygon(poly, mesh)){
             affected.push_back(this->container_polygon);
             remeshAndAdapt(radius, newPolygons, poly, affected, mesh);
         }else{
@@ -99,7 +99,7 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
 
             Region ringRegion = remesher.getRegion();
             affected.assign(ringPolygons.begin(), ringPolygons.end());
-            if(fitsInside(box1, ringRegion, mesh)){
+            if(box1.fitsInsidePolygon(ringRegion, mesh)){
                 remeshAndAdapt(StandardRadius, newPolygons, ringRegion, ringPolygons, mesh);
             }else{
                 remeshAndAdapt(radius, newPolygons, ringRegion, ringPolygons, mesh);
@@ -162,18 +162,6 @@ void CrackTip::reassignContainer(Problem problem) {
     }
 
     this->container_polygon = container;
-}
-
-bool CrackTip::fitsInside(BoundingBox box, Polygon poly, BreakableMesh mesh) {
-    bool result = true;
-    std::vector<PointSegment> segs;
-    box.getSegments(segs);
-
-    for(PointSegment segment: segs){
-        result = !poly.intersectsSegment(segment, mesh.getPoints().getList()) && result;
-    }
-
-    return result;
 }
 
 void CrackTip::checkIfFinished(Problem problem, PointSegment direction) {

@@ -10,7 +10,7 @@ TEST(VeamerTest, LoadDataFirstOrderTest){
     Veamer v;
     std::vector<Point> points = {Point(0,0), Point(2,0), Point(2,1), Point(0,1)};
     Region region(points);
-    region.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 2, 2);
+    region.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 10, 10);
 
     class Sum : public BodyForce{
     private:

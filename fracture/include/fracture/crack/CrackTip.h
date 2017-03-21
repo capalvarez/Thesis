@@ -26,7 +26,6 @@ private:
     bool hasFinished = false;
 
     void reassignContainer(Problem problem);
-    bool fitsInside(BoundingBox box, Polygon poly, BreakableMesh mesh);
     void checkIfFinished(Problem problem, PointSegment direction);
     void remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, Polygon region,
                         std::vector<int> affectedPolygons, BreakableMesh &mesh);

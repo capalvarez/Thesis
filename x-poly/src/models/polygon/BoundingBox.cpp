@@ -1,4 +1,5 @@
 #include <x-poly/models/polygon/BoundingBox.h>
+#include <include/x-poly/models/polygon/Polygon.h>
 
 BoundingBox::BoundingBox(Point p1, Point p2) {
     this->p1 = p1;
@@ -44,3 +45,14 @@ void BoundingBox::getSegments(std::vector<PointSegment> &segments) {
     segments.push_back(PointSegment(p4,p1));
 }
 
+bool BoundingBox::fitsInsidePolygon(Polygon poly, Mesh& mesh) {
+    bool result = true;
+    std::vector<PointSegment> segs;
+    this->getSegments(segs);
+
+    for(PointSegment segment: segs){
+        result = !poly.intersectsSegment(segment, mesh.getPoints().getList()) && result;
+    }
+
+    return result;
+}

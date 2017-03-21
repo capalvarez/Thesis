@@ -17,7 +17,7 @@ public:
     bool isNeighbour(int i);
     int getFirst() const;
     int getSecond() const;
-    int getOther(int n) const;
+    int getOther(int n);
     std::string getString() const;
     bool operator==(const Neighbours& other);
 };

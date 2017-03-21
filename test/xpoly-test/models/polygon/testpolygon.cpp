@@ -140,3 +140,10 @@ TEST_F(PolygonTest, SelfIntersectingTestFalse){
     EXPECT_FALSE(square->isSelfIntersecting(points));
 }
 
+TEST_F(PolygonTest, IntersectSegmentTest){
+    EXPECT_TRUE(square->intersectsSegment(PointSegment(Point(0.75,-0.25), Point(0.75,0.75)), points));
+    EXPECT_FALSE(square->intersectsSegment(PointSegment(Point(0.75,0.25), Point(0.75,0.75)), points));
+
+    EXPECT_TRUE(nonconvex->intersectsSegment(PointSegment(Point(0.25,0.5), Point(0.25,1.75)), points));
+    EXPECT_FALSE(nonconvex->intersectsSegment(PointSegment(Point(0.75,0.25), Point(0.75,1.25)), points));
+}

@@ -50,7 +50,7 @@ bool Neighbours::operator==(const Neighbours &other) {
            this->getFirst()==other.getSecond() && this->getSecond()==other.getFirst();
 }
 
-int Neighbours::getOther(int n) const {
+int Neighbours::getOther(int n) {
     if(this->n1==n){
         return this->n2;
     }

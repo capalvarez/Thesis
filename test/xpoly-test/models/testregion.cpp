@@ -45,3 +45,15 @@ TEST_F(RegionTest, AddHoleInsideTest){
     EXPECT_EQ(rectangle->getRegionPoints(), expected);
 }
 
+TEST_F(RegionTest, RegionFromPolygonTest){
+    std::vector<Point> points = {Point(0,0), Point(1,0), Point(1,1), Point(0.5,1),Point(0,1),Point(0,2), Point(1,2), Point(2,0),
+            Point(2,1), Point(0,-1), Point(2,-1), Point(1,0.5), Point(1,1.5)};
+    std::vector<int> s = {0,1,2,4};
+    Polygon square(s, points);
+
+    Region r (square, points);
+    std::vector<Point> expected = {Point(0,0), Point(1,0), Point(1,1), Point(0,1)};
+    EXPECT_EQ(r.getRegionPoints(), expected);
+
+
+}

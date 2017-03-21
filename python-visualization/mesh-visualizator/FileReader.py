@@ -86,7 +86,13 @@ def read_triangulation(file_name):
         points.append(Point(float(line[0]), float(line[1]), i))
 
     limits = [min_x, max_x, min_y, max_y]
+    number_segments = int(file.readline())
+
+    for i in range(number_segments):
+        line = file.readline().split()
+
     number_triangles = int(file.readline())
+
     for i in range(number_triangles):
         line = file.readline().split()
         cx = float(line[len(line) - 2])

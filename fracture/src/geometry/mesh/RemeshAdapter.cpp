@@ -133,8 +133,7 @@ std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, std::vecto
 
     std::unordered_map<int,int> pointMap = this->includeNewPoints(m.getPoints(), t);
 
-    return adaptToMesh(t, changedPolygons,
-                       m, pointMap, indexes);
+    return adaptToMesh(t, changedPolygons, m, pointMap);
 }
 
 Region RemeshAdapter::getRegion() {
