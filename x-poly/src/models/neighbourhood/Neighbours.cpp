@@ -49,3 +49,15 @@ bool Neighbours::operator==(const Neighbours &other) {
     return this->getFirst()==other.getFirst() && this->getSecond()==other.getSecond() ||
            this->getFirst()==other.getSecond() && this->getSecond()==other.getFirst();
 }
+
+int Neighbours::getOther(int n) const {
+    if(this->n1==n){
+        return this->n2;
+    }
+
+    if(this->n2==n){
+        return this->n1;
+    }
+
+    throw std::invalid_argument("Nonexistant neighbour");
+}

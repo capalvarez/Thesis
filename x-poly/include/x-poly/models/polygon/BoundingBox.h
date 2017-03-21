@@ -2,6 +2,7 @@
 #define THESIS_RECTANGLE_H
 
 #include <x-poly/models/basic/Point.h>
+#include <x-poly/models/basic/PointSegment.h>
 
 class BoundingBox {
 private:
@@ -19,6 +20,7 @@ public:
     double yMin();
 
     bool operator==(const BoundingBox& other) const;
+    void getSegments(std::vector<PointSegment>& segments);
 };
 
 

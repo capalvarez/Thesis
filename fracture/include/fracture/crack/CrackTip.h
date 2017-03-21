@@ -16,23 +16,21 @@
 
 class CrackTip {
 private:
-    double radius;
+    double StandardRadius;
+    double usedRadius;
     std::vector<Point> crackPath;
     int container_polygon;
     CrackTipPoints points;
     double crackAngle;
 
-    std::vector<Point> tipPoints;
-    std::vector<int> changedPolygons;
-    std::vector<int> changedIndex;
-    std::vector<int> container_polygons;
     bool hasFinished = false;
 
     void reassignContainer(Problem problem);
-    void findContainerPolygons(std::vector<Polygon> centerPolygons, std::vector<int> indexes,
-                               std::vector<Point> points);
-
-
+    bool fitsInside(BoundingBox box, Polygon poly, BreakableMesh mesh);
+    void checkIfFinished(Problem problem, PointSegment direction);
+    void remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, Polygon region,
+                        std::vector<int> affectedPolygons, BreakableMesh &mesh);
+    std::vector<int> getDirectNeighbours(int poly, BreakableMesh mesh);
 public:
     CrackTip();
     CrackTip(PointSegment crack);
@@ -46,8 +44,6 @@ public:
     bool isFinished();
     void assignLocation(int polygon);
     Point getPoint();
-
-    std::set<int> generateTipPoints(BreakableMesh mesh);
 
     friend class Crack;
 };

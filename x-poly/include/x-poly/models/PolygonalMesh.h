@@ -34,6 +34,8 @@ public:
 
     bool areNeighbours(int poly1, int poly2);
     bool areNeighbours(Polygon poly, int poly2);
+    bool polygonsTouch(int poly1, int poly2);
+    UniqueList getAllNeighbours(int poly);
 
     int findContainerPolygon(Point p);
     int findContainerPolygon(Point p, int& last);

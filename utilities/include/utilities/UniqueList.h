@@ -15,6 +15,7 @@ public:
     int push_back(T& item);
     int size();
     std::vector<int> push_list(std::vector<T> list);
+    std::vector<int> push_list(UniqueList<T> list);
 
     std::vector<T> getList() const;
     std::vector<T>& getList();
@@ -65,6 +66,17 @@ std::vector<int> UniqueList<T>::push_list(std::vector<T> list) {
 
     for(int i=0;i<list.size();i++){
         index.push_back(this->push_back(list[i]));
+    }
+
+    return index;
+}
+
+template <class T>
+std::vector<int> UniqueList<T>::push_list(UniqueList<T> list) {
+    std::vector<int> index;
+
+    for(int i=0;i<list.size();i++){
+        index.push_back(this->push_back(list.get(i)));
     }
 
     return index;

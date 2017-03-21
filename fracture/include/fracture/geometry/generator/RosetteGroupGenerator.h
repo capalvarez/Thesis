@@ -11,21 +11,14 @@ class RosetteGroupGenerator{
 private:
     Point center;
     std::vector<Point> points;
-
-    std::set<int> changedPolygons;
-    int currentContainer;
-    Polygon current;
-
+    double angle;
     double innerRadius;
     double outerRadius;
-    double angle;
 
-    void generatePoint(double angle, double radius, BreakableMesh mesh);
+    void generatePoint(double angle, double radius);
 public:
-    RosetteGroupGenerator(Point c, double outer, double angle, int center_container,
-                              Polygon container);
-    std::vector<Point> getPoints(double initAngle, BreakableMesh mesh);
-    std::set<int> getChangedPolygons();
+    RosetteGroupGenerator(Point c, double angle, double radius);
+    std::vector<Point> getPoints(double initAngle);
 };
 
 

@@ -148,3 +148,30 @@ void PolygonalMesh::writeElements(std::ofstream &file) {
         file << this->polygons[i].getString() << std::endl;
     }
 }
+
+UniqueList PolygonalMesh::getAllNeighbours(int poly) {
+    UniqueList<int> neighbours;
+    std::vector<IndexSegment> poly_segs;
+    this->getPolygon(poly).getSegments(poly_segs);
+
+    for (IndexSegment s: poly_segs){
+        Neighbours n = edges.get(s);
+        neighbours.push_back(n.getOther(poly));
+    }
+
+    return neighbours;
+}
+
+bool PolygonalMesh::polygonsTouch(int poly1, int poly2) {
+    Polygon p1 = this->getPolygon(poly1);
+    Polygon p2 = this->getPolygon(poly2);
+    std::vector<int> poly2_points = p2.getPoints();
+
+    for (int i = 0; i < poly2_points.size(); ++i) {
+        if(p1.isVertex(poly2_points[i])){
+            return true;
+        }
+    }
+
+    return false;
+}

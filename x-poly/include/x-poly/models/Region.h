@@ -24,6 +24,7 @@ private:
 public:
     Region(std::vector<Point>& points);
     Region();
+    Region(const Polygon& other, std::vector<Point> points);
     Region(const Region& other);
     ~Region();
 

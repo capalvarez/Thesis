@@ -7,6 +7,10 @@ RemeshAdapter::RemeshAdapter(Region region) {
     this->region = region;
 }
 
+RemeshAdapter::RemeshAdapter(Polygon poly, BreakableMesh mesh) {
+    this->region = Region(poly, mesh.getPoints().getList());
+}
+
 RemeshAdapter::RemeshAdapter(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh mesh) {
     this->region = computeRemeshRegion(remeshPolygons, points, mesh);
 }
@@ -23,7 +27,7 @@ Region RemeshAdapter::computeRemeshRegion(std::vector<int> remeshPolygons, std::
 
 std::vector<Polygon>
 RemeshAdapter::adaptToMesh(Triangulation triangulation, std::vector<int> changedPolygons, PolygonalMesh &mesh,
-                           std::unordered_map<int, int> pointMap, std::vector<int> &indexes) {
+                           std::unordered_map<int, int> pointMap) {
     std::unordered_map<int,std::unordered_map<IndexSegment,std::vector<IndexSegment>,IndexSegmentHasher>> changesInNeighbours;
     std::vector<Polygon> newPolygons;
 
@@ -60,7 +64,6 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, std::vector<int> changed
         }
 
         //TODO: Check if this does what it needs to
-        indexes.push_back(index);
         newPolygons.push_back(newPolygon);
 
         for (int j = 0; j < n; ++j) {
@@ -132,4 +135,8 @@ std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, std::vecto
 
     return adaptToMesh(t, changedPolygons,
                        m, pointMap, indexes);
+}
+
+Region RemeshAdapter::getRegion() {
+    return this->region;
 }

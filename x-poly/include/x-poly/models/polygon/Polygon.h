@@ -54,6 +54,7 @@ public:
     bool isSelfIntersecting(std::vector<Point> points);
     std::size_t hash;
     void fixCCW(std::vector<Point> p);
+    bool intersectsSegment(PointSegment segment, std::vector<Point> points);
 
     IndexSegment containerEdge(std::vector<Point>& p, Point point);
     void replace_segment(IndexSegment seg, std::vector<IndexSegment> segs, std::vector<Point> points);

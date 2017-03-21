@@ -434,3 +434,17 @@ bool Polygon::isSelfIntersecting(std::vector<Point> points) {
     }
     return false;
 }
+
+bool Polygon::intersectsSegment(PointSegment segment, std::vector<Point> points) {
+    Point p;
+    std::vector<IndexSegment> poly_segs;
+    this->getSegments(poly_segs);
+
+    for (IndexSegment seg: poly_segs) {
+        if(seg.intersection(points, segment,p)){
+            return true;
+        }
+    }
+
+    return false;
+}

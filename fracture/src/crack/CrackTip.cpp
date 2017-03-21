@@ -6,7 +6,7 @@
 CrackTip::CrackTip(PointSegment crack) {
     FractureConfig* config = FractureConfig::instance();
 
-    this->radius = config->getRatio()*crack.length();
+    this->StandardRadius = config->getRatio()*crack.length();
     crackPath.push_back(crack.getSecond());
     crackPath.push_back(crack.getFirst());
 }
@@ -23,14 +23,10 @@ void CrackTip::addPointToPath(double angle) {
 
 CrackTip::CrackTip(const CrackTip &t) {
     this->points = t.points;
-    this->radius = t.radius;
+    this->StandardRadius = t.StandardRadius;
     this->container_polygon = t.container_polygon;
     this->crackAngle = t.crackAngle;
     this->crackPath = t.crackPath;
-    this->changedPolygons = t.changedPolygons;
-    this->changedIndex = t.changedIndex;
-    this->tipPoints = t.tipPoints;
-    this->container_polygons.assign(t.container_polygons.begin(),t.container_polygons.end());
 }
 
 double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
@@ -39,7 +35,7 @@ double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
     Pair<int> dofD = problem.veamer->pointToDOFS(this->points.d);
     Pair<int> dofE = problem.veamer->pointToDOFS(this->points.e);
 
-    double factor = problem.veamer->getMaterial().stressIntensityFactor()*std::sqrt(2*M_PI/this->radius)*
+    double factor = problem.veamer->getMaterial().stressIntensityFactor()*std::sqrt(2*M_PI/this->usedRadius)*
                     1/std::cos(utilities::radian(this->crackAngle));
 
     double kI = factor * (4*(u[dofB.second] - u[dofD.second]) - (u[dofC.second] - u[dofE.second])/2);
@@ -63,53 +59,77 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
     reassignContainer(problem);
     problem.mesh->printInFile("changed.txt");
     PointSegment direction(lastPoint, crackPath.back());
-    int n = problem.mesh->getPolygonInDirection(this->container_polygons, direction);
 
     PolygonChangeData changeData = problem.mesh->breakMesh(n, direction);
     assignLocation(changeData.lastPolygon);
 
-
-    int last;
-    int isOutside = problem.mesh->findContainerPolygon(crackPath.back(), last);
-    if(isOutside==-1) {
-        Polygon& poly = problem.mesh->getPolygon(last);
-
-        std::vector<IndexSegment> polySeg;
-        poly.getSegments(polySeg);
-
-        for (int j = 0; j < polySeg.size() ; ++j) {
-            Point p;
-            bool intersects = polySeg[j].intersection(problem.mesh->getPoints().getList(), direction, p);
-
-            if(intersects){
-                hasFinished = true;
-                crackPath.pop_back();
-                crackPath.push_back(p);
-            }
-        }
-    }
+    checkIfFinished(problem, direction);
 
     return changeData;
 }
 
 PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
     std::vector<int> indexes;
-    RemeshAdapter remesher(this->changedPolygons, mesh.getPoints().getList(), mesh);
+    std::vector<Polygon> newPolygons;
+    std::vector<int> affected;
 
-    Triangulation t = remesher.triangulate(tipPoints);
-    std::unordered_map<int,int> pointMap = remesher.includeNewPoints(mesh.getPoints(), t);
+    Point last = this->getPoint();
+    Polygon poly = mesh.getPolygon(this->container_polygon);
+    BoundingBox box1(Point(last.getX()-StandardRadius, last.getY()-StandardRadius),
+                    Point(last.getX()+StandardRadius, last.getY()+StandardRadius));
 
-    this->points = CrackTipPoints(pointMap[1], pointMap[2], pointMap[3], pointMap[4]);
+    FractureConfig* config = FractureConfig::instance();
 
-    std::vector<Polygon> newPolygons = remesher.adaptToMesh(t, this->changedIndex, mesh, pointMap, indexes);
-    findContainerPolygons(newPolygons, indexes, mesh.getPoints().getList());
+    this->crackAngle = PointSegment(crackPath[crackPath.size() - 2],crackPath.back()).cartesianAngle();
+
+    if(fitsInside(box1, poly, mesh)){
+        affected.push_back(this->container_polygon);
+        remeshAndAdapt(StandardRadius, newPolygons, poly, affected, mesh);
+    }else{
+        double radius = FractureConfig::instance()->getRatio()*poly.getDiameter()/2;
+        BoundingBox box2 = BoundingBox(Point(last.getX()-radius, last.getY()-radius),
+                          Point(last.getX()+radius, last.getY()+radius));
+
+        if(fitsInside(box2, poly, mesh)){
+            affected.push_back(this->container_polygon);
+            remeshAndAdapt(radius, newPolygons, poly, affected, mesh);
+        }else{
+            std::vector<int> ringPolygons = getDirectNeighbours(this->container_polygon, mesh);
+            RemeshAdapter remesher(ringPolygons, mesh.getPoints().getList(), mesh);
+
+            Region ringRegion = remesher.getRegion();
+            affected.assign(ringPolygons.begin(), ringPolygons.end());
+            if(fitsInside(box1, ringRegion, mesh)){
+                remeshAndAdapt(StandardRadius, newPolygons, ringRegion, ringPolygons, mesh);
+            }else{
+                remeshAndAdapt(radius, newPolygons, ringRegion, ringPolygons, mesh);
+            }
+        }
+    }
 
     std::vector<Polygon> polys;
-    for(int i: this->changedPolygons){
+    for(int i: affected){
         polys.push_back(mesh.getPolygon(i));
     }
 
     return PolygonChangeData(polys, newPolygons);
+}
+
+void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, Polygon region,
+                              std::vector<int> affectedPolygons, BreakableMesh &mesh) {
+    FractureConfig* config = FractureConfig::instance();
+
+    this->usedRadius = radius;
+    RosetteGroupGenerator generator(this->getPoint(), config->getRosetteAngle(),radius);
+    std::vector<Point> points = generator.getPoints(this->crackAngle);
+    RemeshAdapter remesher(region, mesh);
+
+    Triangulation t = remesher.triangulate(points);
+    std::unordered_map<int,int> pointMap = remesher.includeNewPoints(mesh.getPoints(), t);
+
+    this->points = CrackTipPoints(pointMap[1], pointMap[2], pointMap[3], pointMap[4]);
+
+    newPolygons = remesher.adaptToMesh(t, affectedPolygons, mesh, pointMap);
 }
 
 bool CrackTip::isFinished() {
@@ -124,22 +144,6 @@ CrackTip::CrackTip() {}
 
 Point CrackTip::getPoint() {
     return this->crackPath.back();
-}
-
-std::set<int> CrackTip::generateTipPoints(BreakableMesh mesh) {
-    FractureConfig* config = FractureConfig::instance();
-
-    this->crackAngle = PointSegment(crackPath[crackPath.size() - 2],crackPath.back()).cartesianAngle();
-    Polygon container = mesh.getPolygon(this->container_polygon);
-
-    RosetteGroupGenerator rosette = RosetteGroupGenerator(this->getPoint(), this->radius, config->getRosetteAngle(),
-                                                          container_polygon, container);
-    tipPoints = rosette.getPoints(this->crackAngle, mesh);
-
-    this->changedPolygons = fracture_utilities::setToVector(rosette.getChangedPolygons());
-    std::copy(this->changedPolygons.begin(), this->changedPolygons.end(), std::back_inserter(this->changedIndex));
-
-    return rosette.getChangedPolygons();
 }
 
 void CrackTip::reassignContainer(Problem problem) {
@@ -160,16 +164,54 @@ void CrackTip::reassignContainer(Problem problem) {
     this->container_polygon = container;
 }
 
-void CrackTip::findContainerPolygons(std::vector<Polygon> centerPolygons, std::vector<int> indexes,
-                                     std::vector<Point> points) {
-    //TODO: Check for an optimal way of obtaining this index
-    int tip = utilities::indexOf(points,crackPath.back());
+bool CrackTip::fitsInside(BoundingBox box, Polygon poly, BreakableMesh mesh) {
+    bool result = true;
+    std::vector<PointSegment> segs;
+    box.getSegments(segs);
 
-    for (int i = 0; i < centerPolygons.size(); ++i) {
-        Polygon p = centerPolygons[i];
+    for(PointSegment segment: segs){
+        result = !poly.intersectsSegment(segment, mesh.getPoints().getList()) && result;
+    }
 
-        if(p.isVertex(tip)){
-            container_polygons.push_back(indexes[i]);
+    return result;
+}
+
+void CrackTip::checkIfFinished(Problem problem, PointSegment direction) {
+    int last;
+    int isOutside = problem.mesh->findContainerPolygon(crackPath.back(), last);
+    if(isOutside==-1) {
+        Polygon& poly = problem.mesh->getPolygon(last);
+
+        std::vector<IndexSegment> polySeg;
+        poly.getSegments(polySeg);
+
+        for (int j = 0; j < polySeg.size() ; ++j) {
+            Point p;
+            bool intersects = polySeg[j].intersection(problem.mesh->getPoints().getList(), direction, p);
+
+            if(intersects){
+                hasFinished = true;
+                crackPath.pop_back();
+                crackPath.push_back(p);
+            }
         }
     }
+}
+
+std::vector<int> CrackTip::getDirectNeighbours(int poly, BreakableMesh mesh) {
+    UniqueList<int> neighbours = mesh.getAllNeighbours(poly);
+    UniqueList<int> neighbours_neighbours;
+
+    for (int i = 0; i < neighbours.size(); ++i) {
+        neighbours_neighbours.push_list(mesh.getAllNeighbours(neighbours.get(i)));
+    }
+
+    for (int j = 0; j < neighbours_neighbours.size(); ++j) {
+        int candidate = neighbours_neighbours.get(j);
+        if(!neighbours.contains(candidate) && mesh.polygonsTouch(poly, candidate)){
+            neighbours.push_back(neighbours_neighbours.get(j));
+        }
+    }
+
+    return neighbours.getList();
 }

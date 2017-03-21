@@ -34,4 +34,13 @@ bool BoundingBox::operator==(const BoundingBox &other) const {
            getSecond()==other.getFirst() && getFirst()==other.getSecond();
 }
 
+void BoundingBox::getSegments(std::vector<PointSegment> &segments) {
+    Point p3 (p2.getX(), p1.getY());
+    Point p4 (p1.getX(), p2.getY());
+
+    segments.push_back(PointSegment(p1,p3));
+    segments.push_back(PointSegment(p3,p2));
+    segments.push_back(PointSegment(p2,p4));
+    segments.push_back(PointSegment(p4,p1));
+}
 
