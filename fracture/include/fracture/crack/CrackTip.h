@@ -29,7 +29,7 @@ private:
     void checkIfFinished(Problem problem, PointSegment direction);
     void remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, Polygon region,
                         std::vector<int> affectedPolygons, BreakableMesh &mesh);
-    std::vector<int> getDirectNeighbours(int poly, BreakableMesh mesh);
+    void getDirectNeighbours(int poly, BreakableMesh mesh, UniqueList<int> &neighbours);
 public:
     CrackTip();
     CrackTip(PointSegment crack);

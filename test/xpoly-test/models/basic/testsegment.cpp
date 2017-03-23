@@ -19,7 +19,15 @@ TEST_F(SegmentTest, IntersectsTest){
     Point p;
     EXPECT_TRUE(segment->intersection(segment_points, s1, p));
     EXPECT_FALSE(segment->intersection(segment_points, s2, p));
+}
 
+TEST_F(SegmentTest, IntersectionInfiniteTest){
+    PointSegment s1(Point(0,0), Point(1,1));
+    PointSegment s2(Point(1,3), Point(3,1));
+
+    Point p;
+    s1.intersectionInfinite(s2.getFirst(), s2.getSecond(), s1.getFirst(), s1.getSecond(), p);
+    EXPECT_EQ(p, Point(2,2));
 }
 
 

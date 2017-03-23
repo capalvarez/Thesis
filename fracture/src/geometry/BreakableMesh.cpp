@@ -35,109 +35,12 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
         std::vector<int> poly1_points = poly1.getPoints();
         NeighbourInfo n2 = getNeighbour(n1.neighbour, crack, init);
 
-        //Include new points on the mesh
-        this->points.push_back(n1.intersection);
-        this->points.push_back(n2.intersection);
-
-        int p1 = this->points.size()-2;
-        int p2 = this->points.size()-1;
-
-        //Split the old polygon and generate new ones
-        std::vector<int> new1 = {p1, p2};
-        std::vector<int> new2 = {p2, p1};
-
-        n1.orderCCW(this->points.getList(), poly1.getCentroid());
-        n2.orderCCW(this->points.getList(), poly1.getCentroid());
-
-        int indexOfStart,point;
-
-        if(xpoly_utilities::orientation(points.get(p1),points.get(p2),points.get(n2.edge.getFirst()))>=0){
-            indexOfStart = utilities::indexOf(poly1_points, n2.edge.getFirst());
-            point = n2.edge.getFirst();
-        }else{
-            indexOfStart = utilities::indexOf(poly1_points, n2.edge.getSecond());
-            point = n2.edge.getSecond();
-        }
-
-        bool edgePointsPassed = false;
-
-        while(true){
-            if(point==n1.edge.getFirst() || point==n1.edge.getSecond()) {
-                if (edgePointsPassed){
-                    break;
-                } else{
-                    edgePointsPassed = true;
-                }
-            }
-
-            new1.push_back(point);
-            point = poly1_points[(indexOfStart+1)%poly1_points.size()];
-
-            indexOfStart++;
-        }
-
-        edgePointsPassed = false;
-
-        while (true){
-            if(point==n2.edge.getFirst() || point==n2.edge.getSecond()) {
-                if (edgePointsPassed){
-                    break;
-                } else{
-                    edgePointsPassed = true;
-                }
-            }
-
-            new2.push_back(point);
-            point = poly1_points[(indexOfStart+1)%poly1_points.size()];
-
-            indexOfStart++;
-        }
-
-        // Create new polygons and insert them on the mesh
-        oldPolygons.push_back(poly1);
-
-        Polygon newPolygon1 (new1, this->points.getList());
-        Polygon newPolygon2 (new2, this->points.getList());
-
-        newPolygons.push_back(newPolygon1);
-        this->polygons[n1.neighbour] = newPolygon1;
-
-        newPolygons.push_back(newPolygon2);
-        this->polygons.push_back(newPolygon2);
-
-        int new_index1 = n1.neighbour;
-        int new_index2 = this->polygons.size() - 1;
-
-        // Get the edge information for the old polygon and update it
-        this->edges.delete_element(n1.edge);
-        this->edges.delete_element(n2.edge);
-
-        std::vector<IndexSegment> segments1;
-        std::vector<IndexSegment> segments2;
-
-        newPolygon1.getSegments(segments1);
-        newPolygon2.getSegments(segments2);
-
-        this->edges.insert(IndexSegment(p1,p2),Neighbours(n1.neighbour,n1.neighbour));
-
-        for (int i = 0; i < segments1.size() ; ++i) {
-            this->edges.replace_neighbour(segments1[i], n1.neighbour, new_index1);
-        }
-
-        for (int i = 0; i < segments2.size() ; ++i) {
-            this->edges.replace_neighbour(segments2[i], n1.neighbour, new_index2);
-        }
-
-        this->edges.insert(IndexSegment(p1,n1.edge.getFirst()), init);
-        this->edges.insert(IndexSegment(p1,n1.edge.getSecond()), init);
-        this->edges.insert(IndexSegment(p2,n2.edge.getFirst()), n2.neighbour);
-        this->edges.insert(IndexSegment(p2,n2.edge.getSecond()), n2.neighbour);
+        splitPolygons(n1, n2, init, oldPolygons, newPolygons);
 
         // Iterate
         init = n1.neighbour;
         n1 = n2;
 
-        this->edges.printInFile("segments.txt");
     }
 }
 
@@ -188,5 +91,132 @@ void BreakableMesh::mergePolygons(int i1, int i2) {
     }
 
     this->polygons.pop_back();
+}
+
+int BreakableMesh::mergePolygons(std::vector<int> polys) {
+    SimplePolygonMerger merger;
+
+    Polygon merged =  merger.mergePolygons(polys, points.getList(), *this);
+    this->polygons[polys[0]] = merged;
+
+    swapPolygons(i2, this->polygons.size()-1);
+
+    Polygon poly1 = getPolygon(i1);
+    Polygon poly2 = getPolygon(this->polygons.size() - 1);
+
+
+    std::vector<IndexSegment> poly2Segments;
+    poly2.getSegments(poly2Segments);
+
+    for(IndexSegment s: poly2Segments){
+        edges.replace_or_delete(s, this->polygons.size() - 1, polys[0]);
+    }
+
+    this->polygons.pop_back();
+}
+
+
+void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo n2, int init, UniqueList<Polygon> &oldPolygons,
+                                  std::vector<Polygon> &newPolygons) {
+    Polygon& poly1 = getPolygon(n1.neighbour);
+    std::vector<int> poly1_points = poly1.getPoints();
+
+    //Include new points on the mesh
+    this->points.push_back(n1.intersection);
+    this->points.push_back(n2.intersection);
+
+    int p1 = this->points.size()-2;
+    int p2 = this->points.size()-1;
+
+    //Split the old polygon and generate new ones
+    std::vector<int> new1 = {p1, p2};
+    std::vector<int> new2 = {p2, p1};
+
+    n1.orderCCW(this->points.getList(), poly1.getCentroid());
+    n2.orderCCW(this->points.getList(), poly1.getCentroid());
+
+    int indexOfStart,point;
+
+    if(xpoly_utilities::orientation(points.get(p1),points.get(p2),points.get(n2.edge.getFirst()))>=0){
+        indexOfStart = utilities::indexOf(poly1_points, n2.edge.getFirst());
+        point = n2.edge.getFirst();
+    }else{
+        indexOfStart = utilities::indexOf(poly1_points, n2.edge.getSecond());
+        point = n2.edge.getSecond();
+    }
+
+    bool edgePointsPassed = false;
+
+    while(true){
+        if(point==n1.edge.getFirst() || point==n1.edge.getSecond()) {
+            if (edgePointsPassed){
+                break;
+            } else{
+                edgePointsPassed = true;
+            }
+        }
+
+        new1.push_back(point);
+        point = poly1_points[(indexOfStart+1)%poly1_points.size()];
+
+        indexOfStart++;
+    }
+
+    edgePointsPassed = false;
+
+    while (true){
+        if(point==n2.edge.getFirst() || point==n2.edge.getSecond()) {
+            if (edgePointsPassed){
+                break;
+            } else{
+                edgePointsPassed = true;
+            }
+        }
+
+        new2.push_back(point);
+        point = poly1_points[(indexOfStart+1)%poly1_points.size()];
+
+        indexOfStart++;
+    }
+
+    // Create new polygons and insert them on the mesh
+    oldPolygons.push_back(poly1);
+
+    Polygon newPolygon1 (new1, this->points.getList());
+    Polygon newPolygon2 (new2, this->points.getList());
+
+    newPolygons.push_back(newPolygon1);
+    this->polygons[n1.neighbour] = newPolygon1;
+
+    newPolygons.push_back(newPolygon2);
+    this->polygons.push_back(newPolygon2);
+
+    int new_index1 = n1.neighbour;
+    int new_index2 = this->polygons.size() - 1;
+
+    // Get the edge information for the old polygon and update it
+    this->edges.delete_element(n1.edge);
+    this->edges.delete_element(n2.edge);
+
+    std::vector<IndexSegment> segments1;
+    std::vector<IndexSegment> segments2;
+
+    newPolygon1.getSegments(segments1);
+    newPolygon2.getSegments(segments2);
+
+    this->edges.insert(IndexSegment(p1,p2),Neighbours(n1.neighbour,n1.neighbour));
+
+    for (int i = 0; i < segments1.size() ; ++i) {
+        this->edges.replace_neighbour(segments1[i], n1.neighbour, new_index1);
+    }
+
+    for (int i = 0; i < segments2.size() ; ++i) {
+        this->edges.replace_neighbour(segments2[i], n1.neighbour, new_index2);
+    }
+
+    this->edges.insert(IndexSegment(p1,n1.edge.getFirst()), init);
+    this->edges.insert(IndexSegment(p1,n1.edge.getSecond()), init);
+    this->edges.insert(IndexSegment(p2,n2.edge.getFirst()), n2.neighbour);
+    this->edges.insert(IndexSegment(p2,n2.edge.getSecond()), n2.neighbour);
 }
 

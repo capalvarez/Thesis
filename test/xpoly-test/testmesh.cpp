@@ -29,6 +29,8 @@ TEST(MeshTest, PolygonsTouchTest){
 
     EXPECT_TRUE(m.polygonsTouch(23,24));
     EXPECT_FALSE(m.polygonsTouch(22,24));
+    EXPECT_TRUE(m.polygonsTouch(11,15));
+    EXPECT_FALSE(m.polygonsTouch(31,40));
 
 }
 
@@ -42,7 +44,8 @@ TEST(MeshTest, GetAllNeighboursTest){
     PolygonalMesh m = g.getMesh();
     Triangulation t = g.getDelaunayTriangulation();
 
-    UniqueList<int> neighbours = m.getAllNeighbours(24);
+    UniqueList<int> neighbours;
+    m.getAllNeighbours(24, neighbours);
     std::vector<int> expected = {14,12,32,28};
     EXPECT_EQ(neighbours.getList(), expected);
 }

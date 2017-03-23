@@ -149,8 +149,7 @@ void PolygonalMesh::writeElements(std::ofstream &file) {
     }
 }
 
-UniqueList<int> PolygonalMesh::getAllNeighbours(int poly) {
-    UniqueList<int> neighbours;
+void PolygonalMesh::getAllNeighbours(int poly, UniqueList<int> &neighbours) {
     std::vector<IndexSegment> poly_segs;
     this->getPolygon(poly).getSegments(poly_segs);
 
@@ -159,8 +158,6 @@ UniqueList<int> PolygonalMesh::getAllNeighbours(int poly) {
         int neighbour = n.getOther(poly);
         neighbours.push_back(neighbour);
     }
-
-    return neighbours;
 }
 
 bool PolygonalMesh::polygonsTouch(int poly1, int poly2) {

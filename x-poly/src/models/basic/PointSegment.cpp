@@ -30,3 +30,13 @@ bool PointSegment::operator==(const PointSegment other) const {
 bool PointSegment::intersection(PointSegment other, Point &inter) {
     return Segment::intersects(this->p1, this->p2, other.getFirst(), other.getSecond(), inter);
 }
+
+double PointSegment::perpendicularSlope() {
+    double slope = (p2.getY() - p1.getY())/(p2.getX() - p1.getX());
+
+    return -1/slope;
+}
+
+bool PointSegment::intersectionInfinite(Point p1, Point p2, Point &inter) {
+    return Segment::intersectionInfinite(p1,p2,this->p1, this->p2, inter);
+}

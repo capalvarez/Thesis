@@ -12,6 +12,7 @@ private:
     Point p2;
 public:
     BoundingBox(Point p1, Point p2);
+    BoundingBox(const BoundingBox& other);
 
     Point getFirst() const;
     Point getSecond() const;
@@ -24,6 +25,9 @@ public:
     bool operator==(const BoundingBox& other) const;
     void getSegments(std::vector<PointSegment>& segments);
     bool fitsInsidePolygon(Polygon poly, Mesh& mesh);
+    bool intersects(BoundingBox box);
+    Point getClosestTo(Point p);
+    Point centroid();
 };
 
 
