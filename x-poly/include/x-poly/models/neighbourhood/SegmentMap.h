@@ -9,6 +9,12 @@
 #include <fstream>
 #include <x-poly/models/basic/IndexSegment.h>
 
+struct NeighboursHasher{
+    std::size_t operator()(const Neighbours &k) const {
+        return utilities::hash32(k.getFirst()) + utilities::hash32(k.getSecond());
+    }
+};
+
 class SegmentMap{
 private:
     std::unordered_map<IndexSegment,Neighbours,SegmentHasher> map;
@@ -17,7 +23,7 @@ public:
     void insert(IndexSegment s, int polygonIndex);
     void insert(IndexSegment s, Neighbours n);
     void replace_neighbour(IndexSegment s, int oldNeighbour, int newNeighbour);
-    void replace_or_delete(IndexSegment s, int oldNeighbour, int newNeighbour);
+    void replace_or_delete(IndexSegment s, int oldNeighbour, int newNeighbour, std::unordered_map<Neighbours, int, NeighboursHasher> map);
     Neighbours& get(IndexSegment s);
     std::unordered_map<IndexSegment,Neighbours,SegmentHasher>& getMap();
     int size();

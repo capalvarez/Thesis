@@ -3,13 +3,24 @@
 #include <fracture/geometry/BreakableMesh.h>
 
 namespace fracture_utilities{
-     std::vector<int> setToVector(std::set<int> index){
-        std::vector<int> polys;
+    void allPairs(std::vector<Pair<int>>& pairs, int N) {
+        std::string bitmask(2, 1);
+        bitmask.resize(N, 0);
+        do {
+            int f = -1;
+            int s = -1;
 
-        for(auto p : index) {
-            polys.push_back(p);
-        }
+            for (int i = 0; i < N; ++i){
+                if (bitmask[i]){
+                    if(f==-1){
+                        f = i;
+                    }else{
+                        s = i;
+                    }
+                }
+            }
+            pairs.push_back(Pair<int>(f,s));
 
-        return polys;
+        } while (std::prev_permutation(bitmask.begin(), bitmask.end()));
     }
 }

@@ -6,7 +6,8 @@
 #include <fracture/geometry/BreakableMesh.h>
 
 namespace fracture_utilities{
-    extern std::vector<int> setToVector(std::set<int> index);
+    extern void allPairs(std::vector<Pair<int>>& pairs, int N);
+
 }
 
 #endif 

@@ -86,8 +86,12 @@ void BreakableMesh::mergePolygons(int i1, int i2) {
     std::vector<IndexSegment> poly2Segments;
     poly2.getSegments(poly2Segments);
 
+    std::unordered_map<Neighbours, int, NeighboursHasher> map;
+    Neighbours n(this->polygons.size()-1, i1);
+    map[n] = 0;
+
     for(IndexSegment s: poly2Segments){
-        edges.replace_or_delete(s, this->polygons.size() - 1, i1);
+        edges.replace_or_delete(s, this->polygons.size() - 1, i1, map);
     }
 
     this->polygons.pop_back();
@@ -99,20 +103,27 @@ int BreakableMesh::mergePolygons(std::vector<int> polys) {
     Polygon merged =  merger.mergePolygons(polys, points.getList(), *this);
     this->polygons[polys[0]] = merged;
 
-    swapPolygons(i2, this->polygons.size()-1);
-
-    Polygon poly1 = getPolygon(i1);
-    Polygon poly2 = getPolygon(this->polygons.size() - 1);
+    std::unordered_map<Neighbours,int,NeighboursHasher> map;
 
 
-    std::vector<IndexSegment> poly2Segments;
-    poly2.getSegments(poly2Segments);
 
-    for(IndexSegment s: poly2Segments){
-        edges.replace_or_delete(s, this->polygons.size() - 1, polys[0]);
+    for (int i = 1; i < polys.size(); ++i) {
+        int i2 = polys[i];
+
+        swapPolygons(i2, this->polygons.size()-1);
+        Polygon poly2 = getPolygon(this->polygons.size() - 1);
+
+        std::vector<IndexSegment> poly2Segments;
+        poly2.getSegments(poly2Segments);
+
+        for(IndexSegment s: poly2Segments){
+            edges.replace_or_delete(s, this->polygons.size() - 1, i2, map);
+        }
+
+        this->polygons.pop_back();
     }
 
-    this->polygons.pop_back();
+    return polys[0];
 }
 
 
