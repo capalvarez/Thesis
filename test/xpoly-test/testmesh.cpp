@@ -43,6 +43,7 @@ TEST(MeshTest, GetAllNeighboursTest){
     TriangleMeshGenerator g(seeds, region);
     PolygonalMesh m = g.getMesh();
     Triangulation t = g.getDelaunayTriangulation();
+    m.printInFile("lolo.txt");
 
     UniqueList<int> neighbours;
     m.getAllNeighbours(24, neighbours);

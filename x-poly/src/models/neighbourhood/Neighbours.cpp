@@ -11,6 +11,11 @@ Neighbours::Neighbours(int i1, int i2) {
     this->n2 = i2;
 }
 
+Neighbours::Neighbours(Pair<int> p) {
+    this->n1 = p.first;
+    this->n2 = p.second;
+}
+
 void Neighbours::setNeighbour(int i) {
     this->n2 = i;
 }
@@ -45,7 +50,7 @@ std::string Neighbours::getString() const {
     return utilities::toString<double>(this->n1) + " " + utilities::toString<double>(this->n2);
 }
 
-bool Neighbours::operator==(const Neighbours &other) {
+bool Neighbours::operator==(const Neighbours &other) const{
     return this->getFirst()==other.getFirst() && this->getSecond()==other.getSecond() ||
            this->getFirst()==other.getSecond() && this->getSecond()==other.getFirst();
 }

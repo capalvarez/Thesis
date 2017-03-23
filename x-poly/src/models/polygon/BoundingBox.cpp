@@ -57,10 +57,6 @@ bool BoundingBox::fitsInsidePolygon(Polygon poly, Mesh& mesh) {
     return result;
 }
 
-BoundingBox::BoundingBox(const BoundingBox &other) {
-
-}
-
 bool BoundingBox::intersects(BoundingBox box) {
     return false;
 }

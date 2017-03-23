@@ -3,7 +3,8 @@
 #include <fracture/geometry/BreakableMesh.h>
 
 namespace fracture_utilities{
-    void allPairs(std::vector<Pair<int>>& pairs, int N) {
+    void allPairs(std::vector<Pair<int>>& pairs, std::vector<int> numbers) {
+        int N = numbers.size();
         std::string bitmask(2, 1);
         bitmask.resize(N, 0);
         do {
@@ -19,7 +20,7 @@ namespace fracture_utilities{
                     }
                 }
             }
-            pairs.push_back(Pair<int>(f,s));
+            pairs.push_back(Pair<int>(numbers[f],numbers[s]));
 
         } while (std::prev_permutation(bitmask.begin(), bitmask.end()));
     }

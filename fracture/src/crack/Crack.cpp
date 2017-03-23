@@ -41,9 +41,8 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         neighbours.push_back(this->init.container_polygon);
         neighbours.push_back(this->end.container_polygon);
 
-        Polygon ring = merger.mergePolygons(neighbours.getList(), m.getPoints().getList(), m);
-
-
+        int index = m.mergePolygons(neighbours.getList());
+        Polygon ring = m.getPolygon(index);
 
         Point init_last = this->init.getPoint();
         double init_radius = this->init.StandardRadius;
@@ -112,10 +111,10 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         Neighbours n_s = e.get(relevantSegments[0]);
         int neighbour2 = utilities::indexOf(neighbours.getList(), n_s.getFirst())!=-1? n_s.getSecond() : n_s.getFirst();
 
-        NeighbourInfo n1 = NeighbourInfo(, relevantSegments[0], intersections[0], false);
+        NeighbourInfo n1 = NeighbourInfo(neighbour1, relevantSegments[0], intersections[0], false);
         NeighbourInfo n2 = NeighbourInfo(neighbour2, relevantSegments[1], intersections[1], false);
 
-        m.splitPolygons(n1, n2, neighbour1, oldP, newP);
+        m.splitPolygons(n1, n2, neighbour1, oldP.getList(), newP);
 
 
 

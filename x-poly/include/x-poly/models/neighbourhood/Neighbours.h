@@ -12,6 +12,7 @@ public:
     Neighbours();
     Neighbours(int i1);
     Neighbours(int i1, int i2);
+    Neighbours(Pair<int> p);
     void setNeighbour(int i);
     void changeNeighbour(int oldN, int newN);
     bool isNeighbour(int i);
@@ -19,7 +20,7 @@ public:
     int getSecond() const;
     int getOther(int n);
     std::string getString() const;
-    bool operator==(const Neighbours& other);
+    bool operator==(const Neighbours& other) const;
 };
 
 

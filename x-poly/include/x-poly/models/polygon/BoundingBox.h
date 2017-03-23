@@ -12,7 +12,6 @@ private:
     Point p2;
 public:
     BoundingBox(Point p1, Point p2);
-    BoundingBox(const BoundingBox& other);
 
     Point getFirst() const;
     Point getSecond() const;

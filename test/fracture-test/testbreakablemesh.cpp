@@ -61,10 +61,24 @@ TEST(BreakableMeshTest, MergePolygonsTest){
     PolygonalMesh mesh = meshGenerator.getMesh();
 
     BreakableMesh breakableMesh(mesh);
-
-    breakableMesh.printInFile("testMesh1.txt");
-
     breakableMesh.mergePolygons(0,1);
+
+}
+
+TEST(BreakableMeshTest, MergePolygonsListTest){
+    std::vector<Point> points = {Point(0,0), Point(2,0), Point(2,1), Point(0,1)};
+    Region region(points);
+    region.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 7, 7);
+
+    std::vector<Point> seeds = region.getSeedPoints();
+    TriangleMeshGenerator g(seeds, region);
+    PolygonalMesh m = g.getMesh();
+    BreakableMesh breakableMesh(m);
     breakableMesh.printInFile("testMesh.txt");
-    breakableMesh.getSegments().printInFile("edges.txt");
+
+    std::vector<int> polys = {23,28,33,32,13,12,6,14,24};
+
+    breakableMesh.mergePolygons(polys);
+    breakableMesh.printInFile("testMesh2.txt");
+
 }

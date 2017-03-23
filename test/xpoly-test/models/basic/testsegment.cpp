@@ -26,7 +26,7 @@ TEST_F(SegmentTest, IntersectionInfiniteTest){
     PointSegment s2(Point(1,3), Point(3,1));
 
     Point p;
-    s1.intersectionInfinite(s2.getFirst(), s2.getSecond(), s1.getFirst(), s1.getSecond(), p);
+    s1.intersectionInfinite(s2.getFirst(), s2.getSecond(), p);
     EXPECT_EQ(p, Point(2,2));
 }
 

@@ -1,5 +1,6 @@
 #include <fracture/geometry/BreakableMesh.h>
 #include <fracture/geometry/mesh/SimplePolygonMerger.h>
+#include <fracture/utilities/fractureutilities.h>
 
 BreakableMesh::BreakableMesh() {}
 
@@ -104,8 +105,13 @@ int BreakableMesh::mergePolygons(std::vector<int> polys) {
     this->polygons[polys[0]] = merged;
 
     std::unordered_map<Neighbours,int,NeighboursHasher> map;
+    std::vector<Pair<int>> pairs;
+    fracture_utilities::allPairs(pairs, polys);
 
-
+    for (Pair<int> p : pairs){
+        Neighbours n (p);
+        map[n] = 0;
+    }
 
     for (int i = 1; i < polys.size(); ++i) {
         int i2 = polys[i];
@@ -127,7 +133,7 @@ int BreakableMesh::mergePolygons(std::vector<int> polys) {
 }
 
 
-void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo n2, int init, UniqueList<Polygon> &oldPolygons,
+void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo n2, int init, std::vector<Polygon> &oldPolygons,
                                   std::vector<Polygon> &newPolygons) {
     Polygon& poly1 = getPolygon(n1.neighbour);
     std::vector<int> poly1_points = poly1.getPoints();
