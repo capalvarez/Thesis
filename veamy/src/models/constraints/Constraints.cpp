@@ -4,13 +4,13 @@ void Constraints::addConstraint(Constraint c, std::vector<Point> p) {
     UniqueList<IndexSegment> segments = c.getSegments();
 
     for (int i = 0; i < segments.size(); ++i) {
-        IndexSegment s = segments.get(i);
+        IndexSegment s = segments[i];
         Angle angle(s.cartesianAngle(p));
 
         std::vector<IndexSegment>& v = constrained_segments[angle];
         v.push_back(s);
 
-        segment_map.insert(std::make_pair(segments.get(i), c));
+        segment_map.insert(std::make_pair(segments[i], c));
     }
 }
 

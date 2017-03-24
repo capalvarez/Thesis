@@ -98,7 +98,7 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         for (IndexSegment s: segs) {
             Point p;
 
-            if(direction.intersectionInfinite(points.get(s.getFirst()), points.get(s.getSecond()),p)){
+            if(direction.intersectionInfinite(points[s.getFirst()], points[s.getSecond()],p)){
                 intersections.push_back(p);
                 relevantSegments.push_back(s);
             }
@@ -108,16 +108,27 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         Neighbours n_f = e.get(relevantSegments[0]);
         int neighbour1 = utilities::indexOf(neighbours.getList(), n_f.getFirst())!=-1? n_f.getSecond() : n_f.getFirst();
 
-        Neighbours n_s = e.get(relevantSegments[0]);
+        Neighbours n_s = e.get(relevantSegments[1]);
         int neighbour2 = utilities::indexOf(neighbours.getList(), n_s.getFirst())!=-1? n_s.getSecond() : n_s.getFirst();
 
-        NeighbourInfo n1 = NeighbourInfo(neighbour1, relevantSegments[0], intersections[0], false);
+        NeighbourInfo n1 = NeighbourInfo(index, relevantSegments[0], intersections[0], false);
         NeighbourInfo n2 = NeighbourInfo(neighbour2, relevantSegments[1], intersections[1], false);
 
         m.splitPolygons(n1, n2, neighbour1, oldP.getList(), newP);
 
+        std::vector<int> affected1 = {index};
+        std::vector<int> affected2 = {(m.getPolygons().size())-1};
 
+        this->init.remeshAndAdapt(init_radius, newP, m.getPolygon(index), affected1, m);
+        this->end.remeshAndAdapt(end_radius, newP, m.getPolygon(m.getPolygons().size()-1), affected2, m);
 
+        for(int i: affected1){
+            oldP.push_back(m.getPolygon(i));
+        }
+
+        for(int i: affected2){
+            oldP.push_back(m.getPolygon(i));
+        }
     }else{
         this->prepareTip(this->init, oldP, newP, m);
         this->prepareTip(this->end, oldP, newP, m);

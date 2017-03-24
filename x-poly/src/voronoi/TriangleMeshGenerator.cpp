@@ -30,8 +30,8 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list) {
     int points = 0;
 
     for(int i=0;i<pointList.size();i++){
-        in.pointlist[points] = pointList.get(i).getX();
-        in.pointlist[points+1] = pointList.get(i).getY();
+        in.pointlist[points] = pointList[i].getX();
+        in.pointlist[points+1] = pointList[i].getY();
         points+=2;
     }
 
@@ -144,7 +144,7 @@ PolygonalMesh TriangleMeshGenerator::delaunayToVoronoi() {
     for(int i=0;i<this->realPoints.size(); i++) {
         std::vector<IndexSegment> thisEdges;
 
-        int index = this->realPoints.get(i);
+        int index = this->realPoints[i];
         UniqueList<int> cellPoints;
         Point regionCenter = this->meshPoints[index];
         EdgeData init_edge = this->edges[this->points[index].edge];
@@ -197,10 +197,10 @@ PolygonalMesh TriangleMeshGenerator::delaunayToVoronoi() {
         }
 
         if(edge.t2==-1){
-            int firstPoint = cellPoints.get(0);
-            int lastPoint = cellPoints.get(cellPoints.size()-1);
+            int firstPoint = cellPoints[0];
+            int lastPoint = cellPoints[cellPoints.size()-1];
 
-            if(geometry_functions::collinear(voronoiPoints.get(firstPoint),regionCenter,voronoiPoints.get(lastPoint))){
+            if(geometry_functions::collinear(voronoiPoints[firstPoint],regionCenter,voronoiPoints[lastPoint])){
                 IndexSegment e (lastPoint, firstPoint);
                 thisEdges.push_back(e);
             } else{

@@ -190,13 +190,13 @@ void CrackTip::getDirectNeighbours(int poly, BreakableMesh mesh, UniqueList<int>
     UniqueList<int> neighbours_neighbours;
 
     for (int i = 0; i < neighbours.size(); ++i) {
-        mesh.getAllNeighbours(neighbours.get(i), neighbours_neighbours);
+        mesh.getAllNeighbours(neighbours[i], neighbours_neighbours);
     }
 
     for (int j = 0; j < neighbours_neighbours.size(); ++j) {
-        int candidate = neighbours_neighbours.get(j);
+        int candidate = neighbours_neighbours[j];
         if(!neighbours.contains(candidate) && mesh.polygonsTouch(poly, candidate)){
-            neighbours.push_back(neighbours_neighbours.get(j));
+            neighbours.push_back(neighbours_neighbours[j]);
         }
     }
 }

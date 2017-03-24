@@ -9,7 +9,7 @@ void Mesh::printInFile(std::string fileName) {
 
     file << this->points.size() << std::endl;
     for(int i=0;i<this->points.size();i++){
-        file << this->points.get(i).getString() << std::endl;
+        file << this->points[i].getString() << std::endl;
     }
 
 

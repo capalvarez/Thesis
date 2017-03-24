@@ -19,7 +19,7 @@ public:
 
     std::vector<T> getList() const;
     std::vector<T>& getList();
-    T& get(int i);
+    T& operator[](int i);
     bool operator==(const UniqueList<T>& other);
     bool contains(T elem);
 };
@@ -56,7 +56,7 @@ bool UniqueList<T>::operator==(const UniqueList<T> &other) {
 }
 
 template <class T>
-T& UniqueList<T>::get(int i) {
+T& UniqueList<T>::operator[](int i) {
     return list[i];
 }
 
@@ -76,7 +76,7 @@ std::vector<int> UniqueList<T>::push_list(UniqueList<T> list) {
     std::vector<int> index;
 
     for(int i=0;i<list.size();i++){
-        index.push_back(this->push_back(list.get(i)));
+        index.push_back(this->push_back(list[i]));
     }
 
     return index;

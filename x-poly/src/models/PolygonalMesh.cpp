@@ -72,7 +72,7 @@ void PolygonalMesh::update() {
 }
 
 void PolygonalMesh::deformPoint(int point_index, double dX, double dY) {
-    this->points.get(point_index).deform(dX, dY);
+    this->points[point_index].deform(dX, dY);
 }
 
 Polygon& PolygonalMesh::getPolygon(int index) {
@@ -100,8 +100,8 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
 
             if(next_poly!=previous) {
                 return NeighbourInfo(next_poly, polySeg[j], p,
-                                     geometry_functions::collinear(direction,PointSegment(this->points.get(polySeg[j].getFirst()),
-                                                                                          this->points.get(polySeg[j].getSecond()))));
+                                     geometry_functions::collinear(direction,PointSegment(this->points[polySeg[j].getFirst()],
+                                                                                          this->points[polySeg[j].getSecond()])));
             }
         }
     }

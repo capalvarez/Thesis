@@ -35,7 +35,7 @@ int DOFS::size() {
 }
 
 DOF DOFS::get(int i) {
-    return list.get(i);
+    return list[i];
 }
 
 Pair<int> DOFS::pointToDOFS(int point) {

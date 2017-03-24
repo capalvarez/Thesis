@@ -9,7 +9,7 @@ TEST(FractureSimulatorTest, InitTest){
 
     PointGenerator generator (functions::uniform(1), functions::uniform(1));
 
-    square.generateSeedPoints(generator, 3, 3);
+    square.generateSeedPoints(generator, 8, 8);
     std::vector<Point> seeds = square.getSeedPoints();
 
     TriangleMeshGenerator meshGenerator(seeds, square);
@@ -29,6 +29,7 @@ TEST(FractureSimulatorTest, InitTest){
     Material m;
 
     ProblemConditions conditions(container, f, m);
+    mesh.printInFile("start.txt");
     FractureSimulator simulator(mesh, crack, conditions);
 }
 

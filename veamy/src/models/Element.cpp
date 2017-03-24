@@ -37,7 +37,7 @@ void Element::computeK(DOFS d, UniqueList<Point> points, ProblemConditions &cond
     Wc = Eigen::MatrixXd::Zero(2*n, 3);
 
     for(int vertex_id=0; vertex_id<n; vertex_id++){
-        Point vertex = points.get(polygonPoints[vertex_id]);
+        Point vertex = points[polygonPoints[vertex_id]];
 
         Edge prev (polygonPoints[(n+vertex_id-1)%n], polygonPoints[vertex_id]);
         Edge next (polygonPoints[vertex_id], polygonPoints[(n+vertex_id+1)%n]);

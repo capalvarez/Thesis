@@ -154,7 +154,7 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo n2, int init, 
 
     int indexOfStart,point;
 
-    if(xpoly_utilities::orientation(points.get(p1),points.get(p2),points.get(n2.edge.getFirst()))>=0){
+    if(xpoly_utilities::orientation(points[p1],points[p2],points[n2.edge.getFirst()])>=0){
         indexOfStart = utilities::indexOf(poly1_points, n2.edge.getFirst());
         point = n2.edge.getFirst();
     }else{
