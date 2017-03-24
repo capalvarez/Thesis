@@ -3,7 +3,7 @@
 PointSegment::PointSegment(Point p1, Point p2) : Segment<Point>(p1, p2) {}
 
 double PointSegment::length() {
-    return std::sqrt(std::pow(this->p1.getX() - this->p2.getX(), 2) + std::pow(this->p1.getY() - this->p2.getY(),2));
+    return Segment::length(this->p1, this->p2);
 }
 
 bool PointSegment::isBoundary(std::vector<Point> p) {

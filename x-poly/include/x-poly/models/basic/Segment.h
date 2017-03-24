@@ -11,6 +11,9 @@ class Segment {
 protected:
     T p1;
     T p2;
+
+    double length(Point p1, Point p2);
+    bool intersects(Point p1, Point p2, Point o1, Point o2, Point& inter);
 public:
     Segment();
     Segment(T p1, T p2);
@@ -24,9 +27,8 @@ public:
     bool isVertex(T p);
     virtual bool isBoundary(std::vector<Point> p) = 0;
     double cartesianAngle(Point p1, Point p2);
-    bool intersects(Point p1, Point p2, Point o1, Point o2, Point& inter);
-    bool intersectionInfinite(Point p1, Point p2, Point o1, Point o2, Point &inter);
 
+    bool intersectionInfinite(Point p1, Point p2, Point o1, Point o2, Point &inter);
 };
 
 #endif

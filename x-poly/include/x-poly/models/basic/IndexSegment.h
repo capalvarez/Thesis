@@ -22,6 +22,7 @@ public:
     std::string getString() const;
     bool operator==(const IndexSegment& other) const;
     bool operator<(const IndexSegment& other) const;
+    double length(std::vector<Point> points);
 };
 
 

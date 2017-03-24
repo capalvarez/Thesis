@@ -63,3 +63,7 @@ bool IndexSegment::operator<(const IndexSegment &other) const {
 
     return this->p1<other.p1;
 }
+
+double IndexSegment::length(std::vector<Point> points) {
+    Segment::length(points[this->p1], points[this->p2]);
+}
