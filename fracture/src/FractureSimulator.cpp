@@ -1,4 +1,5 @@
 #include <fracture/FractureSimulator.h>
+#include <fracture/config/FractureConfig.h>
 
 FractureSimulator::FractureSimulator(const PolygonalMesh& mesh, const Crack& initial, const ProblemConditions& conditions) {
     this->mesh = BreakableMesh(mesh);
@@ -11,10 +12,11 @@ FractureSimulator::FractureSimulator(const PolygonalMesh& mesh, const Crack& ini
     this->veamer.replaceElements(initialChanges.oldPolygons, initialChanges.newPolygons, this->mesh.getPoints());
 }
 
-void FractureSimulator::simulate(double crack_growth, int max_iter) {
+void FractureSimulator::simulate(double crack_growth) {
+    FractureConfig* config = FractureConfig::instance();
     int n_iter = 0;
 
-    while(n_iter<max_iter && !this->crack.isFinished()){
+    while(n_iter<config->getMaxIterations() && !this->crack.isFinished()){
         PolygonChangeData refinedPolygons = this->crack.prepareTip(this->mesh);
 
         this->veamer.replaceElements(refinedPolygons.oldPolygons, refinedPolygons.newPolygons, this->mesh.getPoints());

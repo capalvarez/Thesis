@@ -72,7 +72,7 @@ TEST(FractureSimulatorTest, SimulateTest){
     FractureSimulator simulator(mesh, crack, conditions);
     mesh.printInFile("init.txt");
 
-    simulator.simulate(0.1,100);
+    simulator.simulate(0.1);
 
 
 

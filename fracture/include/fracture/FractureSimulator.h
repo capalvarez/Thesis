@@ -16,7 +16,7 @@ private:
     Crack crack;
 public:
     FractureSimulator(const PolygonalMesh& mesh, const Crack& initial, const ProblemConditions& conditions);
-    void simulate(double crack_growth, int max_iter);
+    void simulate(double crack_growth);
 };
 
 
