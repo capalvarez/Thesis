@@ -56,7 +56,7 @@ TEST(VeamerTest, OnlyNaturalTest){
     Veamer v;
     std::vector<Point> points = {Point(0,0), Point(2,0), Point(2,1), Point(0,1)};
     Region region(points);
-    region.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 10, 10);
+    region.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 3, 3);
 
     class Sum : public BodyForce{
     private:
@@ -79,8 +79,8 @@ TEST(VeamerTest, OnlyNaturalTest){
     c.addConstraint(const1, m.getPoints().getList());
 
     NaturalConstraints n;
-    PointSegment const3(Point(0,0),Point(2,0));
-    Constraint constraint3(const3,m.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(1));
+    PointSegment const3(Point(2,0),Point(2,1));
+    Constraint constraint3(const3,m.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(1000));
     n.addConstraint(constraint3, m.getPoints().getList());
 
     ConstraintsContainer container;

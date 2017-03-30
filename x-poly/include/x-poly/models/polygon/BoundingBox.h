@@ -10,6 +10,8 @@ class BoundingBox {
 private:
     Point p1;
     Point p2;
+
+    std::vector<Point> getPoints();
 public:
     BoundingBox(Point p1, Point p2);
 
@@ -20,6 +22,8 @@ public:
     double getHeight();
     double xMin();
     double yMin();
+    double xMax();
+    double yMax();
 
     bool operator==(const BoundingBox& other) const;
     void getSegments(std::vector<PointSegment>& segments);

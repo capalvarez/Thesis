@@ -25,11 +25,11 @@ private:
 
     bool hasFinished = false;
 
-    void reassignContainer(Problem problem);
     void checkIfFinished(Problem problem, PointSegment direction);
     void remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, Polygon region,
                         std::vector<int> affectedPolygons, BreakableMesh &mesh);
     void getDirectNeighbours(int poly, BreakableMesh mesh, UniqueList<int> &neighbours);
+    void reassignContainer(BreakableMesh& mesh);
 public:
     CrackTip();
     CrackTip(PointSegment crack);

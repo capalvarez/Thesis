@@ -448,3 +448,17 @@ bool Polygon::intersectsSegment(PointSegment segment, std::vector<Point> points)
 
     return false;
 }
+
+std::vector<IndexSegment> Polygon::getAdjacentEdges(int i) {
+    std::vector<IndexSegment> segs;
+    int index = utilities::indexOf(this->points, i);
+    int n = this->numberOfSides();
+
+    if (index != -1){
+        segs.push_back(IndexSegment(this->points[(n+index-1)%n], this->points[index]));
+        segs.push_back(IndexSegment(this->points[index], this->points[(n+index+1)%n]));
+    }
+
+    return segs;
+
+}

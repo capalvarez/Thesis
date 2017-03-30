@@ -17,12 +17,14 @@ public:
     double cartesianAngle(std::vector<Point> p);
     bool intersection(std::vector<Point> points, PointSegment other, Point &inter);
     bool intersection(std::vector<Point> points, IndexSegment other, Point &inter);
+    bool isContained(PointSegment s, std::vector<Point> p);
     void orderCCW(std::vector<Point> points, Point center);
     bool isCCW(std::vector<Point> points, Point center);
     std::string getString() const;
     bool operator==(const IndexSegment& other) const;
     bool operator<(const IndexSegment& other) const;
-    double length(std::vector<Point> points);
+    double length(std::vector<Point>& points);
+    bool isInCorner(Point p, std::vector<Point> points, int& i);
 };
 
 

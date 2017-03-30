@@ -1,5 +1,9 @@
 #include <algorithm>
 #include <utilities/Pair.h>
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include <random>
 
 namespace utilities {
     int random_integer(int min, int max){

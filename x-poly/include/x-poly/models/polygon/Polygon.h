@@ -60,6 +60,7 @@ public:
     void replace_segment(IndexSegment seg, std::vector<IndexSegment> segs, std::vector<Point> points);
 
     Pair<int> commonEdgesBorder(Polygon p);
+    std::vector<IndexSegment> getAdjacentEdges(int i);
 };
 
 #endif

@@ -56,7 +56,7 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
     Point lastPoint = crackPath.back();
     addPointToPath(angle);
 
-    reassignContainer(problem);
+    reassignContainer(*problem.mesh);
     problem.mesh->printInFile("changed.txt");
     PointSegment direction(lastPoint, crackPath.back());
 
@@ -145,19 +145,19 @@ Point CrackTip::getPoint() {
     return this->crackPath.back();
 }
 
-void CrackTip::reassignContainer(Problem problem) {
-    int container = problem.mesh->findContainerPolygon(this->getPoint());
-    Polygon poly = problem.mesh->getPolygon(container);
+void CrackTip::reassignContainer(BreakableMesh& mesh) {
+    int container = mesh.findContainerPolygon(this->getPoint());
+    Polygon poly = mesh.getPolygon(container);
 
-    IndexSegment container_edge = poly.containerEdge(problem.mesh->getPoints().getList(), this->getPoint());
+    IndexSegment container_edge = poly.containerEdge(mesh.getPoints().getList(), this->getPoint());
 
     if(container_edge.getFirst()!=-1){
-        SegmentMap edges = problem.mesh->getSegments();
+        SegmentMap edges = mesh.getSegments();
         Neighbours n = edges.get(container_edge);
 
         int other = n.getFirst()==container? n.getSecond() : n.getFirst();
 
-        problem.mesh->mergePolygons(container, other);
+        mesh.mergePolygons(container, other);
     }
 
     this->container_polygon = container;

@@ -143,11 +143,10 @@ bool Crack::isFinished() {
 }
 
 PolygonChangeData Crack::initializeCrack(BreakableMesh& mesh) {
-    int poly1 = mesh.findContainerPolygon(this->init.getPoint());
-    init.assignLocation(poly1);
+    this->init.reassignContainer(mesh);
 
-    PolygonChangeData change = mesh.breakMesh(poly1, PointSegment(this->init.getPoint(), this->end.getPoint()));
-    end.assignLocation(change.lastPolygon);
+    PolygonChangeData change = mesh.breakMesh(this->init.container_polygon, PointSegment(this->init.getPoint(), this->end.getPoint()));
+    this->end.reassignContainer(mesh);
 
     return change;
 }

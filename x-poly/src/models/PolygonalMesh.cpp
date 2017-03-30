@@ -93,15 +93,25 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
         Point p;
         bool intersects = polySeg[j].intersection(this->points.getList(), direction, p);
 
-        if(intersects){
+        if(intersects && !polySeg[j].isContained(direction, this->points.getList())){
             Neighbours edge = this->edges.get(polySeg[j]);
 
             int next_poly = edge.getFirst()!=poly_index? edge.getFirst() : edge.getSecond();
 
             if(next_poly!=previous) {
-                return NeighbourInfo(next_poly, polySeg[j], p,
-                                     geometry_functions::collinear(direction,PointSegment(this->points[polySeg[j].getFirst()],
-                                                                                          this->points[polySeg[j].getSecond()])));
+                int vertexIndex;
+
+                if(polySeg[j].isInCorner(p, this->points.getList(), vertexIndex)){
+                    Polygon nextPoly = getPolygon(next_poly);
+                    std::vector<IndexSegment> candidateSegments = nextPoly.getAdjacentEdges(vertexIndex);
+
+                    bool isInEdge = candidateSegments[0].isContained(direction, this->points.getList()) ||
+                                    candidateSegments[1].isContained(direction, this->points.getList());
+
+                    return NeighbourInfo(next_poly, polySeg[j], p, isInEdge);
+                }
+
+                return NeighbourInfo(next_poly, polySeg[j], p, false);
             }
         }
     }

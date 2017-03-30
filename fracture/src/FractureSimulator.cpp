@@ -9,6 +9,7 @@ FractureSimulator::FractureSimulator(const PolygonalMesh& mesh, const Crack& ini
     this->veamer.initProblem(this->mesh, conditions);
 
     PolygonChangeData initialChanges = this->crack.initializeCrack(this->mesh);
+    this->mesh.printInFile("before.txt");
     this->veamer.replaceElements(initialChanges.oldPolygons, initialChanges.newPolygons, this->mesh.getPoints());
 }
 

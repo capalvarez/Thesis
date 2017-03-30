@@ -26,9 +26,13 @@ template <class T>
 bool Segment<T>::contains(Point point, Point p1, Point p2) {
     XPolyConfig* config = XPolyConfig::instance();
 
-    return  ((point.getX()>=p1.getX() && point.getX()<=p2.getX()) || (point.getX()>=p2.getX() && point.getX()<=p1.getX())) &&
-            ((point.getY()>=p1.getY() && point.getY()<=p2.getY()) || (point.getY()>=p2.getY() && point.getY()<=p1.getY())) &&
-            std::abs(p1.getX()*(p2.getY()-point.getY()) + p2.getX()*(point.getY()-p1.getY()) + point.getX()*(p1.getY()-p2.getY()))<0.0001;
+    bool test1 = ((point.getX()>=p1.getX() || std::abs(point.getX()-p1.getX())<config->getTolerance()) && (point.getX()<=p2.getX() || std::abs(point.getX()-p2.getX())<config->getTolerance())) ||
+                 ((point.getX()>=p2.getX() || std::abs(point.getX()-p2.getX())<config->getTolerance()) && (point.getX()<=p1.getX() || std::abs(point.getX()-p1.getX())<config->getTolerance()));
+    bool test2 =  ((point.getY()>=p1.getY() || std::abs(point.getY()-p1.getY())<config->getTolerance()) && (point.getY()<=p2.getY() || std::abs(point.getY()-p2.getY())<config->getTolerance()) ||
+                  ((point.getY()>=p2.getY() || std::abs(point.getY()-p2.getY())<config->getTolerance()) && (point.getY()<=p1.getY() || std::abs(point.getY()-p1.getY())<config->getTolerance())));
+
+    return  test1 &&  test2 &&
+            std::abs(p1.getX()*(p2.getY()-point.getY()) + p2.getX()*(point.getY()-p1.getY()) + point.getX()*(p1.getY()-p2.getY()))<config->getTolerance();
 }
 
 template <class T>

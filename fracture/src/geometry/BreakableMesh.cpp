@@ -29,12 +29,15 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
             return PolygonChangeData(oldPolygons, newPolygons, n1.neighbour);
         }
 
-        if(n1.isEdge){
-            continue;
-        }
-
         std::vector<int> poly1_points = poly1.getPoints();
         NeighbourInfo n2 = getNeighbour(n1.neighbour, crack, init);
+
+        if(n1.isEdge){
+            init = n1.neighbour;
+            n1 = n2;
+
+            continue;
+        }
 
         splitPolygons(n1, n2, init, oldPolygons, newPolygons);
 
