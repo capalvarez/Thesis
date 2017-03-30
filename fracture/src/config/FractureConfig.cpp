@@ -1,4 +1,5 @@
 #include <fracture/config/FractureConfig.h>
+#include <stdexcept>
 
 FractureConfig* FractureConfig::s_instance = nullptr;
 
@@ -19,6 +20,9 @@ void FractureConfig::setGrowthSpeed(double s) {
 }
 
 void FractureConfig::setCrackRatio(double r) {
+    if(r<=0 || r>=1){
+        throw std::invalid_argument("Crack ratio has to be in range (0,1)");
+    }
     this->crack_size_ratio = r;
 }
 

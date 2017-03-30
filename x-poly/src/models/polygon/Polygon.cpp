@@ -311,7 +311,7 @@ std::vector<Point> Polygon::getPoints(std::vector<Point> p) {
     return returnPoints;
 }
 
-Pair<int> Polygon::commonEdgesBorder(Polygon p) {
+Pair<int> Polygon::commonEdgesBorder(Polygon p, std::vector<Point> points) {
     std::map<int,int> thisPoints;
 
     for (int i = 0; i < this->points.size(); ++i) {
@@ -349,6 +349,16 @@ Pair<int> Polygon::commonEdgesBorder(Polygon p) {
         k = (k+1)%n;
         i++;
     }
+
+    if(border.size()==0){
+        if(this->containsPoint(points, p.getCentroid())){
+            throw std::invalid_argument("weeeeird");
+            //ignore this completely
+        }else{
+            return Pair<int>(poly_points[0], poly_points.back());
+        }
+    }
+
 
     return Pair<int>(border[0], border[1]);
 }
@@ -460,5 +470,8 @@ std::vector<IndexSegment> Polygon::getAdjacentEdges(int i) {
     }
 
     return segs;
+}
 
+int Polygon::getPoint(int i) {
+    return this->points[i];
 }

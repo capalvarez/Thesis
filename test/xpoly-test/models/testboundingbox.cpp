@@ -34,8 +34,8 @@ TEST(BoundingBoxTest, FitsInsideTest){
     PolygonalMesh m = gen.getMesh();
 
     BoundingBox box(Point(0.3,0.3), Point(0.6,0.6));
-    EXPECT_TRUE(box.fitsInsidePolygon(m.getPolygon(2), m));
+    EXPECT_TRUE(box.fitsInsidePolygon(m.getPolygon(2), std::vector<Point>()));
 
     box = BoundingBox(Point(0.3,0.3), Point(0.8,0.8));
-    EXPECT_FALSE(box.fitsInsidePolygon(m.getPolygon(2), m));
+    EXPECT_FALSE(box.fitsInsidePolygon(m.getPolygon(2), std::vector<Point>()));
 }

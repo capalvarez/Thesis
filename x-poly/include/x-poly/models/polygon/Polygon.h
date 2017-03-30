@@ -59,8 +59,9 @@ public:
     IndexSegment containerEdge(std::vector<Point>& p, Point point);
     void replace_segment(IndexSegment seg, std::vector<IndexSegment> segs, std::vector<Point> points);
 
-    Pair<int> commonEdgesBorder(Polygon p);
+    Pair<int> commonEdgesBorder(Polygon p, std::vector<Point> points);
     std::vector<IndexSegment> getAdjacentEdges(int i);
+    int getPoint(int i);
 };
 
 #endif

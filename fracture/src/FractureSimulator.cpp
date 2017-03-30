@@ -6,11 +6,9 @@ FractureSimulator::FractureSimulator(const PolygonalMesh& mesh, const Crack& ini
     this->crack = initial;
     this->veamer = BreakableVeamer();
 
+    this->crack.initializeCrack(this->mesh);
     this->veamer.initProblem(this->mesh, conditions);
-
-    PolygonChangeData initialChanges = this->crack.initializeCrack(this->mesh);
-    this->mesh.printInFile("before.txt");
-    this->veamer.replaceElements(initialChanges.oldPolygons, initialChanges.newPolygons, this->mesh.getPoints());
+    this->mesh.printInFile("prepared.txt");
 }
 
 void FractureSimulator::simulate(double crack_growth) {
@@ -19,6 +17,7 @@ void FractureSimulator::simulate(double crack_growth) {
 
     while(n_iter<config->getMaxIterations() && !this->crack.isFinished()){
         PolygonChangeData refinedPolygons = this->crack.prepareTip(this->mesh);
+        this->mesh.printInFile("prepared.txt");
 
         this->veamer.replaceElements(refinedPolygons.oldPolygons, refinedPolygons.newPolygons, this->mesh.getPoints());
 

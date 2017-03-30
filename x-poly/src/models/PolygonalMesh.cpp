@@ -166,7 +166,9 @@ void PolygonalMesh::getAllNeighbours(int poly, UniqueList<int> &neighbours) {
     for (IndexSegment s: poly_segs){
         Neighbours n = edges.get(s);
         int neighbour = n.getOther(poly);
-        neighbours.push_back(neighbour);
+        if(neighbour!=-1){
+            neighbours.push_back(neighbour);
+        }
     }
 }
 

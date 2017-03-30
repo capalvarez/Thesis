@@ -26,8 +26,9 @@ public:
     double yMax();
 
     bool operator==(const BoundingBox& other) const;
+    bool contains(Point p);
     void getSegments(std::vector<PointSegment>& segments);
-    bool fitsInsidePolygon(Polygon poly, Mesh& mesh);
+    bool fitsInsidePolygon(Polygon poly, std::vector<Point> points);
     bool intersects(BoundingBox box);
     Point getClosestTo(Point p);
     Point centroid();

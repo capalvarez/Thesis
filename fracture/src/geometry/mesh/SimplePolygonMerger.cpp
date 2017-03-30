@@ -12,7 +12,7 @@ Polygon SimplePolygonMerger::mergePolygons(Polygon p1, Polygon p2, std::vector<P
     std::vector<int> poly1_points = p1.getPoints();
     std::vector<int> poly2_points = p2.getPoints();
 
-    Pair<int> endPoints = p1.commonEdgesBorder(p2);
+    Pair<int> endPoints = p1.commonEdgesBorder(p2, points);
     int firstPointIndex = utilities::indexOf(poly1_points, endPoints.first);
     int i, init, end;
 

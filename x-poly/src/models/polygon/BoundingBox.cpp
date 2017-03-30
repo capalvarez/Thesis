@@ -54,16 +54,26 @@ void BoundingBox::getSegments(std::vector<PointSegment> &segments) {
     segments.push_back(PointSegment(p4,p1));
 }
 
-bool BoundingBox::fitsInsidePolygon(Polygon poly, Mesh& mesh) {
+bool BoundingBox::fitsInsidePolygon(Polygon poly, std::vector<Point> points) {
     bool result = true;
     std::vector<PointSegment> segs;
     this->getSegments(segs);
 
-    for(PointSegment segment: segs){
-        result = !poly.intersectsSegment(segment, mesh.getPoints().getList()) && result;
+    if(!poly.containsPoint(points, this->centroid())){
+        return false;
     }
 
-    return result;
+    for(PointSegment segment: segs){
+        result = !poly.intersectsSegment(segment, points) && result;
+    }
+
+    if(result){
+        return !contains(points[poly.getPoint(0)]);
+    } else{
+        return false;
+    }
+
+
 }
 
 bool BoundingBox::intersects(BoundingBox box) {
@@ -111,4 +121,8 @@ std::vector<Point> BoundingBox::getPoints() {
     points.push_back(Point(this->p1.getX(), this->p2.getY()));
 
     return points;
+}
+
+bool BoundingBox::contains(Point p) {
+    return p.getX()>=xMin() && p.getX()<=xMax() && p.getY()>=yMin() && p.getY()<=yMax();
 }

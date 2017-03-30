@@ -57,14 +57,14 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         FractureConfig* config = FractureConfig::instance();
 
 
-        while(!init_box.fitsInsidePolygon(ring, m)) {
+        while(!init_box.fitsInsidePolygon(ring, std::vector<Point>())) {
             init_radius = config->getRatio()*init_radius;
 
             init_box = BoundingBox(Point(init_last.getX()-init_radius, init_last.getY()-init_radius),
                                    Point(init_last.getX()+init_radius, init_last.getY()+init_radius));
         }
 
-        while(!end_box.fitsInsidePolygon(ring, m)) {
+        while(!end_box.fitsInsidePolygon(ring, std::vector<Point>())) {
             end_radius = config->getRatio()*end_radius;
 
             end_box = BoundingBox(Point(end_last.getX()-end_radius, end_last.getY()-end_radius),

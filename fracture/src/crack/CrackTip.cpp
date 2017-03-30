@@ -82,7 +82,7 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
 
     this->crackAngle = PointSegment(crackPath[crackPath.size() - 2],crackPath.back()).cartesianAngle();
 
-    if(box.fitsInsidePolygon(poly, mesh)){
+    if(box.fitsInsidePolygon(poly, mesh.getPoints().getList())){
         affected.push_back(this->container_polygon);
         remeshAndAdapt(StandardRadius, newPolygons, poly, affected, mesh);
     }else{
@@ -92,11 +92,11 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
 
         Region ringRegion = remesher.getRegion();
         affected.assign(ringPolygons.getList().begin(), ringPolygons.getList().end());
-        if (box.fitsInsidePolygon(ringRegion, mesh)) {
+        if (box.fitsInsidePolygon(ringRegion, ringRegion.getRegionPoints())) {
             remeshAndAdapt(StandardRadius, newPolygons, ringRegion, ringPolygons.getList(), mesh);
         } else {
             double radius = StandardRadius;
-            while(!box.fitsInsidePolygon(ringRegion, mesh)) {
+            while(!box.fitsInsidePolygon(ringRegion, ringRegion.getRegionPoints())) {
                 radius = config->getRatio()*radius;
                 box = BoundingBox(Point(last.getX()-radius, last.getY()-radius),
                                   Point(last.getX()+radius, last.getY()+radius));
