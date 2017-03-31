@@ -5,6 +5,8 @@ TriangleMeshGenerator::TriangleMeshGenerator(std::vector<Point>& point_list, Reg
     callTriangle(point_list);
 }
 
+TriangleMeshGenerator::~TriangleMeshGenerator() {}
+
 PolygonalMesh TriangleMeshGenerator::getMesh() {
     if(!this->mesh.isFull()){
         this->mesh = delaunayToVoronoi();

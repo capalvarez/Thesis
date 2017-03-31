@@ -38,6 +38,7 @@ private:
     PolygonalMesh delaunayToVoronoi();
 public:
     TriangleMeshGenerator(std::vector<Point>& point_list, Region region);
+    ~TriangleMeshGenerator();
     PolygonalMesh getMesh();
     Triangulation getDelaunayTriangulation();
 };

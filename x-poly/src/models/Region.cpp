@@ -23,7 +23,7 @@ Region::Region(const Polygon &other, std::vector<Point> points) : Polygon(other)
 
 Region::Region(const Region &other) : Polygon(other){
     this->p = other.p;
-    this->holes = other.holes;
+    this->holes.assign(other.holes.begin(), other.holes.end());
 }
 
 std::vector<Hole*> Region::getHoles() {

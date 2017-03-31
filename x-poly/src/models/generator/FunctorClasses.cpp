@@ -2,6 +2,7 @@
 #include <cmath>
 #include <random>
 #include <x-poly/models/generator/Functor.h>
+#include <time.h>
 
 class Constant : public Functor {
 public:
@@ -85,7 +86,7 @@ public:
     Random_Double(double min, double max){
         this->min = min;
         this->max = max;
-        this->rng = new std::mt19937(rd());
+        this->rng = new std::mt19937(time(NULL));
         this->uni = new std::uniform_real_distribution<double>(min,max);
     }
 
