@@ -31,7 +31,6 @@ public:
     double getArea();
     Point getCentroid();
     void getSegments(std::vector<IndexSegment>& segments);
-    void getSegments(std::vector<IndexSegment> &segments, int offset);
     std::vector<int> getPoints() const;
     std::vector<Point> getPoints(std::vector<Point> p);
     int numberOfSides();

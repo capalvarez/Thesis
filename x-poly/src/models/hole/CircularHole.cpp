@@ -2,18 +2,16 @@
 
 CircularHole::CircularHole(Point p, double r) : Circle(r, p){
     this->HolePoints = discretizeCircle();
+    Hole::center = Circle::center;
+    computeSegments();
 }
 
-Point CircularHole::getCenter() {
-    return this->center;
-}
-
-void CircularHole::getSegments(std::vector<IndexSegment>& segments, int offset) {
+void CircularHole::computeSegments() {
     std::vector<int> indexes;
     xpoly_utilities::TrivialIndexVector(indexes, (int) this->HolePoints.size());
 
     Polygon discretePolygon (indexes, this->HolePoints);
-    discretePolygon.getSegments(segments, offset);
+    discretePolygon.getSegments(this->segments);
 }
 
 

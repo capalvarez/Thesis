@@ -26,7 +26,7 @@ Region::Region(const Region &other) : Polygon(other){
     this->holes.assign(other.holes.begin(), other.holes.end());
 }
 
-std::vector<Hole*> Region::getHoles() {
+std::vector<Hole>& Region::getHoles() {
     return this->holes;
 }
 
@@ -34,7 +34,7 @@ std::vector<Point> Region::getSeedPoints() {
     return this->seedPoints;
 }
 
-void Region::addHole(Hole* h) {
+void Region::addHole(Hole h) {
     //When we receive a hole we check whether the difference between the region and the hole is just
     //one path (according to the used library)
     XPolyConfig* config = XPolyConfig::instance();
@@ -46,7 +46,7 @@ void Region::addHole(Hole* h) {
                                        (int)(config->getScale()*this->p[i].getY()));
     }
 
-    std::vector<Point> holePoints = h->getPoints();
+    std::vector<Point> holePoints = h.getPoints();
     for(int i=0;i<holePoints.size();i++){
         hole << ClipperLib::IntPoint((int)(config->getScale()*holePoints[i].getX()),
                                      (int)(config->getScale()*holePoints[i].getY()));
@@ -70,7 +70,7 @@ void Region::addHole(Hole* h) {
     }else{
         //Two cases, hole is completely inside or completely outside, just ignore holes outside
 
-        if(Polygon::containsPoint(this->p, h->getCenter())){
+        if(Polygon::containsPoint(this->p, h.getCenter())){
             this->holes.push_back(h);
         }else{
             throw std::invalid_argument("Hole lies outside region");
@@ -125,7 +125,7 @@ std::vector<Point> Region::getRegionPoints() {
     points.assign(this->p.begin(), this->p.end());
 
     for(int i=0;i<holes.size();i++){
-        std::vector<Point> p = holes[i]->getPoints();
+        std::vector<Point> p = holes[i].getPoints();
         points.insert(points.end(), p.begin(), p.end());
     }
 
@@ -136,8 +136,8 @@ void Region::getSegments(std::vector<IndexSegment> &s) {
     Polygon::getSegments(s);
     int offset = (int) this->p.size();
 
-    for(Hole* h : this->holes){
-        h->getSegments(s, offset);
+    for(Hole h : this->holes){
+        h.getSegments(s, offset);
     }
 }
 
