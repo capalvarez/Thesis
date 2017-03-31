@@ -45,23 +45,24 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list) {
 
     in.pointmarkerlist = (int *)NULL;
 
-    std::vector<IndexSegment> segments;
-    region.getSegments(segments);
+    std::vector<IndexSegment> region_segments;
+    region_segments.reserve(region.numberOfSides()*sizeof(int));
+    region.getSegments(region_segments);
 
-    in.numberofsegments = (int) segments.size();
+    in.numberofsegments = (int) region_segments.size();
     in.segmentlist = (int*)malloc(in.numberofsegments*2*sizeof(int));
     in.segmentmarkerlist = (int*) NULL;
-    for(int i=0;i<segments.size();i++){
-        in.segmentlist[2*i] = regionIndex[segments[i].getFirst()];
-        in.segmentlist[2*i+1] = regionIndex[segments[i].getSecond()];
+    for(int i=0;i<region_segments.size();i++){
+        in.segmentlist[2*i] = regionIndex[region_segments[i].getFirst()];
+        in.segmentlist[2*i+1] = regionIndex[region_segments[i].getSecond()];
     }
 
-    std::vector<Hole*> holes = region.getHoles();
+    std::vector<Hole>& holes = region.getHoles();
     in.numberofholes = (int) holes.size();
     in.holelist = (REAL*)malloc(in.numberofholes*2*sizeof(REAL));
     for(int i=0;i<holes.size();i++){
-        in.holelist[2*i] = holes[i]->getCenter().getX();
-        in.holelist[2*i+1] = holes[i]->getCenter().getY();
+        in.holelist[2*i] = holes[i].getCenter().getX();
+        in.holelist[2*i+1] = holes[i].getCenter().getY();
     }
 
     in.numberofregions = 0;
@@ -76,8 +77,7 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list) {
     out.edgelist = (int *) NULL;
     out.edgemarkerlist = (int *) NULL;
 
-    char switches[5];
-    sprintf(switches,"pzeDQ");
+    char switches[5] = {'p', 'z', 'e', 'D', 'Q'};
     triangulate(switches, &in, &out, (struct triangulateio *)NULL);
 
     for(int i=0;i<out.numberofpoints;i++){

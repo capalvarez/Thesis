@@ -2,7 +2,14 @@
 
 IndexSegment::IndexSegment(int i1, int i2) : Segment<int>(i1, i2) {}
 
+IndexSegment::IndexSegment(const IndexSegment &other) {
+    this->p1 = other.p1;
+    this->p2 = other.p2;
+}
+
 IndexSegment::IndexSegment() : Segment<int>(){}
+
+IndexSegment::~IndexSegment() {}
 
 bool IndexSegment::isBoundary(std::vector<Point> p) {
     return p[this->p1].isInBoundary() && p[this->p2].isInBoundary();
@@ -84,4 +91,8 @@ bool IndexSegment::isInCorner(Point p, std::vector<Point> points, int& i) {
 
 bool IndexSegment::isContained(PointSegment s, std::vector<Point> p) {
     return s.contains(p[this->p1]) && s.contains(p[this->p2]);
+}
+
+IndexSegment IndexSegment::add(int o) {
+    return IndexSegment(this->p1 + o, this->p2 + o);
 }

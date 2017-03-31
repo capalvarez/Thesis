@@ -3,6 +3,7 @@
 #include <random>
 #include <x-poly/models/generator/Functor.h>
 #include <time.h>
+#include <ctime>
 
 class Constant : public Functor {
 public:
@@ -76,26 +77,25 @@ public:
 };
 
 class Random_Double : public Functor {
-private:
+public:
     double min;
     double max;
-    std::random_device rd;
-    std::mt19937* rng;
-    std::uniform_real_distribution<double>* uni;
-public:
+    std::random_device r;
+    std::default_random_engine rd;
+    std::mt19937 rng;
+    std::uniform_real_distribution<double> uni;
+
     Random_Double(double min, double max){
         this->min = min;
         this->max = max;
-        this->rng = new std::mt19937(time(NULL));
-        this->uni = new std::uniform_real_distribution<double>(min,max);
+        this->rd = std::default_random_engine((std::time(nullptr)));
+        this->rng = std::mt19937(rd());
+        this->uni = std::uniform_real_distribution<double>(min,max);
     }
 
-    ~Random_Double(){
-        delete(rng);
-        delete(uni);
-    }
+    ~Random_Double(){}
 
-    inline double apply(double x){return (*uni)(*this->rng);}
+    inline double apply(double x){return (uni)(this->rng);}
 };
 
 

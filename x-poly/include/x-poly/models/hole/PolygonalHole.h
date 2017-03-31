@@ -8,10 +8,6 @@
 class PolygonalHole: public Hole, public Polygon{
 public:
     PolygonalHole(std::vector<Point>& p);
-
-    void getSegments(std::vector<IndexSegment>& s, int offset);
-    Point getCenter();
-
 };
 
 #endif

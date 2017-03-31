@@ -4,7 +4,7 @@
 #include <x-poly/models/hole/CircularHole.h>
 #include <x-poly/models/generator/functions.h>
 
-void generateTest(std::string testName, Region r, Hole* h, std::vector<Point> points){
+void generateTest(std::string testName, Region r, Hole h, std::vector<Point> points){
     r.addHole(h);
 
     TriangleMeshGenerator g(points, r);
@@ -29,7 +29,7 @@ int main(){
     Region square(square_points);
 
     std::vector<Point> inside_p = {Point(0.25,0.25), Point(0.75,0.25), Point(0.75,0.75), Point(0.25,0.75)};
-    Hole* inside = new PolygonalHole(inside_p);
+    PolygonalHole inside(inside_p);
 
     std::vector<Point> points = {Point(0.5,0), Point(1,0.5), Point(0.5,1), Point(0,0.5)};
 
@@ -38,7 +38,7 @@ int main(){
     /*------------------------------------------------------------------------------------------------------*/
 
     std::vector<Point> hPoints = {Point(0.25,0.75), Point(0.75,0.75), Point(0.75,1), Point(0.25,1)};
-    Hole* border = new PolygonalHole(hPoints);
+    PolygonalHole border(hPoints);
 
     points = {Point(0.5,0), Point(1,0.5), Point(0,0.5)};
 
@@ -47,7 +47,7 @@ int main(){
     /*------------------------------------------------------------------------------------------------------*/
 
     hPoints = {Point(0.75,0.75), Point(1,0.75), Point(1,1), Point(0.75,1)};
-    Hole* completely_inside = new PolygonalHole(hPoints);
+    PolygonalHole completely_inside(hPoints);
 
     points = {Point(0.5,0), Point(1,0.5), Point(0.5,1), Point(0,0.5)};
 
@@ -56,24 +56,24 @@ int main(){
     /*------------------------------------------------------------------------------------------------------*/
 
     hPoints = {Point(0.5,0), Point(1,0), Point(1,1), Point(0.5,1)};
-    Hole* half = new PolygonalHole(hPoints);
+    PolygonalHole half(hPoints);
 
     points = {};
 
     generateTest("PolygonalHoleHalfTest", square, half, points);
 
     /*-----------------------------------------------------------------------------------------------------*/
-    Hole* circle = new CircularHole(Point(0.5, 0.5), 0.25);
+    CircularHole circle(Point(0.5, 0.5), 0.25);
     points = {Point(0.5,0), Point(1,0.5), Point(0.5,0), Point(0,0.5)};
 
     generateTest("CircularHoleInside", square, circle, points);
 
     /*-----------------------------------------------------------------------------------------------------*/
 
-    border = new CircularHole(Point(0.5, 1), 0.25);
+    CircularHole border_c(Point(0.5, 1), 0.25);
     points = {};
 
-    generateTest("CircularHoleBorderTest", square, border, points);
+    generateTest("CircularHoleBorderTest", square, border_c, points);
 
     /*------------------------------------------------------------------------------------------------------*/
     std::vector<Point> personPoints = {Point(0,0),Point(3,0),Point(3,2),Point(4.5,2),Point(4.5,0),Point(8.5,0),Point(8.5,1),
