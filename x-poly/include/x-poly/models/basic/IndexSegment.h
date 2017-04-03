@@ -9,6 +9,8 @@ class IndexSegment: public Segment<int>{
 public:
     IndexSegment();
     IndexSegment(int i1, int i2);
+    IndexSegment(const IndexSegment& other);
+    ~IndexSegment();
 
     bool isBoundary(std::vector<Point> p);
     bool contains(std::vector<Point>& p, Point point);
@@ -25,6 +27,7 @@ public:
     bool operator<(const IndexSegment& other) const;
     double length(std::vector<Point>& points);
     bool isInCorner(Point p, std::vector<Point> points, int& i);
+    IndexSegment add(int o);
 };
 
 

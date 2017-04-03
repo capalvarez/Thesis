@@ -16,7 +16,7 @@
 
 class Region: public Polygon {
 private:
-    std::vector<Hole*> holes;
+    std::vector<Hole> holes;
     std::vector<Point> p;
     std::vector<Point> seedPoints;
 
@@ -31,8 +31,8 @@ public:
     void mutate(std::vector<Point>& points);
     std::vector<Point> getSeedPoints();
     std::vector<Point> getRegionPoints();
-    std::vector<Hole*> getHoles();
-    void addHole(Hole* h);
+    std::vector<Hole>& getHoles();
+    void addHole(Hole h);
     void generateSeedPoints(PointGenerator p, int nX, int nY);
     void addSeedPoints(std::vector<Point> seeds);
     BoundingBox getBox();
