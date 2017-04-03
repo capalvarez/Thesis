@@ -84,7 +84,7 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
 
     if(box.fitsInsidePolygon(poly, mesh.getPoints().getList())){
         affected.push_back(this->container_polygon);
-        remeshAndAdapt(StandardRadius, newPolygons, poly, affected, mesh);
+        remeshAndAdapt(StandardRadius, newPolygons, Region (poly, mesh.getPoints().getList()), affected, mesh);
     }else{
         UniqueList<int> ringPolygons;
         getDirectNeighbours(this->container_polygon, mesh, ringPolygons);
@@ -102,6 +102,9 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
                                   Point(last.getX()+radius, last.getY()+radius));
             }
 
+            if(box.fitsInsidePolygon(poly, mesh.getPoints().getList())){
+
+            }
             remeshAndAdapt(radius, newPolygons, ringRegion, ringPolygons.getList(), mesh);
         }
     }
@@ -114,14 +117,14 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
     return PolygonChangeData(polys, newPolygons);
 }
 
-void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, Polygon region,
+void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, Region region,
                               std::vector<int> affectedPolygons, BreakableMesh &mesh) {
     FractureConfig* config = FractureConfig::instance();
 
     this->usedRadius = radius;
     RosetteGroupGenerator generator(this->getPoint(), config->getRosetteAngle(),radius);
     std::vector<Point> points = generator.getPoints(this->crackAngle);
-    RemeshAdapter remesher(region, mesh);
+    RemeshAdapter remesher(region);
 
     Triangulation t = remesher.triangulate(points);
     std::unordered_map<int,int> pointMap = remesher.includeNewPoints(mesh.getPoints(), t);

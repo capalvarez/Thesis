@@ -70,7 +70,7 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, std::vector<int> changed
             IndexSegment edge(newTrianglePoints[j], newTrianglePoints[(j+1)%n]);
             IndexSegment originalEdge(oldTrianglePoints[j],oldTrianglePoints[(j+1)%n]);
 
-            if(originalEdge.isBoundary(triangulation.getPoints().getList())){
+            if(originalEdge.isBoundary(triangulation.getPoints())){
                 for (int k = 0; k < containerSegments.size(); ++k) {
                     if(containerSegments[k].contains(meshPoints.getList(),edge)){
                         Neighbours n = segments.get(containerSegments[k]);
@@ -116,7 +116,7 @@ Triangulation RemeshAdapter::triangulate(std::vector<Point> points) {
 
 std::unordered_map<int, int> RemeshAdapter::includeNewPoints(UniqueList<Point> &meshPoints, Triangulation triangulation) {
     std::unordered_map<int,int> pointMap;
-    std::vector<Point> trianglePoints = triangulation.getPoints().getList();
+    std::vector<Point> trianglePoints = triangulation.getPoints();
 
     for (int j = 0; j < trianglePoints.size() ; ++j) {
         int pointIndex = meshPoints.push_back(trianglePoints[j]);

@@ -89,7 +89,7 @@ def read_triangulation(file_name):
     number_segments = int(file.readline())
 
     for i in range(number_segments):
-        line = file.readline().split()
+        file.readline()
 
     number_triangles = int(file.readline())
 

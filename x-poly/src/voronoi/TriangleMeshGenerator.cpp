@@ -76,7 +76,7 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list) {
     out.edgelist = (int *) NULL;
     out.edgemarkerlist = (int *) NULL;
 
-    char switches[5];
+    char switches[6];
     sprintf(switches,"pzeDQ");
     triangulate(switches, &in, &out, (struct triangulateio *)NULL);
 

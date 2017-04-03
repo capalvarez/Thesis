@@ -7,11 +7,10 @@ void Mesh::printInFile(std::string fileName) {
     std::ofstream file;
     file.open(path, std::ios::out);
 
-    file << this->points.size() << std::endl;
-    for(int i=0;i<this->points.size();i++){
-        file << this->points[i].getString() << std::endl;
+    file << points.size() << std::endl;
+    for(int i=0;i<points.size();i++){
+        file << points[i].getString() << std::endl;
     }
-
 
     file << this->edges.size() << std::endl;
     for(auto e: this->edges.getMap()){

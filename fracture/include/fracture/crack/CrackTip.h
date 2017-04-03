@@ -26,7 +26,7 @@ private:
     bool hasFinished = false;
 
     void checkIfFinished(Problem problem, PointSegment direction);
-    void remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, Polygon region,
+    void remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, Region region,
                         std::vector<int> affectedPolygons, BreakableMesh &mesh);
     void getDirectNeighbours(int poly, BreakableMesh mesh, UniqueList<int> &neighbours);
     void reassignContainer(BreakableMesh& mesh);
