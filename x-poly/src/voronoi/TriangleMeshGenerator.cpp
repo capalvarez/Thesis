@@ -29,18 +29,15 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list) {
 
     in.numberofpoints = pointList.size();
     in.pointlist = (REAL*)malloc(in.numberofpoints*2*sizeof(REAL));
+    in.numberofpointattributes = 1;
+    in.pointattributelist = (REAL *) malloc(in.numberofpoints*in.numberofpointattributes*sizeof(REAL));
     int points = 0;
 
     for(int i=0;i<pointList.size();i++){
         in.pointlist[points] = pointList[i].getX();
         in.pointlist[points+1] = pointList[i].getY();
-        points+=2;
-    }
-
-    in.numberofpointattributes = 1;
-    in.pointattributelist = (REAL *) malloc(in.numberofpoints*in.numberofpointattributes*sizeof(REAL));
-    for (int i=0;i<in.numberofpoints;i++){
         in.pointattributelist[i] = 0.0;
+        points+=2;
     }
 
     in.pointmarkerlist = (int *)NULL;
