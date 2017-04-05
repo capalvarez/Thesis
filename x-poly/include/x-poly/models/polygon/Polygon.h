@@ -32,6 +32,7 @@ public:
     Point getCentroid();
     void getSegments(std::vector<IndexSegment>& segments);
     std::vector<int> getPoints() const;
+    std::vector<int>& getPoints();
     std::vector<Point> getPoints(std::vector<Point> p);
     int numberOfSides();
     bool operator==(const Polygon& other) const;
@@ -58,7 +59,7 @@ public:
     IndexSegment containerEdge(std::vector<Point>& p, Point point);
     void replace_segment(IndexSegment seg, std::vector<IndexSegment> segs, std::vector<Point> points);
 
-    Pair<int> commonEdgesBorder(Polygon p, std::vector<Point> points);
+    Pair<int> commonEdgesBorder(Polygon p, std::vector<Point> points, bool &formsLoop);
     std::vector<IndexSegment> getAdjacentEdges(int i);
     int getPoint(int i);
 };

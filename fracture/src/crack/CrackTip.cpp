@@ -102,9 +102,6 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh& mesh) {
                                   Point(last.getX()+radius, last.getY()+radius));
             }
 
-            if(box.fitsInsidePolygon(poly, mesh.getPoints().getList())){
-
-            }
             remeshAndAdapt(radius, newPolygons, ringRegion, ringPolygons.getList(), mesh);
         }
     }

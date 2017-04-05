@@ -29,6 +29,7 @@ add_subdirectory(xpoly-test)
 add_subdirectory(veamy-test)
 add_subdirectory(numerical-test)
 add_subdirectory(fracture-test)
+add_subdirectory(utilities-test)
 
 
 

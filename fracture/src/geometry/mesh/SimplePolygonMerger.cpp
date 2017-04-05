@@ -9,10 +9,34 @@ Polygon SimplePolygonMerger::mergePolygons(Polygon p1, Polygon p2, std::vector<P
     }
 
     std::vector<int> mergedPolygon;
-    std::vector<int> poly1_points = p1.getPoints();
-    std::vector<int> poly2_points = p2.getPoints();
+    std::vector<int>& poly1_points = p1.getPoints();
+    std::vector<int>& poly2_points = p2.getPoints();
 
-    Pair<int> endPoints = p1.commonEdgesBorder(p2, points);
+    bool loop = false;
+    Pair<int> endPoints = p1.commonEdgesBorder(p2, points, loop);
+    //Boundary case, one polygon is inside the other
+    if(endPoints.first==-1 && endPoints.second==-1){
+        if(p1.containsPoint(points, p2.getCentroid())){
+            for(int i: poly2_points){
+                poly1_points.erase(poly1_points.begin()+i);
+            }
+            p1.mutate(poly1_points, points);
+
+            return p1;
+        }else{
+            for(int i: poly1_points){
+                poly2_points.erase(poly2_points.begin()+i);
+            }
+            p2.mutate(poly2_points, points);
+
+            return p2;
+        }
+    }
+
+    if(loop){
+
+    }
+
     int firstPointIndex = utilities::indexOf(poly1_points, endPoints.first);
     int i, init, end;
 
@@ -72,6 +96,13 @@ Polygon SimplePolygonMerger::mergePolygons(std::vector<int> polygons, std::vecto
             }
             j--;
         }
+
+        if(merged.containsPoint(mesh.getPoints().getList(), mesh.getPolygon(polygons[j]).getCentroid())){
+            polygons.erase(polygons.begin()+j);
+            j = polygons.size()-1;
+            continue;
+        }
+
         merged = this->mergePolygons(merged, mesh.getPolygon(polygons[j]) ,points);
         polygons.erase(polygons.begin()+j);
         j = polygons.size()-1;

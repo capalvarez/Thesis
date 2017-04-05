@@ -3,6 +3,7 @@ include_directories(${BASEPATH})
 
 file(GLOB_RECURSE SRCS ${CMAKE_CURRENT_SOURCE_DIR}/*.h  ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
+include_directories(${BASEPATH}/include/lib)
 include_directories(${BASEPATH}/include)
 add_library(libutilities STATIC ${SRCS})
 

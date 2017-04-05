@@ -1,4 +1,6 @@
 #include <x-poly/models/generator/Functor.h>
+#include <x-poly/models/generator/RandomDouble.h>
+#include <x-poly/models/generator/RandomInteger.h>
 #include "FunctorClasses.cpp"
 
 namespace functions {

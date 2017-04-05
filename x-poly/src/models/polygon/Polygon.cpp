@@ -230,6 +230,9 @@ std::vector<int> Polygon::getPoints() const{
     return this->points;
 }
 
+std::vector<int> &Polygon::getPoints() {
+    return this->points;
+}
 
 int Polygon::numberOfSides() {
     return (int) points.size();
@@ -303,7 +306,7 @@ std::vector<Point> Polygon::getPoints(std::vector<Point> p) {
     return returnPoints;
 }
 
-Pair<int> Polygon::commonEdgesBorder(Polygon p, std::vector<Point> points) {
+Pair<int> Polygon::commonEdgesBorder(Polygon p, std::vector<Point> points, bool &formsLoop) {
     std::map<int,int> thisPoints;
 
     for (int i = 0; i < this->points.size(); ++i) {
@@ -312,11 +315,13 @@ Pair<int> Polygon::commonEdgesBorder(Polygon p, std::vector<Point> points) {
 
     int j,k, n = p.numberOfSides();
     std::vector<int> poly_points = p.getPoints();
+    int nP = p.numberOfSides();
 
-    for (j = 0; j < poly_points.size(); ++j) {
+    for (j = 0; j < nP; ++j) {
         auto search = thisPoints.find(poly_points[j]);
 
-        if(search != thisPoints.end()) {
+        if(search != thisPoints.end() && (thisPoints.find(poly_points[(j-1+nP)%nP])!=thisPoints.end() ||
+                thisPoints.find(poly_points[(j+1)%nP])!=thisPoints.end())) {
             break;
         }
     }
@@ -326,14 +331,17 @@ Pair<int> Polygon::commonEdgesBorder(Polygon p, std::vector<Point> points) {
     bool last = true;
     std::vector<int> border;
 
-    while (i<n+1){
+    while (i<n){
         bool now = thisPoints[poly_points[k]]==0;
+        bool next = thisPoints[poly_points[(k+1)%n]]==1;
 
         if(now && last){
-            border.push_back(poly_points[(k-1+n)%n]);
+            if(thisPoints[poly_points[(n+k-2)%n]]==1){
+                border.push_back(poly_points[(k-1+n)%n]);
+            }
         }
 
-        if(!now && !last){
+        if(!now && !last && next){
             border.push_back(poly_points[k]);
         }
 
@@ -344,15 +352,15 @@ Pair<int> Polygon::commonEdgesBorder(Polygon p, std::vector<Point> points) {
 
     if(border.size()==0){
         if(this->containsPoint(points, p.getCentroid())){
-            throw std::invalid_argument("weeeeird");
-            //ignore this completely
+            //polygon is inside, do something
+            return Pair<int>(-1,-1);
         }else{
             return Pair<int>(poly_points[0], poly_points.back());
         }
     }
 
 
-    return Pair<int>(border[0], border[1]);
+    return Pair<int>(border[0], border.back());
 }
 
 bool Polygon::operator<(const Polygon &other) const {
