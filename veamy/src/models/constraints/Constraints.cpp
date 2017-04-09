@@ -42,10 +42,7 @@ std::vector<int> Constraints::getConstrainedDOF() {
 
 void Constraints::addConstrainedDOF(std::vector<Point> points, int DOF_index, DOF::Axis axis, SegmentPair pair) {
     addConstrainedDOFBySegment(points, DOF_index, axis, pair.s1);
-
-    if(pair.number!=1){
-        addConstrainedDOFBySegment(points, DOF_index, axis, pair.s2);
-    }
+    addConstrainedDOFBySegment(points, DOF_index, axis, pair.s2);
 }
 
 void Constraints::addConstrainedDOFBySegment(std::vector<Point> points, int DOF_index, DOF::Axis axis, IndexSegment s) {

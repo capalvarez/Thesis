@@ -13,6 +13,7 @@ public:
     int pointIndex();
     bool operator==(const DOF& other) const;
     bool operator<(const DOF& other) const;
+    DOF::Axis getAxis();
 protected:
     int index;
     int point_index;

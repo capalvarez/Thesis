@@ -103,10 +103,10 @@ void Element::computeF(DOFS d, UniqueList<Point> points, ProblemConditions &cond
     this->f = Eigen::VectorXd::Zero(this->dofs.size());
     NaturalConstraints natural = conditions.constraints.getNaturalConstraints();
 
-    QuadraturePolygon polygon(p);
+    double bodyIntegral = QuadraturePolygon(p).integrate(conditions.f, points.getList());
 
     for (int i = 0; i < this->dofs.size(); ++i) {
-        this->f(i) = polygon.integrate(conditions.f, points.getList()) + natural.lineIntegral(points.getList(),p,i/2,this->dofs[i]);
+        this->f(i) = conditions.f->isApplicable(bodyIntegral, d.get(this->dofs[i]).getAxis()) + natural.lineIntegral(points.getList(),p,i/2,this->dofs[i]);
     }
 }
 

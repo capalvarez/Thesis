@@ -26,6 +26,9 @@ bool DOF::operator<(const DOF &other) const {
     return this->index<other.index;
 }
 
+DOF::Axis DOF::getAxis() {
+    return this->d;
+}
 
 
 
