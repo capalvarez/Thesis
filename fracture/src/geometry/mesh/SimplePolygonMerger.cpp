@@ -12,56 +12,70 @@ Polygon SimplePolygonMerger::mergePolygons(Polygon p1, Polygon p2, std::vector<P
     std::vector<int>& poly1_points = p1.getPoints();
     std::vector<int>& poly2_points = p2.getPoints();
 
-    bool loop = false;
-    Pair<int> endPoints = p1.commonEdgesBorder(p2, points, loop);
-    //Boundary case, one polygon is inside the other
-    if(endPoints.first==-1 && endPoints.second==-1){
-        if(p1.containsPoint(points, p2.getCentroid())){
-            for(int i: poly2_points){
-                poly1_points.erase(poly1_points.begin()+i);
-            }
-            p1.mutate(poly1_points, points);
+    bool special_case = false;
+    Pair<int> endPoints = p1.commonEdgesBorder(p2, points, special_case);
+    if(special_case) {
+        for (int index: poly2_points){
+            if(index==endPoints.first || index==endPoints.second)
+                continue;
 
-            return p1;
-        }else{
-            for(int i: poly1_points){
-                poly2_points.erase(poly2_points.begin()+i);
-            }
-            p2.mutate(poly2_points, points);
-
-            return p2;
+            poly1_points.erase(std::remove(poly1_points.begin(), poly1_points.end(), index), poly1_points.end());
         }
+
+        p1.mutate(poly1_points, points);
+        return p1;
     }
 
-    if(loop){
+    int firstPointIndex_p1 = utilities::indexOf(poly1_points, endPoints.first);
+    int secondPointIndex_p1 = utilities::indexOf(poly1_points, endPoints.second);
+    int first_1, second_1, first_2, second_2;
 
+    if(firstPointIndex_p1<secondPointIndex_p1) {
+        first_1 = firstPointIndex_p1;
+        second_1 = secondPointIndex_p1;
+    } else{
+        first_1 = secondPointIndex_p1;
+        second_1 = firstPointIndex_p1;
     }
 
-    int firstPointIndex = utilities::indexOf(poly1_points, endPoints.first);
-    int i, init, end;
-
-    if(p2.isVertex(poly1_points[(firstPointIndex+1)%p1.numberOfSides()])) {
-        i = utilities::indexOf(poly1_points, endPoints.second);
-        init = endPoints.second;
-        end = endPoints.first;
-    } else {
-        i = firstPointIndex;
-        init = endPoints.first;
-        end = endPoints.second;
+    if(!p2.isVertex(poly1_points[(first_1+1)%p1.numberOfSides()])) {
+        int tmp = first_1;
+        first_1 = second_1;
+        second_1 = tmp;
     }
 
-    while(poly1_points[i]!=end){
+    int firstPointIndex_p2 = utilities::indexOf(poly2_points, endPoints.first);
+    int secondPointIndex_p2 = utilities::indexOf(poly2_points, endPoints.second);
+
+    if(firstPointIndex_p2<secondPointIndex_p2) {
+        first_2 = firstPointIndex_p2;
+        second_2 = secondPointIndex_p2;
+    } else{
+        first_2 = secondPointIndex_p2;
+        second_2 = firstPointIndex_p2;
+    }
+
+    if(!p1.isVertex(poly2_points[(first_2+1)%p1.numberOfSides()])) {
+        int tmp = first_2;
+        first_2 = second_2;
+        second_2 = tmp;
+    }
+
+    int i = (second_1 + 1)%p1.numberOfSides();
+    while(i!=first_1){
         mergedPolygon.push_back(poly1_points[i]);
+
         i = (i+1)%p1.numberOfSides();
     }
 
-    int secondPointIndex = utilities::indexOf(poly2_points, end);
-    i = secondPointIndex;
-
-    while(poly2_points[i]!=init){
+    i = second_2;
+    while(i!=first_2){
         mergedPolygon.push_back(poly2_points[i]);
+
         i = (i+1)%p2.numberOfSides();
     }
+
+    mergedPolygon.push_back(poly2_points[first_2]);
 
     return Polygon(mergedPolygon, points);
 }
@@ -90,7 +104,7 @@ Polygon SimplePolygonMerger::mergePolygons(std::vector<int> polygons, std::vecto
     j = polygons.size()-1;
 
     while(polygons.size()!=0){
-        while(!mesh.areNeighbours(merged, polygons[j])){
+        while(!mesh.areMergeable(merged, polygons[j])){
             if(j<0){
                 throw std::invalid_argument("Impossible to merge polygons");
             }

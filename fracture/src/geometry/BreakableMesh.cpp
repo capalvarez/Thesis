@@ -240,3 +240,33 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo n2, int init, 
     this->edges.insert(IndexSegment(p2,n2.edge.getSecond()), n2.neighbour);
 }
 
+bool BreakableMesh::areMergeable(Polygon poly1, int poly2) {
+    Polygon p2 = this->getPolygon(poly2);
+
+    std::vector<IndexSegment> poly1_segments;
+    poly1.getSegments(poly1_segments);
+
+    bool last_was_neighbour = edges.get(poly1_segments.back()).isNeighbour(poly2);
+    bool exited_once = false;
+    
+    for(IndexSegment s: poly1_segments){
+        Neighbours n = edges.get(s);
+        bool areNeighbours = n.isNeighbour(poly2);
+        
+        if(last_was_neighbour && !areNeighbours){
+            if(!exited_once){
+                exited_once = true;  
+            } else {
+                return false;
+            }
+        } 
+        
+        if(!last_was_neighbour && !areNeighbours && p2.isVertex(s.getFirst())){
+            return false;
+        }
+        
+        last_was_neighbour = areNeighbours;
+    }
+
+    return exited_once || last_was_neighbour;
+}

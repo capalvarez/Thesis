@@ -18,6 +18,7 @@ public:
     void swapPolygons(int first, int last);
     void mergePolygons(int i1, int i2);
     int mergePolygons(std::vector<int> polys);
+    bool areMergeable(Polygon poly1, int poly2);
 };
 
 

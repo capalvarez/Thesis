@@ -271,10 +271,6 @@ std::string Polygon::getString() {
     return base + " " + getCentroid().getString();
 }
 
-bool Polygon::containsEdge(IndexSegment s) {
-    return isVertex(s.getFirst()) && isVertex(s.getSecond());
-}
-
 bool Polygon::isVertex(int index) {
     return std::find(points.begin(), points.end(), index) != points.end();
 }
@@ -306,7 +302,7 @@ std::vector<Point> Polygon::getPoints(std::vector<Point> p) {
     return returnPoints;
 }
 
-Pair<int> Polygon::commonEdgesBorder(Polygon p, std::vector<Point> points, bool &formsLoop) {
+Pair<int> Polygon::commonEdgesBorder(Polygon p, std::vector<Point> points, bool &special) {
     std::map<int,int> thisPoints;
 
     for (int i = 0; i < this->points.size(); ++i) {
@@ -351,11 +347,15 @@ Pair<int> Polygon::commonEdgesBorder(Polygon p, std::vector<Point> points, bool 
     }
 
     if(border.size()==0){
+        special = true;
         if(this->containsPoint(points, p.getCentroid())){
             //polygon is inside, do something
             return Pair<int>(-1,-1);
         }else{
-            return Pair<int>(poly_points[0], poly_points.back());
+            std::vector<IndexSegment> s;
+            p.getSegments(s);
+
+            return this->segmentNotContained(s);
         }
     }
 
@@ -474,4 +474,20 @@ std::vector<IndexSegment> Polygon::getAdjacentEdges(int i) {
 
 int Polygon::getPoint(int i) {
     return this->points[i];
+}
+
+Pair<int> Polygon::segmentNotContained(std::vector<IndexSegment> s) {
+    for (IndexSegment segment: s) {
+        if(!containsEdge(segment)){
+            return Pair<int>(segment.getFirst(), segment.getSecond());
+        }
+    }
+    return Pair<int>(-1,-1);
+}
+
+bool Polygon::containsEdge(IndexSegment s) {
+    int i = utilities::indexOf(this->points, s.getFirst());
+    int j = utilities::indexOf(this->points, s.getSecond());
+
+    return i!=-1 && j!=-1 && std::abs(i-j)==1;
 }

@@ -21,6 +21,7 @@ private:
     double calculateArea(std::vector<Point>& p);
     Point calculateCentroid(std::vector<Point>& p);
     void calculateHash();
+    Pair<int> segmentNotContained(std::vector<IndexSegment> s);
 public:
     Polygon(std::vector<int>& points, std::vector<Point>& p);
     Polygon(std::vector<Point>& p);
@@ -59,7 +60,7 @@ public:
     IndexSegment containerEdge(std::vector<Point>& p, Point point);
     void replace_segment(IndexSegment seg, std::vector<IndexSegment> segs, std::vector<Point> points);
 
-    Pair<int> commonEdgesBorder(Polygon p, std::vector<Point> points, bool &formsLoop);
+    Pair<int> commonEdgesBorder(Polygon p, std::vector<Point> points, bool &special);
     std::vector<IndexSegment> getAdjacentEdges(int i);
     int getPoint(int i);
 };

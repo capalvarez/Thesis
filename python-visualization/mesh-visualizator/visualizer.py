@@ -16,7 +16,7 @@ frame.pack()
 
 canvas = Canvas(window, width=900, height=700, bg="white")
 
-points, segments, polygons, limits = read_file("randomTest.txt")
+points, segments, polygons, limits = read_file("prepared.txt")
 #t_points, triangles, t_limits = read_triangulation("triangles.txt")
 
 button = Button(frame, text="Draw Polygons", command=lambda p=polygons, c=canvas, ps=points: draw_polygons(p, c, ps))
