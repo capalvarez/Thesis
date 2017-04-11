@@ -28,22 +28,24 @@ void SegmentMap::replace_neighbour(IndexSegment s, int oldNeighbour, int newNeig
     }
 }
 
-void SegmentMap::replace_or_delete(IndexSegment s, int oldNeighbour, int newNeighbour,
+void SegmentMap::replace_or_delete(IndexSegment s, int oldNeighbour_current, int oldNeighbour_old, int newNeighbour,
                                    std::unordered_map<Neighbours, int, NeighboursHasher> map,
-                                   std::unordered_map<IndexSegment, int, SegmentHasher>& erased) {
+                                   std::unordered_map<IndexSegment, int, SegmentHasher> &erased) {
     auto is_there = erased.find(s);
     if(is_there != erased.end()) {
         return;
     }
 
     Neighbours n = get(s);
+    n.changeNeighbour(oldNeighbour_current, oldNeighbour_old);
+
     auto iter = map.find(n);
 
     if(iter != map.end()){
         this->delete_element(s);
         erased[s] = 0;
     } else{
-        this->replace_neighbour(s,oldNeighbour,newNeighbour);
+        this->replace_neighbour(s,oldNeighbour_current,newNeighbour);
     }
 }
 

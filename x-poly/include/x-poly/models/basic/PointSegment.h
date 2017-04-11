@@ -12,7 +12,6 @@ public:
     bool isBoundary(std::vector<Point> p);
     bool contains(Point point);
     bool intersection(PointSegment other, Point& inter);
-    double perpendicularSlope();
     std::string getString() const;
     double cartesianAngle();
     bool operator==(const PointSegment other) const;

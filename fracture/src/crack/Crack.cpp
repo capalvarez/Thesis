@@ -44,6 +44,9 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         int index = m.mergePolygons(neighbours.getList());
         Polygon ring = m.getPolygon(index);
 
+        m.printInFile("afterMerging.txt");
+        m.getSegments().printInFile("afterMergingEdges.txt");
+
         Point init_last = this->init.getPoint();
         double init_radius = this->init.StandardRadius;
         BoundingBox init_box(Point(init_last.getX()-init_radius, init_last.getY()-init_radius),
@@ -57,14 +60,14 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         FractureConfig* config = FractureConfig::instance();
 
 
-        while(!init_box.fitsInsidePolygon(ring, std::vector<Point>())) {
+        while(!init_box.fitsInsidePolygon(ring, points.getList())) {
             init_radius = config->getRatio()*init_radius;
 
             init_box = BoundingBox(Point(init_last.getX()-init_radius, init_last.getY()-init_radius),
                                    Point(init_last.getX()+init_radius, init_last.getY()+init_radius));
         }
 
-        while(!end_box.fitsInsidePolygon(ring, std::vector<Point>())) {
+        while(!end_box.fitsInsidePolygon(ring, points.getList())) {
             end_radius = config->getRatio()*end_radius;
 
             end_box = BoundingBox(Point(end_last.getX()-end_radius, end_last.getY()-end_radius),
@@ -84,10 +87,19 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         Point p1 = end_box.getClosestTo(init_box.centroid());
         Point p2 = init_box.getClosestTo(end_box.centroid());
 
-        Point middle = Point(std::abs(p1.getX()-p2.getX())/2, std::abs(p1.getY()-p2.getY())/2);
-        double slope = PointSegment(init_box.centroid(), end_box.centroid()).perpendicularSlope();
+        Point middle = Point(std::abs(p1.getX()-p2.getX())/2 + std::min(p1.getX(), p2.getX()),
+                             std::abs(p1.getY()-p2.getY())/2 + std::min(p1.getY(), p2.getY()));
+        Point nextPoint;
 
-        Point nextPoint(middle.getX()*2 , slope*middle.getX() + middle.getY());
+        double dX = (p2.getX() - p1.getX());
+
+        if(dX!=0){
+            double slope = -dX/(p2.getY() - p1.getY());
+            nextPoint = Point(middle.getX()*2 , slope*middle.getX() + middle.getY());
+        }else{
+            nextPoint = Point(middle.getX(), 2*middle.getY());
+        }
+
         PointSegment direction(middle, nextPoint);
 
         std::vector<Point> intersections;
@@ -115,6 +127,7 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         NeighbourInfo n2 = NeighbourInfo(neighbour2, relevantSegments[1], intersections[1], false);
 
         m.splitPolygons(n1, n2, neighbour1, oldP.getList(), newP);
+        m.printInFile("afterSplit.txt");
 
         std::vector<int> affected1 = {index};
         std::vector<int> affected2 = {(int)(m.getPolygons().size())-1};

@@ -105,11 +105,11 @@ void BreakableMesh::mergePolygons(int i1, int i2) {
     poly2.getSegments(poly2Segments);
 
     std::unordered_map<Neighbours, int, NeighboursHasher> map;
-    Neighbours n(this->polygons.size()-1, i1);
+    Neighbours n(i2, i1);
     map[n] = 0;
 
     for(IndexSegment s: poly2Segments){
-        edges.replace_or_delete(s, this->polygons.size() - 1, i1, map, toIgnore);
+        edges.replace_or_delete(s, this->polygons.size() - 1, i2, i1, map, toIgnore);
     }
 
     this->polygons.pop_back();
@@ -142,7 +142,7 @@ int BreakableMesh::mergePolygons(std::vector<int> polys) {
         poly2.getSegments(poly2Segments);
 
         for(IndexSegment s: poly2Segments){
-            edges.replace_or_delete(s, this->polygons.size() - 1, i2, map, toIgnore);
+            edges.replace_or_delete(s, this->polygons.size() - 1, i2, polys.back(), map, toIgnore);
         }
 
         this->polygons.pop_back();
