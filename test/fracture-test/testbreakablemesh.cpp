@@ -29,6 +29,7 @@ TEST(BreakableMeshTest, BreakMeshTest){
 }
 
 TEST(BreakableMeshTest, SwapPolygonsTest){
+    std::unordered_map<IndexSegment, int, SegmentHasher> m;
     std::vector<Point> squarePoints = {Point(0,0),Point(3,0),Point(3,3),Point(0,3)};
     Region square (squarePoints);
 
@@ -42,7 +43,7 @@ TEST(BreakableMeshTest, SwapPolygonsTest){
 
     BreakableMesh breakableMesh(mesh);
 
-    breakableMesh.swapPolygons(0,8);
+    breakableMesh.swapPolygons(0, 8, m);
 
 
     breakableMesh.printInFile("testMesh.txt");

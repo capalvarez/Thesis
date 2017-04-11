@@ -22,8 +22,8 @@ Polygon SimplePolygonMerger::mergePolygons(Polygon p1, Polygon p2, std::vector<P
             poly1_points.erase(std::remove(poly1_points.begin(), poly1_points.end(), index), poly1_points.end());
         }
 
-        p1.mutate(poly1_points, points);
-        return p1;
+        Polygon (poly1_points, points);
+        return Polygon (poly1_points, points);
     }
 
     int firstPointIndex_p1 = utilities::indexOf(poly1_points, endPoints.first);

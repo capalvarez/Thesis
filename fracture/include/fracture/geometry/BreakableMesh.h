@@ -15,7 +15,7 @@ public:
     void splitPolygons(NeighbourInfo n1, NeighbourInfo n2, int init, std::vector<Polygon> &oldPolygons,
                        std::vector<Polygon> &newPolygons);
 
-    void swapPolygons(int first, int last);
+    void swapPolygons(int first, int last, std::unordered_map<IndexSegment,int,SegmentHasher>& toIgnore);
     void mergePolygons(int i1, int i2);
     int mergePolygons(std::vector<int> polys);
     bool areMergeable(Polygon poly1, int poly2);

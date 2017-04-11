@@ -23,7 +23,9 @@ public:
     void insert(IndexSegment s, int polygonIndex);
     void insert(IndexSegment s, Neighbours n);
     void replace_neighbour(IndexSegment s, int oldNeighbour, int newNeighbour);
-    void replace_or_delete(IndexSegment s, int oldNeighbour, int newNeighbour, std::unordered_map<Neighbours, int, NeighboursHasher> map);
+    void replace_or_delete(IndexSegment s, int oldNeighbour, int newNeighbour,
+                               std::unordered_map<Neighbours, int, NeighboursHasher> map,
+                               std::unordered_map<IndexSegment, int, SegmentHasher> &erased);
     Neighbours& get(IndexSegment s);
     std::unordered_map<IndexSegment,Neighbours,SegmentHasher>& getMap();
     int size();

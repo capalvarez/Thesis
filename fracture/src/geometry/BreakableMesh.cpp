@@ -2,6 +2,11 @@
 #include <fracture/geometry/mesh/SimplePolygonMerger.h>
 #include <fracture/utilities/fractureutilities.h>
 
+struct greater{
+    template<class T>
+    bool operator()(T const &a, T const &b) const { return a > b; }
+};
+
 BreakableMesh::BreakableMesh() {}
 
 BreakableMesh::BreakableMesh(const PolygonalMesh& m) {
@@ -48,7 +53,7 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
     }
 }
 
-void BreakableMesh::swapPolygons(int first, int last) {
+void BreakableMesh::swapPolygons(int first, int last, std::unordered_map<IndexSegment,int,SegmentHasher> &toIgnore) {
     Polygon p1 = getPolygon(first);
     Polygon p2 = getPolygon(last);
 
@@ -59,11 +64,19 @@ void BreakableMesh::swapPolygons(int first, int last) {
     p2.getSegments(lastSegments);
 
     for(IndexSegment s: firstSegments){
-        edges.get(s).changeNeighbour(first, last);
+        auto got = toIgnore.find(s);
+
+        if(got==toIgnore.end()){
+            edges.get(s).changeNeighbour(first, last);
+        }
     }
 
-    for(IndexSegment s: lastSegments){
-        edges.get(s).changeNeighbour(last, first);
+    for(IndexSegment s: lastSegments) {
+        auto got = toIgnore.find(s);
+
+        if (got == toIgnore.end()) {
+            edges.get(s).changeNeighbour(last, first);
+        }
     }
 
     this->polygons[first] = p2;
@@ -77,7 +90,8 @@ void BreakableMesh::mergePolygons(int i1, int i2) {
         return;
     }
 
-    swapPolygons(i2, this->polygons.size()-1);
+    std::unordered_map<IndexSegment, int, SegmentHasher> toIgnore;
+    swapPolygons(i2, this->polygons.size() - 1, toIgnore);
 
     Polygon poly1 = getPolygon(i1);
     Polygon poly2 = getPolygon(this->polygons.size() - 1);
@@ -95,7 +109,7 @@ void BreakableMesh::mergePolygons(int i1, int i2) {
     map[n] = 0;
 
     for(IndexSegment s: poly2Segments){
-        edges.replace_or_delete(s, this->polygons.size() - 1, i1, map);
+        edges.replace_or_delete(s, this->polygons.size() - 1, i1, map, toIgnore);
     }
 
     this->polygons.pop_back();
@@ -105,9 +119,11 @@ int BreakableMesh::mergePolygons(std::vector<int> polys) {
     SimplePolygonMerger merger;
 
     Polygon merged =  merger.mergePolygons(polys, points.getList(), *this);
-    this->polygons[polys[0]] = merged;
+    std::sort(polys.begin(), polys.end(), greater());
+    this->polygons[polys.back()] = merged;
 
     std::unordered_map<Neighbours,int,NeighboursHasher> map;
+    std::unordered_map<IndexSegment, int,SegmentHasher> toIgnore;
     std::vector<Pair<int>> pairs;
     fracture_utilities::allPairs(pairs, polys);
 
@@ -116,23 +132,23 @@ int BreakableMesh::mergePolygons(std::vector<int> polys) {
         map[n] = 0;
     }
 
-    for (int i = 1; i < polys.size(); ++i) {
+    for (int i = 0; i < polys.size()-1; ++i) {
         int i2 = polys[i];
 
-        swapPolygons(i2, this->polygons.size()-1);
+        swapPolygons(i2, this->polygons.size() - 1, toIgnore);
         Polygon poly2 = getPolygon(this->polygons.size() - 1);
 
         std::vector<IndexSegment> poly2Segments;
         poly2.getSegments(poly2Segments);
 
         for(IndexSegment s: poly2Segments){
-            edges.replace_or_delete(s, this->polygons.size() - 1, i2, map);
+            edges.replace_or_delete(s, this->polygons.size() - 1, i2, map, toIgnore);
         }
 
         this->polygons.pop_back();
     }
 
-    return polys[0];
+    return polys.back();
 }
 
 
