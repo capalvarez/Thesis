@@ -127,7 +127,6 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         NeighbourInfo n2 = NeighbourInfo(neighbour2, relevantSegments[1], intersections[1], false);
 
         m.splitPolygons(n1, n2, neighbour1, oldP.getList(), newP);
-        m.printInFile("afterSplit.txt");
 
         std::vector<int> affected1 = {index};
         std::vector<int> affected2 = {(int)(m.getPolygons().size())-1};

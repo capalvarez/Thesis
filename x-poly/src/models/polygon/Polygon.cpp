@@ -491,3 +491,12 @@ bool Polygon::containsEdge(IndexSegment s) {
 
     return i!=-1 && j!=-1 && std::abs(i-j)==1;
 }
+
+void Polygon::insertOnSegment(IndexSegment segment, int point) {
+    int i = utilities::indexOf(this->points, segment.getFirst());
+    int j = utilities::indexOf(this->points, segment.getSecond());
+
+    if(i!=-1 && j!=-1 && std::abs(i-j)==1){
+        this->points.insert(this->points.begin()+i, point);
+    }
+}

@@ -9,7 +9,7 @@ TEST(BreakableMeshTest, BreakMeshTest){
     std::vector<Point> squarePoints = {Point(0,0),Point(3,0),Point(3,3),Point(0,3)};
     Region square (squarePoints);
 
-    PointGenerator generator (functions::uniform(1), functions::uniform(1));
+    PointGenerator generator (functions::random_double(0,3), functions::random_double(0,3));
 
     square.generateSeedPoints(generator, 3, 3);
     std::vector<Point> seeds = square.getSeedPoints();
@@ -18,14 +18,13 @@ TEST(BreakableMeshTest, BreakMeshTest){
     PolygonalMesh mesh = meshGenerator.getMesh();
 
     BreakableMesh breakableMesh(mesh);
-    Polygon& poly = breakableMesh.getPolygon(2);
 
-    PointSegment crack(Point(0.25,1.5), Point(2.75,1.5));
-
-    breakableMesh.breakMesh(2, crack);
-    breakableMesh.getSegments().printInFile("segments.txt");
-
+    PointSegment crack(Point(0.25,0.5), Point(2.75,2.5));
     breakableMesh.printInFile("broken.txt");
+    int container = breakableMesh.findContainerPolygon(Point(0.25,0emp.5));
+
+    breakableMesh.breakMesh(container, crack);
+    breakableMesh.printInFile("broken2.txt");
 }
 
 TEST(BreakableMeshTest, SwapPolygonsTest){
@@ -53,16 +52,19 @@ TEST(BreakableMeshTest, MergePolygonsTest){
     std::vector<Point> squarePoints = {Point(0,0),Point(3,0),Point(3,3),Point(0,3)};
     Region square (squarePoints);
 
-    PointGenerator generator (functions::uniform(1), functions::uniform(1));
+    PointGenerator generator (functions::random_double(0,3), functions::random_double(0,3));
 
-    square.generateSeedPoints(generator, 3, 3);
+    square.generateSeedPoints(generator, 5, 5);
     std::vector<Point> seeds = square.getSeedPoints();
 
     TriangleMeshGenerator meshGenerator(seeds, square);
     PolygonalMesh mesh = meshGenerator.getMesh();
+    mesh.printInFile("randomMerge.txt");
 
     BreakableMesh breakableMesh(mesh);
-    breakableMesh.mergePolygons(0,1);
+    std::vector<int> polys = {16,6,7,0};
+    breakableMesh.mergePolygons(polys);
+    breakableMesh.printInFile("randomMerge2.txt");
 
 }
 

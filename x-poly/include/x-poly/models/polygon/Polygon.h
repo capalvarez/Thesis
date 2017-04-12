@@ -63,6 +63,8 @@ public:
     Pair<int> commonEdgesBorder(Polygon p, std::vector<Point> points, bool &special);
     std::vector<IndexSegment> getAdjacentEdges(int i);
     int getPoint(int i);
+
+    void insertOnSegment(IndexSegment segment, int point);
 };
 
 #endif

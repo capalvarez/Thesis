@@ -42,7 +42,7 @@ public:
     int findContainerPolygon(Point p, int init_polygon, int &last);
 
     NeighbourInfo getNeighbour(int poly_index, PointSegment direction);
-    NeighbourInfo getNeighbour(int poly_index, PointSegment direction, int previous);
+    NeighbourInfo getNeighbour(int poly_index, PointSegment direction, std::vector<int> previous);
     int getPolygonInDirection(std::vector<int> index, PointSegment direction);
 
     Region getRegion() const;

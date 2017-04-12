@@ -80,10 +80,10 @@ Polygon& PolygonalMesh::getPolygon(int index) {
 }
 
 NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction) {
-    return getNeighbour(poly_index, direction, -1);
+    return getNeighbour(poly_index, direction, std::vector<int>());
 }
 
-NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction, int previous) {
+NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction, std::vector<int> previous) {
     Polygon& poly = getPolygon(poly_index);
 
     std::vector<IndexSegment> polySeg;
@@ -97,8 +97,9 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
             Neighbours edge = this->edges.get(polySeg[j]);
 
             int next_poly = edge.getFirst()!=poly_index? edge.getFirst() : edge.getSecond();
+            auto find = std::find(previous.begin(), previous.end(), next_poly);
 
-            if(next_poly!=previous) {
+            if(find == previous.end()) {
                 int vertexIndex;
 
                 if(polySeg[j].isInCorner(p, this->points.getList(), vertexIndex)){
@@ -121,7 +122,7 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
 
 int PolygonalMesh::getPolygonInDirection(std::vector<int> index, PointSegment direction) {
     for (int i = 0; i < index.size(); ++i) {
-        NeighbourInfo n = getNeighbour(index[i], direction, -1);
+        NeighbourInfo n = getNeighbour(index[i], direction, std::vector<int>());
         if(utilities::indexOf(index,n.neighbour)<0){
             return index[i];
         }
