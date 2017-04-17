@@ -77,6 +77,8 @@ bool BoundingBox::fitsInsidePolygon(Polygon poly, std::vector<Point> points) {
 }
 
 bool BoundingBox::intersects(BoundingBox box) {
+    XPolyConfig* config = XPolyConfig::instance();
+
     double left1 = this->xMin();
     double left2 = box.xMin();
 
@@ -89,7 +91,12 @@ bool BoundingBox::intersects(BoundingBox box) {
     double down1 = this->yMin();
     double down2 = box.yMin();
 
-    return left1<right2 && right1>left2 && up1<down2 && down1>up2;
+    bool val = left1>right2 || std::abs(left1-right2)<config->getTolerance() ||
+               right1<left2 || std::abs(left2-right1)<config->getTolerance() ||
+               up1<down2 || std::abs(up1-down2)<config->getTolerance() ||
+               down1>up2 || std::abs(up2-down1)<config->getTolerance();
+
+    return !val;
 }
 
 Point BoundingBox::getClosestTo(Point p) {
