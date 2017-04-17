@@ -128,13 +128,14 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
 
         m.splitPolygons(n1, n2, neighbour1, oldP.getList(), newP);
 
-        std::vector<int> affected1 = {index};
-        std::vector<int> affected2 = {(int)(m.getPolygons().size())-1};
+        std::vector<int> affected1 = {m.getPolygon(index).containsPoint(m.getPoints().getList(), this->init.getPoint())?
+                                      index : (int)(m.getPolygons().size())-1};
+        std::vector<int> affected2 = {affected1[0]==index? (int)(m.getPolygons().size())-1 : index };
 
         m.printInFile("beforePreparing.txt");
 
-        std::vector<Point> region1Points = m.getPolygon(index).getPoints(m.getPoints().getList());
-        std::vector<Point> region2Points = m.getPolygon(m.getPolygons().size()-1).getPoints(m.getPoints().getList());
+        std::vector<Point> region1Points = m.getPolygon(affected1[0]).getPoints(m.getPoints().getList());
+        std::vector<Point> region2Points = m.getPolygon(affected2[0]).getPoints(m.getPoints().getList());
 
         this->init.remeshAndAdapt(init_radius, newP, Region(region1Points), affected1, m);
         this->end.remeshAndAdapt(end_radius, newP, Region(region2Points), affected2, m);

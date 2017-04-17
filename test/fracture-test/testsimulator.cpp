@@ -38,11 +38,12 @@ TEST(FractureSimulatorTest, SimulateTest){
 
     PointGenerator generator (functions::constant(), functions::constant());
 
-    square.generateSeedPoints(generator, 8, 8);
+    square.generateSeedPoints(generator, 1, 1);
     std::vector<Point> seeds = square.getSeedPoints();
 
     TriangleMeshGenerator meshGenerator(seeds, square);
     PolygonalMesh mesh = meshGenerator.getMesh();
+    mesh.printInFile("previous.txt");
 
     Crack crack(Point(0.5,1.5), Point(0.8,1.5));
 

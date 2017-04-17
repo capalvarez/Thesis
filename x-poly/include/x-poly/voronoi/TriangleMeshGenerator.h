@@ -36,7 +36,7 @@ private:
     Point getCircumcenter(int triangle, int edge, std::vector<Point>& points);
     void callTriangle(std::vector<Point> &point_list);
     PolygonalMesh delaunayToVoronoi();
-    void writeInputInFile(std::vector<Point> &point_list, Region region, std::vector<int> regionIndex);
+    void writeInputInFile(UniqueList<Point> &point_list, Region region, std::vector<int> regionIndex);
 public:
     TriangleMeshGenerator(std::vector<Point>& point_list, Region region);
     ~TriangleMeshGenerator();
