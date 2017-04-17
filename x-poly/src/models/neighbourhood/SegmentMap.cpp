@@ -45,6 +45,7 @@ void SegmentMap::replace_or_delete(IndexSegment s, int oldNeighbour_current, int
         this->delete_element(s);
         erased[s] = 0;
     } else{
+        n.changeNeighbour(oldNeighbour_old, oldNeighbour_current);
         this->replace_neighbour(s,oldNeighbour_current,newNeighbour);
     }
 }

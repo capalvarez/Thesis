@@ -21,7 +21,7 @@ TEST(BreakableMeshTest, BreakMeshTest){
 
     PointSegment crack(Point(0.25,0.5), Point(2.75,2.5));
     breakableMesh.printInFile("broken.txt");
-    int container = breakableMesh.findContainerPolygon(Point(0.25,0emp.5));
+    int container = breakableMesh.findContainerPolygon(Point(0.25,0.5));
 
     breakableMesh.breakMesh(container, crack);
     breakableMesh.printInFile("broken2.txt");
@@ -54,7 +54,7 @@ TEST(BreakableMeshTest, MergePolygonsTest){
 
     PointGenerator generator (functions::random_double(0,3), functions::random_double(0,3));
 
-    square.generateSeedPoints(generator, 5, 5);
+    square.generateSeedPoints(generator, 9, 9);
     std::vector<Point> seeds = square.getSeedPoints();
 
     TriangleMeshGenerator meshGenerator(seeds, square);

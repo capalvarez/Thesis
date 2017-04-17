@@ -22,7 +22,6 @@ Polygon SimplePolygonMerger::mergePolygons(Polygon p1, Polygon p2, std::vector<P
             poly1_points.erase(std::remove(poly1_points.begin(), poly1_points.end(), index), poly1_points.end());
         }
 
-        Polygon (poly1_points, points);
         return Polygon (poly1_points, points);
     }
 
@@ -91,7 +90,7 @@ Polygon SimplePolygonMerger::mergePolygons(std::vector<int> polygons, std::vecto
             throw std::invalid_argument("Impossible to merge polygons");
         }
 
-        if(mesh.areNeighbours(polygons[i], polygons[j])){
+        if(mesh.areMergeable(mesh.getPolygon(polygons[i]), polygons[j])){
             merged = this->mergePolygons(mesh.getPolygon(polygons[i]), mesh.getPolygon(polygons[j]),points);
             polygons.erase(polygons.begin()+i);
             polygons.erase(polygons.begin()+j);

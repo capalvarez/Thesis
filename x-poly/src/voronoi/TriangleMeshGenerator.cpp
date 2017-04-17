@@ -27,6 +27,8 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list) {
     pointList.push_list(point_list);
     std::vector<int> regionIndex = pointList.push_list(regionPoints);
 
+    writeInputInFile(point_list, this->region, regionIndex);
+
     in.numberofpoints = pointList.size();
     in.pointlist = (REAL*)malloc(in.numberofpoints*2*sizeof(REAL));
     in.numberofpointattributes = 1;
@@ -73,7 +75,7 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list) {
     out.edgelist = (int *) NULL;
     out.edgemarkerlist = (int *) NULL;
 
-    char switches[5] = {'p', 'z', 'e', 'D', 'Q'};
+    char switches[] = "pzeDQ";
     triangulate(switches, &in, &out, (struct triangulateio *)NULL);
 
     for(int i=0;i<out.numberofpoints;i++){
@@ -249,6 +251,28 @@ Point TriangleMeshGenerator::getCircumcenter(int triangle, int edge, std::vector
     }
 }
 
+void
+TriangleMeshGenerator::writeInputInFile(std::vector<Point> &point_list, Region region, std::vector<int> regionIndex) {
+    std::string path = utilities::getPath();
+    path +=  "toTriangle.txt";
+
+    std::ofstream file;
+    file.open(path, std::ios::out);
+
+    file << point_list.size() + " 2 0 0" << std::endl;
+    for (int i = 0; i < point_list.size(); ++i) {
+        file << i + " " + point_list[i].getString() << std::endl;
+    }
+
+    std::vector<IndexSegment> segments;
+    region.getSegments(segments);
+
+    file << segments.size() + " 0" << std::endl;
+    for (int i = 0; i < segments.size(); ++i) {
+        file << i + " " +  regionIndex[segments[i].getFirst()] + regionIndex[segments[i].getSecond()]<< std::endl;
+    }
+
+}
 
 
 
