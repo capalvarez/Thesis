@@ -20,6 +20,8 @@ public:
     UniqueList<Point> getPoints() const;
 
     bool isFull();
+
+    Point getPoint(int i);
 };
 
 

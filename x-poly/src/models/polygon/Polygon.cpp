@@ -486,17 +486,21 @@ Pair<int> Polygon::segmentNotContained(std::vector<IndexSegment> s) {
 }
 
 bool Polygon::containsEdge(IndexSegment s) {
+    int n = this->numberOfSides();
+
     int i = utilities::indexOf(this->points, s.getFirst());
     int j = utilities::indexOf(this->points, s.getSecond());
 
-    return i!=-1 && j!=-1 && std::abs(i-j)==1;
+    return i!=-1 && j!=-1 && (std::abs(i-j)==1 || std::abs(i-j)==(n-1));
 }
 
 void Polygon::insertOnSegment(IndexSegment segment, int point) {
+    int n = this->numberOfSides();
+
     int i = utilities::indexOf(this->points, segment.getFirst());
     int j = utilities::indexOf(this->points, segment.getSecond());
 
-    if(i!=-1 && j!=-1 && std::abs(i-j)==1){
+    if(i!=-1 && j!=-1 && (std::abs(i-j)==1 || std::abs(i-j)==(n-1))){
         this->points.insert(this->points.begin()+i, point);
     }
 }

@@ -1,6 +1,7 @@
 #include <fracture/crack/Crack.h>
 #include <fracture/config/FractureConfig.h>
 #include <fracture/geometry/mesh/SimplePolygonMerger.h>
+#include <fracture/geometry/mesh/RemeshAdapter.h>
 
 Crack::Crack() {}
 
@@ -43,9 +44,7 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
 
         int index = m.mergePolygons(neighbours.getList());
         Polygon ring = m.getPolygon(index);
-
-        m.printInFile("afterMerging.txt");
-        m.getSegments().printInFile("afterMergingEdges.txt");
+        std::vector<int> unused = m.getUnusedPoints(neighbours.getList(), ring.getPoints());
 
         Point init_last = this->init.getPoint();
         double init_radius = this->init.StandardRadius;
@@ -58,8 +57,6 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                             Point(end_last.getX()+this->end.StandardRadius, end_last.getY()+this->end.StandardRadius));
 
         FractureConfig* config = FractureConfig::instance();
-
-
         while(!init_box.fitsInsidePolygon(ring, points.getList())) {
             init_radius = config->getRatio()*init_radius;
 
@@ -137,9 +134,9 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         std::vector<Point> region1Points = m.getPolygon(affected1[0]).getPoints(m.getPoints().getList());
         std::vector<Point> region2Points = m.getPolygon(affected2[0]).getPoints(m.getPoints().getList());
 
-        this->init.remeshAndAdapt(init_radius, newP, Region(region1Points), affected1, m);
+        this->init.remeshAndAdapt(init_radius, newP, Region(region1Points), affected1, m, unused);
         m.printInFile("onePrepared.txt");
-        this->end.remeshAndAdapt(end_radius, newP, Region(region2Points), affected2, m);
+        this->end.remeshAndAdapt(end_radius, newP, Region(region2Points), affected2, m, std::vector<int>());
 
         for(int i: affected1){
             oldP.push_back(m.getPolygon(i));
@@ -150,6 +147,7 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         }
     }else{
         this->prepareTip(this->init, oldP, newP, m);
+        m.printInFile("onePrepared.txt");
         this->prepareTip(this->end, oldP, newP, m);
     }
 

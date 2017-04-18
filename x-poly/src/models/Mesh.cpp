@@ -42,3 +42,7 @@ UniqueList <Point> Mesh::getPoints() const {
 bool Mesh::isFull() {
     return this->points.size()>0;
 }
+
+Point Mesh::getPoint(int i) {
+    return this->points[i];
+}

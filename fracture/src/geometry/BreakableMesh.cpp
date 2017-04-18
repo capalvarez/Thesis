@@ -48,7 +48,6 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
         }
 
         splitPolygons(n1, n2, init, oldPolygons, newPolygons);
-        this->printInFile("after_first.txt");
 
         // Iterate
         init = n1.neighbour;
@@ -292,4 +291,19 @@ bool BreakableMesh::areMergeable(Polygon poly1, int poly2) {
     }
 
     return exited_once || last_was_neighbour;
+}
+
+std::vector<int> BreakableMesh::getUnusedPoints(std::vector<int> polys, std::vector<int> merged) {
+    UniqueList<int> all;
+    for (int p : polys) {
+        all.push_list(getPolygon(p).getPoints());
+    }
+
+    std::vector<int> allPoints = all.getList();
+
+    for (int i : merged) {
+        allPoints.erase(std::remove(allPoints.begin(), allPoints.end(), i), allPoints.end() );
+    }
+
+    return allPoints;
 }

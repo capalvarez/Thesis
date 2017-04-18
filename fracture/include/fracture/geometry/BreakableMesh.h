@@ -19,6 +19,7 @@ public:
     void mergePolygons(int i1, int i2);
     int mergePolygons(std::vector<int> polys);
     bool areMergeable(Polygon poly1, int poly2);
+    std::vector<int> getUnusedPoints(std::vector<int> polys, std::vector<int> merged);
 };
 
 
