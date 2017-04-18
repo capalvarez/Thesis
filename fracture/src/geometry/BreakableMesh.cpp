@@ -33,6 +33,7 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
         Polygon& poly1 = getPolygon(n1.neighbour);
 
         if(poly1.containsPoint(this->points.getList(), crack.getSecond())){
+            this->edges.printInFile("edges.txt");
             return PolygonChangeData(oldPolygons, newPolygons, n1.neighbour);
         }
 
@@ -54,6 +55,8 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
         n1 = n2;
         last = this->polygons.size()-1;
     }
+
+
 }
 
 void BreakableMesh::swapPolygons(int first, int last, std::unordered_map<IndexSegment,int,SegmentHasher> &toIgnore) {
@@ -161,11 +164,8 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo n2, int init, 
     std::vector<int> poly1_points = poly1.getPoints();
 
     //Include new points on the mesh
-    this->points.push_back(n1.intersection);
-    this->points.push_back(n2.intersection);
-
-    int p1 = this->points.size()-2;
-    int p2 = this->points.size()-1;
+    int p1 = this->points.push_back(n1.intersection);
+    int p2 = this->points.push_back(n2.intersection);
 
     //Split the old polygon and generate new ones
     std::vector<int> new1 = {p1, p2};
@@ -256,10 +256,10 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo n2, int init, 
         this->edges.replace_neighbour(segments2[i], n1.neighbour, new_index2);
     }
 
-    this->edges.insert(IndexSegment(p1,n1.edge.getFirst()), init);
-    this->edges.insert(IndexSegment(p1,n1.edge.getSecond()), init);
-    this->edges.insert(IndexSegment(p2,n2.edge.getFirst()), n2.neighbour);
-    this->edges.insert(IndexSegment(p2,n2.edge.getSecond()), n2.neighbour);
+    this->edges.insert_if_null(IndexSegment(p1,n1.edge.getFirst()),init);
+    this->edges.insert_if_null(IndexSegment(p1,n1.edge.getSecond()), init);
+    this->edges.insert_if_null(IndexSegment(p2,n2.edge.getFirst()), n2.neighbour);
+    this->edges.insert_if_null(IndexSegment(p2,n2.edge.getSecond()), n2.neighbour);
 }
 
 bool BreakableMesh::areMergeable(Polygon poly1, int poly2) {

@@ -36,7 +36,7 @@ void SegmentMap::replace_or_delete(IndexSegment s, int oldNeighbour_current, int
         return;
     }
 
-    Neighbours n = get(s);
+    Neighbours& n = get(s);
     n.changeNeighbour(oldNeighbour_current, oldNeighbour_old);
 
     auto iter = map.find(n);
@@ -79,4 +79,15 @@ void SegmentMap::printInFile(std::string fileName) {
     }
 
     file.close();
+}
+
+void SegmentMap::insert_if_null(IndexSegment s, int index) {
+    std::unordered_map<IndexSegment,Neighbours,SegmentHasher>::iterator got = this->map.find(s);
+
+    if(got != this->map.end()){
+        Neighbours& n = got->second;
+        if(n.isNeighbour(-1)){
+            n.changeNeighbour(-1, index);
+        }
+    }
 }
