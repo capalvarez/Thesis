@@ -9,17 +9,20 @@ struct NeighbourInfo {
     Point intersection;
     IndexSegment edge;
     bool isEdge;
+    int extraPoint;
 
     NeighbourInfo(int n, IndexSegment e, Point i, bool is){
         neighbour = n;
         edge = e;
         intersection = i;
         isEdge = is;
+        extraPoint = -1;
     }
 
     void orderCCW(std::vector<Point> points, Point center){
         edge.orderCCW(points, center);
     }
+
 };
 
 #endif 

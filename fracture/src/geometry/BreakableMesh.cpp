@@ -28,12 +28,12 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
     }
 
     int last = -1;
+    int i = 0;
 
     while(true){
         Polygon& poly1 = getPolygon(n1.neighbour);
 
         if(poly1.containsPoint(this->points.getList(), crack.getSecond())){
-            this->edges.printInFile("edges.txt");
             return PolygonChangeData(oldPolygons, newPolygons, n1.neighbour);
         }
 
@@ -51,9 +51,16 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
         splitPolygons(n1, n2, init, oldPolygons, newPolygons);
 
         // Iterate
+        last = this->polygons.size()-1;
         init = n1.neighbour;
         n1 = n2;
-        last = this->polygons.size()-1;
+
+        std::string file("edges");
+        file += utilities::toString<int>(i) + ".txt";
+
+        this->edges.printInFile(file);
+
+        i++;
     }
 
 
@@ -158,7 +165,7 @@ int BreakableMesh::mergePolygons(std::vector<int> polys) {
 }
 
 
-void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo n2, int init, std::vector<Polygon> &oldPolygons,
+void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init, std::vector<Polygon> &oldPolygons,
                                   std::vector<Polygon> &newPolygons) {
     Polygon& poly1 = getPolygon(n1.neighbour);
     std::vector<int> poly1_points = poly1.getPoints();
@@ -187,7 +194,7 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo n2, int init, 
     bool edgePointsPassed = false;
 
     while(true){
-        if(point==n1.edge.getFirst() || point==n1.edge.getSecond()) {
+        if(point==n1.edge.getFirst() || point==n1.edge.getSecond() || point==n1.extraPoint) {
             if (edgePointsPassed){
                 break;
             } else{
@@ -212,7 +219,10 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo n2, int init, 
             }
         }
 
-        new2.push_back(point);
+        if(point!= p1 && point!=p2){
+            new2.push_back(point);
+        }
+
         point = poly1_points[(indexOfStart+1)%poly1_points.size()];
 
         indexOfStart++;
@@ -260,6 +270,9 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo n2, int init, 
     this->edges.insert_if_null(IndexSegment(p1,n1.edge.getSecond()), init);
     this->edges.insert_if_null(IndexSegment(p2,n2.edge.getFirst()), n2.neighbour);
     this->edges.insert_if_null(IndexSegment(p2,n2.edge.getSecond()), n2.neighbour);
+
+    n2.extraPoint = p2;
+
 }
 
 bool BreakableMesh::areMergeable(Polygon poly1, int poly2) {
