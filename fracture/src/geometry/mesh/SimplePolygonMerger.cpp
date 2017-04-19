@@ -54,7 +54,7 @@ Polygon SimplePolygonMerger::mergePolygons(Polygon p1, Polygon p2, std::vector<P
         second_2 = firstPointIndex_p2;
     }
 
-    if(!p1.isVertex(poly2_points[(first_2+1)%p1.numberOfSides()])) {
+    if(!p1.isVertex(poly2_points[(first_2+1)%p2.numberOfSides()])) {
         int tmp = first_2;
         first_2 = second_2;
         second_2 = tmp;

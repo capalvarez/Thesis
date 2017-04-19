@@ -55,11 +55,6 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
         init = n1.neighbour;
         n1 = n2;
 
-        std::string file("edges");
-        file += utilities::toString<int>(i) + ".txt";
-
-        this->edges.printInFile(file);
-
         i++;
     }
 
