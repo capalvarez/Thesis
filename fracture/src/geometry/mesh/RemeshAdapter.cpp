@@ -3,41 +3,36 @@
 #include <fracture/geometry/mesh/SimplePolygonMerger.h>
 #include <fracture/geometry/mesh/structures/IndexSegmentHasher.h>
 
-RemeshAdapter::RemeshAdapter(Region region) {
-    this->region = region;
+RemeshAdapter::RemeshAdapter(Polygon poly, int index) {
+    this->region = poly;
+    this->regionIndex = index;
 }
 
-RemeshAdapter::RemeshAdapter(Polygon poly, BreakableMesh mesh) {
-    this->region = Region(poly, mesh.getPoints().getList());
-}
-
-RemeshAdapter::RemeshAdapter(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh mesh) {
+RemeshAdapter::RemeshAdapter(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh &mesh) {
     std::vector<int> involved;
 
     this->region = computeRemeshRegion(remeshPolygons, points, mesh, involved);
 }
 
-RemeshAdapter::RemeshAdapter(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh mesh,
+RemeshAdapter::RemeshAdapter(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh &mesh,
                              std::vector<int> &involved) {
     this->region = computeRemeshRegion(remeshPolygons, points, mesh, involved);
 }
 
-Region RemeshAdapter::computeRemeshRegion(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh mesh,
-                                          std::vector<int> &involved) {
-    SimplePolygonMerger merger;
+Polygon RemeshAdapter::computeRemeshRegion(std::vector<int> remeshPolygons, std::vector<Point> points,
+                                          BreakableMesh &mesh, std::vector<int> &involved) {
+    this->regionIndex = mesh.mergePolygons(remeshPolygons);
 
-    Polygon merged = merger.mergePolygons(remeshPolygons, points, mesh);
+    Polygon merged = mesh.getPolygon(this->regionIndex);
     std::vector<int> mergedPoints = merged.getPoints();
 
     involved.assign(mergedPoints.begin(), mergedPoints.end());
-    std::vector<Point> containerPoints = merged.getPoints(points);
 
-    return  Region (containerPoints);
+    return  merged;
 }
 
 std::vector<Polygon>
-RemeshAdapter::adaptToMesh(Triangulation triangulation, std::vector<int> changedPolygons, PolygonalMesh &mesh,
-                           std::unordered_map<int, int> pointMap) {
+RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std::unordered_map<int, int> pointMap) {
     std::unordered_map<int,std::unordered_map<IndexSegment,std::vector<IndexSegment>,IndexSegmentHasher>> changesInNeighbours;
     std::vector<Polygon> newPolygons;
 
@@ -48,9 +43,7 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, std::vector<int> changed
     std::vector<Triangle> triangles = triangulation.getTriangles();
 
     std::vector<IndexSegment> containerSegments;
-    for (int l = 0; l < changedPolygons.size(); ++l) {
-        mesh.getPolygon(changedPolygons[l]).getSegments(containerSegments);
-    }
+    mesh.getPolygon(this->regionIndex).getSegments(containerSegments);
 
     for (int i = 0; i < triangles.size() ; ++i) {
         std::vector<int> oldTrianglePoints = triangles[i].getPoints();
@@ -65,9 +58,9 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, std::vector<int> changed
         Polygon newPolygon =  Polygon(newTrianglePoints, mesh.getPoints().getList());
         int index;
 
-        if(i<changedPolygons.size()){
-            meshPolygons[changedPolygons[i]] = newPolygon;
-            index = changedPolygons[i];
+        if(i<1){
+            meshPolygons[this->regionIndex] = newPolygon;
+            index = this->regionIndex;
         }else{
             meshPolygons.push_back(newPolygon);
             index = meshPolygons.size() - 1;
@@ -83,12 +76,11 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, std::vector<int> changed
             if(originalEdge.isBoundary(triangulation.getPoints())){
                 for (int k = 0; k < containerSegments.size(); ++k) {
                     if(containerSegments[k].contains(meshPoints.getList(),edge)){
-                        Neighbours n = segments.get(containerSegments[k]);
+                        Neighbours neighbours = segments.get(containerSegments[k]);
 
-                        bool is_first = std::find(changedPolygons.begin(), changedPolygons.end(), n.getFirst())
-                                        != changedPolygons.end();
+                        bool is_first = neighbours.getFirst() == this->regionIndex;
 
-                        int otherNeighbour = is_first? n.getSecond() : n.getFirst();
+                        int otherNeighbour = is_first? neighbours.getSecond() : neighbours.getFirst();
 
                         segments.insert(edge, index);
                         segments.insert(edge, otherNeighbour);
@@ -118,7 +110,7 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, std::vector<int> changed
 }
 
 Triangulation RemeshAdapter::triangulate(std::vector<Point> points) {
-    TriangleMeshGenerator generator(points, region);
+    TriangleMeshGenerator generator(points, Region(region));
     Triangulation triangulation = generator.getDelaunayTriangulation();
 
     return triangulation;
@@ -136,16 +128,15 @@ std::unordered_map<int, int> RemeshAdapter::includeNewPoints(UniqueList<Point> &
     return pointMap;
 }
 
-std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, std::vector<int> changedPolygons, PolygonalMesh &m) {
+std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, PolygonalMesh &m) {
     std::vector<int> indexes;
     Triangulation t = this->triangulate(points);
-    t.printInFile("testing.txt");
 
     std::unordered_map<int,int> pointMap = this->includeNewPoints(m.getPoints(), t);
 
-    return adaptToMesh(t, changedPolygons, m, pointMap);
+    return adaptToMesh(t, m, pointMap);
 }
 
-Region RemeshAdapter::getRegion() {
+Polygon RemeshAdapter::getRegion() {
     return this->region;
 }
