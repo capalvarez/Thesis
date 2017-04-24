@@ -2,7 +2,7 @@
 #define THESIS_SIMPLEPOLYGONMERGER_H
 
 #include <fracture/geometry/mesh/PolygonMerger.h>
-#include "../../../../../utilities/include/utilities/Pair.h"
+#include <utilities/Pair.h>
 
 class SimplePolygonMerger: public PolygonMerger{
 public:

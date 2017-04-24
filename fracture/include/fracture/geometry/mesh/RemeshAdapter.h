@@ -21,10 +21,11 @@ public:
                   std::vector<int> &involved);
 
     std::vector<Polygon> adaptToMesh(Triangulation triangulation, BreakableMesh &m, std::unordered_map<int, int> pointMap);
-    Triangulation triangulate(std::vector<Point> points);
+    Triangulation triangulate(std::vector<Point> points, BreakableMesh mesh);
     std::unordered_map<int, int> includeNewPoints(UniqueList<Point> &meshPoints, Triangulation triangulation);
-    std::vector<Polygon> remesh(std::vector<Point> points, PolygonalMesh &m);
+    std::vector<Polygon> remesh(std::vector<Point> points, BreakableMesh &m);
     Polygon getRegion();
+    int getRegionIndex();
 };
 
 

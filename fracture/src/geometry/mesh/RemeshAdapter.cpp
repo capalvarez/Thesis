@@ -66,7 +66,6 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
             index = meshPolygons.size() - 1;
         }
 
-        //TODO: Check if this does what it needs to
         newPolygons.push_back(newPolygon);
 
         for (int j = 0; j < n; ++j) {
@@ -85,7 +84,7 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
                         segments.insert(edge, index);
                         segments.insert(edge, otherNeighbour);
 
-                        std::unordered_map<IndexSegment,std::vector<IndexSegment>,IndexSegmentHasher> polyInfo =
+                        std::unordered_map<IndexSegment,std::vector<IndexSegment>,IndexSegmentHasher>& polyInfo =
                                 changesInNeighbours[otherNeighbour];
                         polyInfo[containerSegments[k]].push_back(edge);
 
@@ -109,8 +108,8 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
     return newPolygons;
 }
 
-Triangulation RemeshAdapter::triangulate(std::vector<Point> points) {
-    TriangleMeshGenerator generator(points, Region(region));
+Triangulation RemeshAdapter::triangulate(std::vector<Point> points, BreakableMesh mesh) {
+    TriangleMeshGenerator generator(points, Region(region, mesh.getPoints().getList()));
     Triangulation triangulation = generator.getDelaunayTriangulation();
 
     return triangulation;
@@ -128,9 +127,9 @@ std::unordered_map<int, int> RemeshAdapter::includeNewPoints(UniqueList<Point> &
     return pointMap;
 }
 
-std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, PolygonalMesh &m) {
+std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, BreakableMesh &m) {
     std::vector<int> indexes;
-    Triangulation t = this->triangulate(points);
+    Triangulation t = this->triangulate(points, m);
 
     std::unordered_map<int,int> pointMap = this->includeNewPoints(m.getPoints(), t);
 
@@ -139,4 +138,8 @@ std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, PolygonalM
 
 Polygon RemeshAdapter::getRegion() {
     return this->region;
+}
+
+int RemeshAdapter::getRegionIndex() {
+    return this->regionIndex;
 }

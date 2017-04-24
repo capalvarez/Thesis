@@ -1,7 +1,5 @@
 #include <fracture/crack/Crack.h>
 #include <fracture/config/FractureConfig.h>
-#include <fracture/geometry/mesh/SimplePolygonMerger.h>
-#include <fracture/geometry/mesh/RemeshAdapter.h>
 
 Crack::Crack() {}
 
@@ -125,26 +123,18 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
 
         m.splitPolygons(n1, n2, neighbour1, oldP.getList(), newP);
 
-        std::vector<int> affected1 = {m.getPolygon(index).containsPoint(m.getPoints().getList(), this->init.getPoint())?
-                                      index : (int)(m.getPolygons().size())-1};
-        std::vector<int> affected2 = {affected1[0]==index? (int)(m.getPolygons().size())-1 : index };
+        int poly1 = m.getPolygon(index).containsPoint(m.getPoints().getList(), this->init.getPoint())?
+                    index : (int)(m.getPolygons().size())-1;
+        int poly2 = poly1==index? (int)(m.getPolygons().size())-1 : index;
 
         m.printInFile("beforePreparing.txt");
 
-        std::vector<Point> region1Points = m.getPolygon(affected1[0]).getPoints(m.getPoints().getList());
-        std::vector<Point> region2Points = m.getPolygon(affected2[0]).getPoints(m.getPoints().getList());
-
-        this->init.remeshAndAdapt(init_radius, newP, Region(region1Points), affected1, m, unused);
+        this->init.remeshAndAdapt(init_radius, newP, poly1, m, unused);
         m.printInFile("onePrepared.txt");
-        this->end.remeshAndAdapt(end_radius, newP, Region(region2Points), affected2, m, std::vector<int>());
+        this->end.remeshAndAdapt(end_radius, newP, poly2, m, std::vector<int>());
 
-        for(int i: affected1){
-            oldP.push_back(m.getPolygon(i));
-        }
-
-        for(int i: affected2){
-            oldP.push_back(m.getPolygon(i));
-        }
+        oldP.push_back(m.getPolygon(poly1));
+        oldP.push_back(m.getPolygon(poly2));
     }else{
         this->prepareTip(this->init, oldP, newP, m);
         m.printInFile("onePrepared.txt");
