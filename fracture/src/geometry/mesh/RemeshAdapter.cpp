@@ -98,6 +98,9 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
     }
 
     for(auto value: changesInNeighbours){
+        if(value.first<0)
+            continue;
+
         Polygon& poly = meshPolygons[value.first];
 
         for(auto s: value.second){

@@ -21,7 +21,7 @@ Region::Region(const Polygon &other, std::vector<Point>& points) : Polygon() {
         this->p.push_back(points[otherPoints[i]]);
     }
 
-    Polygon(this->p);
+    Polygon::mutate(this->p);
 }
 
 
