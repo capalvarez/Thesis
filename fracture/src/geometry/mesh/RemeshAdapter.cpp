@@ -91,6 +91,9 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
                         break;
                     }
                 }
+
+            //ToDO: Quickfix for border case
+                segments.insert(edge, index);
             }else{
                 segments.insert(edge,index);
             }
