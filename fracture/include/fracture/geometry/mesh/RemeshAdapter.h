@@ -9,22 +9,23 @@
 
 class RemeshAdapter {
 private:
-    Region region;
+    Polygon region;
+    int regionIndex;
 
-    Region computeRemeshRegion(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh mesh,
-                                   std::vector<int> &involved);
+    Polygon computeRemeshRegion(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh &mesh,
+                               std::vector<int> &involved);
 public:
-    RemeshAdapter(Region region);
-    RemeshAdapter(Polygon poly, BreakableMesh mesh);
-    RemeshAdapter(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh mesh);
-    RemeshAdapter(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh mesh, std::vector<int>& involved);
+    RemeshAdapter(Polygon poly, int index);
+    RemeshAdapter(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh &mesh);
+    RemeshAdapter(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh &mesh,
+                  std::vector<int> &involved);
 
-    std::vector<Polygon> adaptToMesh(Triangulation triangulation, std::vector<int> changedPolygons, PolygonalMesh &m,
-                                         std::unordered_map<int, int> pointMap);
-    Triangulation triangulate(std::vector<Point> points);
+    std::vector<Polygon> adaptToMesh(Triangulation triangulation, BreakableMesh &m, std::unordered_map<int, int> pointMap);
+    Triangulation triangulate(std::vector<Point> points, std::vector<Point> meshPoints);
     std::unordered_map<int, int> includeNewPoints(UniqueList<Point> &meshPoints, Triangulation triangulation);
-    std::vector<Polygon> remesh(std::vector<Point> points, std::vector<int> changedPolygons, PolygonalMesh &m);
-    Region getRegion();
+    std::vector<Polygon> remesh(std::vector<Point> points, BreakableMesh &m);
+    Polygon getRegion();
+    int getRegionIndex();
 };
 
 

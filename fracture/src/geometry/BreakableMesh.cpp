@@ -301,17 +301,20 @@ bool BreakableMesh::areMergeable(Polygon poly1, int poly2) {
     return exited_once || last_was_neighbour;
 }
 
-std::vector<int> BreakableMesh::getUnusedPoints(std::vector<int> polys, std::vector<int> merged) {
-    UniqueList<int> all;
-    for (int p : polys) {
-        all.push_list(getPolygon(p).getPoints());
-    }
-
-    std::vector<int> allPoints = all.getList();
-
+std::vector<int> BreakableMesh::getUnusedPoints(std::vector<int> allPoints, std::vector<int> merged) {
     for (int i : merged) {
         allPoints.erase(std::remove(allPoints.begin(), allPoints.end(), i), allPoints.end() );
     }
 
     return allPoints;
+}
+
+std::vector<int> BreakableMesh::getAllPoints(std::vector<int> polys) {
+    UniqueList<int> all;
+    for (int p : polys) {
+        Polygon poly = getPolygon(p);
+        all.push_list(poly.getPoints());
+    }
+
+    return all.getList();
 }
