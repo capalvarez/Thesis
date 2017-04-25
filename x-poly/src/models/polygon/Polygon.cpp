@@ -234,7 +234,7 @@ std::vector<int> &Polygon::getPoints() {
     return this->points;
 }
 
-int Polygon::numberOfSides() {
+int Polygon::numberOfSides() const{
     return (int) points.size();
 }
 

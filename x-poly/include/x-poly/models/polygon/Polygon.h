@@ -35,7 +35,7 @@ public:
     std::vector<int> getPoints() const;
     std::vector<int>& getPoints();
     std::vector<Point> getPoints(std::vector<Point> p);
-    int numberOfSides();
+    int numberOfSides() const;
     bool operator==(const Polygon& other) const;
     bool operator<(const Polygon& other) const;
     std::string getString();

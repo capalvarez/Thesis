@@ -14,9 +14,11 @@ Region::~Region() {}
 
 Region::Region() : Polygon(){}
 
-Region::Region(const Polygon &other, std::vector<Point> points) : Polygon() {
-    for (int i = 0; i < this->points.size(); ++i) {
-        this->p.push_back(points[this->points[i]]);
+Region::Region(const Polygon &other, std::vector<Point>& points) : Polygon() {
+    std::vector<int> otherPoints = other.getPoints();
+
+    for (int i = 0; i < other.numberOfSides(); ++i) {
+        this->p.push_back(points[otherPoints[i]]);
     }
 
     Polygon(this->p);

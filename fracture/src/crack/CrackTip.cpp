@@ -133,7 +133,7 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
 
     RemeshAdapter remesher(mesh.getPolygon(region), region);
 
-    Triangulation t = remesher.triangulate(points, BreakableMesh());
+    Triangulation t = remesher.triangulate(points, mesh.getPoints().getList());
     std::unordered_map<int,int> pointMap = remesher.includeNewPoints(mesh.getPoints(), t);
 
     mesh.printInFile("beforeAdapt.txt");

@@ -108,8 +108,9 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
     return newPolygons;
 }
 
-Triangulation RemeshAdapter::triangulate(std::vector<Point> points, BreakableMesh mesh) {
-    TriangleMeshGenerator generator(points, Region(region, mesh.getPoints().getList()));
+Triangulation RemeshAdapter::triangulate(std::vector<Point> points, std::vector<Point> meshPoints) {
+    Region r (region, meshPoints);
+    TriangleMeshGenerator generator(points, r);
     Triangulation triangulation = generator.getDelaunayTriangulation();
 
     return triangulation;
@@ -129,7 +130,7 @@ std::unordered_map<int, int> RemeshAdapter::includeNewPoints(UniqueList<Point> &
 
 std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, BreakableMesh &m) {
     std::vector<int> indexes;
-    Triangulation t = this->triangulate(points, m);
+    Triangulation t = this->triangulate(points, m.getPoints().getList());
 
     std::unordered_map<int,int> pointMap = this->includeNewPoints(m.getPoints(), t);
 
