@@ -2,6 +2,7 @@
 #include <x-poly/voronoi/TriangleMeshGenerator.h>
 #include <fracture/geometry/mesh/SimplePolygonMerger.h>
 #include <fracture/geometry/mesh/structures/IndexSegmentHasher.h>
+#include <veamy/models/constraints/structures/Angle.h>
 
 RemeshAdapter::RemeshAdapter(Polygon poly, int index) {
     this->region = poly;
@@ -45,6 +46,15 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
     std::vector<IndexSegment> containerSegments;
     mesh.getPolygon(this->regionIndex).getSegments(containerSegments);
 
+    std::map<Angle,std::vector<IndexSegment>> containerSegmentsMap;
+
+    for (IndexSegment s: containerSegments) {
+        Angle angle = s.cartesianAngle(meshPoints.getList());
+
+        std::vector<IndexSegment>& v = containerSegmentsMap[angle];
+        v.push_back(s);
+    }
+
     for (int i = 0; i < triangles.size() ; ++i) {
         std::vector<int> oldTrianglePoints = triangles[i].getPoints();
         int n = oldTrianglePoints.size();
@@ -73,9 +83,12 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
             IndexSegment originalEdge(oldTrianglePoints[j],oldTrianglePoints[(j+1)%n]);
 
             if(originalEdge.isBoundary(triangulation.getPoints())){
-                for (int k = 0; k < containerSegments.size(); ++k) {
-                    if(containerSegments[k].contains(meshPoints.getList(),edge)){
-                        Neighbours neighbours = segments.get(containerSegments[k]);
+                Angle a = edge.cartesianAngle(meshPoints.getList());
+                std::vector<IndexSegment> containerCandidates = containerSegmentsMap[a];
+
+                for (int k = 0; k < containerCandidates.size(); ++k) {
+                    if(containerCandidates[k].contains(meshPoints.getList(),edge)){
+                        Neighbours neighbours = segments.get(containerCandidates[k]);
 
                         bool is_first = neighbours.getFirst() == this->regionIndex;
 
@@ -86,7 +99,7 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
 
                         std::unordered_map<IndexSegment,std::vector<IndexSegment>,IndexSegmentHasher>& polyInfo =
                                 changesInNeighbours[otherNeighbour];
-                        polyInfo[containerSegments[k]].push_back(edge);
+                        polyInfo[containerCandidates[k]].push_back(edge);
 
                         break;
                     }
