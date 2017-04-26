@@ -45,7 +45,7 @@ TEST(FractureSimulatorTest, SimulateTest){
     PolygonalMesh mesh = meshGenerator.getMesh();
     mesh.printInFile("previous.txt");
 
-    Crack crack(Point(1.5, 0.214286), Point(1.5, 3.1));
+    Crack crack(Point(1.5, 0.214286), Point(1.5, 3.0));
 
     class Sum : public BodyForce{
     private:

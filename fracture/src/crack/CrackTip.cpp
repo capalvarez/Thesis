@@ -27,6 +27,7 @@ CrackTip::CrackTip(const CrackTip &t) {
     this->container_polygon = t.container_polygon;
     this->crackAngle = t.crackAngle;
     this->crackPath = t.crackPath;
+    this->hasFinished = t.hasFinished;
 }
 
 double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
@@ -171,6 +172,11 @@ void CrackTip::reassignContainer(BreakableMesh& mesh) {
              if(mesh.getPoint(container_edge.getSecond())==this->getPoint()){
                  vertexIndex = container_edge.getSecond();
              }
+        }
+
+        if(mesh.getPoint(vertexIndex).isInBoundary()){
+            this->hasFinished = true;
+            return;
         }
 
         if(vertexIndex!=-1){

@@ -31,8 +31,10 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
     std::vector<Polygon> newP;
     UniqueList<Point> points = m.getPoints();
 
-    if(this->init.container_polygon  == this->end.container_polygon ||
-       m.polygonsTouch(this->init.container_polygon, this->end.container_polygon)){
+    bool bothAreGrowing = !this->init.hasFinished && !this->end.hasFinished;
+
+    if(bothAreGrowing && (this->init.container_polygon  == this->end.container_polygon ||
+                          m.polygonsTouch(this->init.container_polygon, this->end.container_polygon))){
         UniqueList<int> neighbours;
         this->init.getDirectNeighbours(this->init.container_polygon, m, neighbours);
         this->end.getDirectNeighbours(this->end.container_polygon, m, neighbours);
@@ -137,7 +139,6 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         oldP.push_back(m.getPolygon(poly2));
     }else{
         this->prepareTip(this->init, oldP, newP, m);
-        m.printInFile("onePrepared.txt");
         this->prepareTip(this->end, oldP, newP, m);
     }
 
