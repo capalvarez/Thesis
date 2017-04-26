@@ -24,7 +24,7 @@ public:
     PolygonChangeData prepareTip(BreakableMesh &m);
     bool isFinished();
 
-    PolygonChangeData initializeCrack(BreakableMesh &mesh);
+    void initializeCrack(BreakableMesh &mesh);
 };
 
 

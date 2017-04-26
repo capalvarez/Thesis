@@ -7,7 +7,7 @@ FractureConfig::FractureConfig() {
     this->double_comparison_tolerance = 0.001;
     this->crack_growth_speed = 0.1;
     this->crack_size_ratio = 0.5;
-    this->rossette_angle = 45;
+    this->rosette_angle = 45;
     this->max_iterations = 100;
 }
 
@@ -27,7 +27,7 @@ void FractureConfig::setCrackRatio(double r) {
 }
 
 void FractureConfig::setRosetteAngle(double a) {
-    this->rossette_angle = a;
+    this->rosette_angle = a;
 }
 
 void FractureConfig::setMaxIterations(int i) {
@@ -47,7 +47,7 @@ double FractureConfig::getRatio() {
 }
 
 double FractureConfig::getRosetteAngle() {
-    return this->rossette_angle;
+    return this->rosette_angle;
 }
 
 int FractureConfig::getMaxIterations() {

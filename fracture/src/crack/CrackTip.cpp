@@ -163,12 +163,41 @@ void CrackTip::reassignContainer(BreakableMesh& mesh) {
     IndexSegment container_edge = poly.containerEdge(mesh.getPoints().getList(), this->getPoint());
 
     if(container_edge.getFirst()!=-1){
-        SegmentMap edges = mesh.getSegments();
-        Neighbours n = edges.get(container_edge);
+        int vertexIndex = -1;
 
-        int other = n.getFirst()==container? n.getSecond() : n.getFirst();
+        if(mesh.getPoint(container_edge.getFirst())==this->getPoint() ){
+            vertexIndex = container_edge.getFirst();
+        }else{
+             if(mesh.getPoint(container_edge.getSecond())==this->getPoint()){
+                 vertexIndex = container_edge.getSecond();
+             }
+        }
 
-        mesh.mergePolygons(container, other);
+        if(vertexIndex!=-1){
+            UniqueList<int> neighbours;
+            this->getDirectNeighbours(container, mesh, neighbours);
+
+            std::vector<int> vertexContainers;
+            for (int i = 0; i < neighbours.size(); ++i) {
+                Polygon neighbour = mesh.getPolygon(neighbours[i]);
+
+                if(neighbour.isVertex(vertexIndex)){
+                    vertexContainers.push_back(neighbours[i]);
+                }
+            }
+
+            int index = mesh.mergePolygons(vertexContainers);
+            this->container_polygon = index;
+
+            return;
+        }else{
+            SegmentMap edges = mesh.getSegments();
+            Neighbours n = edges.get(container_edge);
+
+            int other = n.getFirst()==container? n.getSecond() : n.getFirst();
+
+            mesh.mergePolygons(container, other);
+        }
     }
 
     this->container_polygon = container;

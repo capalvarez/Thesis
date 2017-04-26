@@ -50,6 +50,8 @@ double Segment<T>::cartesianAngle(Point p1, Point p2) {
 
 template <class T>
 bool Segment<T>::intersects(Point p1, Point p2, Point o1, Point o2, Point &inter) {
+    double tolerance = XPolyConfig::instance()->getTolerance();
+
     double s1_x, s1_y, s2_x, s2_y;
     s1_x = p2.getX() - p1.getX();     s1_y = p2.getY() - p1.getY();
     s2_x = o2.getX() - o1.getX();     s2_y = o2.getY() - o1.getY();
@@ -58,7 +60,7 @@ bool Segment<T>::intersects(Point p1, Point p2, Point o1, Point o2, Point &inter
     s = (-s1_y * (p1.getX() - o1.getX()) + s1_x * (p1.getY() - o1.getY())) / (-s2_x * s1_y + s1_x * s2_y);
     t = ( s2_x * (p1.getY() - o1.getY()) - s2_y * (p1.getX() - o1.getX())) / (-s2_x * s1_y + s1_x * s2_y);
 
-    if (s >= 0 && s <= 1 && t >= 0 && t <= 1){
+    if (s >= (0-tolerance) && s <= (1+tolerance) && t >= (0-tolerance) && t <= (1+tolerance)){
         double i_x = p1.getX() + (t * s1_x);
         double i_y = p1.getY() + (t * s1_y);
 

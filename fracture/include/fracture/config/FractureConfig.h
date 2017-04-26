@@ -6,7 +6,7 @@ private:
     double double_comparison_tolerance;
     double crack_growth_speed;
     double crack_size_ratio;
-    double rossette_angle;
+    double rosette_angle;
     int max_iterations;
 
     static FractureConfig* s_instance;
