@@ -46,6 +46,7 @@ public:
     int getPolygonInDirection(std::vector<int> index, PointSegment direction);
 
     Region getRegion() const;
+    bool isInDomain(Point p);
 };
 
 

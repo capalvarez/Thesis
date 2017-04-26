@@ -37,6 +37,7 @@ public:
     void addSeedPoints(std::vector<Point> seeds);
     BoundingBox getBox();
     void getSegments(std::vector<IndexSegment>& s);
+    bool containsPoint(Point p);
 
 };
 

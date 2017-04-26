@@ -150,6 +150,10 @@ bool Crack::isFinished() {
 }
 
 void Crack::initializeCrack(BreakableMesh &mesh) {
+    if(!mesh.isInDomain(this->init.getPoint()) || !mesh.isInDomain(this->end.getPoint())){
+        throw std::invalid_argument("Invalid input. Crack lies outside the domain!");
+    }
+
     this->init.reassignContainer(mesh);
     mesh.breakMesh(this->init.container_polygon, PointSegment(this->init.getPoint(), this->end.getPoint()));
     this->end.reassignContainer(mesh);

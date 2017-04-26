@@ -186,3 +186,7 @@ bool PolygonalMesh::polygonsTouch(int poly1, int poly2) {
 
     return false;
 }
+
+bool PolygonalMesh::isInDomain(Point p) {
+    return this->region.containsPoint(p);
+}

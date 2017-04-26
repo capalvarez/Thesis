@@ -145,6 +145,10 @@ void Region::getSegments(std::vector<IndexSegment> &s) {
     }
 }
 
+bool Region::containsPoint(Point p) {
+    std::vector<Point> regionPoints = this->p;
 
+    return Polygon::containsPoint(regionPoints, p);
+}
 
 
