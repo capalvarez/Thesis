@@ -20,128 +20,144 @@ Crack::Crack(const Crack& c) {
 }
 
 Crack::Crack(Point init, Point end) {
+    FractureConfig* config = FractureConfig::instance();
     PointSegment crack (init, end);
 
     this->init = CrackTip(crack);
     this->end = CrackTip(PointSegment(end, init));
+    this->StandardRadius = config->getRatio()*crack.length();
 }
 
 PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
+    FractureConfig* config = FractureConfig::instance();
+
     UniqueList<Polygon> oldP;
     std::vector<Polygon> newP;
     UniqueList<Point> points = m.getPoints();
 
     bool bothAreGrowing = !this->init.hasFinished && !this->end.hasFinished;
 
-    if(bothAreGrowing && (this->init.container_polygon  == this->end.container_polygon ||
-                          m.polygonsTouch(this->init.container_polygon, this->end.container_polygon))){
-        UniqueList<int> neighbours;
-        this->init.getDirectNeighbours(this->init.container_polygon, m, neighbours);
-        this->end.getDirectNeighbours(this->end.container_polygon, m, neighbours);
+    if(bothAreGrowing){
+        if((this->init.container_polygon  == this->end.container_polygon ||
+            m.polygonsTouch(this->init.container_polygon, this->end.container_polygon)){
+            UniqueList<int> neighbours;
+            this->init.getDirectNeighbours(this->init.container_polygon, m, neighbours);
+            this->end.getDirectNeighbours(this->end.container_polygon, m, neighbours);
 
-        neighbours.push_back(this->init.container_polygon);
-        neighbours.push_back(this->end.container_polygon);
+            neighbours.push_back(this->init.container_polygon);
+            neighbours.push_back(this->end.container_polygon);
 
-        int index = m.mergePolygons(neighbours.getList());
-        Polygon ring = m.getPolygon(index);
-        std::vector<int> unused = m.getUnusedPoints(neighbours.getList(), ring.getPoints());
+            int index = m.mergePolygons(neighbours.getList());
+            Polygon ring = m.getPolygon(index);
+            std::vector<int> unused = m.getUnusedPoints(neighbours.getList(), ring.getPoints());
 
-        Point init_last = this->init.getPoint();
-        double init_radius = this->init.StandardRadius;
-        BoundingBox init_box(Point(init_last.getX()-init_radius, init_last.getY()-init_radius),
-                         Point(init_last.getX()+init_radius, init_last.getY()+init_radius));
+            double radius = adjustBoxes(ring, ring, points.getList());
 
-        Point end_last = this->end.getPoint();
-        double end_radius = this->end.StandardRadius;
-        BoundingBox end_box(Point(end_last.getX()-this->end.StandardRadius, end_last.getY()-this->end.StandardRadius),
-                            Point(end_last.getX()+this->end.StandardRadius, end_last.getY()+this->end.StandardRadius));
+            Point init_last = this->init.getPoint();
+            BoundingBox init_box(Point(init_last.getX()-radius, init_last.getY()-radius),
+                                 Point(init_last.getX()+radius, init_last.getY()+radius));
 
-        FractureConfig* config = FractureConfig::instance();
-        while(!init_box.fitsInsidePolygon(ring, points.getList())) {
-            init_radius = config->getRatio()*init_radius;
+            Point end_last = this->end.getPoint();
+            BoundingBox end_box(Point(end_last.getX()-radius, end_last.getY()-radius),
+                                Point(end_last.getX()+radius, end_last.getY()+radius));
 
-            init_box = BoundingBox(Point(init_last.getX()-init_radius, init_last.getY()-init_radius),
-                                   Point(init_last.getX()+init_radius, init_last.getY()+init_radius));
-        }
+            while(init_box.intersects(end_box)){
+                radius = config->getRatio()*radius;
 
-        while(!end_box.fitsInsidePolygon(ring, points.getList())) {
-            end_radius = config->getRatio()*end_radius;
-
-            end_box = BoundingBox(Point(end_last.getX()-end_radius, end_last.getY()-end_radius),
-                                  Point(end_last.getX()+end_radius, end_last.getY()+end_radius));
-        }
-
-        while(init_box.intersects(end_box)){
-            init_radius = config->getRatio()*init_radius;
-            end_radius = config->getRatio()*end_radius;
-
-            init_box = BoundingBox(Point(init_last.getX()-init_radius, init_last.getY()-init_radius),
-                                   Point(init_last.getX()+init_radius, init_last.getY()+init_radius));
-            end_box = BoundingBox(Point(end_last.getX()-end_radius, end_last.getY()-end_radius),
-                                  Point(end_last.getX()+end_radius, end_last.getY()+end_radius));
-        }
-
-        Point p1 = end_box.getClosestTo(init_box.centroid());
-        Point p2 = init_box.getClosestTo(end_box.centroid());
-
-        Point middle = Point(std::abs(p1.getX()-p2.getX())/2 + std::min(p1.getX(), p2.getX()),
-                             std::abs(p1.getY()-p2.getY())/2 + std::min(p1.getY(), p2.getY()));
-        Point nextPoint;
-
-        double dX = (p2.getX() - p1.getX());
-
-        if(dX!=0){
-            double slope = -dX/(p2.getY() - p1.getY());
-            nextPoint = Point(middle.getX()*2 , slope*middle.getX() + middle.getY());
-        }else{
-            nextPoint = Point(middle.getX(), 2*middle.getY());
-        }
-
-        PointSegment direction(middle, nextPoint);
-
-        std::vector<Point> intersections;
-        std::vector<IndexSegment> relevantSegments;
-        std::vector<IndexSegment> segs;
-        ring.getSegments(segs);
-
-        for (IndexSegment s: segs) {
-            Point p;
-
-            if(direction.intersectionInfinite(points[s.getFirst()], points[s.getSecond()],p)){
-                intersections.push_back(p);
-                relevantSegments.push_back(s);
+                init_box = BoundingBox(Point(init_last.getX()-radius, init_last.getY()-radius),
+                                       Point(init_last.getX()+radius, init_last.getY()+radius));
+                end_box = BoundingBox(Point(end_last.getX()-radius, end_last.getY()-radius),
+                                      Point(end_last.getX()+radius, end_last.getY()+radius));
             }
+
+            Point p1 = end_box.getClosestTo(init_box.centroid());
+            Point p2 = init_box.getClosestTo(end_box.centroid());
+
+            Point middle = Point(std::abs(p1.getX()-p2.getX())/2 + std::min(p1.getX(), p2.getX()),
+                                 std::abs(p1.getY()-p2.getY())/2 + std::min(p1.getY(), p2.getY()));
+            Point nextPoint;
+
+            double dX = (p2.getX() - p1.getX());
+
+            if(dX!=0){
+                double slope = -dX/(p2.getY() - p1.getY());
+                nextPoint = Point(middle.getX()*2 , slope*middle.getX() + middle.getY());
+            }else{
+                nextPoint = Point(middle.getX(), 2*middle.getY());
+            }
+
+            PointSegment direction(middle, nextPoint);
+
+            std::vector<Point> intersections;
+            std::vector<IndexSegment> relevantSegments;
+            std::vector<IndexSegment> segs;
+            ring.getSegments(segs);
+
+            for (IndexSegment s: segs) {
+                Point p;
+
+                if(direction.intersectionInfinite(points[s.getFirst()], points[s.getSecond()],p)){
+                    intersections.push_back(p);
+                    relevantSegments.push_back(s);
+                }
+            }
+
+            SegmentMap e = m.getSegments();
+            Neighbours n_f = e.get(relevantSegments[0]);
+            int neighbour1 = utilities::indexOf(neighbours.getList(), n_f.getFirst())!=-1? n_f.getSecond() : n_f.getFirst();
+
+            Neighbours n_s = e.get(relevantSegments[1]);
+            int neighbour2 = utilities::indexOf(neighbours.getList(), n_s.getFirst())!=-1? n_s.getSecond() : n_s.getFirst();
+
+            NeighbourInfo n1 = NeighbourInfo(index, relevantSegments[0], intersections[0], false);
+            NeighbourInfo n2 = NeighbourInfo(neighbour2, relevantSegments[1], intersections[1], false);
+
+            m.splitPolygons(n1, n2, neighbour1, oldP.getList(), newP);
+
+            int poly1 = m.getPolygon(index).containsPoint(m.getPoints().getList(), this->init.getPoint())?
+                        index : (int)(m.getPolygons().size())-1;
+            int poly2 = poly1==index? (int)(m.getPolygons().size())-1 : index;
+
+            m.printInFile("beforePreparing.txt");
+
+            Polygon polygon1 = m.getPolygon(poly1);
+            Polygon polygon2 = m.getPolygon(poly2);
+
+            std::vector<int> toPoly1;
+            std::vector<int> toPoly2;
+
+            for(int u: unused){
+                if(polygon1.containsPoint(points.getList(), m.getPoint(u))){
+                    toPoly1.push_back(u);
+                } else{
+                    toPoly2.push_back(u);
+                }
+            }
+
+            this->init.remeshAndAdapt(radius, newP, poly1, m, toPoly1);
+            this->end.remeshAndAdapt(radius, newP, poly2, m, toPoly2);
+
+            oldP.push_back(m.getPolygon(poly1));
+            oldP.push_back(m.getPolygon(poly2));
+        }else{
+
+
+
+            Polygon initRing = this->init.getRingPolygon();
+            Polygon endRing = this->end.getRingPolygon();
+
+            double radius = adjustBoxes(initRing, endRing, m.getPoints().getList());
+
+            this->init.remeshAndAdapt(radius, newP, initRing, m, unused);
+            this->end.remeshAndAdapt(radius, newP, endRing, m, std::vector<int>());
+
+
+
         }
-
-        SegmentMap e = m.getSegments();
-        Neighbours n_f = e.get(relevantSegments[0]);
-        int neighbour1 = utilities::indexOf(neighbours.getList(), n_f.getFirst())!=-1? n_f.getSecond() : n_f.getFirst();
-
-        Neighbours n_s = e.get(relevantSegments[1]);
-        int neighbour2 = utilities::indexOf(neighbours.getList(), n_s.getFirst())!=-1? n_s.getSecond() : n_s.getFirst();
-
-        NeighbourInfo n1 = NeighbourInfo(index, relevantSegments[0], intersections[0], false);
-        NeighbourInfo n2 = NeighbourInfo(neighbour2, relevantSegments[1], intersections[1], false);
-
-        m.splitPolygons(n1, n2, neighbour1, oldP.getList(), newP);
-
-        int poly1 = m.getPolygon(index).containsPoint(m.getPoints().getList(), this->init.getPoint())?
-                    index : (int)(m.getPolygons().size())-1;
-        int poly2 = poly1==index? (int)(m.getPolygons().size())-1 : index;
-
-        m.printInFile("beforePreparing.txt");
-
-        this->init.remeshAndAdapt(init_radius, newP, poly1, m, unused);
-        m.printInFile("onePrepared.txt");
-        this->end.remeshAndAdapt(end_radius, newP, poly2, m, std::vector<int>());
-
-        oldP.push_back(m.getPolygon(poly1));
-        oldP.push_back(m.getPolygon(poly2));
     }else{
         this->prepareTip(this->init, oldP, newP, m);
         this->prepareTip(this->end, oldP, newP, m);
     }
-
 
     return PolygonChangeData(oldP.getList(), newP);
 }
@@ -174,7 +190,7 @@ PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
 
 void Crack::prepareTip(CrackTip tip, UniqueList<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh) {
     if(!tip.isFinished()){
-        PolygonChangeData data = tip.prepareTip(mesh);
+        PolygonChangeData data = tip.prepareTip(mesh, StandardRadius);
 
         oldP.push_list(data.oldPolygons);
         newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());
@@ -191,7 +207,16 @@ void Crack::grow(CrackTip &tip, std::vector<Polygon> &oldP, std::vector<Polygon>
     }
 }
 
+double Crack::adjustBoxes(Polygon initPoly, Polygon endPoly, std::vector<Point> points) {
+    double radius = this->StandardRadius;
 
+    FractureConfig* config = FractureConfig::instance();
+    while(!this->init.fitsBox(radius, initPoly, points) || !this->end.fitsBox(radius, endPoly, points)){
+        radius = config->getRatio()*radius;
+    }
+
+    return radius;
+}
 
 
 

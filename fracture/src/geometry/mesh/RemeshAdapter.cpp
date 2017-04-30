@@ -1,6 +1,5 @@
 #include <fracture/geometry/mesh/RemeshAdapter.h>
 #include <x-poly/voronoi/TriangleMeshGenerator.h>
-#include <fracture/geometry/mesh/SimplePolygonMerger.h>
 #include <fracture/geometry/mesh/structures/IndexSegmentHasher.h>
 #include <veamy/models/constraints/structures/Angle.h>
 

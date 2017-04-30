@@ -16,7 +16,6 @@
 
 class CrackTip {
 private:
-    double StandardRadius;
     double usedRadius;
     std::vector<Point> crackPath;
     int container_polygon;
@@ -30,7 +29,7 @@ private:
                             std::vector<int> oldPoints);
     void getDirectNeighbours(int poly, BreakableMesh mesh, UniqueList<int> &neighbours);
     void reassignContainer(BreakableMesh& mesh);
-
+    bool fitsBox(double radius, Polygon poly, std::vector<Point> points);
 public:
     CrackTip();
     CrackTip(PointSegment crack);
@@ -40,7 +39,7 @@ public:
     double calculateAngle(Problem problem, Eigen::VectorXd u);
 
     PolygonChangeData grow(Eigen::VectorXd u, Problem problem);
-    PolygonChangeData prepareTip(BreakableMesh& mesh);
+    PolygonChangeData prepareTip(BreakableMesh &mesh, double StandardRadius);
     bool isFinished();
     void assignLocation(int polygon);
     Point getPoint();

@@ -6,7 +6,7 @@ FractureConfig* FractureConfig::s_instance = nullptr;
 FractureConfig::FractureConfig() {
     this->double_comparison_tolerance = 0.001;
     this->crack_growth_speed = 0.1;
-    this->crack_size_ratio = 0.5;
+    this->crack_size_ratio = 0.75;
     this->rosette_angle = 45;
     this->max_iterations = 100;
 }

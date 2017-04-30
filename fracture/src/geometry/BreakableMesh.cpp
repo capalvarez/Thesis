@@ -28,7 +28,6 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
     }
 
     int last = -1;
-    int i = 0;
 
     while(true){
         Polygon& poly1 = getPolygon(n1.neighbour);
@@ -54,8 +53,6 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
         last = this->polygons.size()-1;
         init = n1.neighbour;
         n1 = n2;
-
-        i++;
     }
 
 
@@ -252,10 +249,6 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
     newPolygon2.getSegments(segments2);
 
     this->edges.insert(IndexSegment(p1,p2),Neighbours(n1.neighbour,n1.neighbour));
-
-    for (int i = 0; i < segments1.size() ; ++i) {
-        this->edges.replace_neighbour(segments1[i], n1.neighbour, new_index1);
-    }
 
     for (int i = 0; i < segments2.size() ; ++i) {
         this->edges.replace_neighbour(segments2[i], n1.neighbour, new_index2);
