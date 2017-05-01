@@ -58,7 +58,7 @@ int main(){
     generateTest("squareRandom20", square, square.getSeedPoints());
     square.cleanSeedPoints();
 
-    romboid.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 5, 5);
+    romboid.generateSeedPoints(PointGenerator(functions::random_double(0,15), functions::random_double(0,15)), 5, 5);
     generateTest("romboidRandom5", romboid, romboid.getSeedPoints());
     romboid.cleanSeedPoints();
 
@@ -106,7 +106,7 @@ int main(){
     generateTest("squareHoleCenterRandom10", square, square.getSeedPoints());
     square.cleanSeedPoints();
 
-    square.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 10, 10);
+    square.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 10, 10);
     generateTest("squareHoleCenterUniform10", square, square.getSeedPoints());
     square.cleanSeedPoints();
 
@@ -122,7 +122,7 @@ int main(){
     generateTest("squareHoleBorderRandom10", square, square.getSeedPoints());
     square.cleanSeedPoints();
 
-    square.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 10, 10);
+    square.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 10, 10);
     generateTest("squareHoleBorderUniform10", square, square.getSeedPoints());
     square.cleanSeedPoints();
 
@@ -139,6 +139,6 @@ int main(){
     circular = CircularHole(Point(10,0), 4);
     quarter_circle.addHole(circular);
     quarter_circle.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 10, 10);
-    generateTest("quarter_circleRandom10", quarter_circle, quarter_circle.getSeedPoints());
+    generateTest("quarter_circleHoleRandom10", quarter_circle, quarter_circle.getSeedPoints());
     quarter_circle.cleanSeedPoints();
 }

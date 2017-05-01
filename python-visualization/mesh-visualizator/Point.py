@@ -6,4 +6,4 @@ class Point:
 
     def draw(self, canvas, limits, color):
         y = float(canvas['height'])
-        canvas.create_text(self.x, y-self.y,text=self.index, fill=color)
+        #canvas.create_text(self.x, y-self.y,text=self.index, fill=color)
