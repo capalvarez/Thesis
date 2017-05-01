@@ -151,4 +151,6 @@ bool Region::containsPoint(Point p) {
     return Polygon::containsPoint(regionPoints, p);
 }
 
-
+void Region::cleanSeedPoints() {
+    this->seedPoints.clear();
+}

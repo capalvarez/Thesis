@@ -4,18 +4,7 @@
 #include <x-poly/models/hole/CircularHole.h>
 #include <x-poly/models/generator/functions.h>
 
-void generateTest(std::string testName, Region r, Hole h, std::vector<Point> points){
-    r.addHole(h);
-
-    TriangleMeshGenerator g(points, r);
-    Triangulation t = g.getDelaunayTriangulation();
-    t.printInFile(testName + "_triangles.txt");
-
-    PolygonalMesh m = g.getMesh();
-    m.printInFile(testName + ".txt");
-}
-
-void generateTestNoHole(std::string testName, Region r, std::vector<Point> points){
+void generateTest(std::string testName, Region r, std::vector<Point> points){
     TriangleMeshGenerator g(points, r);
     Triangulation t = g.getDelaunayTriangulation();
     t.printInFile(testName + "_triangles.txt");
@@ -25,75 +14,131 @@ void generateTestNoHole(std::string testName, Region r, std::vector<Point> point
 }
 
 int main(){
-    std::vector<Point> square_points = {Point(0,0), Point(1,0), Point(1,1), Point(0,1)};
+    std::vector<Point> square_points = {Point(0,0), Point(10,0), Point(10,10), Point(0,10)};
     Region square(square_points);
 
-    std::vector<Point> inside_p = {Point(0.25,0.25), Point(0.75,0.25), Point(0.75,0.75), Point(0.25,0.75)};
-    PolygonalHole inside(inside_p);
+    std::vector<Point> romboid_points = {Point(0,0), Point(10,0), Point(15,10), Point(5,10)};
+    Region romboid(romboid_points);
 
-    std::vector<Point> points = {Point(0.5,0), Point(1,0.5), Point(0.5,1), Point(0,0.5)};
+    std::vector<Point> quarter_circle_points = {Point(0,0), Point(10,0), Point(10,10)};
 
-    generateTest("PolygonalInside", square, inside, points);
+    double max = 10.0;
+    for(int i=0; i<max;i++){
+        double angle = 90 - (90/max)*i;
 
-    /*------------------------------------------------------------------------------------------------------*/
+        double x = 10 - 10*std::cos(utilities::radian(angle));
+        double y = 10*std::sin(utilities::radian(angle));
 
-    std::vector<Point> hPoints = {Point(0.25,0.75), Point(0.75,0.75), Point(0.75,1), Point(0.25,1)};
-    PolygonalHole border(hPoints);
+        Point point (x, y);
 
-    points = {Point(0.5,0), Point(1,0.5), Point(0,0.5)};
+        quarter_circle_points.push_back(point);
+    }
 
-    generateTest("PolygonalBorder", square, inside, points);
+    Region quarter_circle(quarter_circle_points);
 
-    /*------------------------------------------------------------------------------------------------------*/
+    std::vector<Point> unicorn_points = {Point(2,0), Point(3,0.5), Point(3.5,2), Point(4,4), Point(6,4), Point(8.5,4),
+                                         Point(9,2), Point(9.5,0.5), Point(10,0), Point(10.5,0.5), Point(11.2,2.5),
+                                         Point(11.5,4.5), Point(11.8,8.75), Point(11.8,11.5), Point(13.5,11), Point(14.5,11.2),
+                                         Point(15,12), Point(15,13), Point(15,14.5), Point(14,16.5), Point(15,19.5), Point(15.2,20),
+                                         Point(14.5,19.7), Point(11.8,18.2), Point(10.5,18.3), Point(10,18), Point(8,16),
+                                         Point(7.3,15.3), Point(7,13.8), Point(6.7,11.5), Point(3.3,11.3), Point(1,10.5),
+                                         Point(0.4,8.8), Point(0.3,6.8), Point(0.4,4), Point(0.8,2.1), Point(1.3,0.4)};
+    Region unicorn(unicorn_points);
 
-    hPoints = {Point(0.75,0.75), Point(1,0.75), Point(1,1), Point(0.75,1)};
-    PolygonalHole completely_inside(hPoints);
+    /*----------------Random generation--------------------------------------------------------------------*/
+    square.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 5, 5);
+    generateTest("squareRandom5", square, square.getSeedPoints());
+    square.cleanSeedPoints();
 
-    points = {Point(0.5,0), Point(1,0.5), Point(0.5,1), Point(0,0.5)};
+    square.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 10, 10);
+    generateTest("squareRandom10", square, square.getSeedPoints());
+    square.cleanSeedPoints();
 
-    generateTest("PolygonalHoleCompletelyInBorder", square, completely_inside, points);
+    square.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 20, 20);
+    generateTest("squareRandom20", square, square.getSeedPoints());
+    square.cleanSeedPoints();
 
-    /*------------------------------------------------------------------------------------------------------*/
+    romboid.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 5, 5);
+    generateTest("romboidRandom5", romboid, romboid.getSeedPoints());
+    romboid.cleanSeedPoints();
 
-    hPoints = {Point(0.5,0), Point(1,0), Point(1,1), Point(0.5,1)};
-    PolygonalHole half(hPoints);
+    romboid.generateSeedPoints(PointGenerator(functions::random_double(0,15), functions::random_double(0,15)), 10, 10);
+    generateTest("romboidRandom10", romboid, romboid.getSeedPoints());
+    romboid.cleanSeedPoints();
 
-    points = {};
+    quarter_circle.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 5, 5);
+    generateTest("quarter_circleRandom5", quarter_circle, quarter_circle.getSeedPoints());
+    quarter_circle.cleanSeedPoints();
 
-    generateTest("PolygonalHoleHalfTest", square, half, points);
+    quarter_circle.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 10, 10);
+    generateTest("quarter_circleRandom10", quarter_circle, quarter_circle.getSeedPoints());
+    quarter_circle.cleanSeedPoints();
 
-    /*-----------------------------------------------------------------------------------------------------*/
-    CircularHole circle(Point(0.5, 0.5), 0.25);
-    points = {Point(0.5,0), Point(1,0.5), Point(0.5,0), Point(0,0.5)};
+    unicorn.generateSeedPoints(PointGenerator(functions::random_double(0,15), functions::random_double(0,20)), 5, 5);
+    generateTest("unicornRandom5", unicorn, unicorn.getSeedPoints());
+    unicorn.cleanSeedPoints();
 
-    generateTest("CircularHoleInside", square, circle, points);
+    unicorn.generateSeedPoints(PointGenerator(functions::random_double(0,15), functions::random_double(0,20)), 10, 10);
+    generateTest("unicornRandom10", unicorn, unicorn.getSeedPoints());
+    unicorn.cleanSeedPoints();
 
-    /*-----------------------------------------------------------------------------------------------------*/
+    /*-----------------------------------------------Uniform generation-------------------------------------------------*/
+    square.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 10, 10);
+    generateTest("squareUniform10", square, square.getSeedPoints());
+    square.cleanSeedPoints();
 
-    CircularHole border_c(Point(0.5, 1), 0.25);
-    points = {};
+    romboid.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 10, 10);
+    generateTest("romboidUniform10", romboid, romboid.getSeedPoints());
+    romboid.cleanSeedPoints();
 
-    generateTest("CircularHoleBorderTest", square, border_c, points);
+    quarter_circle.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 10, 10);
+    generateTest("quarter_circleUniform10", quarter_circle, quarter_circle.getSeedPoints());
+    quarter_circle.cleanSeedPoints();
 
-    /*------------------------------------------------------------------------------------------------------*/
-    std::vector<Point> personPoints = {Point(0,0),Point(3,0),Point(3,2),Point(4.5,2),Point(4.5,0),Point(8.5,0),Point(8.5,1),
-                                       Point(6,1),Point(6,5),Point(7,5),Point(7,3.5),Point(9,3.5),Point(9,7),Point(5,7),
-                                       Point(5,8.5),Point(4,8.5),Point(4,7),Point(2,7),Point(2,10),Point(0,10),Point(0,8),
-                                       Point(1,8),Point(1,6),Point(3,6),Point(3,3),Point(1.5,3),Point(1.5,1),Point(0,1)};
-    Region person(personPoints);
-    generateTestNoHole("PersonTest", person, points);
+    /*---------------------------------------Generation with holes------------------------------------*/
+    Hole circular = CircularHole(Point(5,5), 2);
+    square.addHole(circular);
+    square.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 5, 5);
+    generateTest("squareHoleCenterRandom5", square, square.getSeedPoints());
+    square.cleanSeedPoints();
 
-    /*---------------------------------------------------------------------------------------------------*/
-    std::vector<Point> unicornPoints = {Point(0,3),Point(3,1),Point(5,5),Point(4.5,4),Point(7,6),Point(7,0),Point(17,5),
-                                        Point(14,5),Point(14,6),Point(15,6.5),Point(13,6.25),Point(12,7),Point(14,8),
-                                        Point(11,7.5),Point(10,9),Point(11,10),Point(9,9.25),Point(7,9.5),Point(6,11),
-                                        Point(6,9.5),Point(5,9.4),Point(4,13),Point(5,11.5),Point(0,14),Point(8,2),
-                                        Point(7,1),Point(7,2)};
-    Region unicorn(unicornPoints);
-    generateTestNoHole("UnicornTest", unicorn, points);
+    square.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 10, 10);
+    generateTest("squareHoleCenterRandom10", square, square.getSeedPoints());
+    square.cleanSeedPoints();
 
-    /*-------------------------------------------------------------------------------------------------*/
-    square.generateSeedPoints(PointGenerator(functions::random_double(0, 1), functions::random_double(0, 1)), 10, 10);
-    generateTestNoHole("RandomTest", square, square.getSeedPoints());
+    square.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 10, 10);
+    generateTest("squareHoleCenterUniform10", square, square.getSeedPoints());
+    square.cleanSeedPoints();
 
+    square = Region(square_points);
+
+    circular = CircularHole(Point(5,10), 2);
+    square.addHole(circular);
+    square.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 5, 5);
+    generateTest("squareHoleBorderRandom5", square, square.getSeedPoints());
+    square.cleanSeedPoints();
+
+    square.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 10, 10);
+    generateTest("squareHoleBorderRandom10", square, square.getSeedPoints());
+    square.cleanSeedPoints();
+
+    square.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 10, 10);
+    generateTest("squareHoleBorderUniform10", square, square.getSeedPoints());
+    square.cleanSeedPoints();
+
+    Hole circular1 = CircularHole(Point(10,5), 2);
+    Hole circular2 = CircularHole(Point(5,0), 2);
+    Hole circular3 = CircularHole(Point(0,5), 2);
+    square.addHole(circular1);
+    square.addHole(circular2);
+    square.addHole(circular3);
+    square.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 10, 10);
+    generateTest("squareSwissCheeseRandom10", square, square.getSeedPoints());
+    square.cleanSeedPoints();
+
+    circular = CircularHole(Point(10,0), 4);
+    quarter_circle.addHole(circular);
+    quarter_circle.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 10, 10);
+    generateTest("quarter_circleRandom10", quarter_circle, quarter_circle.getSeedPoints());
+    quarter_circle.cleanSeedPoints();
 }
