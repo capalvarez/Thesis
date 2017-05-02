@@ -85,34 +85,28 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
 
         if(fitsBox(candidateRadius, poly, mesh.getPoints().getList())){
             affected.push_back(this->container_polygon);
-            remeshAndAdapt(StandardRadius, newPolygons, this->container_polygon, mesh, std::vector<int>());
+            remeshAndAdapt(candidateRadius, newPolygons, this->container_polygon, mesh, std::vector<int>());
         } else{
+            std::vector<int> unusedPoints;
+            int ringIndex = this->getRingPolygon(mesh, unusedPoints, affected);
+            Polygon ringRegion = mesh.getPolygon(ringIndex);
+            
+            Point last = getPoint();
+            BoundingBox box(Point(last.getX()-candidateRadius, last.getY()-candidateRadius),
+                            Point(last.getX()+candidateRadius, last.getY()+candidateRadius));
 
-        }
+            if (box.fitsInsidePolygon(ringRegion, mesh.getPoints().getList())) {
+                remeshAndAdapt(candidateRadius, newPolygons, ringIndex, mesh, unusedPoints);
+            } else {
+                double radius = candidateRadius;
+                while(!box.fitsInsidePolygon(ringRegion, mesh.getPoints().getList())) {
+                    radius = config->getRatio()*radius;
+                    box = BoundingBox(Point(last.getX()-radius, last.getY()-radius),
+                                      Point(last.getX()+radius, last.getY()+radius));
+                }
 
-
-        UniqueList<int> ringPolygons;
-        getDirectNeighbours(this->container_polygon, mesh, ringPolygons);
-
-        std::vector<int> mergedPoints;
-        std::vector<int> ringPolygonPoints = mesh.getAllPoints(ringPolygons.getList());
-        RemeshAdapter remesher(ringPolygons.getList(), mesh.getPoints().getList(), mesh, mergedPoints);
-
-        Polygon ringRegion = remesher.getRegion();
-        affected.assign(ringPolygons.getList().begin(), ringPolygons.getList().end());
-        if (box.fitsInsidePolygon(ringRegion, mesh.getPoints().getList())) {
-            remeshAndAdapt(StandardRadius, newPolygons, remesher.getRegionIndex(), mesh,
-                           mesh.getUnusedPoints(ringPolygonPoints, mergedPoints));
-        } else {
-            double radius = StandardRadius;
-            while(!box.fitsInsidePolygon(ringRegion, mesh.getPoints().getList())) {
-                radius = config->getRatio()*radius;
-                box = BoundingBox(Point(last.getX()-radius, last.getY()-radius),
-                                  Point(last.getX()+radius, last.getY()+radius));
+                remeshAndAdapt(radius, newPolygons, ringIndex, mesh, unusedPoints);
             }
-
-            remeshAndAdapt(radius, newPolygons, remesher.getRegionIndex(), mesh,
-                           mesh.getUnusedPoints(ringPolygonPoints, mergedPoints));
         }
     }
 
@@ -255,4 +249,20 @@ bool CrackTip::fitsBox(double radius, Polygon poly, std::vector<Point> points) {
                     Point(p.getX()+radius, p.getY()+radius));
 
     return box.fitsInsidePolygon(poly, points);
+}
+
+int CrackTip::getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints, std::vector<int> &affectedPolygons) {
+    UniqueList<int> ringPolygons;
+    getDirectNeighbours(this->container_polygon, mesh, ringPolygons);
+
+    std::vector<int> mergedPoints;
+    std::vector<int> ringPolygonPoints = mesh.getAllPoints(ringPolygons.getList());
+    RemeshAdapter remesher(ringPolygons.getList(), mesh.getPoints().getList(), mesh, mergedPoints);
+
+    Polygon ringRegion = remesher.getRegion();
+    affectedPolygons.assign(ringPolygons.getList().begin(), ringPolygons.getList().end());
+    
+    unusedPoints = mesh.getUnusedPoints(ringPolygonPoints, mergedPoints);
+        
+    return remesher.getRegionIndex();
 }

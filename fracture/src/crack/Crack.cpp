@@ -38,7 +38,7 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
     bool bothAreGrowing = !this->init.hasFinished && !this->end.hasFinished;
 
     if(bothAreGrowing){
-        if((this->init.container_polygon  == this->end.container_polygon ||
+        if(this->init.container_polygon  == this->end.container_polygon ||
             m.polygonsTouch(this->init.container_polygon, this->end.container_polygon)){
             UniqueList<int> neighbours;
             this->init.getDirectNeighbours(this->init.container_polygon, m, neighbours);
@@ -47,9 +47,10 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
             neighbours.push_back(this->init.container_polygon);
             neighbours.push_back(this->end.container_polygon);
 
+            std::vector<int> allPoints = m.getAllPoints(neighbours.getList());
             int index = m.mergePolygons(neighbours.getList());
             Polygon ring = m.getPolygon(index);
-            std::vector<int> unused = m.getUnusedPoints(neighbours.getList(), ring.getPoints());
+            std::vector<int> unused = m.getUnusedPoints(allPoints, ring.getPoints());
 
             double radius = adjustBoxes(ring, ring, points.getList());
 
@@ -140,19 +141,44 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
             oldP.push_back(m.getPolygon(poly1));
             oldP.push_back(m.getPolygon(poly2));
         }else{
+            double radius;
+            int initPoly_index, endPoly_index;
+            std::vector<int> unusedInit, unusedEnd, affectedPolygons;
 
+            if(this->init.fitsBox(StandardRadius, m.getPolygon(this->init.container_polygon), m.getPoints().getList())
+               && this->end.fitsBox(StandardRadius, m.getPolygon(this->end.container_polygon), m.getPoints().getList())){
+                radius = StandardRadius;
+                initPoly_index = this->init.container_polygon;
+                endPoly_index = this->end.container_polygon;
 
+                affectedPolygons.push_back(initPoly_index);
+                affectedPolygons.push_back(endPoly_index);
+            } else {
+                if(this->init.fitsBox(StandardRadius*config->getRatio(), m.getPolygon(this->init.container_polygon), m.getPoints().getList())
+                   && this->end.fitsBox(StandardRadius*config->getRatio(), m.getPolygon(this->end.container_polygon), m.getPoints().getList())){
+                    radius = StandardRadius*config->getRatio();
+                    initPoly_index = this->init.container_polygon;
+                    endPoly_index = this->end.container_polygon;
 
-            Polygon initRing = this->init.getRingPolygon();
-            Polygon endRing = this->end.getRingPolygon();
+                    affectedPolygons.push_back(initPoly_index);
+                    affectedPolygons.push_back(endPoly_index);
+                }else{
+                    int initRing_index = this->init.getRingPolygon(m, unusedInit, affectedPolygons);
+                    int endRing_index = this->end.getRingPolygon(m, unusedEnd, affectedPolygons);
 
-            double radius = adjustBoxes(initRing, endRing, m.getPoints().getList());
+                    Polygon initRing = m.getPolygon(initRing_index);
+                    Polygon endRing = m.getPolygon(endRing_index);
 
-            this->init.remeshAndAdapt(radius, newP, initRing, m, unused);
-            this->end.remeshAndAdapt(radius, newP, endRing, m, std::vector<int>());
+                    radius = adjustBoxes(initRing, endRing, m.getPoints().getList());
+                }
+            }
 
+            this->init.remeshAndAdapt(radius, newP, initPoly_index, m, unusedInit);
+            this->end.remeshAndAdapt(radius, newP, endPoly_index, m, unusedEnd);
 
-
+            for (int i: affectedPolygons){
+                oldP.push_back(m.getPolygon(i));
+            }
         }
     }else{
         this->prepareTip(this->init, oldP, newP, m);

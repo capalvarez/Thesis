@@ -8,7 +8,6 @@ FractureSimulator::FractureSimulator(const PolygonalMesh& mesh, const Crack& ini
 
     this->crack.initializeCrack(this->mesh);
     this->veamer.initProblem(this->mesh, conditions);
-    this->mesh.printInFile("prepared.txt");
 }
 
 void FractureSimulator::simulate(double crack_growth) {

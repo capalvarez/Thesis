@@ -30,6 +30,7 @@ private:
     void getDirectNeighbours(int poly, BreakableMesh mesh, UniqueList<int> &neighbours);
     void reassignContainer(BreakableMesh& mesh);
     bool fitsBox(double radius, Polygon poly, std::vector<Point> points);
+    int getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints, std::vector<int> &affectedPolygons);
 public:
     CrackTip();
     CrackTip(PointSegment crack);
