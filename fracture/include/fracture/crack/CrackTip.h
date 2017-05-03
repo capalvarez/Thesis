@@ -31,6 +31,7 @@ private:
     void reassignContainer(BreakableMesh& mesh);
     bool fitsBox(double radius, Polygon poly, std::vector<Point> points);
     int getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints, std::vector<int> &affectedPolygons);
+    int getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints, std::vector<int> &affectedPolygons, UniqueList<int> neighbours);
 public:
     CrackTip();
     CrackTip(PointSegment crack);

@@ -253,17 +253,23 @@ bool CrackTip::fitsBox(double radius, Polygon poly, std::vector<Point> points) {
 }
 
 int CrackTip::getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints, std::vector<int> &affectedPolygons) {
-    UniqueList<int> ringPolygons;
-    getDirectNeighbours(this->container_polygon, mesh, ringPolygons);
+    UniqueList<int> neighbours;
+    getDirectNeighbours(this->container_polygon, mesh, neighbours);
 
+    return this->getRingPolygon(mesh, unusedPoints, affectedPolygons, neighbours);
+}
+
+int CrackTip::getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints, std::vector<int> &affectedPolygons,
+                             UniqueList<int> neighbours) {
     std::vector<int> mergedPoints;
-    std::vector<int> ringPolygonPoints = mesh.getAllPoints(ringPolygons.getList());
-    RemeshAdapter remesher(ringPolygons.getList(), mesh.getPoints().getList(), mesh, mergedPoints);
+    std::vector<int> ringPolygonPoints = mesh.getAllPoints(neighbours.getList());
+    RemeshAdapter remesher(neighbours.getList(), mesh.getPoints().getList(), mesh, mergedPoints);
 
     Polygon ringRegion = remesher.getRegion();
-    affectedPolygons.assign(ringPolygons.getList().begin(), ringPolygons.getList().end());
-    
+    affectedPolygons.assign(neighbours.getList().begin(), neighbours.getList().end());
+
     unusedPoints = mesh.getUnusedPoints(ringPolygonPoints, mergedPoints);
-        
+
+    mesh.printInFile("afterFirst.txt");
     return remesher.getRegionIndex();
 }

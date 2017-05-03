@@ -22,6 +22,7 @@ public:
     T& operator[](int i);
     bool operator==(const UniqueList<T>& other);
     bool contains(T elem);
+    bool hasCommonElement(UniqueList<T> other);
 };
 
 template <class T>
@@ -91,6 +92,17 @@ bool UniqueList<T>::contains(T elem) {
 template <class T>
 std::vector<T>& UniqueList<T>::getList() {
     return this->list;
+}
+
+template <class T>
+bool UniqueList<T>::hasCommonElement(UniqueList<T> other) {
+    for(int i=0; i<other.size(); i++){
+        if(this->contains(other[i])){
+            return true;
+        }
+    }
+
+    return false;
 }
 
 #endif

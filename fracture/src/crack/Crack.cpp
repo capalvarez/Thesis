@@ -38,17 +38,20 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
     bool bothAreGrowing = !this->init.hasFinished && !this->end.hasFinished;
 
     if(bothAreGrowing){
-        if(this->init.container_polygon  == this->end.container_polygon ||
-            m.polygonsTouch(this->init.container_polygon, this->end.container_polygon)){
-            UniqueList<int> neighbours;
-            this->init.getDirectNeighbours(this->init.container_polygon, m, neighbours);
-            this->end.getDirectNeighbours(this->end.container_polygon, m, neighbours);
+        UniqueList<int> initNeighbours;
+        UniqueList<int> endNeighbours;
 
-            neighbours.push_back(this->init.container_polygon);
-            neighbours.push_back(this->end.container_polygon);
+        this->init.getDirectNeighbours(this->init.container_polygon, m, initNeighbours);
+        this->end.getDirectNeighbours(this->end.container_polygon, m, endNeighbours);
 
-            std::vector<int> allPoints = m.getAllPoints(neighbours.getList());
-            int index = m.mergePolygons(neighbours.getList());
+        if(initNeighbours.hasCommonElement(endNeighbours)){
+            initNeighbours.push_list(endNeighbours.getList());
+
+            initNeighbours.push_back(this->init.container_polygon);
+            initNeighbours.push_back(this->end.container_polygon);
+
+            std::vector<int> allPoints = m.getAllPoints(initNeighbours.getList());
+            int index = m.mergePolygons(initNeighbours.getList());
             Polygon ring = m.getPolygon(index);
             std::vector<int> unused = m.getUnusedPoints(allPoints, ring.getPoints());
 
@@ -105,10 +108,10 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
 
             SegmentMap e = m.getSegments();
             Neighbours n_f = e.get(relevantSegments[0]);
-            int neighbour1 = utilities::indexOf(neighbours.getList(), n_f.getFirst())!=-1? n_f.getSecond() : n_f.getFirst();
+            int neighbour1 = utilities::indexOf(initNeighbours.getList(), n_f.getFirst())!=-1? n_f.getSecond() : n_f.getFirst();
 
             Neighbours n_s = e.get(relevantSegments[1]);
-            int neighbour2 = utilities::indexOf(neighbours.getList(), n_s.getFirst())!=-1? n_s.getSecond() : n_s.getFirst();
+            int neighbour2 = utilities::indexOf(initNeighbours.getList(), n_s.getFirst())!=-1? n_s.getSecond() : n_s.getFirst();
 
             NeighbourInfo n1 = NeighbourInfo(index, relevantSegments[0], intersections[0], false);
             NeighbourInfo n2 = NeighbourInfo(neighbour2, relevantSegments[1], intersections[1], false);
@@ -163,8 +166,8 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                     affectedPolygons.push_back(initPoly_index);
                     affectedPolygons.push_back(endPoly_index);
                 }else{
-                    initPoly_index = this->init.getRingPolygon(m, unusedInit, affectedPolygons);
-                    endPoly_index = this->end.getRingPolygon(m, unusedEnd, affectedPolygons);
+                    initPoly_index = this->init.getRingPolygon(m, unusedInit, affectedPolygons, initNeighbours);
+                    endPoly_index = this->end.getRingPolygon(m, unusedEnd, affectedPolygons, endNeighbours);
 
                     Polygon initRing = m.getPolygon(initPoly_index);
                     Polygon endRing = m.getPolygon(endPoly_index);
