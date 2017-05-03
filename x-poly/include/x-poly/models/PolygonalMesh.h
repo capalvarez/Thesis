@@ -47,6 +47,7 @@ public:
 
     Region getRegion() const;
     bool isInDomain(Point p);
+    bool isInBorder(Point p);
 };
 
 

@@ -38,6 +38,7 @@ public:
     BoundingBox getBox();
     void getSegments(std::vector<IndexSegment>& s);
     bool containsPoint(Point p);
+    bool inEdges(Point p);
     void cleanSeedPoints();
 
 };

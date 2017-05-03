@@ -27,14 +27,16 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack, bool in
         return PolygonChangeData(oldPolygons, newPolygons, init);
     }
 
+    int last = -1;
     if(initialCrackTip){
         IndexSegment container_edge = this->getPolygon(init).containerEdge(getPoints().getList(), crack.getFirst());
         NeighbourInfo n0 = NeighbourInfo(init, container_edge,crack.getFirst() ,false);
 
         splitPolygons(n0, n1, -1, oldPolygons, newPolygons);
+        last = this->polygons.size() - 1;
     }
 
-    int last = -1;
+    this->printInFile("meshmesh.txt");
     bool oneLastIteration = false;
 
     while(true){

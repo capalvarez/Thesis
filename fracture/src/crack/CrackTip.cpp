@@ -170,11 +170,8 @@ void CrackTip::reassignContainer(BreakableMesh& mesh) {
              }
         }
 
-        if(mesh.getPoint(vertexIndex).isInBoundary()){
+        if(mesh.isInBorder(this->getPoint())){
             this->hasFinished = true;
-            this->container_polygon = container;
-
-            return;
         }
 
         if(vertexIndex!=-1){
@@ -195,12 +192,14 @@ void CrackTip::reassignContainer(BreakableMesh& mesh) {
 
             return;
         }else{
-            SegmentMap edges = mesh.getSegments();
-            Neighbours n = edges.get(container_edge);
+            if(!this->isFinished()){
+                SegmentMap edges = mesh.getSegments();
+                Neighbours n = edges.get(container_edge);
 
-            int other = n.getFirst()==container? n.getSecond() : n.getFirst();
+                int other = n.getFirst()==container? n.getSecond() : n.getFirst();
 
-            mesh.mergePolygons(container, other);
+                mesh.mergePolygons(container, other);
+            }
         }
     }
 

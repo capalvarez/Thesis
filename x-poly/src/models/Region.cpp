@@ -151,6 +151,12 @@ bool Region::containsPoint(Point p) {
     return Polygon::containsPoint(regionPoints, p);
 }
 
+bool Region::inEdges(Point p) {
+    std::vector<Point> regionPoints = this->p;
+
+    return Polygon::inEdges(regionPoints, p);
+}
+
 void Region::cleanSeedPoints() {
     this->seedPoints.clear();
 }

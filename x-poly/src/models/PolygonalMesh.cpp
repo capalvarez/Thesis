@@ -190,3 +190,7 @@ bool PolygonalMesh::polygonsTouch(int poly1, int poly2) {
 bool PolygonalMesh::isInDomain(Point p) {
     return this->region.containsPoint(p);
 }
+
+bool PolygonalMesh::isInBorder(Point p) {
+    return this->region.inEdges(p);
+}
