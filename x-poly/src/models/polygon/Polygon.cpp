@@ -395,14 +395,14 @@ void Polygon::replace_segment(IndexSegment seg, std::vector<IndexSegment> segs, 
 
         if(segment.isVertex(orderedSegments.front())){
             orderedSegments.insert(orderedSegments.begin(), segment.getFirst());
-            segs.pop_back();
+            segs.erase(segs.begin()+i);
             i--;
             continue;
         }
 
         if(segment.isVertex(orderedSegments.back())){
             orderedSegments.push_back(segment.getSecond());
-            segs.pop_back();
+            segs.erase(segs.begin()+i);
             i--;
             continue;
         }
@@ -410,9 +410,10 @@ void Polygon::replace_segment(IndexSegment seg, std::vector<IndexSegment> segs, 
         i--;
     }
 
+    seg.orderCCW(points, this->getCentroid());
     int indexOfStart = utilities::indexOf(this->points, seg.getFirst());
 
-    this->points.insert(this->points.begin()+indexOfStart, orderedSegments.begin()+1, orderedSegments.end()-1);
+    this->points.insert(this->points.begin()+indexOfStart+1, orderedSegments.begin()+1, orderedSegments.end()-1);
     this->mutate(this->points,points);
 }
 

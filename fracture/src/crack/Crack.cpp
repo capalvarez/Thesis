@@ -78,10 +78,10 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                                  std::abs(p1.getY()-p2.getY())/2 + std::min(p1.getY(), p2.getY()));
             Point nextPoint;
 
-            double dX = (p2.getX() - p1.getX());
+            double dY = (p2.getY() - p1.getY());
 
-            if(dX!=0){
-                double slope = -dX/(p2.getY() - p1.getY());
+            if(dY!=0){
+                double slope = -(p2.getX() - p1.getX())/dY;
                 nextPoint = Point(middle.getX()*2 , slope*middle.getX() + middle.getY());
             }else{
                 nextPoint = Point(middle.getX(), 2*middle.getY());
