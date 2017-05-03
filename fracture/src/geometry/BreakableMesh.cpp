@@ -28,12 +28,19 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
     }
 
     int last = -1;
+    bool oneLastIteration = false;
 
     while(true){
         Polygon& poly1 = getPolygon(n1.neighbour);
 
         if(poly1.containsPoint(this->points.getList(), crack.getSecond())){
-            return PolygonChangeData(oldPolygons, newPolygons, n1.neighbour);
+            if(poly1.inEdges(this->points.getList(), crack.getSecond())){
+                if(!oneLastIteration){
+                    oneLastIteration = true;
+                }
+            }else{
+                return PolygonChangeData(oldPolygons, newPolygons, n1.neighbour);
+            }
         }
 
         std::vector<int> poly1_points = poly1.getPoints();
@@ -48,14 +55,17 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
         }
 
         splitPolygons(n1, n2, init, oldPolygons, newPolygons);
-
+        this->printInFile("meshmesh.txt");
         // Iterate
+
+        if(oneLastIteration){
+            return PolygonChangeData(oldPolygons, newPolygons, n1.neighbour);
+        }
+
         last = this->polygons.size()-1;
         init = n1.neighbour;
         n1 = n2;
     }
-
-
 }
 
 void BreakableMesh::swapPolygons(int first, int last, std::unordered_map<IndexSegment,int,SegmentHasher> &toIgnore) {
@@ -249,6 +259,10 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
     newPolygon2.getSegments(segments2);
 
     this->edges.insert(IndexSegment(p1,p2),Neighbours(n1.neighbour,n1.neighbour));
+
+    for (int i = 0; i < segments1.size() ; ++i) {
+        this->edges.replace_neighbour(segments1[i], n1.neighbour, new_index1);
+    }
 
     for (int i = 0; i < segments2.size() ; ++i) {
         this->edges.replace_neighbour(segments2[i], n1.neighbour, new_index2);

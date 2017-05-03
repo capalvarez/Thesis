@@ -172,6 +172,8 @@ void CrackTip::reassignContainer(BreakableMesh& mesh) {
 
         if(mesh.getPoint(vertexIndex).isInBoundary()){
             this->hasFinished = true;
+            this->container_polygon = container;
+
             return;
         }
 

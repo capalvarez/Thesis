@@ -163,11 +163,11 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                     affectedPolygons.push_back(initPoly_index);
                     affectedPolygons.push_back(endPoly_index);
                 }else{
-                    int initRing_index = this->init.getRingPolygon(m, unusedInit, affectedPolygons);
-                    int endRing_index = this->end.getRingPolygon(m, unusedEnd, affectedPolygons);
+                    initPoly_index = this->init.getRingPolygon(m, unusedInit, affectedPolygons);
+                    endPoly_index = this->end.getRingPolygon(m, unusedEnd, affectedPolygons);
 
-                    Polygon initRing = m.getPolygon(initRing_index);
-                    Polygon endRing = m.getPolygon(endRing_index);
+                    Polygon initRing = m.getPolygon(initPoly_index);
+                    Polygon endRing = m.getPolygon(endPoly_index);
 
                     radius = adjustBoxes(initRing, endRing, m.getPoints().getList());
                 }
@@ -198,8 +198,8 @@ void Crack::initializeCrack(BreakableMesh &mesh) {
     }
 
     this->init.reassignContainer(mesh);
-    mesh.breakMesh(this->init.container_polygon, PointSegment(this->init.getPoint(), this->end.getPoint()));
     this->end.reassignContainer(mesh);
+    mesh.breakMesh(this->init.container_polygon, PointSegment(this->init.getPoint(), this->end.getPoint()));
 }
 
 PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
