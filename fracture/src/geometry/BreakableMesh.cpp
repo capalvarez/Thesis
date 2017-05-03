@@ -16,7 +16,7 @@ BreakableMesh::BreakableMesh(const PolygonalMesh& m) {
     this->region = m.getRegion();
 }
 
-PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
+PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip) {
     std::vector<Polygon> oldPolygons;
     std::vector<Polygon> newPolygons;
 
@@ -25,6 +25,13 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
     if(n1.neighbour<0){
         //If the crack is in one element, return the same element
         return PolygonChangeData(oldPolygons, newPolygons, init);
+    }
+
+    if(initialCrackTip){
+        IndexSegment container_edge = this->getPolygon(init).containerEdge(getPoints().getList(), crack.getFirst());
+        NeighbourInfo n0 = NeighbourInfo(init, container_edge,crack.getFirst() ,false);
+
+        splitPolygons(n0, n1, -1, oldPolygons, newPolygons);
     }
 
     int last = -1;
@@ -56,8 +63,8 @@ PolygonChangeData BreakableMesh::breakMesh(int init, PointSegment crack) {
 
         splitPolygons(n1, n2, init, oldPolygons, newPolygons);
         this->printInFile("meshmesh.txt");
-        // Iterate
 
+        // Iterate
         if(oneLastIteration){
             return PolygonChangeData(oldPolygons, newPolygons, n1.neighbour);
         }
@@ -245,7 +252,10 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
     int new_index1 = n1.neighbour;
     int new_index2 = this->polygons.size() - 1;
 
-    this->getPolygon(init).insertOnSegment(n1.edge, p1);
+    if(init>=0){
+        this->getPolygon(init).insertOnSegment(n1.edge, p1);
+    }
+
     this->getPolygon(n2.neighbour).insertOnSegment(n2.edge, p2);
 
     // Get the edge information for the old polygon and update it

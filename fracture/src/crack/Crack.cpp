@@ -199,7 +199,7 @@ void Crack::initializeCrack(BreakableMesh &mesh) {
 
     this->init.reassignContainer(mesh);
     this->end.reassignContainer(mesh);
-    mesh.breakMesh(this->init.container_polygon, PointSegment(this->init.getPoint(), this->end.getPoint()));
+    mesh.breakMesh(this->init.container_polygon, PointSegment(this->init.getPoint(), this->end.getPoint()), this->init.isFinished());
 }
 
 PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {

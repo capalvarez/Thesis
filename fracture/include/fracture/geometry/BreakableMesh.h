@@ -11,7 +11,7 @@ public:
     BreakableMesh();
     BreakableMesh(const PolygonalMesh& m);
 
-    PolygonChangeData breakMesh(int init, PointSegment crack);
+    PolygonChangeData breakMesh(int init, PointSegment crack, bool initialCrackTip);
     void splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init, std::vector<Polygon> &oldPolygons,
                        std::vector<Polygon> &newPolygons);
 
