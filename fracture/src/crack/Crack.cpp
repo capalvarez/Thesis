@@ -116,8 +116,8 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
             NeighbourInfo n1 = NeighbourInfo(index, relevantSegments[0], intersections[0], false);
             NeighbourInfo n2 = NeighbourInfo(neighbour2, relevantSegments[1], intersections[1], false);
 
-
-            m.splitPolygons(n1, n2, neighbour1, oldP.getList(), newP, UniqueList<int>());
+            UniqueList<int> n;
+            m.splitPolygons(n1, n2, neighbour1, oldP.getList(), newP, n);
 
             int poly1 = m.getPolygon(index).containsPoint(m.getPoints().getList(), this->init.getPoint())?
                         index : (int)(m.getPolygons().size())-1;

@@ -9,6 +9,7 @@ struct NeighbourInfo {
     Point intersection;
     IndexSegment edge;
     bool isEdge;
+    bool isVertex;
     int extraPoint;
 
     NeighbourInfo(int n, IndexSegment e, Point i, bool is){
@@ -16,6 +17,7 @@ struct NeighbourInfo {
         edge = e;
         intersection = i;
         isEdge = is;
+        isVertex = false;
         extraPoint = -1;
     }
 

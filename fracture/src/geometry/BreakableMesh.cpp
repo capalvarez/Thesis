@@ -32,6 +32,7 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
     if(initialCrackTip){
         IndexSegment container_edge = this->getPolygon(init).containerEdge(getPoints().getList(), crack.getFirst());
         NeighbourInfo n0 = NeighbourInfo(init, container_edge,crack.getFirst() ,false);
+        n0.isVertex = container_edge.isEndPoint(crack.getFirst(), this->points.getList());
 
         splitPolygons(n0, n1, -1, oldPolygons, newPolygons, newPoints);
         last = this->polygons.size() - 1;
@@ -216,7 +217,10 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
             }
         }
 
-        new1.push_back(point);
+        if(point!= p1 && point!=p2){
+            new1.push_back(point);
+        }
+
         point = poly1_points[(indexOfStart+1)%poly1_points.size()];
 
         indexOfStart++;
@@ -264,8 +268,12 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
     this->getPolygon(n2.neighbour).insertOnSegment(n2.edge, p2);
 
     // Get the edge information for the old polygon and update it
-    this->edges.delete_element(n1.edge);
-    this->edges.delete_element(n2.edge);
+    if(!n1.isVertex){
+        this->edges.delete_element(n1.edge);
+    }
+    if(!n2.isVertex){
+        this->edges.delete_element(n2.edge);
+    }
 
     std::vector<IndexSegment> segments1;
     std::vector<IndexSegment> segments2;
@@ -283,10 +291,15 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
         this->edges.replace_neighbour(segments2[i], n1.neighbour, new_index2);
     }
 
-    this->edges.insert_if_null(IndexSegment(p1,n1.edge.getFirst()),init);
-    this->edges.insert_if_null(IndexSegment(p1,n1.edge.getSecond()), init);
-    this->edges.insert_if_null(IndexSegment(p2,n2.edge.getFirst()), n2.neighbour);
-    this->edges.insert_if_null(IndexSegment(p2,n2.edge.getSecond()), n2.neighbour);
+    if(!n1.isVertex){
+        this->edges.insert_if_null(IndexSegment(p1,n1.edge.getFirst()),init);
+        this->edges.insert_if_null(IndexSegment(p1,n1.edge.getSecond()), init);
+    }
+
+    if(!n2.isVertex){
+        this->edges.insert_if_null(IndexSegment(p2,n2.edge.getFirst()), n2.neighbour);
+        this->edges.insert_if_null(IndexSegment(p2,n2.edge.getSecond()), n2.neighbour);
+    }
 
     n2.extraPoint = p2;
 

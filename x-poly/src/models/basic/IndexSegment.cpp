@@ -96,3 +96,7 @@ bool IndexSegment::isContained(PointSegment s, std::vector<Point> p) {
 IndexSegment IndexSegment::add(int o) {
     return IndexSegment(this->p1 + o, this->p2 + o);
 }
+
+bool IndexSegment::isEndPoint(Point p, std::vector<Point> points) {
+    return p == points[this->getFirst()] || p == points[this->getSecond()];
+}

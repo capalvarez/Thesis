@@ -23,7 +23,8 @@ TEST(BreakableMeshTest, BreakMeshTest){
     breakableMesh.printInFile("broken.txt");
     int container = breakableMesh.findContainerPolygon(Point(0.25,0.5));
 
-    breakableMesh.breakMesh(container, crack, false, <#initializer#>);
+    UniqueList<int> c;
+    breakableMesh.breakMesh(container, crack, false, c);
     breakableMesh.printInFile("broken2.txt");
 }
 

@@ -94,8 +94,17 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
         Point p;
         bool intersects = polySeg[j].intersection(this->points.getList(), direction, p);
 
+        Neighbours edge = this->edges.get(polySeg[j]);
+
+        int next_poly = edge.getFirst()!=poly_index? edge.getFirst() : edge.getSecond();
+        auto find = std::find(previous.begin(), previous.end(), next_poly);
+        if(next_poly==-1 || find!=previous.end()){
+            continue;
+        }
+
         // Special case: Intersection through vertex
-        if(poly.isVertex(p, this->points.getList())){
+        int vertexIndex;
+        if(poly.isVertex(p, this->points.getList(), vertexIndex)){
             double tolerance = XPolyConfig::instance()->getTolerance();
 
             UniqueList<int> neighbours;
@@ -107,6 +116,10 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
             Pair<double> slopeDirection = direction.getSlope();
 
             for (int i = 0; i < neighbours.size(); ++i) {
+                if(!getPolygon(neighbours[i]).isVertex(vertexIndex)){
+                    continue;
+                }
+
                 Pair<double> slopeNeighbour = PointSegment(poly.getCentroid(), getPolygon(neighbours[i]).getCentroid()).getSlope();
 
                 if(std::abs(slopeNeighbour.first)<tolerance && std::abs(slopeDirection.first)<tolerance){
@@ -123,19 +136,13 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
                     }
                 }
             }
-            return NeighbourInfo(neighbour, IndexSegment(), p, false);
+            NeighbourInfo n = NeighbourInfo(neighbour, polySeg[j], p, false);
+            n.isVertex = true;
+
+            return n;
         }
 
         if(intersects && !polySeg[j].isContained(direction, this->points.getList())){
-            Neighbours edge = this->edges.get(polySeg[j]);
-
-            int next_poly = edge.getFirst()!=poly_index? edge.getFirst() : edge.getSecond();
-            if(next_poly==-1){
-                continue;
-            }
-
-            auto find = std::find(previous.begin(), previous.end(), next_poly);
-
             if(find == previous.end()) {
                 int vertexIndex;
 
@@ -232,7 +239,7 @@ bool PolygonalMesh::isInBorder(Point p) {
     return this->region.inEdges(p);
 }
 
-void PolygonalMesh::getDirectNeighbours(int poly, UniqueList<int> neighbours) {
+void PolygonalMesh::getDirectNeighbours(int poly, UniqueList<int> &neighbours) {
     this->getAllNeighbours(poly, neighbours);
     UniqueList<int> neighbours_neighbours;
 

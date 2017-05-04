@@ -275,9 +275,10 @@ bool Polygon::isVertex(int index) {
     return std::find(points.begin(), points.end(), index) != points.end();
 }
 
-bool Polygon::isVertex(Point p, std::vector<Point> points) {
+bool Polygon::isVertex(Point p, std::vector<Point> points, int &vertexIndex) {
     for (int i: this->points){
         if(points[i]==p){
+            vertexIndex = i;
             return true;
         }
     }
