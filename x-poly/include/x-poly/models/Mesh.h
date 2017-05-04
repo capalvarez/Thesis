@@ -10,6 +10,7 @@ protected:
     SegmentMap edges;
     UniqueList<Point> points;
 public:
+    void printInStream(std::ofstream& file);
     void printInFile(std::string fileName);
     virtual void writeElements(std::ofstream& file) = 0;
 

@@ -1,7 +1,8 @@
 #include <fracture/FractureSimulator.h>
 #include <fracture/config/FractureConfig.h>
 
-FractureSimulator::FractureSimulator(const PolygonalMesh& mesh, const Crack& initial, const ProblemConditions& conditions) {
+FractureSimulator::FractureSimulator(std::string simulationName, const PolygonalMesh& mesh, const Crack& initial, const ProblemConditions& conditions) {
+    this->simulationName = simulationName;
     this->mesh = BreakableMesh(mesh);
     this->crack = initial;
     this->veamer = BreakableVeamer();
@@ -12,9 +13,9 @@ FractureSimulator::FractureSimulator(const PolygonalMesh& mesh, const Crack& ini
 
 void FractureSimulator::simulate(double crack_growth) {
     FractureConfig* config = FractureConfig::instance();
-    int n_iter = 0;
+    this->step = 0;
 
-    while(n_iter<config->getMaxIterations() && !this->crack.isFinished()){
+    while(this->step<config->getMaxIterations() && !this->crack.isFinished()){
         PolygonChangeData refinedPolygons = this->crack.prepareTip(this->mesh);
         this->mesh.printInFile("prepared.txt");
 
@@ -25,8 +26,19 @@ void FractureSimulator::simulate(double crack_growth) {
         this->veamer.replaceElements(affectedPolygons.oldPolygons, affectedPolygons.newPolygons, this->mesh.getPoints());
         this->mesh.printInFile("after.txt");
 
-        n_iter++;
+        this->step++;
     }
 }
 
+void FractureSimulator::writeStepInFile() {
+    std::string fileName = this->simulationName +"_step" + utilities::toString(step) + ".txt";
+    std::ofstream file;
+    file.open(fileName, std::ios::out);
+
+    this->mesh.printInStream(file);
+    this->crack.printInStream(file);
+
+    file.close();
+
+}
 

@@ -58,7 +58,8 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
     problem.mesh->printInFile("changed.txt");
     PointSegment direction(lastPoint, crackPath.back());
 
-    PolygonChangeData changeData = problem.mesh->breakMesh(this->container_polygon, direction, this->isFinished());
+    PolygonChangeData changeData = problem.mesh->breakMesh(this->container_polygon, direction, this->isFinished(),
+                                                           <#initializer#>);
     assignLocation(changeData.lastPolygon);
 
     checkIfFinished(problem, direction);
@@ -172,11 +173,14 @@ void CrackTip::reassignContainer(BreakableMesh& mesh) {
 
         if(mesh.isInBorder(this->getPoint())){
             this->hasFinished = true;
+            this->container_polygon = container;
+
+            return;
         }
 
         if(vertexIndex!=-1){
             UniqueList<int> neighbours;
-            this->getDirectNeighbours(container, mesh, neighbours);
+            mesh.getDirectNeighbours(container, neighbours);
 
             std::vector<int> vertexContainers;
             for (int i = 0; i < neighbours.size(); ++i) {
@@ -228,22 +232,6 @@ void CrackTip::checkIfFinished(Problem problem, PointSegment direction) {
     }
 }
 
-void CrackTip::getDirectNeighbours(int poly, BreakableMesh mesh, UniqueList<int> &neighbours) {
-    mesh.getAllNeighbours(poly, neighbours);
-    UniqueList<int> neighbours_neighbours;
-
-    for (int i = 0; i < neighbours.size(); ++i) {
-        mesh.getAllNeighbours(neighbours[i], neighbours_neighbours);
-    }
-
-    for (int j = 0; j < neighbours_neighbours.size(); ++j) {
-        int candidate = neighbours_neighbours[j];
-        if(!neighbours.contains(candidate) && mesh.polygonsTouch(poly, candidate)){
-            neighbours.push_back(neighbours_neighbours[j]);
-        }
-    }
-}
-
 bool CrackTip::fitsBox(double radius, Polygon poly, std::vector<Point> points) {
     Point p = getPoint();
     BoundingBox box(Point(p.getX()-radius, p.getY()-radius),
@@ -254,7 +242,7 @@ bool CrackTip::fitsBox(double radius, Polygon poly, std::vector<Point> points) {
 
 int CrackTip::getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints, std::vector<int> &affectedPolygons) {
     UniqueList<int> neighbours;
-    getDirectNeighbours(this->container_polygon, mesh, neighbours);
+    mesh.getDirectNeighbours(this->container_polygon, neighbours);
 
     return this->getRingPolygon(mesh, unusedPoints, affectedPolygons, neighbours);
 }

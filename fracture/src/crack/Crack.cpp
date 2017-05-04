@@ -41,8 +41,8 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         UniqueList<int> initNeighbours;
         UniqueList<int> endNeighbours;
 
-        this->init.getDirectNeighbours(this->init.container_polygon, m, initNeighbours);
-        this->end.getDirectNeighbours(this->end.container_polygon, m, endNeighbours);
+        m.getDirectNeighbours(this->init.container_polygon, initNeighbours);
+        m.getDirectNeighbours(this->end.container_polygon, endNeighbours);
 
         if(initNeighbours.hasCommonElement(endNeighbours)){
             initNeighbours.push_list(endNeighbours.getList());
@@ -116,7 +116,8 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
             NeighbourInfo n1 = NeighbourInfo(index, relevantSegments[0], intersections[0], false);
             NeighbourInfo n2 = NeighbourInfo(neighbour2, relevantSegments[1], intersections[1], false);
 
-            m.splitPolygons(n1, n2, neighbour1, oldP.getList(), newP);
+
+            m.splitPolygons(n1, n2, neighbour1, oldP.getList(), newP, UniqueList<int>());
 
             int poly1 = m.getPolygon(index).containsPoint(m.getPoints().getList(), this->init.getPoint())?
                         index : (int)(m.getPolygons().size())-1;
@@ -202,7 +203,8 @@ void Crack::initializeCrack(BreakableMesh &mesh) {
 
     this->init.reassignContainer(mesh);
     this->end.reassignContainer(mesh);
-    mesh.breakMesh(this->init.container_polygon, PointSegment(this->init.getPoint(), this->end.getPoint()), this->init.isFinished());
+    mesh.breakMesh(this->init.container_polygon, PointSegment(this->init.getPoint(), this->end.getPoint()),
+                   this->init.isFinished(), this->pointIndexes);
 }
 
 PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
@@ -247,6 +249,14 @@ double Crack::adjustBoxes(Polygon initPoly, Polygon endPoly, std::vector<Point> 
     return radius;
 }
 
+void Crack::printInStream(std::ofstream &file) {
+    int n = pointIndexes.size();
 
+    file << n << std::endl;
+
+    for (int i = 0; i < n; ++i) {
+        file << pointIndexes[i] << " " << pointIndexes[(i+1)%n] << std::endl;
+    }
+}
 
 

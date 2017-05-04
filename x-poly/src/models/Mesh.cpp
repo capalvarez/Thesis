@@ -7,6 +7,11 @@ void Mesh::printInFile(std::string fileName) {
     std::ofstream file;
     file.open(path, std::ios::out);
 
+    printInStream(file);
+    file.close();
+}
+
+void Mesh::printInStream(std::ofstream &file) {
     file << points.size() << std::endl;
     for(int i=0;i<points.size();i++){
         file << points[i].getString() << std::endl;
@@ -19,8 +24,6 @@ void Mesh::printInFile(std::string fileName) {
     }
 
     writeElements(file);
-
-    file.close();
 }
 
 SegmentMap &Mesh::getSegments() {

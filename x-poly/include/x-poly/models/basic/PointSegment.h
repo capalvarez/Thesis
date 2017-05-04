@@ -16,6 +16,7 @@ public:
     double cartesianAngle();
     bool operator==(const PointSegment other) const;
     bool intersectionInfinite(Point p1, Point p2, Point& inter);
+    Pair<double> getSlope();
 };
 
 

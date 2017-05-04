@@ -11,6 +11,7 @@ class Crack {
 private:
     CrackTip init;
     CrackTip end;
+    UniqueList<int> pointIndexes;
     double StandardRadius;
 
     void prepareTip(CrackTip tip, UniqueList<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh);
@@ -27,6 +28,7 @@ public:
     bool isFinished();
 
     void initializeCrack(BreakableMesh &mesh);
+    void printInStream(std::ofstream& file);
 };
 
 

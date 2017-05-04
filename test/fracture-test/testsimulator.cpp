@@ -29,7 +29,7 @@ TEST(FractureSimulatorTest, InitTest){
     Material m;
 
     ProblemConditions conditions(container, f, m);
-    FractureSimulator simulator(mesh, crack, conditions);
+    FractureSimulator simulator("test", mesh, crack, conditions);
 }
 
 TEST(FractureSimulatorTest, SimulateTest){
@@ -38,14 +38,14 @@ TEST(FractureSimulatorTest, SimulateTest){
 
     PointGenerator generator (functions::constant(), functions::constant());
 
-    square.generateSeedPoints(generator, 3, 3);
+    square.generateSeedPoints(generator, 8, 8);
     std::vector<Point> seeds = square.getSeedPoints();
 
     TriangleMeshGenerator meshGenerator(seeds, square);
     PolygonalMesh mesh = meshGenerator.getMesh();
     mesh.printInFile("previous.txt");
 
-    Crack crack(Point(0.5, 2.0), Point(2.5, 2.0));
+    Crack crack(Point(0.0, 3.0), Point(1.5, 1.5));
 
     class Sum : public BodyForce{
     private:
@@ -69,6 +69,6 @@ TEST(FractureSimulatorTest, SimulateTest){
 
     ProblemConditions conditions(container, f, Material(Materials::material::Steel));
 
-    FractureSimulator simulator(mesh, crack, conditions);
+    FractureSimulator simulator("squareUniform", mesh, crack, conditions);
     simulator.simulate(0.1);
 }

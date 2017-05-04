@@ -35,4 +35,6 @@ bool PointSegment::intersectionInfinite(Point p1, Point p2, Point &inter) {
     return Segment::intersectionInfinite(p1,p2,this->p1, this->p2, inter);
 }
 
-
+Pair<double> PointSegment::getSlope() {
+    return Pair<double>(getSecond().getX() - getFirst().getX(), getSecond().getY() - getFirst().getY());
+}

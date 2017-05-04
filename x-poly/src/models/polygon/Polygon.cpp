@@ -275,6 +275,16 @@ bool Polygon::isVertex(int index) {
     return std::find(points.begin(), points.end(), index) != points.end();
 }
 
+bool Polygon::isVertex(Point p, std::vector<Point> points) {
+    for (int i: this->points){
+        if(points[i]==p){
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void Polygon::calculateHash() {
     std::size_t hash = 0;
 
@@ -498,3 +508,5 @@ void Polygon::insertOnSegment(IndexSegment segment, int point) {
         this->points.insert(this->points.begin()+i, point);
     }
 }
+
+

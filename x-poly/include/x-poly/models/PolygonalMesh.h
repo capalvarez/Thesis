@@ -48,6 +48,7 @@ public:
     Region getRegion() const;
     bool isInDomain(Point p);
     bool isInBorder(Point p);
+    void getDirectNeighbours(int poly, UniqueList<int> neighbours);
 };
 
 
