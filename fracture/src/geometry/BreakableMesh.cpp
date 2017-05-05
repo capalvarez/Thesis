@@ -20,8 +20,9 @@ PolygonChangeData
 BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, UniqueList<int> &newPoints) {
     std::vector<Polygon> oldPolygons;
     std::vector<Polygon> newPolygons;
+    std::vector<int> previous;
 
-    NeighbourInfo n1 = getNeighbour(init, crack);
+    NeighbourInfo n1 = getNeighbour(init, crack, previous);
 
     if(n1.neighbour<0){
         //If the crack is in one element, return the same element
@@ -41,6 +42,7 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
     this->printInFile("meshmesh.txt");
     bool oneLastIteration = false;
 
+
     while(true){
         Polygon& poly1 = getPolygon(n1.neighbour);
 
@@ -55,7 +57,13 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
         }
 
         std::vector<int> poly1_points = poly1.getPoints();
-        std::vector<int> previous = {init, last};
+
+        if(!n1.isVertex){
+            previous = {init, last};
+        }else{
+            previous.push_back(last);
+        }
+
         NeighbourInfo n2 = getNeighbour(n1.neighbour, crack, previous);
 
         if(n1.isEdge){
@@ -209,13 +217,21 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
     bool edgePointsPassed = false;
 
     while(true){
-        if(point==n1.edge.getFirst() || point==n1.edge.getSecond() || point==n1.extraPoint) {
-            if (edgePointsPassed){
+        if(n1.isVertex){
+            if(point==p1){
                 break;
-            } else{
-                edgePointsPassed = true;
             }
+        } else{
+            if(point==n1.edge.getFirst() || point==n1.edge.getSecond() || point==n1.extraPoint) {
+                if (edgePointsPassed){
+                    break;
+                } else{
+                    edgePointsPassed = true;
+                }
+            }    
         }
+        
+        
 
         if(point!= p1 && point!=p2){
             new1.push_back(point);
@@ -229,13 +245,21 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
     edgePointsPassed = false;
 
     while (true){
-        if(point==n2.edge.getFirst() || point==n2.edge.getSecond()) {
-            if (edgePointsPassed){
+        if(n2.isVertex){
+            if(point==p2){
                 break;
-            } else{
-                edgePointsPassed = true;
             }
+        }else{
+            if(point==n2.edge.getFirst() || point==n2.edge.getSecond()) {
+                if (edgePointsPassed){
+                    break;
+                } else{
+                    edgePointsPassed = true;
+                }
+            }   
         }
+        
+        
 
         if(point!= p1 && point!=p2){
             new2.push_back(point);

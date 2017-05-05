@@ -81,10 +81,11 @@ Polygon& PolygonalMesh::getPolygon(int index) {
 }
 
 NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction) {
-    return getNeighbour(poly_index, direction, std::vector<int>());
+    std::vector<int> p;
+    return getNeighbour(poly_index, direction, p);
 }
 
-NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction, std::vector<int> previous) {
+NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction, std::vector<int> &previous) {
     Polygon& poly = getPolygon(poly_index);
 
     std::vector<IndexSegment> polySeg;
@@ -105,6 +106,7 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
         // Special case: Intersection through vertex
         int vertexIndex;
         if(poly.isVertex(p, this->points.getList(), vertexIndex)){
+            previous.clear();
             double tolerance = XPolyConfig::instance()->getTolerance();
 
             UniqueList<int> neighbours;
@@ -120,6 +122,7 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
                     continue;
                 }
 
+                previous.push_back(neighbours[i]);
                 Pair<double> slopeNeighbour = PointSegment(poly.getCentroid(), getPolygon(neighbours[i]).getCentroid()).getSlope();
 
                 if(std::abs(slopeNeighbour.first)<tolerance && std::abs(slopeDirection.first)<tolerance){
@@ -165,8 +168,9 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
 }
 
 int PolygonalMesh::getPolygonInDirection(std::vector<int> index, PointSegment direction) {
+    std::vector<int> p;
     for (int i = 0; i < index.size(); ++i) {
-        NeighbourInfo n = getNeighbour(index[i], direction, std::vector<int>());
+        NeighbourInfo n = getNeighbour(index[i], direction, p);
         if(utilities::indexOf(index,n.neighbour)<0){
             return index[i];
         }
