@@ -123,6 +123,12 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                         index : (int)(m.getPolygons().size())-1;
             int poly2 = poly1==index? (int)(m.getPolygons().size())-1 : index;
 
+            Point crackPoint;
+            PointSegment(intersections[0], intersections[1]).intersection(PointSegment(init_last, end_last), crackPoint);
+            int crackPointIndex = m.getPoints().push_back(crackPoint);
+            pointIndexes.clear();
+            pointIndexes.push_back(crackPointIndex);
+
             m.printInFile("beforePreparing.txt");
 
             Polygon polygon1 = m.getPolygon(poly1);
@@ -168,6 +174,13 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                     affectedPolygons.push_back(endPoly_index);
                 }else{
                     initPoly_index = this->init.getRingPolygon(m, unusedInit, affectedPolygons, initNeighbours);
+                    m.printInFile("beforeSecond.txt");
+
+                    //We have changed the mesh, hence, end crack tip information needs to be recomputed
+                    endNeighbours.clear();
+                    this->end.reassignContainer(m);
+                    m.getDirectNeighbours(this->end.container_polygon, endNeighbours);
+
                     endPoly_index = this->end.getRingPolygon(m, unusedEnd, affectedPolygons, endNeighbours);
 
                     Polygon initRing = m.getPolygon(initPoly_index);
@@ -185,8 +198,8 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
             }
         }
     }else{
-        this->prepareTip(this->init, oldP, newP, m, pointIndexes.first());
-        this->prepareTip(this->end, oldP, newP, m, pointIndexes.last());
+        this->prepareTip(this->init, oldP, newP, m, {pointIndexes.first(), pointIndexes.second()});
+        this->prepareTip(this->end, oldP, newP, m, {pointIndexes.last(), pointIndexes.secondToLast()});
     }
 
     return PolygonChangeData(oldP.getList(), newP);
@@ -220,7 +233,7 @@ PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
 }
 
 void Crack::prepareTip(CrackTip tip, UniqueList<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh,
-                       int entryToContainer) {
+                       std::vector<int> entryToContainer) {
     if(!tip.isFinished()){
         PolygonChangeData data = tip.prepareTip(mesh, StandardRadius, entryToContainer);
 

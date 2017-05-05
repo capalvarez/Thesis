@@ -40,7 +40,7 @@ public:
     double calculateAngle(Problem problem, Eigen::VectorXd u);
 
     PolygonChangeData grow(Eigen::VectorXd u, Problem problem);
-    PolygonChangeData prepareTip(BreakableMesh &mesh, double StandardRadius, int entryToContainer);
+    PolygonChangeData prepareTip(BreakableMesh &mesh, double StandardRadius, std::vector<int> entryToContainer);
     bool isFinished();
     void assignLocation(int polygon);
     Point getPoint();

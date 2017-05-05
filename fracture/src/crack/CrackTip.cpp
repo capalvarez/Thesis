@@ -67,7 +67,7 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
     return changeData;
 }
 
-PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadius, int entryToContainer) {
+PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadius, std::vector<int> entryToContainer) {
     std::vector<int> indexes;
     std::vector<Polygon> newPolygons;
     std::vector<int> affected;
@@ -80,13 +80,13 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
 
     if(fitsBox(StandardRadius, poly, mesh.getPoints().getList())){
         affected.push_back(this->container_polygon);
-        remeshAndAdapt(StandardRadius, newPolygons, this->container_polygon, mesh, std::vector<int>(), entryToContainer);
+        remeshAndAdapt(StandardRadius, newPolygons, this->container_polygon, mesh, std::vector<int>(), entryToContainer[0]);
     } else{
         double candidateRadius = poly.getDiameter()*config->getRatio();
 
         if(fitsBox(candidateRadius, poly, mesh.getPoints().getList())){
             affected.push_back(this->container_polygon);
-            remeshAndAdapt(candidateRadius, newPolygons, this->container_polygon, mesh, std::vector<int>(), entryToContainer);
+            remeshAndAdapt(candidateRadius, newPolygons, this->container_polygon, mesh, std::vector<int>(), entryToContainer[0]);
         } else{
             std::vector<int> unusedPoints;
             int ringIndex = this->getRingPolygon(mesh, unusedPoints, affected);
@@ -97,7 +97,7 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
                             Point(last.getX()+candidateRadius, last.getY()+candidateRadius));
 
             if (box.fitsInsidePolygon(ringRegion, mesh.getPoints().getList())) {
-                remeshAndAdapt(candidateRadius, newPolygons, ringIndex, mesh, unusedPoints, entryToContainer);
+                remeshAndAdapt(candidateRadius, newPolygons, ringIndex, mesh, unusedPoints, entryToContainer[1]);
             } else {
                 double radius = candidateRadius;
                 while(!box.fitsInsidePolygon(ringRegion, mesh.getPoints().getList())) {
@@ -106,7 +106,7 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
                                       Point(last.getX()+radius, last.getY()+radius));
                 }
 
-                remeshAndAdapt(radius, newPolygons, ringIndex, mesh, unusedPoints, entryToContainer);
+                remeshAndAdapt(radius, newPolygons, ringIndex, mesh, unusedPoints, entryToContainer[1]);
             }
         }
     }

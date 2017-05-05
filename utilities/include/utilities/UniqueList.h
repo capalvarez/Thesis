@@ -24,7 +24,11 @@ public:
     bool contains(T elem);
     bool hasCommonElement(UniqueList<T> other);
     T first();
+    T second();
+    T secondToLast();
     T last();
+
+    void clear();
 };
 
 template <class T>
@@ -108,13 +112,38 @@ bool UniqueList<T>::hasCommonElement(UniqueList<T> other) {
 }
 
 template <class T>
-T UniqueList::first() {
-    return nullptr;
+T UniqueList<T>::first() {
+    return this->list[0];
 }
 
 template <class T>
-T UniqueList::last() {
-    return nullptr;
+T UniqueList<T>::second() {
+    if(this->list.size()==1){
+        return this->list[0];
+    }
+
+    return this->list[0];
 }
+
+template <class T>
+T UniqueList<T>::last() {
+    return this->list.back();
+}
+
+template <class T>
+T UniqueList<T>::secondToLast() {
+    if(this->list.size()==1){
+        return this->list.back();
+    }
+
+    return this->list.back();
+}
+
+template <class T>
+void UniqueList<T>::clear() {
+    this->list.clear();
+    this->map.clear();
+}
+
 
 #endif
