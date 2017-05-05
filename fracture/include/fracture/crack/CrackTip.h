@@ -26,7 +26,7 @@ private:
 
     void checkIfFinished(Problem problem, PointSegment direction);
     void remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, int region, BreakableMesh &mesh,
-                            std::vector<int> oldPoints);
+                        std::vector<int> oldPoints, int entryToContainer);
     void reassignContainer(BreakableMesh& mesh);
     bool fitsBox(double radius, Polygon poly, std::vector<Point> points);
     int getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints, std::vector<int> &affectedPolygons);
@@ -40,7 +40,7 @@ public:
     double calculateAngle(Problem problem, Eigen::VectorXd u);
 
     PolygonChangeData grow(Eigen::VectorXd u, Problem problem);
-    PolygonChangeData prepareTip(BreakableMesh &mesh, double StandardRadius);
+    PolygonChangeData prepareTip(BreakableMesh &mesh, double StandardRadius, int entryToContainer);
     bool isFinished();
     void assignLocation(int polygon);
     Point getPoint();

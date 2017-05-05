@@ -2,7 +2,13 @@
 
 TriangleMeshGenerator::TriangleMeshGenerator(std::vector<Point>& point_list, Region region) {
     this->region = region;
-    callTriangle(point_list);
+    callTriangle(point_list, std::vector<IndexSegment>());
+}
+
+TriangleMeshGenerator::TriangleMeshGenerator(std::vector<Point> &point_list, Region region,
+                                             std::vector<IndexSegment> restrictedSegments) {
+    this->region = region;
+    callTriangle(point_list, restrictedSegments);
 }
 
 TriangleMeshGenerator::~TriangleMeshGenerator() {}
@@ -19,7 +25,7 @@ Triangulation TriangleMeshGenerator::getDelaunayTriangulation() {
     return Triangulation(this->meshPoints, this->triangles, delaunayEdges);
 }
 
-void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list) {
+void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, std::vector<IndexSegment> restrictedSegments) {
     struct triangulateio in, out;
 
     std::vector<Point> regionPoints = region.getRegionPoints();
@@ -46,6 +52,7 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list) {
 
     std::vector<IndexSegment> segments;
     region.getSegments(segments);
+    segments.insert(segments.end(), restrictedSegments.begin(), restrictedSegments.end());
 
     in.numberofsegments = (int) segments.size();
     in.segmentlist = (int*)malloc(in.numberofsegments*2*sizeof(int));

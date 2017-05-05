@@ -23,6 +23,8 @@ public:
     bool operator==(const UniqueList<T>& other);
     bool contains(T elem);
     bool hasCommonElement(UniqueList<T> other);
+    T first();
+    T last();
 };
 
 template <class T>
@@ -103,6 +105,16 @@ bool UniqueList<T>::hasCommonElement(UniqueList<T> other) {
     }
 
     return false;
+}
+
+template <class T>
+T UniqueList::first() {
+    return nullptr;
+}
+
+template <class T>
+T UniqueList::last() {
+    return nullptr;
 }
 
 #endif

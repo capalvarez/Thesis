@@ -139,8 +139,8 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                 }
             }
 
-            this->init.remeshAndAdapt(radius, newP, poly1, m, toPoly1);
-            this->end.remeshAndAdapt(radius, newP, poly2, m, toPoly2);
+            this->init.remeshAndAdapt(radius, newP, poly1, m, toPoly1, pointIndexes.first());
+            this->end.remeshAndAdapt(radius, newP, poly2, m, toPoly2, pointIndexes.last());
 
             oldP.push_back(m.getPolygon(poly1));
             oldP.push_back(m.getPolygon(poly2));
@@ -177,16 +177,16 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                 }
             }
 
-            this->init.remeshAndAdapt(radius, newP, initPoly_index, m, unusedInit);
-            this->end.remeshAndAdapt(radius, newP, endPoly_index, m, unusedEnd);
+            this->init.remeshAndAdapt(radius, newP, initPoly_index, m, unusedInit, pointIndexes.first());
+            this->end.remeshAndAdapt(radius, newP, endPoly_index, m, unusedEnd, pointIndexes.last());
 
             for (int i: affectedPolygons){
                 oldP.push_back(m.getPolygon(i));
             }
         }
     }else{
-        this->prepareTip(this->init, oldP, newP, m);
-        this->prepareTip(this->end, oldP, newP, m);
+        this->prepareTip(this->init, oldP, newP, m, pointIndexes.first());
+        this->prepareTip(this->end, oldP, newP, m, pointIndexes.last());
     }
 
     return PolygonChangeData(oldP.getList(), newP);
@@ -219,9 +219,10 @@ PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
     return PolygonChangeData(oldP, newP);
 }
 
-void Crack::prepareTip(CrackTip tip, UniqueList<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh) {
+void Crack::prepareTip(CrackTip tip, UniqueList<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh,
+                       int entryToContainer) {
     if(!tip.isFinished()){
-        PolygonChangeData data = tip.prepareTip(mesh, StandardRadius);
+        PolygonChangeData data = tip.prepareTip(mesh, StandardRadius, entryToContainer);
 
         oldP.push_list(data.oldPolygons);
         newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());
