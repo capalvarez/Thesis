@@ -152,7 +152,7 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
             oldP.push_back(m.getPolygon(poly2));
         }else{
             double radius;
-            int initPoly_index, endPoly_index;
+            int initPoly_index, endPoly_index, init_entry, end_entry;
             std::vector<int> unusedInit, unusedEnd, affectedPolygons;
 
             if(this->init.fitsBox(StandardRadius, m.getPolygon(this->init.container_polygon), m.getPoints().getList())
@@ -160,6 +160,8 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                 radius = StandardRadius;
                 initPoly_index = this->init.container_polygon;
                 endPoly_index = this->end.container_polygon;
+                init_entry = pointIndexes.first();
+                end_entry = pointIndexes.last();
 
                 affectedPolygons.push_back(initPoly_index);
                 affectedPolygons.push_back(endPoly_index);
@@ -169,6 +171,8 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                     radius = StandardRadius*config->getRatio();
                     initPoly_index = this->init.container_polygon;
                     endPoly_index = this->end.container_polygon;
+                    init_entry = pointIndexes.first();
+                    end_entry = pointIndexes.last();
 
                     affectedPolygons.push_back(initPoly_index);
                     affectedPolygons.push_back(endPoly_index);
@@ -187,11 +191,14 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                     Polygon endRing = m.getPolygon(endPoly_index);
 
                     radius = adjustBoxes(initRing, endRing, m.getPoints().getList());
+                    init_entry = pointIndexes.second();
+                    end_entry = pointIndexes.secondToLast();
+
                 }
             }
 
-            this->init.remeshAndAdapt(radius, newP, initPoly_index, m, unusedInit, pointIndexes.first());
-            this->end.remeshAndAdapt(radius, newP, endPoly_index, m, unusedEnd, pointIndexes.last());
+            this->init.remeshAndAdapt(radius, newP, initPoly_index, m, unusedInit, init_entry);
+            this->end.remeshAndAdapt(radius, newP, endPoly_index, m, unusedEnd, end_entry);
 
             for (int i: affectedPolygons){
                 oldP.push_back(m.getPolygon(i));

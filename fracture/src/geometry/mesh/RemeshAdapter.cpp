@@ -135,7 +135,7 @@ Triangulation RemeshAdapter::triangulate(std::vector<Point> points, std::vector<
 }
 
 Triangulation RemeshAdapter::triangulate(std::vector<Point> points, std::vector<Point> meshPoints,
-                                         std::vector<IndexSegment> restrictedSegments) {
+                                         std::vector<PointSegment> restrictedSegments) {
     Region r (region, meshPoints);
     TriangleMeshGenerator generator(points, r, restrictedSegments);
     Triangulation triangulation = generator.getDelaunayTriangulation();

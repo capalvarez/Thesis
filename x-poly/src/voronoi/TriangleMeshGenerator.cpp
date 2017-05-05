@@ -2,11 +2,11 @@
 
 TriangleMeshGenerator::TriangleMeshGenerator(std::vector<Point>& point_list, Region region) {
     this->region = region;
-    callTriangle(point_list, std::vector<IndexSegment>());
+    callTriangle(point_list, std::vector<PointSegment>());
 }
 
 TriangleMeshGenerator::TriangleMeshGenerator(std::vector<Point> &point_list, Region region,
-                                             std::vector<IndexSegment> restrictedSegments) {
+                                             std::vector<PointSegment> restrictedSegments) {
     this->region = region;
     callTriangle(point_list, restrictedSegments);
 }
@@ -25,7 +25,7 @@ Triangulation TriangleMeshGenerator::getDelaunayTriangulation() {
     return Triangulation(this->meshPoints, this->triangles, delaunayEdges);
 }
 
-void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, std::vector<IndexSegment> restrictedSegments) {
+void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, std::vector<PointSegment> restrictedSegments) {
     struct triangulateio in, out;
 
     std::vector<Point> regionPoints = region.getRegionPoints();
@@ -52,14 +52,22 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, std::ve
 
     std::vector<IndexSegment> segments;
     region.getSegments(segments);
-    segments.insert(segments.end(), restrictedSegments.begin(), restrictedSegments.end());
 
-    in.numberofsegments = (int) segments.size();
+    in.numberofsegments = (int) (segments.size() + restrictedSegments.size());
     in.segmentlist = (int*)malloc(in.numberofsegments*2*sizeof(int));
     in.segmentmarkerlist = (int*) NULL;
-    for(int i=0;i<segments.size();i++){
+    int i;
+    for(i=0;i<segments.size();i++){
         in.segmentlist[2*i] = regionIndex[segments[i].getFirst()];
         in.segmentlist[2*i+1] = regionIndex[segments[i].getSecond()];
+    }
+
+    for (int j=0; j<restrictedSegments.size(); j++){
+        PointSegment s = restrictedSegments[j];
+
+        in.segmentlist[2*i] = pointList.indexOf(s.getFirst());
+        in.segmentlist[2*i+1] = pointList.indexOf(s.getSecond());
+        i++;
     }
 
     std::vector<Hole>& holes = region.getHoles();

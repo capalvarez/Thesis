@@ -7,6 +7,7 @@
 class PointSegment: public Segment<Point>{
 public:
     PointSegment(Point p1, Point p2);
+    PointSegment();
 
     double length();
     bool isBoundary(std::vector<Point> p);

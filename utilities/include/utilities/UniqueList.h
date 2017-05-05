@@ -19,10 +19,13 @@ public:
 
     std::vector<T> getList() const;
     std::vector<T>& getList();
+
+    int indexOf(T elem);
     T& operator[](int i);
     bool operator==(const UniqueList<T>& other);
     bool contains(T elem);
     bool hasCommonElement(UniqueList<T> other);
+
     T first();
     T second();
     T secondToLast();
@@ -55,6 +58,11 @@ int UniqueList<T>::size() {
 template <class T>
 std::vector<T> UniqueList<T>::getList() const{
     return this->list;
+}
+
+template <class T>
+int UniqueList<T>::indexOf(T elem) {
+    return utilities::indexOf(this->list, elem);
 }
 
 template <class T>
@@ -122,7 +130,7 @@ T UniqueList<T>::second() {
         return this->list[0];
     }
 
-    return this->list[0];
+    return this->list[1];
 }
 
 template <class T>
@@ -136,7 +144,7 @@ T UniqueList<T>::secondToLast() {
         return this->list.back();
     }
 
-    return this->list.back();
+    return this->list[this->list.size()-2];
 }
 
 template <class T>

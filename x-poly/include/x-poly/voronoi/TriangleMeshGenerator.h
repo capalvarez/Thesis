@@ -7,10 +7,9 @@
 #include <unordered_map>
 #include <x-poly/models/neighbourhood/EdgeData.h>
 #include <x-poly/voronoi/structures/PointData.h>
-#include "../../../../utilities/include/utilities/UniqueList.h"
+#include <utilities/UniqueList.h>
 #include <x-poly/models/Region.h>
 #include <x-poly/voronoi/structures/mapdata.h>
-#include <x-poly/models/Triangulation.h>
 #include <x-poly/models/Triangulation.h>
 #include <x-poly/models/neighbourhood/Neighbours.h>
 #include <x-poly/models/neighbourhood/SegmentMap.h>
@@ -34,12 +33,12 @@ private:
     UniqueList<Polygon> voronoiCells;
 
     Point getCircumcenter(int triangle, int edge, std::vector<Point>& points);
-    void callTriangle(std::vector<Point> &point_list, std::vector<IndexSegment> restrictedSegments);
+    void callTriangle(std::vector<Point> &point_list, std::vector<PointSegment> restrictedSegments);
     PolygonalMesh delaunayToVoronoi();
     void writeInputInFile(UniqueList<Point> &point_list, Region region, std::vector<int> regionIndex);
 public:
     TriangleMeshGenerator(std::vector<Point>& point_list, Region region);
-    TriangleMeshGenerator(std::vector<Point>& point_list, Region region, std::vector<IndexSegment> restrictedSegments);
+    TriangleMeshGenerator(std::vector<Point>& point_list, Region region, std::vector<PointSegment> restrictedSegments);
     ~TriangleMeshGenerator();
     PolygonalMesh getMesh();
     Triangulation getDelaunayTriangulation();

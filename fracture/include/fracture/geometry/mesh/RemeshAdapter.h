@@ -22,7 +22,7 @@ public:
 
     std::vector<Polygon> adaptToMesh(Triangulation triangulation, BreakableMesh &m, std::unordered_map<int, int> pointMap);
     Triangulation triangulate(std::vector<Point> points, std::vector<Point> meshPoints);
-    Triangulation triangulate(std::vector<Point> points, std::vector<Point> meshPoints, std::vector<IndexSegment> restrictedSegments);
+    Triangulation triangulate(std::vector<Point> points, std::vector<Point> meshPoints, std::vector<PointSegment> restrictedSegments);
     std::unordered_map<int, int> includeNewPoints(UniqueList<Point> &meshPoints, Triangulation triangulation);
     std::vector<Polygon> remesh(std::vector<Point> points, BreakableMesh &m);
     Polygon getRegion();

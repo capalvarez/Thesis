@@ -2,6 +2,8 @@
 
 PointSegment::PointSegment(Point p1, Point p2) : Segment<Point>(p1, p2) {}
 
+PointSegment::PointSegment() : Segment<Point>(){}
+
 double PointSegment::length() {
     return Segment::length(this->p1, this->p2);
 }

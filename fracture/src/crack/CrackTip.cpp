@@ -135,7 +135,8 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
 
     int intersectionIndex = utilities::indexOf(mesh.getPolygon(region).getPoints(), entryToContainer) + points.size();
 
-    Triangulation t = remesher.triangulate(points, mesh.getPoints().getList(), {IndexSegment(0, intersectionIndex)});
+    Triangulation t = remesher.triangulate(points, mesh.getPoints().getList(),
+                                           {PointSegment(this->getPoint(), mesh.getPoint(entryToContainer))});
     std::unordered_map<int,int> pointMap = remesher.includeNewPoints(mesh.getPoints(), t);
 
     mesh.printInFile("beforeAdapt.txt");
