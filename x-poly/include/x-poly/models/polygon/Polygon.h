@@ -66,6 +66,7 @@ public:
     int getPoint(int i);
 
     void insertOnSegment(IndexSegment segment, int point);
+    bool isValidPolygon();
 };
 
 #endif

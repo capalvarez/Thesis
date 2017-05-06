@@ -67,6 +67,11 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
         Polygon newPolygon =  Polygon(newTrianglePoints, mesh.getPoints().getList());
         int index;
 
+        //TODO: Hot fix!!!!
+        if(!newPolygon.isValidPolygon()){
+            continue;
+        }
+
         if(i<1){
             meshPolygons[this->regionIndex] = newPolygon;
             index = this->regionIndex;

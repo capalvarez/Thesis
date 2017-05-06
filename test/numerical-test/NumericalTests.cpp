@@ -1,237 +1,169 @@
 #include "NumericalTests.h"
 
-NumericalTests::NumericalTests(int order) {
-    this->order = order;
-    /*One Square*/
-    std::vector<Point> points = {Point(0,0), Point(1,0), Point(2,0), Point(0,1), Point(1,1), Point(2,1)};
-    std::vector<int> p1 ={0,1,4,3};
-    std::vector<int> p2 ={1,2,5,4};
-    std::vector<Point> regionPoints = {points[0], points[2], points[5], points[3]};
+class None : public BodyForce{
+private:
+    double apply(double x, double y){
+        return 0;
+    }
+};
 
-    std::vector<Polygon> polygons = {Polygon(p1,points), Polygon(p2,points)};
-    SegmentMap segments;
-    Region r(regionPoints);
+class Gravity : public BodyForce{
+private:
+    double apply(double x, double y){
+        return 9.81;
+    }
+};
 
-<<<<<<< HEAD
-    two_squares = Mesh(points, polygons, segments, r);
-=======
-    two_squares = PolygonalMesh(points, polygons, segments, Region(std::vector<Point>()));
->>>>>>> fracture_all_neighbours
+NumericalTests::NumericalTests() {
+    /*Rectangle*/
+    std::vector<Point> rectangle_points = {Point(0, 0), Point(4, 0), Point(4, 1), Point(0, 1)};
+    Region region(rectangle_points);
 
-    /*Hundred Square*/
-    std::vector<Point> hundred_square_points = {Point(0, 0), Point(20, 0), Point(20, 5), Point(0, 5)};
-    Region region(hundred_square_points);
-    PointGenerator generator_uniform (functions::uniform(1), functions::uniform(1));
-
-    region.generateSeedPoints(generator_uniform, 20, 5);
+    region.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 20, 5);
     std::vector<Point> seeds = region.getSeedPoints();
 
     TriangleMeshGenerator meshGenerator(seeds, region);
-    hundred_square = meshGenerator.getMesh();
+    rectangleUniform = meshGenerator.getMesh();
 
-    /*Random Voronoi on (0,1) square*/
-    std::vector<Point> points_square = {Point(0,0), Point(1,0), Point(1,1), Point(0,1)};
-    Region region1(points_square);
-    PointGenerator generator_random(functions::random_double(0,1), functions::random_double(0,1));
+    region.cleanSeedPoints();
+    region.generateSeedPoints(PointGenerator(functions::random_double(0,20), functions::random_double(0,5)), 20, 5);
+    seeds = region.getSeedPoints();
 
-    region1.generateSeedPoints(generator_random, 10, 10);
-    seeds = region1.getSeedPoints();
-
-    meshGenerator = TriangleMeshGenerator(seeds, region1);
-    random_voronoi_square = meshGenerator.getMesh();
-
-<<<<<<< HEAD
-    /*Rectangle hole with squares*/
-    Hole* circle = new CircularHole(Point(0.5, 0.5), 0.25);
-=======
-    /*BoundingBox hole with squares*/
-    Hole* circle = new CircularHole(Point(0.5,0.5),0.25, 10);
->>>>>>> fracture_all_neighbours
-    region1.addHole(circle);
-
-    region1.generateSeedPoints(generator_uniform, 10, 10);
-    seeds = region1.getSeedPoints();
-
-    meshGenerator = TriangleMeshGenerator(seeds, region1);
-    rectangle_hole = meshGenerator.getMesh();
-
-    /*Trapezoid*/
-    std::vector<Point> trapezoid_points = {Point(0,0), Point(10,3), Point(10,7), Point(0,10)};
-    Region trapezoid_region (trapezoid_points);
-
-    trapezoid_region.generateSeedPoints(generator_uniform, 10, 10);
-    seeds = trapezoid_region.getSeedPoints();
-
-    meshGenerator = TriangleMeshGenerator(seeds, trapezoid_region);
-    trapezoid = meshGenerator.getMesh();
-
-    /*L shape*/
-    std::vector<Point> l_points = {Point(10,0), Point(20,0), Point(20,20), Point(0,20), Point(0,10), Point(10,10)};
-    Region l_region(l_points);
-
-    l_region.generateSeedPoints(generator_uniform, 10, 10);
-    seeds = l_region.getSeedPoints();
-
-    meshGenerator = TriangleMeshGenerator(seeds, l_region);
-    L = meshGenerator.getMesh();
+    meshGenerator = TriangleMeshGenerator (seeds, region);
+    rectangleRandom = meshGenerator.getMesh();
+    rectangleRandom.printInFile("rectangleRandom.txt");
 }
 
-
-Eigen::VectorXd NumericalTests::two_squares_rightforceX() {
+Eigen::VectorXd
+NumericalTests::loadBothSides(PolygonalMesh mesh, std::vector<PointSegment> restrained, std::vector<double> values) {
     Veamer v;
-    loadRightForceX(two_squares, v, Segment<int>(0,3), Segment<int>(2,5));
-
-    return v.simulate(<#initializer#>);
-}
-
-Eigen::VectorXd NumericalTests::two_squares_rightforceY() {
-    Veamer v;
-    loadRightForceY(two_squares, v, Segment<int>(0,3), Segment<int>(2,5));
-
-    return v.simulate(<#initializer#>);
-}
-
-Eigen::VectorXd NumericalTests::two_squares_noforces() {
-    Veamer v;
-    loadNoForces(two_squares, v, Segment<int>(0,3), Segment<int>(2,5));
-
-    return v.simulate(<#initializer#>);
-}
-
-Eigen::VectorXd NumericalTests::hundredsquare_rightforceX() {
-    Veamer v;
-    loadRightForceX(hundred_square, v, Segment<int>(0,3), Segment<int>(1,2));
-
-    return v.simulate(<#initializer#>);
-}
-
-Eigen::VectorXd NumericalTests::hundredsquare_rightforceY() {
-    return Eigen::Matrix<double, -1, 1, 0, -1, 1>();
-}
-
-Eigen::VectorXd NumericalTests::hundredsquare_noforces() {
-    return Eigen::Matrix<double, -1, 1, 0, -1, 1>();
-}
-
-Eigen::VectorXd NumericalTests::hundredsquare_twoforcesX() {
-    return Eigen::Matrix<double, -1, 1, 0, -1, 1>();
-}
-
-Eigen::VectorXd NumericalTests::voronoi_rightforceX() {
-    return Eigen::Matrix<double, -1, 1, 0, -1, 1>();
-}
-
-Eigen::VectorXd NumericalTests::voronoi_rightforceY() {
-    return Eigen::Matrix<double, -1, 1, 0, -1, 1>();
-}
-
-Eigen::VectorXd NumericalTests::hole_rightforceX() {
-    return Eigen::Matrix<double, -1, 1, 0, -1, 1>();
-}
-
-Eigen::VectorXd NumericalTests::hole_twoforceX() {
-    return Eigen::Matrix<double, -1, 1, 0, -1, 1>();
-}
-
-<<<<<<< HEAD
-void NumericalTests::loadRightForceX(Mesh m, Veamer &v, Segment<int> leftSide, Segment<int> rightSide) {
-=======
-void NumericalTests::loadRightForceX(PolygonalMesh m, Veamer &v, Segment leftSide, Segment rightSide) {
->>>>>>> fracture_all_neighbours
-    class None : public BodyForce {
-        double apply (double x, double y){
-            return 0;
-        }
-    };
-
     BodyForce* f = new None();
 
-    EssentialConstraints c;
-     Constraint const1 (leftSide, Constraint::Direction::Total, new Constant(0));
-    c.addConstraint(const1, std::vector<Point>());
+    NaturalConstraints c;
+    Constraint const1 (restrained[0], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(values[0]));
+    Constraint const2 (restrained[1], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(values[1]));
+
+    c.addConstraint(const1, mesh.getPoints().getList());
+    c.addConstraint(const2, mesh.getPoints().getList());
+
+    ConstraintsContainer container;
+    container.addConstraints(c, mesh);
+
+    ProblemConditions conditions(container, f, Material(Materials::material::Steel));
+
+    v.initProblem(mesh, conditions);
+
+    Eigen::VectorXd x = v.simulate(mesh);
+
+    return x;
+}
+
+Eigen::VectorXd
+NumericalTests::clampedWithLoad(PolygonalMesh mesh, std::vector<PointSegment> restricted, double loadValue) {
+    Veamer v;
+    BodyForce* f = new None();
+
+    EssentialConstraints essential;
+    Constraint const1 (restricted[0], mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
+    essential.addConstraint(const1, mesh.getPoints().getList());
 
     NaturalConstraints natural;
-    Constraint const2 (rightSide, Constraint::Direction::Horizontal, new Constant(10));
-    natural.addConstraint(const2, std::vector<Point>());
+    Constraint const2 (restricted[1], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(loadValue));
+    natural.addConstraint(const2, mesh.getPoints().getList());
 
     ConstraintsContainer container;
-    container.addConstraints(c, PolygonalMesh());
-    container.addConstraints(natural, nullptr);
+    container.addConstraints(essential, mesh);
+    container.addConstraints(natural, mesh);
 
-    ProblemConditions p (container, f, Material());
+    ProblemConditions conditions(container, f, Material(Materials::material::Steel));
 
-    v.initProblem(m, p);
+    v.initProblem(mesh, conditions);
+
+    Eigen::VectorXd x = v.simulate(mesh);
+
+    return x;
 }
 
-<<<<<<< HEAD
-void NumericalTests::loadRightForceY(Mesh m, Veamer &v, Segment<int> leftSide, Segment<int> rightSide) {
-=======
-void NumericalTests::loadRightForceY(PolygonalMesh m, Veamer &v, Segment leftSide, Segment rightSide) {
->>>>>>> fracture_all_neighbours
-    class None : public BodyForce {
-        double apply (double x, double y){
-            return 0;
-        }
-    };
+Eigen::VectorXd NumericalTests::clampedWithBodyForce(PolygonalMesh mesh, PointSegment clamped) {
+    Veamer v;
+    BodyForce* f = new Gravity();
 
+    EssentialConstraints essential;
+    Constraint const1 (clamped, mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
+    essential.addConstraint(const1, mesh.getPoints().getList());
+
+    ConstraintsContainer container;
+    container.addConstraints(essential, mesh);
+
+    ProblemConditions conditions(container, f, Material(Materials::material::Steel));
+
+    v.initProblem(mesh, conditions);
+
+    Eigen::VectorXd x = v.simulate(mesh);
+
+    return x;
+}
+
+Eigen::VectorXd NumericalTests::clampedWithParabolicLoad(PolygonalMesh mesh) {
+    return Eigen::VectorXd();
+}
+
+Eigen::VectorXd
+NumericalTests::clampedDisplacement(PolygonalMesh mesh, std::vector<PointSegment> restricted, double displacement) {
+    Veamer v;
     BodyForce* f = new None();
 
-    EssentialConstraints c;
-    Constraint const1 (leftSide, Constraint::Direction::Total, new Constant(0));
-    c.addConstraint(const1, std::vector<Point>());
+    EssentialConstraints essential;
+    Constraint const1 (restricted[0], mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
+    essential.addConstraint(const1, mesh.getPoints().getList());
 
-    NaturalConstraints natural;
-    Constraint const2 (rightSide, Constraint::Direction::Vertical, new Constant(10));
-    natural.addConstraint(const2, std::vector<Point>());
+    Constraint const2 (restricted[1], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(displacement));
+    essential.addConstraint(const2, mesh.getPoints().getList());
 
     ConstraintsContainer container;
-    container.addConstraints(c, PolygonalMesh());
-    container.addConstraints(natural, nullptr);
+    container.addConstraints(essential, mesh);
 
-    ProblemConditions p (container, f, Material());
+    ProblemConditions conditions(container, f, Material(Materials::material::Steel));
 
-    v.initProblem(m, p);
+    v.initProblem(mesh, conditions);
+
+    Eigen::VectorXd x = v.simulate(mesh);
+
+    return x;
 }
 
-<<<<<<< HEAD
-void NumericalTests::loadNoForces(Mesh m, Veamer &v, Segment<int> leftSide, Segment<int> rightSide) {
-=======
-void NumericalTests::loadNoForces(PolygonalMesh m, Veamer &v, Segment leftSide, Segment rightSide) {
->>>>>>> fracture_all_neighbours
-    class None : public BodyForce {
-        double apply (double x, double y){
-            return 0;
-        }
-    };
+Eigen::VectorXd NumericalTests::clampedBothSideLoadMiddle(PolygonalMesh mesh) {
+    return Eigen::VectorXd();
+}
 
+Eigen::VectorXd NumericalTests::displacementBothSides(PolygonalMesh mesh, std::vector<PointSegment> restricted,
+                                                      std::vector<double> displacements) {
+    Veamer v;
     BodyForce* f = new None();
 
-    EssentialConstraints c;
-    Constraint const1 (leftSide, Constraint::Direction::Total, new Constant(0));
-    c.addConstraint(const1, std::vector<Point>());
-    Constraint const2 (rightSide, Constraint::Direction::Total, new Constant(10));
-    c.addConstraint(const2, std::vector<Point>());
+    EssentialConstraints essential;
+    Constraint const1 (restricted[0], mesh.getPoints().getList(), Constraint::Direction::Total,
+                       new Constant(displacements[0]));
+    essential.addConstraint(const1, mesh.getPoints().getList());
+
+    Constraint const2 (restricted[1], mesh.getPoints().getList(), Constraint::Direction::Horizontal,
+                       new Constant(displacements[1]));
+    essential.addConstraint(const2, mesh.getPoints().getList());
 
     ConstraintsContainer container;
-    container.addConstraints(c, PolygonalMesh());
+    container.addConstraints(essential, mesh);
 
-    ProblemConditions p (container, f, Material());
+    ProblemConditions conditions(container, f, Material(Materials::material::Steel));
 
-    v.initProblem(m, p);
-}
+    v.initProblem(mesh, conditions);
 
-<<<<<<< HEAD
-void NumericalTests::loadTwoForcesX(Mesh m, Veamer &v, Segment<int> leftSide, Segment<int> rightSide) {
-=======
-void NumericalTests::loadTwoForcesX(PolygonalMesh m, Veamer &v, Segment leftSide, Segment rightSide) {
->>>>>>> fracture_all_neighbours
+    Eigen::VectorXd x = v.simulate(mesh);
 
+    return x;
 }
 
 void NumericalTests::runTests() {
-    std::cout << two_squares_noforces() << std::endl << std::endl;
-    std::cout << two_squares_rightforceX() << std::endl << std::endl;
-    std::cout << two_squares_rightforceY() << std::endl << std::endl;
+    std::cout << clampedWithLoad(rectangleUniform, std::vector<PointSegment>(), 0) << std::endl;
 }
 
 

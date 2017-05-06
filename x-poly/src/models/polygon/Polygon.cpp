@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <x-poly/models/polygon/Polygon.h>
 #include <map>
+#include <utilities/UniqueList.h>
 #include "../../../../utilities/include/utilities/Pair.h"
 
 
@@ -510,4 +511,10 @@ void Polygon::insertOnSegment(IndexSegment segment, int point) {
     }
 }
 
+bool Polygon::isValidPolygon() {
+    UniqueList<int> vertices;
+    vertices.push_list(this->points);
+
+    return vertices.size()>2;
+}
 
