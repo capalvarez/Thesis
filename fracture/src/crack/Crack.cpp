@@ -29,6 +29,7 @@ Crack::Crack(Point init, Point end) {
 }
 
 PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
+    m.printInFile("beforePreparing.txt");
     FractureConfig* config = FractureConfig::instance();
 
     UniqueList<Polygon> oldP;
@@ -49,6 +50,10 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
 
             initNeighbours.push_back(this->init.container_polygon);
             initNeighbours.push_back(this->end.container_polygon);
+
+            for (int n: initNeighbours.getList()){
+                oldP.push_back(m.getPolygon(n));
+            }
 
             std::vector<int> allPoints = m.getAllPoints(initNeighbours.getList());
             int index = m.mergePolygons(initNeighbours.getList());
@@ -147,9 +152,6 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
 
             this->init.remeshAndAdapt(radius, newP, poly1, m, toPoly1, pointIndexes.first());
             this->end.remeshAndAdapt(radius, newP, poly2, m, toPoly2, pointIndexes.last());
-
-            oldP.push_back(m.getPolygon(poly1));
-            oldP.push_back(m.getPolygon(poly2));
         }else{
             double radius;
             int initPoly_index, endPoly_index, init_entry, end_entry;
@@ -163,8 +165,8 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                 init_entry = pointIndexes.first();
                 end_entry = pointIndexes.last();
 
-                affectedPolygons.push_back(initPoly_index);
-                affectedPolygons.push_back(endPoly_index);
+                oldP.push_back(m.getPolygon(initPoly_index));
+                oldP.push_back(m.getPolygon(endPoly_index));
             } else {
                 if(this->init.fitsBox(StandardRadius*config->getRatio(), m.getPolygon(this->init.container_polygon), m.getPoints().getList())
                    && this->end.fitsBox(StandardRadius*config->getRatio(), m.getPolygon(this->end.container_polygon), m.getPoints().getList())){
@@ -174,18 +176,24 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                     init_entry = pointIndexes.first();
                     end_entry = pointIndexes.last();
 
-                    affectedPolygons.push_back(initPoly_index);
-                    affectedPolygons.push_back(endPoly_index);
+                    oldP.push_back(m.getPolygon(initPoly_index));
+                    oldP.push_back(m.getPolygon(endPoly_index));
                 }else{
-                    initPoly_index = this->init.getRingPolygon(m, unusedInit, affectedPolygons, initNeighbours);
-                    m.printInFile("beforeSecond.txt");
+                    for (int i: initNeighbours.getList()){
+                        oldP.push_back(m.getPolygon(i));
+                    }
 
+                    for (int i: endNeighbours.getList()){
+                        oldP.push_back(m.getPolygon(i));
+                    }
+
+                    initPoly_index = this->init.getRingPolygon(m, unusedInit, initNeighbours);
                     //We have changed the mesh, hence, end crack tip information needs to be recomputed
                     endNeighbours.clear();
                     this->end.reassignContainer(m);
                     m.getDirectNeighbours(this->end.container_polygon, endNeighbours);
 
-                    endPoly_index = this->end.getRingPolygon(m, unusedEnd, affectedPolygons, endNeighbours);
+                    endPoly_index = this->end.getRingPolygon(m, unusedEnd, endNeighbours);
 
                     Polygon initRing = m.getPolygon(initPoly_index);
                     Polygon endRing = m.getPolygon(endPoly_index);
@@ -199,10 +207,6 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
 
             this->init.remeshAndAdapt(radius, newP, initPoly_index, m, unusedInit, init_entry);
             this->end.remeshAndAdapt(radius, newP, endPoly_index, m, unusedEnd, end_entry);
-
-            for (int i: affectedPolygons){
-                oldP.push_back(m.getPolygon(i));
-            }
         }
     }else{
         this->prepareTip(this->init, oldP, newP, m, {pointIndexes.first(), pointIndexes.second()});

@@ -80,6 +80,10 @@ Polygon& PolygonalMesh::getPolygon(int index) {
     return this->polygons[index];
 }
 
+Polygon PolygonalMesh::getPolygon(int index) const {
+    return this->polygons[index];
+}
+
 NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction) {
     std::vector<int> p;
     return getNeighbour(poly_index, direction, p);
