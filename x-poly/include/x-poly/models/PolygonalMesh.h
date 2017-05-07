@@ -43,12 +43,13 @@ public:
 
     NeighbourInfo getNeighbour(int poly_index, PointSegment direction);
     NeighbourInfo getNeighbour(int poly_index, PointSegment direction, std::vector<int> &previous);
-    int getPolygonInDirection(std::vector<int> index, PointSegment direction);
+
 
     Region getRegion() const;
     bool isInDomain(Point p);
     bool isInBorder(Point p);
     void getDirectNeighbours(int poly, UniqueList<int> &neighbours);
+
 };
 
 

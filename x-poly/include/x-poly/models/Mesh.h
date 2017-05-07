@@ -23,6 +23,8 @@ public:
     bool isFull();
 
     Point getPoint(int i);
+    IndexSegment convertSegment(PointSegment s);
+    Neighbours getNeighbours(IndexSegment s);
 };
 
 

@@ -32,7 +32,8 @@ Polygon RemeshAdapter::computeRemeshRegion(std::vector<int> remeshPolygons, std:
 }
 
 std::vector<Polygon>
-RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std::unordered_map<int, int> pointMap) {
+RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std::unordered_map<int, int> pointMap,
+                           std::vector<int> &tipTriangles) {
     std::unordered_map<int,std::unordered_map<IndexSegment,std::vector<IndexSegment>,IndexSegmentHasher>> changesInNeighbours;
     std::vector<Polygon> newPolygons;
 
@@ -55,12 +56,17 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
     }
 
     for (int i = 0; i < triangles.size() ; ++i) {
+        bool isTipTriangle = false;
         std::vector<int> oldTrianglePoints = triangles[i].getPoints();
         int n = oldTrianglePoints.size();
 
         std::vector<int> newTrianglePoints;
 
         for (int k = 0; k < n ; ++k) {
+            if(oldTrianglePoints[k] == 0){
+                isTipTriangle = true;
+            }
+
             newTrianglePoints.push_back(pointMap[oldTrianglePoints[k]]);
         }
 
@@ -76,6 +82,9 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
         }
 
         newPolygons.push_back(newPolygon);
+        if(isTipTriangle){
+            tipTriangles.push_back(index);
+        }
 
         for (int j = 0; j < n; ++j) {
             IndexSegment edge(newTrianglePoints[j], newTrianglePoints[(j+1)%n]);
@@ -161,7 +170,7 @@ std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, BreakableM
 
     std::unordered_map<int,int> pointMap = this->includeNewPoints(m.getPoints(), t);
 
-    return adaptToMesh(t, m, pointMap);
+    return adaptToMesh(t, m, pointMap, <#initializer#>);
 }
 
 Polygon RemeshAdapter::getRegion() {

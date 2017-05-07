@@ -160,3 +160,18 @@ bool Region::inEdges(Point p) {
 void Region::cleanSeedPoints() {
     this->seedPoints.clear();
 }
+
+PointSegment Region::getIntersectedSegment(PointSegment direction, Point &intersection) {
+    std::vector<IndexSegment> segments;
+    this->getSegments(segments);
+
+    for (IndexSegment s: segments) {
+        bool intersects = s.intersection(this->p, direction, intersection);
+
+        if(intersects){
+            return PointSegment(this->p[s.getFirst()], this->p[s.getSecond()]);
+        }
+    }
+
+    return PointSegment();
+}

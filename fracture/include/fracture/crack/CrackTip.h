@@ -21,6 +21,8 @@ private:
     int container_polygon;
     CrackTipPoints points;
     double crackAngle;
+    std::vector<int> tipTriangles;
+    Region ring;
 
     bool hasFinished = false;
 
@@ -36,7 +38,7 @@ public:
     CrackTip(PointSegment crack);
     CrackTip(const CrackTip& t);
 
-    void addPointToPath(double angle);
+    void addPointToPath(double angle, BreakableMesh mesh);
     double calculateAngle(Problem problem, Eigen::VectorXd u);
 
     PolygonChangeData grow(Eigen::VectorXd u, Problem problem);

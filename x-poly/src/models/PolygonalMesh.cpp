@@ -107,7 +107,7 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
         int vertexIndex;
         if(poly.isVertex(p, this->points.getList(), vertexIndex)){
             previous.clear();
-            double tolerance = XPolyConfig::instance()->getTolerance();
+
 
             UniqueList<int> neighbours;
             this->getDirectNeighbours(poly_index, neighbours);
@@ -115,6 +115,8 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
             double diff = DBL_MAX;
             int neighbour = 0;
 
+
+            double tolerance = XPolyConfig::instance()->getTolerance();
             Pair<double> slopeDirection = direction.getSlope();
 
             for (int i = 0; i < neighbours.size(); ++i) {
@@ -165,18 +167,6 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
     }
 
     return NeighbourInfo(-1,IndexSegment(),Point(), false);
-}
-
-int PolygonalMesh::getPolygonInDirection(std::vector<int> index, PointSegment direction) {
-    std::vector<int> p;
-    for (int i = 0; i < index.size(); ++i) {
-        NeighbourInfo n = getNeighbour(index[i], direction, p);
-        if(utilities::indexOf(index,n.neighbour)<0){
-            return index[i];
-        }
-    }
-
-    return -1;
 }
 
 Region PolygonalMesh::getRegion() const{

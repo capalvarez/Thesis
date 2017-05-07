@@ -29,13 +29,13 @@ TEST(CrackTipTest, AddPointToPathTest){
 
     CrackTip tip(crack);
 
-    tip.addPointToPath(0);
+    tip.addPointToPath(0, BreakableMesh());
     EXPECT_EQ(tip.getPoint(), Point(1.1,1));
 
-    tip.addPointToPath(90);
+    tip.addPointToPath(90, BreakableMesh());
     EXPECT_EQ(tip.getPoint(), Point(1.1,1.1));
 
-    tip.addPointToPath(30);
+    tip.addPointToPath(30, BreakableMesh());
     EXPECT_EQ(tip.getPoint(), Point(1.1866,1.15));
 }
 

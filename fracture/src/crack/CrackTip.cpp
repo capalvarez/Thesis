@@ -9,14 +9,56 @@ CrackTip::CrackTip(PointSegment crack) {
     crackPath.push_back(crack.getFirst());
 }
 
-void CrackTip::addPointToPath(double angle) {
+void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
     FractureConfig* config = FractureConfig::instance();
     Point last = crackPath.back();
 
-    Point newPoint(last.getX() + config->getSpeed()*std::cos(utilities::radian(angle)),
-                   last.getY() + config->getSpeed()*std::sin(utilities::radian(angle)));
+    Point standardPoint(last.getX() + config->getSpeed()*std::cos(utilities::radian(angle)),
+                        last.getY() + config->getSpeed()*std::sin(utilities::radian(angle)));
 
-    this->crackPath.push_back(newPoint);
+    bool useSecondChoice = ring.containsPoint(standardPoint);
+    int firstNeighbour = -1;
+
+    Point alwaysOutside(last.getX() + ring.getDiameter() * std::cos(utilities::radian(angle)),
+                        last.getY() + ring.getDiameter() * std::sin(utilities::radian(angle)));
+    Point exitRing;
+    PointSegment intersected = ring.getIntersectedSegment(PointSegment(last, alwaysOutside), exitRing);
+    IndexSegment segment = mesh.convertSegment(intersected);
+
+    Neighbours possibleNeighbours = mesh.getNeighbours(segment);
+
+    std::vector<Polygon> polygons = {mesh.getPolygon(possibleNeighbours.getFirst()),
+                                     mesh.getPolygon(possibleNeighbours.getSecond())};
+
+    int index = -1;
+    if (ring.containsPoint(polygons[0].getCentroid())) {
+        firstNeighbour = possibleNeighbours.getSecond();
+        index = 1;
+    } else {
+        if (ring.containsPoint(polygons[1].getCentroid())) {
+            firstNeighbour = possibleNeighbours.getFirst();
+            index = 0;
+        }
+    }
+
+    if(polygons[index].containsPoint(mesh.getPoints().getList(), standardPoint)) {
+        useSecondChoice = true;
+    }
+
+    if(!useSecondChoice){
+        this->crackPath.push_back(standardPoint);
+    }else{
+        std::vector<int> previous = {firstNeighbour};
+        Point advanceDirection(exitRing.getX() + 2*polygons[index].getDiameter() * std::cos(utilities::radian(angle)),
+                               exitRing.getY() + 2*polygons[index].getDiameter() * std::sin(utilities::radian(angle)));
+
+        NeighbourInfo finalPolygonInfo = mesh.getNeighbour(firstNeighbour, PointSegment(last, advanceDirection), previous);
+        Polygon finalPolygon = mesh.getPolygon(finalPolygonInfo.neighbour);
+
+        Point finalPoint(finalPolygonInfo.intersection.getX() + finalPolygon.getDiameter() * std::cos(utilities::radian(angle)),
+                         finalPolygonInfo.intersection.getY() + finalPolygon.getDiameter() * std::sin(utilities::radian(angle)));
+        this->crackPath.push_back(finalPoint);
+    }
 }
 
 CrackTip::CrackTip(const CrackTip &t) {
@@ -52,14 +94,15 @@ double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
 PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
     double angle = calculateAngle(problem, u);
     Point lastPoint = crackPath.back();
-    addPointToPath(angle);
+
+    addPointToPath(angle, *problem.mesh);
 
     reassignContainer(*problem.mesh);
     problem.mesh->printInFile("changed.txt");
     PointSegment direction(lastPoint, crackPath.back());
 
-    UniqueList<int> n;
-    PolygonChangeData changeData = problem.mesh->breakMesh(this->container_polygon, direction, this->isFinished(), n);
+    UniqueList<int> newPoints;
+    PolygonChangeData changeData = problem.mesh->breakMesh(this->container_polygon, direction, this->isFinished(), newPoints);
     assignLocation(changeData.lastPolygon);
 
     checkIfFinished(problem, direction);
@@ -121,6 +164,8 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
 
 void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, int region, BreakableMesh &mesh,
                               std::vector<int> oldPoints, int entryToContainer) {
+    this->tipTriangles.clear();
+
     FractureConfig* config = FractureConfig::instance();
 
     this->usedRadius = radius;
@@ -133,8 +178,7 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
 
     RemeshAdapter remesher(mesh.getPolygon(region), region);
 
-    int intersectionIndex = utilities::indexOf(mesh.getPolygon(region).getPoints(), entryToContainer) + points.size();
-
+    this->ring = Region(remesher.getRegion(), mesh.getPoints().getList());
     Triangulation t = remesher.triangulate(points, mesh.getPoints().getList(),
                                            {PointSegment(this->getPoint(), mesh.getPoint(entryToContainer))});
     std::unordered_map<int,int> pointMap = remesher.includeNewPoints(mesh.getPoints(), t);
@@ -142,7 +186,7 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     mesh.printInFile("beforeAdapt.txt");
     this->points = CrackTipPoints(pointMap[1], pointMap[2], pointMap[3], pointMap[4]);
 
-    newPolygons = remesher.adaptToMesh(t, mesh, pointMap);
+    newPolygons = remesher.adaptToMesh(t, mesh, pointMap, this->tipTriangles);
 }
 
 bool CrackTip::isFinished() {
