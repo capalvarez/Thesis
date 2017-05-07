@@ -43,7 +43,8 @@ public:
 
     NeighbourInfo getNeighbour(int poly_index, PointSegment direction);
     NeighbourInfo getNeighbour(int poly_index, PointSegment direction, std::vector<int> &previous);
-
+    int getNeighbourFromCommonVertexSet(PointSegment direction, std::vector<int> vertexSet, int vertexIndex,
+                                        std::vector<int> &previousPolygons);
 
     Region getRegion() const;
     bool isInDomain(Point p);

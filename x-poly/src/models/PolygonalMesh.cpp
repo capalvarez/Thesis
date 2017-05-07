@@ -108,40 +108,11 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
         if(poly.isVertex(p, this->points.getList(), vertexIndex)){
             previous.clear();
 
-
             UniqueList<int> neighbours;
             this->getDirectNeighbours(poly_index, neighbours);
+            int neighbour = getNeighbourFromCommonVertexSet(direction, neighbours.getList(), vertexIndex, previous);
 
-            double diff = DBL_MAX;
-            int neighbour = 0;
-
-
-            double tolerance = XPolyConfig::instance()->getTolerance();
-            Pair<double> slopeDirection = direction.getSlope();
-
-            for (int i = 0; i < neighbours.size(); ++i) {
-                if(!getPolygon(neighbours[i]).isVertex(vertexIndex)){
-                    continue;
-                }
-
-                previous.push_back(neighbours[i]);
-                Pair<double> slopeNeighbour = PointSegment(poly.getCentroid(), getPolygon(neighbours[i]).getCentroid()).getSlope();
-
-                if(std::abs(slopeNeighbour.first)<tolerance && std::abs(slopeDirection.first)<tolerance){
-
-                }else{
-                    double sD = slopeDirection.second/slopeDirection.first;
-                    double sN = slopeNeighbour.second/slopeNeighbour.first;
-
-                    double newDiff = std::abs(sD-sN);
-
-                    if(newDiff < diff && sD*sN>0){
-                        diff = newDiff;
-                        neighbour = neighbours[i];
-                    }
-                }
-            }
-            NeighbourInfo n = NeighbourInfo(neighbour, polySeg[j], p, false);
+            NeighbourInfo n(neighbour, polySeg[j], p, false);
             n.isVertex = true;
 
             return n;
@@ -167,6 +138,39 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
     }
 
     return NeighbourInfo(-1,IndexSegment(),Point(), false);
+}
+
+int PolygonalMesh::getNeighbourFromCommonVertexSet(PointSegment direction, std::vector<int> vertexSet, int vertexIndex,
+                                                   std::vector<int> &previousPolygons) {
+    double diff = DBL_MAX;
+    int neighbour = 0;
+
+    double tolerance = XPolyConfig::instance()->getTolerance();
+    Pair<double> slopeDirection = direction.getSlope();
+
+    for (int i = 0; i < vertexSet.size(); ++i) {
+        if(!getPolygon(vertexSet[i]).isVertex(vertexIndex)){
+            continue;
+        }
+
+        previousPolygons.push_back(vertexSet[i]);
+        Pair<double> slopeNeighbour = PointSegment(getPoint(vertexIndex), getPolygon(vertexSet[i]).getCentroid()).getSlope();
+
+        if(std::abs(slopeNeighbour.first)<tolerance && std::abs(slopeDirection.first)<tolerance){
+
+        }else{
+            double sD = slopeDirection.second/slopeDirection.first;
+            double sN = slopeNeighbour.second/slopeNeighbour.first;
+
+            double newDiff = std::abs(sD-sN);
+
+            if(newDiff < diff && sD*sN>0){
+                diff = newDiff;
+                neighbour = vertexSet[i];
+            }
+        }
+    }
+    return neighbour;
 }
 
 Region PolygonalMesh::getRegion() const{

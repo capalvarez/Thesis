@@ -101,9 +101,11 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
     problem.mesh->printInFile("changed.txt");
     PointSegment direction(lastPoint, crackPath.back());
 
+    std::vector<int> previous;
+    int startTriangleIndex = problem.mesh->getNeighbourFromCommonVertexSet(direction, this->tipTriangles,
+                                                                           this->points.center, previous);
     UniqueList<int> newPoints;
-    PolygonChangeData changeData = problem.mesh->breakMesh(this->container_polygon, direction, this->isFinished(), newPoints);
-    assignLocation(changeData.lastPolygon);
+    PolygonChangeData changeData = problem.mesh->breakMesh(startTriangleIndex, direction, true, newPoints);
 
     checkIfFinished(problem, direction);
 
@@ -184,7 +186,7 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     std::unordered_map<int,int> pointMap = remesher.includeNewPoints(mesh.getPoints(), t);
 
     mesh.printInFile("beforeAdapt.txt");
-    this->points = CrackTipPoints(pointMap[1], pointMap[2], pointMap[3], pointMap[4]);
+    this->points = CrackTipPoints(pointMap[0], pointMap[1], pointMap[2], pointMap[3], pointMap[4]);
 
     newPolygons = remesher.adaptToMesh(t, mesh, pointMap, this->tipTriangles);
 }
