@@ -121,8 +121,6 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
 
     FractureConfig* config = FractureConfig::instance();
 
-    this->crackAngle = PointSegment(crackPath[crackPath.size() - 2],crackPath.back()).cartesianAngle();
-
     if(fitsBox(StandardRadius, poly, mesh.getPoints().getList())){
         affected.push_back(this->container_polygon);
         remeshAndAdapt(StandardRadius, newPolygons, this->container_polygon, mesh, std::vector<int>(), entryToContainer[0]);
@@ -167,7 +165,7 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
 void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, int region, BreakableMesh &mesh,
                               std::vector<int> oldPoints, int entryToContainer) {
     this->tipTriangles.clear();
-
+    this->crackAngle = PointSegment(crackPath[crackPath.size() - 2],crackPath.back()).cartesianAngle();
     FractureConfig* config = FractureConfig::instance();
 
     this->usedRadius = radius;

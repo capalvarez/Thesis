@@ -62,7 +62,7 @@ TEST(FractureSimulatorTest, SimulateTest){
     Constraint const1 (constrained, mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
 
     c.addConstraint(const1,  mesh.getPoints().getList());
-    Constraint const2 (constrained2, mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(1));
+    Constraint const2 (constrained2, mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(0.1));
     c.addConstraint(const2,  mesh.getPoints().getList());
 
     ConstraintsContainer container;

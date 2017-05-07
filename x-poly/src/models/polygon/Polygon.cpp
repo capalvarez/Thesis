@@ -1,8 +1,4 @@
-#include <algorithm>
 #include <x-poly/models/polygon/Polygon.h>
-#include <map>
-#include "../../../../utilities/include/utilities/Pair.h"
-
 
 Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
     if(isSelfIntersecting(p)){
@@ -508,6 +504,13 @@ void Polygon::insertOnSegment(IndexSegment segment, int point) {
     if(i!=-1 && j!=-1 && (std::abs(i-j)==1 || std::abs(i-j)==(n-1))){
         this->points.insert(this->points.begin()+i, point);
     }
+}
+
+bool Polygon::isValidPolygon() {
+    UniqueList<int> vertices;
+    vertices.push_list(this->points);
+
+    return vertices.size()>2;
 }
 
 

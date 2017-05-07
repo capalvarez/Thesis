@@ -8,6 +8,9 @@
 #include <x-poly/utilities/convexHull.h>
 #include <x-poly/models/basic/IndexSegment.h>
 #include <utilities/Pair.h>
+#include <map>
+#include <utilities/UniqueList.h>
+#include <algorithm>
 
 class Polygon {
 protected:
@@ -66,6 +69,7 @@ public:
     int getPoint(int i);
 
     void insertOnSegment(IndexSegment segment, int point);
+    bool isValidPolygon();
 };
 
 #endif
