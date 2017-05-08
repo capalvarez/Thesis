@@ -20,9 +20,10 @@ public:
     RemeshAdapter(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh &mesh,
                   std::vector<int> &involved);
 
-    std::vector<Polygon> adaptToMesh(Triangulation triangulation, BreakableMesh &m, std::unordered_map<int, int> pointMap,
-                                         std::vector<int> &tipTriangles);
-    std::vector<Polygon> adaptToMesh(Triangulation triangulation, BreakableMesh &m, std::unordered_map<int, int> pointMap);
+    void adaptToMesh(Triangulation triangulation, BreakableMesh &m, std::unordered_map<int, int> pointMap,
+                         std::vector<int> &tipTriangles, std::vector<Polygon> &newPolygons);
+    void adaptToMesh(Triangulation triangulation, BreakableMesh &m, std::unordered_map<int, int> pointMap,
+                         std::vector<Polygon> &newPolygons);
     Triangulation triangulate(std::vector<Point> points, std::vector<Point> meshPoints);
     Triangulation triangulate(std::vector<Point> points, std::vector<Point> meshPoints, std::vector<PointSegment> restrictedSegments);
     std::unordered_map<int, int> includeNewPoints(UniqueList<Point> &meshPoints, Triangulation triangulation);

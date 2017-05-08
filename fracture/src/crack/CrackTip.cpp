@@ -181,7 +181,7 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     mesh.printInFile("beforeAdapt.txt");
     this->points = CrackTipPoints(pointMap[0], pointMap[1], pointMap[2], pointMap[3], pointMap[4]);
 
-    newPolygons = remesher.adaptToMesh(t, mesh, pointMap, this->tipTriangles);
+   remesher.adaptToMesh(t, mesh, pointMap, this->tipTriangles, newPolygons);
 }
 
 bool CrackTip::isFinished() {

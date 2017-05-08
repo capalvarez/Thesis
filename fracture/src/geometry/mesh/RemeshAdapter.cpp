@@ -31,18 +31,18 @@ Polygon RemeshAdapter::computeRemeshRegion(std::vector<int> remeshPolygons, std:
     return  merged;
 }
 
-std::vector<Polygon>
-RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &m, std::unordered_map<int, int> pointMap) {
+void
+RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &m, std::unordered_map<int, int> pointMap,
+                           std::vector<Polygon> &newPolygons) {
     std::vector<int> t;
 
-    return adaptToMesh(triangulation, m, pointMap,t);
+    return adaptToMesh(triangulation, m, pointMap, t, newPolygons);
 }
 
-std::vector<Polygon>
+void
 RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std::unordered_map<int, int> pointMap,
-                           std::vector<int> &tipTriangles) {
+                           std::vector<int> &tipTriangles, std::vector<Polygon> &newPolygons) {
     std::unordered_map<int,std::unordered_map<IndexSegment,std::vector<IndexSegment>,IndexSegmentHasher>> changesInNeighbours;
-    std::vector<Polygon> newPolygons;
 
     UniqueList<Point>& meshPoints = mesh.getPoints();
     std::vector<Polygon>& meshPolygons = mesh.getPolygons();
@@ -143,8 +143,6 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
             poly.replace_segment(s.first, s.second, meshPoints.getList());
         }
     }
-
-    return newPolygons;
 }
 
 Triangulation RemeshAdapter::triangulate(std::vector<Point> points, std::vector<Point> meshPoints) {
@@ -178,11 +176,13 @@ std::unordered_map<int, int> RemeshAdapter::includeNewPoints(UniqueList<Point> &
 
 std::vector<Polygon> RemeshAdapter::remesh(std::vector<Point> points, BreakableMesh &m) {
     std::vector<int> indexes;
+    std::vector<Polygon> newPolygons;
     Triangulation t = this->triangulate(points, m.getPoints().getList());
 
     std::unordered_map<int,int> pointMap = this->includeNewPoints(m.getPoints(), t);
 
-    return adaptToMesh(t, m, pointMap);
+    adaptToMesh(t, m,  pointMap, newPolygons);
+    return newPolygons;
 }
 
 Polygon RemeshAdapter::getRegion() {
