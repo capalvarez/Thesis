@@ -114,7 +114,7 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
 
             UniqueList<int> neighbours;
             this->getDirectNeighbours(poly_index, neighbours);
-            int neighbour = getNeighbourFromCommonVertexSet(direction, neighbours.getList(), vertexIndex, previous);
+            int neighbour = getNeighbourFromCommonVertexSet(direction, neighbours.getList(), vertexIndex, previous, poly);
 
             NeighbourInfo n(neighbour, polySeg[j], p, false);
             n.isVertex = true;
@@ -145,7 +145,7 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
 }
 
 int PolygonalMesh::getNeighbourFromCommonVertexSet(PointSegment direction, std::vector<int> vertexSet, int vertexIndex,
-                                                   std::vector<int> &previousPolygons) {
+                                                   std::vector<int> &previousPolygons, Polygon current) {
     double diff = DBL_MAX;
     int neighbour = 0;
 
@@ -158,7 +158,7 @@ int PolygonalMesh::getNeighbourFromCommonVertexSet(PointSegment direction, std::
         }
 
         previousPolygons.push_back(vertexSet[i]);
-        Pair<double> slopeNeighbour = PointSegment(getPoint(vertexIndex), getPolygon(vertexSet[i]).getCentroid()).getSlope();
+        Pair<double> slopeNeighbour = PointSegment(current.getCentroid(), getPolygon(vertexSet[i]).getCentroid()).getSlope();
 
         if(std::abs(slopeNeighbour.first)<tolerance && std::abs(slopeDirection.first)<tolerance){
 

@@ -103,7 +103,7 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
 
     std::vector<int> previous;
     int startTriangleIndex = problem.mesh->getNeighbourFromCommonVertexSet(direction, this->tipTriangles,
-                                                                           this->points.center, previous);
+                                                                           this->points.center, previous, Polygon());
     UniqueList<int> newPoints;
     PolygonChangeData changeData = problem.mesh->breakMesh(startTriangleIndex, direction, true, newPoints);
 
