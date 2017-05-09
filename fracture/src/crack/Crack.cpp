@@ -133,8 +133,6 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
             pointIndexes.clear();
             pointIndexes.push_back(crackPointIndex);
 
-            m.printInFile("beforePreparing.txt");
-
             Polygon polygon1 = m.getPolygon(poly1);
             Polygon polygon2 = m.getPolygon(poly2);
 

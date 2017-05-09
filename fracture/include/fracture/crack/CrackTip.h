@@ -22,7 +22,7 @@ private:
     CrackTipPoints points;
     double crackAngle;
     std::vector<int> tipTriangles;
-    Region ring;
+    Polygon ring;
 
     bool hasFinished = false;
 

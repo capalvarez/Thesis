@@ -99,6 +99,10 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
         Point p;
         bool intersects = polySeg[j].intersection(this->points.getList(), direction, p);
 
+        if(!intersects){
+            continue;
+        }
+
         Neighbours edge = this->edges.get(polySeg[j]);
 
         int next_poly = edge.getFirst()!=poly_index? edge.getFirst() : edge.getSecond();

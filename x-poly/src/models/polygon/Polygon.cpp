@@ -513,4 +513,19 @@ bool Polygon::isValidPolygon() {
     return vertices.size()>2 && this->area>10e-5;
 }
 
+IndexSegment Polygon::getIntersectedSegment(PointSegment direction, Point &intersection, std::vector<Point> points) {
+    std::vector<IndexSegment> segments;
+    this->getSegments(segments);
+
+    for (IndexSegment s: segments) {
+        bool intersects = s.intersection(points, direction, intersection);
+
+        if(intersects){
+            return s;
+        }
+    }
+
+    return IndexSegment();
+}
+
 

@@ -16,26 +16,26 @@ void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
     Point standardPoint(last.getX() + config->getSpeed()*std::cos(utilities::radian(angle)),
                         last.getY() + config->getSpeed()*std::sin(utilities::radian(angle)));
 
-    bool useSecondChoice = ring.containsPoint(standardPoint);
+    bool useSecondChoice = ring.containsPoint(mesh.getPoints().getList(),standardPoint);
     int firstNeighbour = -1;
 
     Point alwaysOutside(last.getX() + ring.getDiameter() * std::cos(utilities::radian(angle)),
                         last.getY() + ring.getDiameter() * std::sin(utilities::radian(angle)));
     Point exitRing;
-    PointSegment intersected = ring.getIntersectedSegment(PointSegment(last, alwaysOutside), exitRing);
-    IndexSegment segment = mesh.convertSegment(intersected);
+    IndexSegment intersected = ring.getIntersectedSegment(PointSegment(last, alwaysOutside), exitRing,
+                                                          mesh.getPoints().getList());
 
-    Neighbours possibleNeighbours = mesh.getNeighbours(segment);
+    Neighbours possibleNeighbours = mesh.getNeighbours(intersected);
 
     std::vector<Polygon> polygons = {mesh.getPolygon(possibleNeighbours.getFirst()),
                                      mesh.getPolygon(possibleNeighbours.getSecond())};
 
     int index = -1;
-    if (ring.containsPoint(polygons[0].getCentroid())) {
+    if (ring.containsPoint(mesh.getPoints().getList(), polygons[0].getCentroid())) {
         firstNeighbour = possibleNeighbours.getSecond();
         index = 1;
     } else {
-        if (ring.containsPoint(polygons[1].getCentroid())) {
+        if (ring.containsPoint(mesh.getPoints().getList(), polygons[1].getCentroid())) {
             firstNeighbour = possibleNeighbours.getFirst();
             index = 0;
         }
@@ -48,15 +48,15 @@ void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
     if(!useSecondChoice){
         this->crackPath.push_back(standardPoint);
     }else{
-        std::vector<int> previous = {firstNeighbour};
+        std::vector<int> previous = {possibleNeighbours.getFirst(), possibleNeighbours.getSecond()};
         Point advanceDirection(exitRing.getX() + 2*polygons[index].getDiameter() * std::cos(utilities::radian(angle)),
                                exitRing.getY() + 2*polygons[index].getDiameter() * std::sin(utilities::radian(angle)));
 
         NeighbourInfo finalPolygonInfo = mesh.getNeighbour(firstNeighbour, PointSegment(last, advanceDirection), previous);
         Polygon finalPolygon = mesh.getPolygon(finalPolygonInfo.neighbour);
 
-        Point finalPoint(finalPolygonInfo.intersection.getX() + finalPolygon.getDiameter() * std::cos(utilities::radian(angle)),
-                         finalPolygonInfo.intersection.getY() + finalPolygon.getDiameter() * std::sin(utilities::radian(angle)));
+        Point finalPoint(finalPolygonInfo.intersection.getX() + finalPolygon.getDiameter()/2 * std::cos(utilities::radian(angle)),
+                         finalPolygonInfo.intersection.getY() + finalPolygon.getDiameter()/2 * std::sin(utilities::radian(angle)));
         this->crackPath.push_back(finalPoint);
     }
 }
@@ -184,8 +184,7 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     }
 
     RemeshAdapter remesher(mesh.getPolygon(region), region);
-
-    this->ring = Region(remesher.getRegion(), mesh.getPoints().getList());
+    this->ring = remesher.getRegion();
 
     int j = restrictedSegments.size()-1;
     while(pointsOnSegment.size()>0){
