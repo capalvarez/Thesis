@@ -1,5 +1,10 @@
 #include <fracture/numeric/BreakableVeamer.h>
 
+struct greater{
+    template<class T>
+    bool operator()(T const &a, T const &b) const { return a > b; }
+};
+
 BreakableVeamer::BreakableVeamer() {}
 
 BreakableVeamer::BreakableVeamer(const Veamer& veamer) {
@@ -12,6 +17,11 @@ BreakableVeamer::BreakableVeamer(const Veamer& veamer) {
 void BreakableVeamer::createElement(Polygon p) {
     polygon_to_element.insert(std::make_pair(p,elements.size()));
     Veamer::createElement(p);
+}
+
+void BreakableVeamer::createAndInsertElement(Polygon p, int index) {
+    polygon_to_element.insert(std::make_pair(p, index));
+    Veamer::insertElement(p, index);
 }
 
 void BreakableVeamer::replaceElement(Polygon old, std::vector<Polygon> newPolygons) {
@@ -27,15 +37,23 @@ void BreakableVeamer::replaceElement(Polygon old, std::vector<Polygon> newPolygo
 
 void BreakableVeamer::replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons, UniqueList<Point> points) {
     this->points = points;
+    std::vector<int> toRemoveIndexes;
 
-    for (int i = 0; i < old.size(); ++i) {
-        int to_remove = polygon_to_element[old[i]];
-        polygon_to_element.erase(old[i]);
+    for (Polygon p: old) {
+        int to_remove = polygon_to_element[p];
+        polygon_to_element.erase(p);
 
-        elements.erase(elements.begin() + to_remove);
+        toRemoveIndexes.push_back(to_remove);
     }
 
-    for (int i = 0; i < newPolygons.size(); ++i) {
+    std::sort(toRemoveIndexes.begin(), toRemoveIndexes.end(), greater());
+    for (int r: toRemoveIndexes) {
+        this->elements.erase(this->elements.begin()+ r);
+    }
+
+    createAndInsertElement(newPolygons[0], toRemoveIndexes.back());
+
+    for (int i = 1; i < newPolygons.size(); ++i) {
         createElement(newPolygons[i]);
     }
 }

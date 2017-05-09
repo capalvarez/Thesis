@@ -29,7 +29,6 @@ Crack::Crack(Point init, Point end) {
 }
 
 PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
-    m.printInFile("beforePreparing.txt");
     FractureConfig* config = FractureConfig::instance();
 
     UniqueList<Polygon> oldP;

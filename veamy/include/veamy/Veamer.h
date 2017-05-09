@@ -22,7 +22,8 @@ protected:
     ProblemConditions conditions;
     UniqueList<Point> points;
 
-    void createElement(Polygon p);
+    virtual void createElement(Polygon p);
+    void insertElement(Polygon p, int index);
 public:
     DOFS DOFs;
     std::vector<Element> elements;
