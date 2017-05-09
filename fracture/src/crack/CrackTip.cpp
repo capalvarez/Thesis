@@ -70,24 +70,24 @@ CrackTip::CrackTip(const CrackTip &t) {
 }
 
 double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
+    Material m = problem.veamer->getMaterial();
     Pair<int> dofB = problem.veamer->pointToDOFS(this->points.b);
     Pair<int> dofC = problem.veamer->pointToDOFS(this->points.c);
     Pair<int> dofD = problem.veamer->pointToDOFS(this->points.d);
     Pair<int> dofE = problem.veamer->pointToDOFS(this->points.e);
 
-    double factor = problem.veamer->getMaterial().stressIntensityFactor()*std::sqrt(2*M_PI/this->usedRadius)*
-                    1/std::cos(utilities::radian(this->crackAngle));
+    double factor = (m.E()*std::sqrt(2*M_PI/this->usedRadius)) / (3*(1 + m.v())*(1 + m.k()));
 
-    double kI = factor * (4*(u[dofB.second] - u[dofD.second]) - (u[dofC.second] - u[dofE.second])/2);
-    double kII = factor * (4*(u[dofB.first] - u[dofD.first]) - (u[dofC.first] - u[dofE.first])/2);
-
+    double kI = factor * (4*(u[dofB.second] - u[dofD.second]) - (u[dofC.second] - u[dofE.second])/2)*std::cos(utilities::radian(this->crackAngle));
+    double kII = factor * (4*(u[dofB.first] - u[dofD.first]) - (u[dofC.first] - u[dofE.first])/2)*std::cos(utilities::radian(this->crackAngle));
 
     if(kII!=0){
         double r = kI/kII;
 
-        return 2*std::atan(r/4 - utilities::sign(kII)/4*std::sqrt((std::pow(r,2) + 8)))  + this->crackAngle;
+        return utilities::degrees(2*std::atan(r/4 - utilities::sign(kII)/4*std::sqrt((std::pow(r,2) + 8))))
+               + this->crackAngle;
     }else{
-        return this->crackAngle;
+        return this->crackAngle + 90;
     }
 }
 
