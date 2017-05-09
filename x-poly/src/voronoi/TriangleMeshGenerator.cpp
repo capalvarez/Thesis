@@ -2,13 +2,15 @@
 
 TriangleMeshGenerator::TriangleMeshGenerator(std::vector<Point>& point_list, Region region) {
     this->region = region;
-    callTriangle(point_list, std::vector<PointSegment>());
+    char switches[] = "pzeDQ";
+    callTriangle(point_list, std::vector<PointSegment>(), switches);
 }
 
 TriangleMeshGenerator::TriangleMeshGenerator(std::vector<Point> &point_list, Region region,
                                              std::vector<PointSegment> restrictedSegments) {
     this->region = region;
-    callTriangle(point_list, restrictedSegments);
+    char switches[] = "pzeQ";
+    callTriangle(point_list, restrictedSegments, switches);
 }
 
 TriangleMeshGenerator::~TriangleMeshGenerator() {}
@@ -25,7 +27,8 @@ Triangulation TriangleMeshGenerator::getDelaunayTriangulation() {
     return Triangulation(this->meshPoints, this->triangles, delaunayEdges);
 }
 
-void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, std::vector<PointSegment> restrictedSegments) {
+void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, std::vector<PointSegment> restrictedSegments,
+                                         char switches[]) {
     struct triangulateio in, out;
 
     std::vector<Point> regionPoints = region.getRegionPoints();
@@ -56,18 +59,18 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, std::ve
     in.numberofsegments = (int) (segments.size() + restrictedSegments.size());
     in.segmentlist = (int*)malloc(in.numberofsegments*2*sizeof(int));
     in.segmentmarkerlist = (int*) NULL;
-    int i;
-    for(i=0;i<segments.size();i++){
-        in.segmentlist[2*i] = regionIndex[segments[i].getFirst()];
-        in.segmentlist[2*i+1] = regionIndex[segments[i].getSecond()];
+    int k;
+    for(k=0;k<segments.size();k++){
+        in.segmentlist[2*k] = regionIndex[segments[k].getFirst()];
+        in.segmentlist[2*k+1] = regionIndex[segments[k].getSecond()];
     }
 
     for (int j=0; j<restrictedSegments.size(); j++){
         PointSegment s = restrictedSegments[j];
 
-        in.segmentlist[2*i] = pointList.indexOf(s.getFirst());
-        in.segmentlist[2*i+1] = pointList.indexOf(s.getSecond());
-        i++;
+        in.segmentlist[2*k] = pointList.indexOf(s.getFirst());
+        in.segmentlist[2*k+1] = pointList.indexOf(s.getSecond());
+        k++;
     }
 
     std::vector<Hole>& holes = region.getHoles();
@@ -90,7 +93,7 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, std::ve
     out.edgelist = (int *) NULL;
     out.edgemarkerlist = (int *) NULL;
 
-    char switches[] = "pzeDQ";
+
     triangulate(switches, &in, &out, (struct triangulateio *)NULL);
 
     for(int i=0;i<out.numberofpoints;i++){

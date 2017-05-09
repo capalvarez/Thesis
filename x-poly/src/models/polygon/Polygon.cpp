@@ -510,7 +510,7 @@ bool Polygon::isValidPolygon() {
     UniqueList<int> vertices;
     vertices.push_list(this->points);
 
-    return vertices.size()>2;
+    return vertices.size()>2 && this->area>10e-5;
 }
 
 

@@ -13,6 +13,7 @@ private:
 public:
     UniqueList();
     int push_back(T& item);
+    int push_front(T& item);
     int size();
     std::vector<int> push_list(std::vector<T> list);
     std::vector<int> push_list(UniqueList<T> list);
@@ -48,6 +49,12 @@ int UniqueList<T>::push_back(T& item) {
     list.push_back(item);
 
     return (int) list.size()-1;
+}
+
+template <class T>
+int UniqueList<T>::push_front(T &item) {
+    this->list.insert(this->list.begin(), item);
+    return 0;
 }
 
 template <class T>

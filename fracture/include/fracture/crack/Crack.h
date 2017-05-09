@@ -14,7 +14,7 @@ private:
     UniqueList<int> pointIndexes;
     double StandardRadius;
 
-    void prepareTip(CrackTip tip, UniqueList<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh,
+    void prepareTip(CrackTip &tip, UniqueList<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh,
                     std::vector<int> entryToContainer);
     void grow(CrackTip &tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, Problem problem, Eigen::VectorXd u);
     double adjustBoxes(Polygon initPoly, Polygon endPoly, std::vector<Point> points);

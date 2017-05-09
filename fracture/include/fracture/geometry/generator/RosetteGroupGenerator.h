@@ -18,7 +18,8 @@ private:
     void generatePoint(double angle, double radius);
 public:
     RosetteGroupGenerator(Point c, double angle, double radius);
-    std::vector<Point> getPoints(double initAngle);
+    std::vector<Point> generatePoints(double initAngle);
+    std::vector<Point> getPoints();
 };
 
 

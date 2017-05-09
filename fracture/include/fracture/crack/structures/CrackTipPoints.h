@@ -9,8 +9,8 @@ struct CrackTipPoints {
     int d;
     int e;
 
-    CrackTipPoints(int c, int bP, int cP, int dP, int eP){
-        center = c;
+    CrackTipPoints(int Center, int bP, int cP, int dP, int eP){
+        center = Center;
 
         b = bP;
         c = cP;
