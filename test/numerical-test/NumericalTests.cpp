@@ -1,3 +1,4 @@
+#include <veamy/models/constraints/values/Function.h>
 #include "NumericalTests.h"
 
 class None : public BodyForce{
@@ -13,6 +14,10 @@ private:
         return 9.81;
     }
 };
+
+double tangencial(double x, double y){
+    return -1000/(2*8)*(4-std::pow(y,2));
+}
 
 NumericalTests::NumericalTests() {
     /*Rectangle*/
@@ -31,7 +36,25 @@ NumericalTests::NumericalTests() {
 
     meshGenerator = TriangleMeshGenerator (seeds, region);
     rectangleRandom = meshGenerator.getMesh();
-    rectangleRandom.printInFile("rectangleRandom.txt");
+
+
+    /*Rectangle 4x8*/
+    std::vector<Point> rectangle4x8_points = {Point(0, 0), Point(8, 0), Point(8, 4), Point(0, 4)};
+    Region rectangle4x8(rectangle4x8_points);
+    rectangle4x8.generateSeedPoints(PointGenerator(functions::random_double(0,8), functions::random_double(0,4)), 10, 5);
+    seeds = rectangle4x8.getSeedPoints();
+
+    meshGenerator = TriangleMeshGenerator (seeds, rectangle4x8);
+    rectangle4x8Random = meshGenerator.getMesh();
+    rectangle4x8Random.printInFile("rectangle4x8Random.txt");
+    rectangle4x8.cleanSeedPoints();
+
+    rectangle4x8.generateSeedPoints(PointGenerator(functions::constantAlternating(), functions::constant()), 10, 5);
+    seeds = rectangle4x8.getSeedPoints();
+
+    meshGenerator = TriangleMeshGenerator (seeds, rectangle4x8);
+    rectangle4x8ConstantAlternating = meshGenerator.getMesh();
+    rectangle4x8ConstantAlternating.printInFile("rectangle4x8ConstantAlternating.txt");
 }
 
 Eigen::VectorXd
@@ -106,6 +129,35 @@ Eigen::VectorXd NumericalTests::clampedWithBodyForce(PolygonalMesh mesh, PointSe
 
 Eigen::VectorXd NumericalTests::clampedWithParabolicLoad(PolygonalMesh mesh) {
     return Eigen::VectorXd();
+}
+
+Eigen::VectorXd NumericalTests::fixedXWithParabolicLoad(PolygonalMesh mesh, std::vector<PointSegment> restricted) {
+    Veamer v;
+    BodyForce* f = new None();
+
+    EssentialConstraints essential;
+    Constraint const1 (restricted[0], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(0));
+    essential.addConstraint(const1, mesh.getPoints().getList());
+
+    NaturalConstraints natural;
+
+    Function* tangencialLoad = new Function(tangencial);
+
+    Constraint const2 (restricted[1], mesh.getPoints().getList(), Constraint::Direction::Vertical, tangencialLoad);
+    natural.addConstraint(const2, mesh.getPoints().getList());
+
+    ConstraintsContainer container;
+    container.addConstraints(essential, mesh);
+    container.addConstraints(natural, mesh);
+
+    Material m(1e7, 0.3);
+    ProblemConditions conditions(container, f, m);
+
+    v.initProblem(mesh, conditions);
+
+    Eigen::VectorXd x = v.simulate(mesh);
+
+    return x;
 }
 
 Eigen::VectorXd

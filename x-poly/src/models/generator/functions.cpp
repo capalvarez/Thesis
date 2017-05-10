@@ -8,6 +8,10 @@ namespace functions {
         return new Uniform(1.0);
     }
 
+    Functor *constantAlternating() {
+        return new ConstantAlternating();
+    }
+
     Functor *uniform(double delta) {
         return new Uniform(delta);
     }
