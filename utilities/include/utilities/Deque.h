@@ -42,7 +42,7 @@ void Deque<T>::insert(std::vector<T> elems) {
 }
 
 template <class T>
-T &Deque::operator[](int i) {
+T &Deque<T>::operator[](int i) {
     return this->deque[i];
 }
 

@@ -149,11 +149,11 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
             }
 
             this->init.remeshAndAdapt(radius, newP, poly1, m, toPoly1,
-                                      {PointSegment(this->init.getPoint(), m.getPoint(crackPath.first()))});
+                                      {PointSegment(this->init.getPoint(), m.getPoint(crackPath.first()))}, crackPath.first());
             crackPath.push_front(this->init.points.center);
 
             this->end.remeshAndAdapt(radius, newP, poly2, m, toPoly2,
-                                     {PointSegment(this->end.getPoint(), m.getPoint(crackPath.last()))});
+                                     {PointSegment(this->end.getPoint(), m.getPoint(crackPath.last()))}, crackPath.last());
             crackPath.push_back(this->end.points.center);
         }else{
             double radius;
@@ -211,18 +211,18 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                 }
             }
 
-            this->init.remeshAndAdapt(radius, newP, initPoly_index, m, unusedInit, initRestricted);
+            this->init.remeshAndAdapt(radius, newP, initPoly_index, m, unusedInit, initRestricted, crackPath.first());
             crackPath.push_front(this->init.points.center);
-            this->end.remeshAndAdapt(radius, newP, endPoly_index, m, unusedEnd, endRestricted);
+            this->end.remeshAndAdapt(radius, newP, endPoly_index, m, unusedEnd, endRestricted, crackPath.last());
             crackPath.push_back(this->end.points.center);
         }
     }else{
-        this->prepareTip(this->init, oldP, newP, m, {crackPath.first(), crackPath.second()});
+        this->prepareTip(this->init, oldP, newP, m, {crackPath.first(), crackPath.second()}, crackPath.first());
         if(!this->init.isFinished()){
             crackPath.push_front(this->init.points.center);
         }
 
-        this->prepareTip(this->end, oldP, newP, m, {crackPath.last(), crackPath.secondToLast()});
+        this->prepareTip(this->end, oldP, newP, m, {crackPath.last(), crackPath.secondToLast()}, crackPath.last());
         if(!this->end.isFinished()){
             crackPath.push_back(this->end.points.center);
         }
@@ -260,9 +260,9 @@ PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
 }
 
 void Crack::prepareTip(CrackTip &tip, UniqueList<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh,
-                       std::vector<int> entryToContainer) {
+                       std::vector<int> entryToContainer, int previousCrackPoint) {
     if(!tip.isFinished()){
-        PolygonChangeData data = tip.prepareTip(mesh, StandardRadius, entryToContainer);
+        PolygonChangeData data = tip.prepareTip(mesh, StandardRadius, entryToContainer, previousCrackPoint);
 
         oldP.push_list(data.oldPolygons);
         newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());

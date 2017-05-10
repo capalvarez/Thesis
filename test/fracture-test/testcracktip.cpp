@@ -18,16 +18,16 @@ TEST(CrackTipTest, PrepareTipTest){
 
     PointSegment crack(Point(0.25,0.25), Point(2.75,1.5));
 
-    CrackTip tip(crack);
+    CrackTip tip(crack.getFirst());
     tip.assignLocation(breakableMesh.findContainerPolygon(crack.getFirst()));
-    tip.prepareTip(breakableMesh, 1, {0,0});
+    tip.prepareTip(breakableMesh, 1, {0, 0}, 0);
 
 }
 
 TEST(CrackTipTest, AddPointToPathTest){
     PointSegment crack (Point(1,1), Point(0,0));
 
-    CrackTip tip(crack);
+    CrackTip tip(crack.getFirst());
 
     tip.addPointToPath(0, BreakableMesh());
     EXPECT_EQ(tip.getPoint(), Point(1.1,1));
