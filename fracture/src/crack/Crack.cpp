@@ -25,7 +25,7 @@ Crack::Crack(Point init, Point end) {
 
     this->init = CrackTip(crack);
     this->end = CrackTip(PointSegment(end, init));
-    this->StandardRadius = config->getRatio()*crack.length();
+    this->StandardRadius = config->getDiameterRatio()*crack.length();
 }
 
 PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
