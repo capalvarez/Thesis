@@ -17,7 +17,7 @@
 class CrackTip {
 private:
     double usedRadius;
-    std::vector<int> crackPath;
+    Point tipPoint;
     int container_polygon;
     CrackTipPoints points;
     double crackAngle;
@@ -35,7 +35,7 @@ private:
     int getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints, UniqueList<int> neighbours);
 public:
     CrackTip();
-    CrackTip(PointSegment crack);
+    CrackTip(Point crack);
     CrackTip(const CrackTip& t);
 
     void addPointToPath(double angle, BreakableMesh mesh);

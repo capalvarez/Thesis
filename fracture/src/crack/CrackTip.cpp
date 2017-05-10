@@ -4,9 +4,8 @@
 
 CrackTip::CrackTip() {}
 
-CrackTip::CrackTip(PointSegment crack) {
-    crackPath.push_back(crack.getSecond());
-    crackPath.push_back(crack.getFirst());
+CrackTip::CrackTip(Point crack) {
+    this->tipPoint = crack;
 }
 
 void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
