@@ -31,6 +31,8 @@ public:
 
     void initializeCrack(BreakableMesh &mesh);
     void printInStream(std::ofstream& file);
+
+    friend class CrackTip;
 };
 
 

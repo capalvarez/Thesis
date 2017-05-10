@@ -10,7 +10,7 @@ CrackTip::CrackTip(Point crack) {
 
 void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
     FractureConfig* config = FractureConfig::instance();
-    Point last = mesh.getPoint(crackPath.back());
+    Point last = this->getPoint();
 
     Point standardPoint(last.getX() + config->getSpeed()*std::cos(utilities::radian(angle)),
                         last.getY() + config->getSpeed()*std::sin(utilities::radian(angle)));
@@ -45,7 +45,7 @@ void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
     }
 
     if(!useSecondChoice){
-        this->crackPath.push_back(standardPoint);
+       this->tipPoint = standardPoint;
     }else{
         std::vector<int> previous = {possibleNeighbours.getFirst(), possibleNeighbours.getSecond()};
         Point advanceDirection(exitRing.getX() + 2*polygons[index].getDiameter() * std::cos(utilities::radian(angle)),
@@ -56,7 +56,7 @@ void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
 
         Point finalPoint(finalPolygonInfo.intersection.getX() + finalPolygon.getDiameter()/2 * std::cos(utilities::radian(angle)),
                          finalPolygonInfo.intersection.getY() + finalPolygon.getDiameter()/2 * std::sin(utilities::radian(angle)));
-        this->crackPath.push_back(finalPoint);
+        this->tipPoint = finalPoint;
     }
 }
 
@@ -64,8 +64,11 @@ CrackTip::CrackTip(const CrackTip &t) {
     this->points = t.points;
     this->container_polygon = t.container_polygon;
     this->crackAngle = t.crackAngle;
-    this->crackPath = t.crackPath;
+    this->tipPoint = t.tipPoint;
     this->hasFinished = t.hasFinished;
+    this->usedRadius = t.usedRadius;
+    this->tipTriangles = t.tipTriangles;
+    this->ring = t.ring;
 }
 
 double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
@@ -92,13 +95,13 @@ double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
 
 PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
     double angle = calculateAngle(problem, u);
-    Point lastPoint = crackPath.back();
+    Point lastPoint = this->getPoint();
 
     addPointToPath(angle, *problem.mesh);
 
     reassignContainer(*problem.mesh);
     problem.mesh->printInFile("changed.txt");
-    PointSegment direction(lastPoint, crackPath.back());
+    PointSegment direction(lastPoint, this->getPoint());
 
     std::vector<int> previous;
     int startTriangleIndex = problem.mesh->getNeighbourFromCommonVertexSet(direction, this->tipTriangles,
@@ -170,7 +173,7 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
 void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, int region, BreakableMesh &mesh,
                               std::vector<int> oldPoints, std::vector<PointSegment> restrictedSegments) {
     this->tipTriangles.clear();
-    this->crackAngle = PointSegment(crackPath[crackPath.size() - 2],crackPath.back()).cartesianAngle();
+    this->crackAngle = restrictedSegments[0].cartesianAngle();
     FractureConfig* config = FractureConfig::instance();
 
     this->usedRadius = radius;
@@ -223,7 +226,7 @@ void CrackTip::assignLocation(int polygon) {
 }
 
 Point CrackTip::getPoint() {
-    return this->crackPath.back();
+    return this->tipPoint;
 }
 
 void CrackTip::reassignContainer(BreakableMesh& mesh) {
@@ -284,7 +287,7 @@ void CrackTip::reassignContainer(BreakableMesh& mesh) {
 
 void CrackTip::checkIfFinished(Problem problem, PointSegment direction) {
     int last;
-    int isOutside = problem.mesh->findContainerPolygon(crackPath.back(), last);
+    int isOutside = problem.mesh->findContainerPolygon(this->getPoint(), last);
     if(isOutside==-1) {
         Polygon& poly = problem.mesh->getPolygon(last);
 
@@ -297,8 +300,7 @@ void CrackTip::checkIfFinished(Problem problem, PointSegment direction) {
 
             if(intersects){
                 hasFinished = true;
-                crackPath.pop_back();
-                crackPath.push_back(p);
+                tipPoint  = p;
             }
         }
     }
