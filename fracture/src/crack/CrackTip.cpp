@@ -11,7 +11,7 @@ CrackTip::CrackTip(PointSegment crack) {
 
 void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
     FractureConfig* config = FractureConfig::instance();
-    Point last = crackPath.back();
+    Point last = mesh.getPoint(crackPath.back());
 
     Point standardPoint(last.getX() + config->getSpeed()*std::cos(utilities::radian(angle)),
                         last.getY() + config->getSpeed()*std::sin(utilities::radian(angle)));

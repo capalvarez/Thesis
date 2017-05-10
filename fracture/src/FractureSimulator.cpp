@@ -15,6 +15,7 @@ FractureSimulator::FractureSimulator(std::string simulationName, const Polygonal
 
 void FractureSimulator::simulate(double crack_growth) {
     FractureConfig* config = FractureConfig::instance();
+    config->setGrowthSpeed(crack_growth);
 
     while(this->step<config->getMaxIterations() && !this->crack.isFinished()){
         PolygonChangeData refinedPolygons = this->crack.prepareTip(this->mesh);
