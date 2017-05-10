@@ -15,7 +15,7 @@ void SegmentMap::insert(IndexSegment s, int polygonIndex) {
 }
 
 void SegmentMap::insert(IndexSegment s, Neighbours n) {
-    this->map.insert(std::make_pair(s,n));
+    this->map[s] = n;
 }
 
 void SegmentMap::replace_neighbour(IndexSegment s, int oldNeighbour, int newNeighbour) {

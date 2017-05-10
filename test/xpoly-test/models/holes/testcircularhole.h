@@ -9,14 +9,14 @@ class CircularHoleTest : public ::testing::Test {
 protected:
     virtual void SetUp(){
         square = new Region(squarePoints);
-        hole = new CircularHole(Point(0.5, 0.5), 0.25);
+        hole = CircularHole(Point(0.5, 0.5), 0.25);
         square->addHole(hole);
     }
 
     std::vector<Point> squarePoints = {Point(0,0),Point(1,0),Point(1,1),Point(0,1)};
     Region* square;
 
-    Hole* hole;
+    Hole hole;
 };
 
 

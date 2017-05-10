@@ -99,6 +99,7 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
         }
 
         for (int j = 0; j < n; ++j) {
+            bool changed = false;
             IndexSegment edge(newTrianglePoints[j], newTrianglePoints[(j+1)%n]);
             IndexSegment originalEdge(oldTrianglePoints[j],oldTrianglePoints[(j+1)%n]);
 
@@ -114,19 +115,21 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
 
                         int otherNeighbour = is_first? neighbours.getSecond() : neighbours.getFirst();
 
-                        segments.insert(edge, index);
-                        segments.insert(edge, otherNeighbour);
+                        segments.insert(edge, Neighbours(index, otherNeighbour));
 
                         std::unordered_map<IndexSegment,std::vector<IndexSegment>,IndexSegmentHasher>& polyInfo =
                                 changesInNeighbours[otherNeighbour];
                         polyInfo[containerCandidates[k]].push_back(edge);
 
+                        changed = true;
                         break;
                     }
                 }
 
-            //ToDO: Quickfix for border case
-                segments.insert(edge, index);
+                if(!changed){
+                    //ToDO: Quickfix for border case
+                    segments.insert(edge, index);
+                }
             }else{
                 segments.insert(edge,index);
             }
@@ -143,6 +146,8 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
             poly.replace_segment(s.first, s.second, meshPoints.getList());
         }
     }
+
+    mesh.getSegments().printInFile("segmentsAfterAdapt.txt");
 }
 
 Triangulation RemeshAdapter::triangulate(std::vector<Point> points, std::vector<Point> meshPoints) {

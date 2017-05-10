@@ -8,9 +8,20 @@ CrackTip::CrackTip(Point crack) {
     this->tipPoint = crack;
 }
 
+CrackTip::CrackTip(const CrackTip &t) {
+    this->points = t.points;
+    this->container_polygon = t.container_polygon;
+    this->crackAngle = t.crackAngle;
+    this->tipPoint = t.tipPoint;
+    this->hasFinished = t.hasFinished;
+    this->usedRadius = t.usedRadius;
+    this->tipTriangles = t.tipTriangles;
+    this->ring = t.ring;
+}
+
 void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
     FractureConfig* config = FractureConfig::instance();
-    Point last = this->getPoint();
+    Point last = mesh.getPoint(points.center);
 
     Point standardPoint(last.getX() + config->getSpeed()*std::cos(utilities::radian(angle)),
                         last.getY() + config->getSpeed()*std::sin(utilities::radian(angle)));
@@ -60,16 +71,7 @@ void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
     }
 }
 
-CrackTip::CrackTip(const CrackTip &t) {
-    this->points = t.points;
-    this->container_polygon = t.container_polygon;
-    this->crackAngle = t.crackAngle;
-    this->tipPoint = t.tipPoint;
-    this->hasFinished = t.hasFinished;
-    this->usedRadius = t.usedRadius;
-    this->tipTriangles = t.tipTriangles;
-    this->ring = t.ring;
-}
+
 
 double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
     Material m = problem.veamer->getMaterial();
@@ -95,7 +97,7 @@ double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
 
 PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
     double angle = calculateAngle(problem, u);
-    Point lastPoint = this->getPoint();
+    Point lastPoint = problem.mesh->getPoint(points.center);
 
     addPointToPath(angle, *problem.mesh);
 

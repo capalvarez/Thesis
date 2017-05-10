@@ -27,7 +27,7 @@ TEST_F(RegionTest, GeneratePointsTest){
 
 TEST_F(RegionTest, AddHoleTest){
     std::vector<Point> hPoints = {Point(2,0), Point(7,0), Point(7,2), Point(2,2)};
-    Hole* h = new PolygonalHole(hPoints);
+    Hole h = PolygonalHole(hPoints);
 
     rectangle->addHole(h);
     std::vector<Point> expected = {Point(7,2), Point(7,0), Point(10,0), Point(10,10), Point(0,10),
@@ -37,7 +37,7 @@ TEST_F(RegionTest, AddHoleTest){
 
 TEST_F(RegionTest, AddHoleInsideTest){
     std::vector<Point> hPoints = {Point(4,4), Point(6,4), Point(6,6), Point(4,6)};
-    Hole* h = new PolygonalHole(hPoints);
+    Hole h = PolygonalHole(hPoints);
 
     rectangle->addHole(h);
     std::vector<Point> expected = {Point(0,0), Point(10,0), Point(10,10), Point(0,10), Point(4,4), Point(6,4),
