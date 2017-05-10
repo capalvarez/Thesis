@@ -60,7 +60,13 @@ void Polygon::mutate(std::vector<int> points, std::vector<Point> p) {
 void Polygon::update(std::vector<Point> points) {
     this->area = calculateArea(points);
     this->centroid = calculateCentroid(points);
-    this->diameter = calculateDiameter(points);
+
+    std::vector<Point> this_points;
+    for(int i=0;i<this->points.size();i++){
+        this_points.push_back(points[this->points[i]]);
+    }
+
+    this->diameter = calculateDiameter(this_points);
 }
 
 Polygon::Polygon(std::vector<Point> &p) {
