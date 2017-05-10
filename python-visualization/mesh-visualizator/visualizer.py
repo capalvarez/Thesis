@@ -26,4 +26,3 @@ button2.pack(side="right")
 button3.pack(side="right")
 
 window.mainloop()
-

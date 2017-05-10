@@ -16,7 +16,7 @@ private:
 };
 
 double tangencial(double x, double y){
-    return -1000/(2*8)*(4-std::pow(y,2));
+    return -1000*12/(2*64)*(4-std::pow(y,2));
 }
 
 NumericalTests::NumericalTests() {
@@ -49,7 +49,7 @@ NumericalTests::NumericalTests() {
     rectangle4x8Random.printInFile("rectangle4x8Random.txt");
     rectangle4x8.cleanSeedPoints();
 
-    rectangle4x8.generateSeedPoints(PointGenerator(functions::constantAlternating(), functions::constant()), 10, 5);
+    rectangle4x8.generateSeedPoints(PointGenerator(functions::constantAlternating(), functions::constant()), 12, 6);
     seeds = rectangle4x8.getSeedPoints();
 
     meshGenerator = TriangleMeshGenerator (seeds, rectangle4x8);
@@ -156,6 +156,7 @@ Eigen::VectorXd NumericalTests::fixedXWithParabolicLoad(PolygonalMesh mesh, std:
     v.initProblem(mesh, conditions);
 
     Eigen::VectorXd x = v.simulate(mesh);
+    v.writeDisplacements("rectangle4x8ConstantAlternating_displacements.txt", x);
 
     return x;
 }
@@ -215,7 +216,8 @@ Eigen::VectorXd NumericalTests::displacementBothSides(PolygonalMesh mesh, std::v
 }
 
 void NumericalTests::runTests() {
-    std::cout << clampedWithLoad(rectangleUniform, std::vector<PointSegment>(), 0) << std::endl;
+    std::cout << fixedXWithParabolicLoad(rectangle4x8ConstantAlternating, {PointSegment(Point(0,0), Point(0,4)),
+                                                                           PointSegment(Point(8,0), Point(8,4))}) << std::endl;
 }
 
 

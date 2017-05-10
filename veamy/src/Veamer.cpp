@@ -89,3 +89,21 @@ UniqueList<Point> Veamer::getPoints() {
 ProblemConditions Veamer::getConditions() const {
     return this->conditions;
 }
+
+void Veamer::writeDisplacements(std::string fileName, Eigen::VectorXd u) {
+    std::string path = utilities::getPath();
+    path +=  fileName;
+
+    std::ofstream file;
+    file.open(path, std::ios::out);
+
+    for (int k = 0; k < u.rows(); k = k + 2) {
+        int point_index = DOFs.get(k).pointIndex();
+        double def_x = u[k];
+        double def_y = u[k+1];
+
+        file << utilities::toString(point_index) << " " << utilities::toString(def_x) << " " << utilities::toString(def_y) << std::endl;
+    }
+
+    file.close();
+}
