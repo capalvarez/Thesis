@@ -26,7 +26,7 @@ void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
     Point standardPoint(last.getX() + config->getSpeed()*std::cos(utilities::radian(angle)),
                         last.getY() + config->getSpeed()*std::sin(utilities::radian(angle)));
 
-    bool useSecondChoice = ring.containsPoint(mesh.getPoints().getList(),standardPoint);
+    bool useSecondChoice = std::abs(standardPoint.distance(last)) < usedRadius;
     int firstNeighbour = -1;
 
     Point alwaysOutside(last.getX() + ring.getDiameter() * std::cos(utilities::radian(angle)),
@@ -41,11 +41,11 @@ void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
                                      mesh.getPolygon(possibleNeighbours.getSecond())};
 
     int index = -1;
-    if (ring.containsPoint(mesh.getPoints().getList(), polygons[0].getCentroid())) {
+    if (ring.containsPoint(mesh.getPoints().getList(), polygons[1].getCentroid())) {
         firstNeighbour = possibleNeighbours.getSecond();
         index = 1;
     } else {
-        if (ring.containsPoint(mesh.getPoints().getList(), polygons[1].getCentroid())) {
+        if (ring.containsPoint(mesh.getPoints().getList(), polygons[0].getCentroid())) {
             firstNeighbour = possibleNeighbours.getFirst();
             index = 0;
         }
@@ -58,19 +58,23 @@ void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
     if(!useSecondChoice){
        this->tipPoint = standardPoint;
     }else{
-        std::vector<int> previous = {possibleNeighbours.getFirst(), possibleNeighbours.getSecond()};
-        Point advanceDirection(exitRing.getX() + 2*polygons[index].getDiameter() * std::cos(utilities::radian(angle)),
-                               exitRing.getY() + 2*polygons[index].getDiameter() * std::sin(utilities::radian(angle)));
-
-        NeighbourInfo finalPolygonInfo = mesh.getNeighbour(firstNeighbour, PointSegment(last, advanceDirection), previous);
-        Polygon finalPolygon = mesh.getPolygon(finalPolygonInfo.neighbour);
-
-        Point finalPoint(finalPolygonInfo.intersection.getX() + finalPolygon.getDiameter()/2 * std::cos(utilities::radian(angle)),
-                         finalPolygonInfo.intersection.getY() + finalPolygon.getDiameter()/2 * std::sin(utilities::radian(angle)));
-        this->tipPoint = finalPoint;
+        int index2 = (index+1)%2;
+        this->tipPoint = this->generateNextPoint(polygons[index2], exitRing, angle, mesh.getPoints().getList());
     }
 }
 
+Point CrackTip::generateNextPoint(Polygon poly, Point intersection, double angle, std::vector<Point> points) {
+    double length = poly.getDiameter()/2;
+    Point finalPoint(intersection.getX() + length * std::cos(utilities::radian(angle)),
+                     intersection.getY() + length * std::sin(utilities::radian(angle)));
+    while(!poly.containsPoint(points, finalPoint)){
+        length = length/2;
+        finalPoint = Point(intersection.getX() + length * std::cos(utilities::radian(angle)),
+                           intersection.getY() + length * std::sin(utilities::radian(angle)));
+    }
+
+    return finalPoint;
+}
 
 
 double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
@@ -103,6 +107,7 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
 
     reassignContainer(*problem.mesh);
     problem.mesh->printInFile("changed.txt");
+
     PointSegment direction(lastPoint, this->getPoint());
 
     std::vector<int> previous;
@@ -343,3 +348,4 @@ int CrackTip::getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints
     mesh.printInFile("afterFirst.txt");
     return remesher.getRegionIndex();
 }
+

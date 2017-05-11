@@ -150,6 +150,10 @@ void BreakableMesh::mergePolygons(int i1, int i2) {
 }
 
 int BreakableMesh::mergePolygons(std::vector<int> &polys) {
+    if(polys.size()==1){
+        return polys[0];
+    }
+
     SimplePolygonMerger merger;
 
     Polygon merged =  merger.mergePolygons(polys, points.getList(), *this);

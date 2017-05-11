@@ -71,7 +71,8 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
     }
 
     for (int i = 0; i < triangles.size() ; ++i) {
-        bool isTipTriangle = false, toMerge = false;
+        bool isTipTriangle = false;
+        int toMerge = 0;
         int boundaryPointIndex = -1;
         std::vector<int> oldTrianglePoints = triangles[i].getPoints();
         int n = oldTrianglePoints.size();
@@ -86,7 +87,7 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
             int newPoint = pointMap[oldTrianglePoints[k]];
 
             if(triangulationPoints[oldTrianglePoints[k]].isInBoundary()) {
-                toMerge = !toMerge;
+                toMerge++;
                 boundaryPointIndex = newPoint;
             }
 
@@ -114,7 +115,7 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
             tipTriangles.push_back(index);
         }
 
-        if(toMerge){
+        if(toMerge==1){
             std::vector<int>& list = trianglesToMerge[boundaryPointIndex];
             list.push_back(index);
         }
@@ -186,6 +187,7 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
             int index = n - i;
             equivalence[index] = toMerge[i];
         }
+        mesh.printInFile("iammerging.txt");
     }
 }
 
