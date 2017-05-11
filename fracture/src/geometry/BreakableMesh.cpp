@@ -149,7 +149,7 @@ void BreakableMesh::mergePolygons(int i1, int i2) {
     this->polygons.pop_back();
 }
 
-int BreakableMesh::mergePolygons(std::vector<int> polys) {
+int BreakableMesh::mergePolygons(std::vector<int> &polys) {
     SimplePolygonMerger merger;
 
     Polygon merged =  merger.mergePolygons(polys, points.getList(), *this);

@@ -14,6 +14,7 @@ private:
 
     Polygon computeRemeshRegion(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh &mesh,
                                std::vector<int> &involved);
+    int getEquivalentIndex(std::unordered_map<int, int> map, int index);
 public:
     RemeshAdapter(Polygon poly, int index);
     RemeshAdapter(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh &mesh);

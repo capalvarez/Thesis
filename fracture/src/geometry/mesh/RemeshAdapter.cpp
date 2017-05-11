@@ -3,6 +3,11 @@
 #include <fracture/geometry/mesh/structures/IndexSegmentHasher.h>
 #include <veamy/models/constraints/structures/Angle.h>
 
+struct greater{
+    template<class T>
+    bool operator()(T const &a, T const &b) const { return a > b; }
+};
+
 RemeshAdapter::RemeshAdapter(Polygon poly, int index) {
     this->region = poly;
     this->regionIndex = index;
@@ -43,12 +48,14 @@ void
 RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std::unordered_map<int, int> pointMap,
                            std::vector<int> &tipTriangles, std::vector<Polygon> &newPolygons) {
     std::unordered_map<int,std::unordered_map<IndexSegment,std::vector<IndexSegment>,IndexSegmentHasher>> changesInNeighbours;
+    std::unordered_map<int, std::vector<int>> trianglesToMerge;
 
     UniqueList<Point>& meshPoints = mesh.getPoints();
     std::vector<Polygon>& meshPolygons = mesh.getPolygons();
     SegmentMap& segments = mesh.getSegments();
 
     std::vector<Triangle> triangles = triangulation.getTriangles();
+    std::vector<Point> triangulationPoints = triangulation.getPoints();
 
     std::vector<IndexSegment> containerSegments;
     mesh.getPolygon(this->regionIndex).getSegments(containerSegments);
@@ -63,7 +70,8 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
     }
 
     for (int i = 0; i < triangles.size() ; ++i) {
-        bool isTipTriangle = false;
+        bool isTipTriangle = false, toMerge = false;
+        int boundaryPointIndex = -1;
         std::vector<int> oldTrianglePoints = triangles[i].getPoints();
         int n = oldTrianglePoints.size();
 
@@ -72,6 +80,11 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
         for (int k = 0; k < n ; ++k) {
             if(oldTrianglePoints[k] == 0){
                 isTipTriangle = true;
+            }
+
+            if(triangulationPoints[oldTrianglePoints[k]].isInBoundary()){
+                toMerge = !toMerge;
+                boundaryPointIndex = pointMap[oldTrianglePoints[k]];
             }
 
             newTrianglePoints.push_back(pointMap[oldTrianglePoints[k]]);
@@ -96,6 +109,11 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
         newPolygons.push_back(newPolygon);
         if(isTipTriangle){
             tipTriangles.push_back(index);
+        }
+
+        if(toMerge){
+            std::vector<int>& list = trianglesToMerge[boundaryPointIndex];
+            list.push_back(index);
         }
 
         for (int j = 0; j < n; ++j) {
@@ -147,7 +165,21 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
         }
     }
 
-    mesh.getSegments().printInFile("segmentsAfterAdapt.txt");
+    std::unordered_map<int,int> equivalence;
+    for (auto value: trianglesToMerge){
+        std::vector<int> toMerge;
+        for(int i=0;i<value.second.size();i++){
+            toMerge.push_back(getEquivalentIndex(equivalence,value.second[i]));
+        }
+
+        int n = mesh.numberOfPolygons() - 1;
+        mesh.mergePolygons(toMerge);
+
+        for(int i=0; i < toMerge.size()-1; i++){
+            int index = n - i;
+            equivalence[index] = toMerge[i];
+        }
+    }
 }
 
 Triangulation RemeshAdapter::triangulate(std::vector<Point> points, std::vector<Point> meshPoints) {
@@ -196,4 +228,22 @@ Polygon RemeshAdapter::getRegion() {
 
 int RemeshAdapter::getRegionIndex() {
     return this->regionIndex;
+}
+
+int RemeshAdapter::getEquivalentIndex(std::unordered_map<int, int> map, int index) {
+    auto iter = map.find(index);
+
+    if(iter!=map.end()){
+        int i = iter->second;
+        iter = map.find(i);
+
+        while(iter!=map.end()){
+            i = iter->second;
+            iter = map.find(i);
+        }
+
+        return i;
+    }else{
+        return index;
+    }
 }

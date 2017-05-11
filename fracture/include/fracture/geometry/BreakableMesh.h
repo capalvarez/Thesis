@@ -17,7 +17,7 @@ public:
 
     void swapPolygons(int first, int last, std::unordered_map<IndexSegment,int,SegmentHasher>& toIgnore);
     void mergePolygons(int i1, int i2);
-    int mergePolygons(std::vector<int> polys);
+    int mergePolygons(std::vector<int> &polys);
     bool areMergeable(Polygon poly1, int poly2);
     std::vector<int> getUnusedPoints(std::vector<int> allPoints, std::vector<int> merged);
     std::vector<int> getAllPoints(std::vector<int> polys);

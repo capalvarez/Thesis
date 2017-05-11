@@ -260,3 +260,7 @@ void PolygonalMesh::getDirectNeighbours(int poly, UniqueList<int> &neighbours) {
         }
     }
 }
+
+int PolygonalMesh::numberOfPolygons() {
+    return this->polygons.size();
+}
