@@ -16,7 +16,7 @@ private:
 };
 
 double tangencial(double x, double y){
-    return -1000*12/(2*64)*(4-std::pow(y,2));
+    return 1000*12/(2*64)*(4-std::pow(y,2));
 }
 
 NumericalTests::NumericalTests() {
