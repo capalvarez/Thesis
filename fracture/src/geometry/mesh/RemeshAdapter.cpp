@@ -41,12 +41,13 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &m, std::u
                            std::vector<Polygon> &newPolygons) {
     std::vector<int> t;
 
-    return adaptToMesh(triangulation, m, pointMap, t, newPolygons);
+    return adaptToMesh(triangulation, m, pointMap, t, newPolygons, std::vector<int>());
 }
 
 void
 RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std::unordered_map<int, int> pointMap,
-                           std::vector<int> &tipTriangles, std::vector<Polygon> &newPolygons) {
+                           std::vector<int> &tipTriangles, std::vector<Polygon> &newPolygons,
+                           std::vector<int> restrictedPoints) {
     std::unordered_map<int,std::unordered_map<IndexSegment,std::vector<IndexSegment>,IndexSegmentHasher>> changesInNeighbours;
     std::unordered_map<int, std::vector<int>> trianglesToMerge;
 
@@ -82,12 +83,14 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
                 isTipTriangle = true;
             }
 
-            if(triangulationPoints[oldTrianglePoints[k]].isInBoundary()){
+            int newPoint = pointMap[oldTrianglePoints[k]];
+
+            if(triangulationPoints[oldTrianglePoints[k]].isInBoundary()) {
                 toMerge = !toMerge;
-                boundaryPointIndex = pointMap[oldTrianglePoints[k]];
+                boundaryPointIndex = newPoint;
             }
 
-            newTrianglePoints.push_back(pointMap[oldTrianglePoints[k]]);
+            newTrianglePoints.push_back(newPoint);
         }
 
         Polygon newPolygon =  Polygon(newTrianglePoints, mesh.getPoints().getList());
@@ -167,6 +170,10 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
 
     std::unordered_map<int,int> equivalence;
     for (auto value: trianglesToMerge){
+        if(std::find(restrictedPoints.begin(), restrictedPoints.end(), value.first)!=restrictedPoints.end()){
+            continue;
+        }
+
         std::vector<int> toMerge;
         for(int i=0;i<value.second.size();i++){
             toMerge.push_back(getEquivalentIndex(equivalence,value.second[i]));

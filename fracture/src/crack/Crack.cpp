@@ -149,11 +149,13 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
             }
 
             this->init.remeshAndAdapt(radius, newP, poly1, m, toPoly1,
-                                      {PointSegment(this->init.getPoint(), m.getPoint(crackPath.first()))}, crackPath.first());
+                                      {PointSegment(this->init.getPoint(), m.getPoint(crackPath.first()))},
+                                      crackPath.first(), {crackPath.first(), crackPath.second()});
             crackPath.push_front(this->init.points.center);
 
             this->end.remeshAndAdapt(radius, newP, poly2, m, toPoly2,
-                                     {PointSegment(this->end.getPoint(), m.getPoint(crackPath.last()))}, crackPath.last());
+                                     {PointSegment(this->end.getPoint(), m.getPoint(crackPath.last()))},
+                                     crackPath.last(),{crackPath.last(), crackPath.secondToLast()});
             crackPath.push_back(this->end.points.center);
         }else{
             double radius;
@@ -211,9 +213,11 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                 }
             }
 
-            this->init.remeshAndAdapt(radius, newP, initPoly_index, m, unusedInit, initRestricted, crackPath.first());
+            this->init.remeshAndAdapt(radius, newP, initPoly_index, m, unusedInit, initRestricted, crackPath.first(),
+                                      {crackPath.first(), crackPath.second()});
             crackPath.push_front(this->init.points.center);
-            this->end.remeshAndAdapt(radius, newP, endPoly_index, m, unusedEnd, endRestricted, crackPath.last());
+            this->end.remeshAndAdapt(radius, newP, endPoly_index, m, unusedEnd, endRestricted, crackPath.last(),
+                                     {crackPath.last(), crackPath.secondToLast()});
             crackPath.push_back(this->end.points.center);
         }
     }else{
