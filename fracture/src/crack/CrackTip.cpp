@@ -111,7 +111,7 @@ double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
     }
 }
 
-PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
+PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem, UniqueList<int> &newPoints) {
     double angle = calculateAngle(problem, u);
     Point lastPoint = problem.mesh->getPoint(points.center);
 
@@ -123,15 +123,9 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
     problem.mesh->printInFile("changed.txt");
     std::vector<int> previous;
     int startTriangleIndex = problem.mesh->getNeighbourFromCommonVertexSet(direction, this->tipTriangles);
-    /*UniqueList<int> triangleNeighbours;
-    problem.mesh->getAllNeighbours(startTriangleIndex, triangleNeighbours);
 
-    for(int i=0;i<triangleNeighbours.size();i++){
-        previous.erase(std::remove(previous.begin(), previous.end(), triangleNeighbours[i]), previous.end());
-    }*/
-
-    UniqueList<int> newPoints;
     PolygonChangeData changeData = problem.mesh->breakMesh(startTriangleIndex, direction, true, newPoints, previous);
+    newPoints.pop_front();
 
     checkIfFinished(problem, direction);
 

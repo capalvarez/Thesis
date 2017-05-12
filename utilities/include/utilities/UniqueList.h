@@ -16,6 +16,7 @@ public:
     int size();
     std::vector<int> push_list(std::vector<T> list);
     std::vector<int> push_list(UniqueList<T> list);
+    void pop_front();
 
     std::vector<T> getList() const;
     std::vector<T>& getList();
@@ -43,6 +44,14 @@ int UniqueList<T>::push_back(T& item) {
     list.push_back(item);
 
     return (int) list.size()-1;
+}
+
+template <class T>
+void UniqueList<T>::pop_front() {
+    T elem = this->list[0];
+
+    this->list.erase(this->list.begin());
+    this->map.erase(elem);
 }
 
 template <class T>

@@ -10,12 +10,13 @@ FractureSimulator::FractureSimulator(std::string simulationName, const Polygonal
 
     this->crack.initializeCrack(this->mesh);
     this->veamer.initProblem(this->mesh, conditions);
-    this->writeStepInFile();
 }
 
 void FractureSimulator::simulate(double crack_growth) {
     FractureConfig* config = FractureConfig::instance();
     config->setGrowthSpeed(crack_growth);
+
+    this->writeStepInFile();
 
     while(this->step<config->getMaxIterations() && !this->crack.isFinished()){
         PolygonChangeData refinedPolygons = this->crack.prepareTip(this->mesh);
@@ -30,6 +31,7 @@ void FractureSimulator::simulate(double crack_growth) {
         this->mesh.printInFile("after.txt");
 
         this->step++;
+        this->writeStepInFile();
     }
 }
 

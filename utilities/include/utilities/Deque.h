@@ -12,6 +12,7 @@ public:
     void push_front(T& item);
     void push_back(T& item);
     void insert(std::vector<T> elems);
+    void insert_front(std::vector<T> elems);
     T& operator[](int i);
 
     T& first();
@@ -38,7 +39,12 @@ void Deque<T>::push_back(T &item) {
 
 template <class T>
 void Deque<T>::insert(std::vector<T> elems) {
-    this->deque.insert(deque.begin(), elems.begin(), elems.end());
+    this->deque.insert(deque.end(), elems.begin(), elems.end());
+}
+
+template <class T>
+void Deque<T>::insert_front(std::vector<T> elems) {
+    this->deque.insert(deque.begin(), elems.rend(), elems.rbegin());
 }
 
 template <class T>

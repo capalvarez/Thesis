@@ -9,7 +9,7 @@ frame.pack()
 
 canvas = Canvas(window, width=WIDTH, height=HEIGHT, bg="white")
 
-points, segments, polygons, crack, limits = read_file("squareUniform_step0.txt")
+points, segments, polygons, crack, limits = read_file("squareUniform_step1.txt")
 
 draw_list(points, canvas, limits, "red")
 draw_polygons(polygons, canvas, points)

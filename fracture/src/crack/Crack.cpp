@@ -257,8 +257,12 @@ PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
     std::vector<Polygon> oldP;
     std::vector<Polygon> newP;
 
-    this->grow(this->init, oldP, newP, problem, u);
-    this->grow(this->end, oldP, newP, problem, u);
+    UniqueList<int> initCrackPoints, endCrackPoints;
+    this->grow(this->init, oldP, newP, problem, u, initCrackPoints);
+    this->crackPath.insert_front(initCrackPoints.getList());
+
+    this->grow(this->end, oldP, newP, problem, u, endCrackPoints);
+    this->crackPath.insert(endCrackPoints.getList());
 
     return PolygonChangeData(oldP, newP);
 }
@@ -273,10 +277,10 @@ void Crack::prepareTip(CrackTip &tip, UniqueList<Polygon> &oldP, std::vector<Pol
     }
 }
 
-void Crack::grow(CrackTip &tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, Problem problem,
-                 Eigen::VectorXd u) {
+void Crack::grow(CrackTip &tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, Problem problem, Eigen::VectorXd u,
+                 UniqueList<int> &crackPoints) {
     if(!tip.isFinished()){
-        PolygonChangeData data = tip.grow(u, problem);
+        PolygonChangeData data = tip.grow(u, problem, crackPoints);
 
         oldP.insert(oldP.end(), data.oldPolygons.begin(), data.oldPolygons.end());
         newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());
@@ -297,9 +301,9 @@ double Crack::adjustBoxes(Polygon initPoly, Polygon endPoly, std::vector<Point> 
 void Crack::printInStream(std::ofstream &file) {
     int n = crackPath.size();
 
-    file << n << std::endl;
+    file << n-1 << std::endl;
 
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < n-1; ++i) {
         file << crackPath[i] << " " << crackPath[(i+1)%n] << std::endl;
     }
 }

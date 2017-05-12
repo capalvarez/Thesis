@@ -47,7 +47,6 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
     this->printInFile("meshmesh.txt");
     bool oneLastIteration = false;
 
-
     while(true){
         Polygon& poly1 = getPolygon(n1.neighbour);
 
