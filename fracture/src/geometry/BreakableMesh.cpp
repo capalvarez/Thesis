@@ -18,9 +18,14 @@ BreakableMesh::BreakableMesh(const PolygonalMesh& m) {
 
 PolygonChangeData
 BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, UniqueList<int> &newPoints) {
+    return breakMesh(init, crack, initialCrackTip, newPoints, std::vector<int>());
+}
+
+PolygonChangeData
+BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, UniqueList<int> &newPoints,
+                         std::vector<int> previous) {
     std::vector<Polygon> oldPolygons;
     std::vector<Polygon> newPolygons;
-    std::vector<int> previous;
 
     NeighbourInfo n1 = getNeighbour(init, crack, previous);
 
@@ -85,6 +90,7 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
         init = n1.neighbour;
         n1 = n2;
     }
+
 }
 
 void BreakableMesh::swapPolygons(int first, int last, std::unordered_map<IndexSegment,int,SegmentHasher> &toIgnore) {

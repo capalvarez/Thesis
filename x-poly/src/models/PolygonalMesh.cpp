@@ -118,7 +118,7 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
 
             UniqueList<int> neighbours;
             this->getDirectNeighbours(poly_index, neighbours);
-            int neighbour = getNeighbourFromCommonVertexSet(direction, neighbours.getList(), vertexIndex, previous, poly);
+            int neighbour = getNeighbourFromCommonVertexSet(direction, neighbours.getList(), vertexIndex, previous, poly.getCentroid());
 
             NeighbourInfo n(neighbour, polySeg[j], p, false);
             n.isVertex = true;
@@ -149,7 +149,7 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
 }
 
 int PolygonalMesh::getNeighbourFromCommonVertexSet(PointSegment direction, std::vector<int> vertexSet, int vertexIndex,
-                                                   std::vector<int> &previousPolygons, Polygon current) {
+                                                   std::vector<int> &previousPolygons, Point reference) {
     double diff = DBL_MAX;
     int neighbour = 0;
 
@@ -162,7 +162,7 @@ int PolygonalMesh::getNeighbourFromCommonVertexSet(PointSegment direction, std::
         }
 
         previousPolygons.push_back(vertexSet[i]);
-        Pair<double> slopeNeighbour = PointSegment(current.getCentroid(), getPolygon(vertexSet[i]).getCentroid()).getSlope();
+        Pair<double> slopeNeighbour = PointSegment(reference, getPolygon(vertexSet[i]).getCentroid()).getSlope();
 
         if(std::abs(slopeNeighbour.first)<tolerance && std::abs(slopeDirection.first)<tolerance){
 
@@ -180,6 +180,23 @@ int PolygonalMesh::getNeighbourFromCommonVertexSet(PointSegment direction, std::
     }
     return neighbour;
 }
+
+int PolygonalMesh::getNeighbourFromCommonVertexSet(PointSegment direction, std::vector<int> vertexSet) {
+    for (int i = 0; i < vertexSet.size(); ++i) {
+        NeighbourInfo n = getNeighbour(vertexSet[i], direction);
+        if(n.neighbour>=0){
+            auto find = std::find(vertexSet.begin(), vertexSet.end(), n.neighbour);
+            if(find!=vertexSet.end()){
+                continue;
+            }else{
+                return vertexSet[i];
+            }
+        }
+    }
+
+    return -1;
+}
+
 
 Region PolygonalMesh::getRegion() const{
     return this->region;

@@ -56,17 +56,19 @@ TEST(FractureSimulatorTest, SimulateTest){
     };
 
     BodyForce* f = new Sum();
-    EssentialConstraints c;
+    EssentialConstraints essential;
     PointSegment constrained(Point(0,0),Point(0,3));
-    PointSegment constrained2 (Point(3,0),Point(3,3));
     Constraint const1 (constrained, mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
+    essential.addConstraint(const1,  mesh.getPoints().getList());
 
-    c.addConstraint(const1,  mesh.getPoints().getList());
-    Constraint const2 (constrained2, mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(1));
-    c.addConstraint(const2,  mesh.getPoints().getList());
+    NaturalConstraints natural;
+    PointSegment constrained2 (Point(3,0),Point(3,3));
+    Constraint const2 (constrained2, mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(100));
+    natural.addConstraint(const2,  mesh.getPoints().getList());
 
     ConstraintsContainer container;
-    container.addConstraints(c, PolygonalMesh());
+    container.addConstraints(essential, mesh);
+    container.addConstraints(natural, mesh);
 
     ProblemConditions conditions(container, f, Material(Materials::material::Steel));
 

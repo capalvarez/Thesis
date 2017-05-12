@@ -27,7 +27,6 @@ void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
                         last.getY() + config->getSpeed()*std::sin(utilities::radian(angle)));
 
     bool useSecondChoice = std::abs(standardPoint.distance(last)) < usedRadius;
-    int firstNeighbour = -1;
 
     Point alwaysOutside(last.getX() + ring.getDiameter() * std::cos(utilities::radian(angle)),
                         last.getY() + ring.getDiameter() * std::sin(utilities::radian(angle)));
@@ -36,18 +35,27 @@ void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
                                                           mesh.getPoints().getList());
 
     Neighbours possibleNeighbours = mesh.getNeighbours(intersected);
+    std::vector<Polygon> polygons;
+    int index = -1, otherIndex = -1;
+    bool border = false;
 
-    std::vector<Polygon> polygons = {mesh.getPolygon(possibleNeighbours.getFirst()),
-                                     mesh.getPolygon(possibleNeighbours.getSecond())};
+    if(possibleNeighbours.isNeighbour(-1)){
+        int notNull = possibleNeighbours.getFirst()==-1? possibleNeighbours.getSecond() : possibleNeighbours.getFirst();
+        polygons = {mesh.getPolygon(notNull)};
+        otherIndex = 0;
+        index = 0;
+        border = true;
+    }else{
+        polygons = {mesh.getPolygon(possibleNeighbours.getFirst()), mesh.getPolygon(possibleNeighbours.getSecond())};
 
-    int index = -1;
-    if (ring.containsPoint(mesh.getPoints().getList(), polygons[1].getCentroid())) {
-        firstNeighbour = possibleNeighbours.getSecond();
-        index = 1;
-    } else {
-        if (ring.containsPoint(mesh.getPoints().getList(), polygons[0].getCentroid())) {
-            firstNeighbour = possibleNeighbours.getFirst();
-            index = 0;
+        if (ring.containsPoint(mesh.getPoints().getList(), polygons[1].getCentroid())) {
+            otherIndex = 0;
+            index = 1;
+        } else {
+            if (ring.containsPoint(mesh.getPoints().getList(), polygons[0].getCentroid())) {
+                otherIndex = 1;
+                index = 0;
+            }
         }
     }
 
@@ -58,12 +66,16 @@ void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
     if(!useSecondChoice){
        this->tipPoint = standardPoint;
     }else{
-        int index2 = (index+1)%2;
-        this->tipPoint = this->generateNextPoint(polygons[index2], exitRing, angle, mesh.getPoints().getList());
+        this->tipPoint = this->generateNextPoint(polygons[otherIndex], exitRing, angle, mesh.getPoints().getList(), border);
     }
 }
 
-Point CrackTip::generateNextPoint(Polygon poly, Point intersection, double angle, std::vector<Point> points) {
+Point
+CrackTip::generateNextPoint(Polygon poly, Point intersection, double angle, std::vector<Point> points, bool border) {
+    if(border){
+        return intersection;
+    }
+
     double length = poly.getDiameter()/2;
     Point finalPoint(intersection.getX() + length * std::cos(utilities::radian(angle)),
                      intersection.getY() + length * std::sin(utilities::radian(angle)));
@@ -106,15 +118,20 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem) {
     addPointToPath(angle, *problem.mesh);
 
     reassignContainer(*problem.mesh);
-    problem.mesh->printInFile("changed.txt");
-
     PointSegment direction(lastPoint, this->getPoint());
 
+    problem.mesh->printInFile("changed.txt");
     std::vector<int> previous;
-    int startTriangleIndex = problem.mesh->getNeighbourFromCommonVertexSet(direction, this->tipTriangles,
-                                                                           this->points.center, previous, Polygon());
+    int startTriangleIndex = problem.mesh->getNeighbourFromCommonVertexSet(direction, this->tipTriangles);
+    /*UniqueList<int> triangleNeighbours;
+    problem.mesh->getAllNeighbours(startTriangleIndex, triangleNeighbours);
+
+    for(int i=0;i<triangleNeighbours.size();i++){
+        previous.erase(std::remove(previous.begin(), previous.end(), triangleNeighbours[i]), previous.end());
+    }*/
+
     UniqueList<int> newPoints;
-    PolygonChangeData changeData = problem.mesh->breakMesh(startTriangleIndex, direction, true, newPoints);
+    PolygonChangeData changeData = problem.mesh->breakMesh(startTriangleIndex, direction, true, newPoints, previous);
 
     checkIfFinished(problem, direction);
 

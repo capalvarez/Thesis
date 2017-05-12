@@ -12,6 +12,7 @@ class Polygon:
             p2 = points[self.p[(i+1)%len(self.p)]]
 
             canvas.create_line(p1.x, y-p1.y, p2.x, y-p2.y, fill=color)
-            canvas.create_text(self.centroid.x, y-self.centroid.y, text=self.index)
+            if self.index==97:
+                canvas.create_text(self.centroid.x, y-self.centroid.y, text=self.index)
 
 
