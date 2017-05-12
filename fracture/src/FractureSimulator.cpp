@@ -33,6 +33,8 @@ void FractureSimulator::simulate(double crack_growth) {
         this->step++;
         this->writeStepInFile();
     }
+
+    this->writeNumberOfSteps();
 }
 
 void FractureSimulator::writeStepInFile() {
@@ -44,6 +46,14 @@ void FractureSimulator::writeStepInFile() {
     this->crack.printInStream(file);
 
     file.close();
-
 }
 
+void FractureSimulator::writeNumberOfSteps() {
+    std::string fileName = utilities::getPath() + this->simulationName +"number.txt";
+    std::ofstream file;
+    file.open(fileName, std::ios::out);
+
+    file << utilities::toString(this->step) << std::endl;
+
+    file.close();
+}

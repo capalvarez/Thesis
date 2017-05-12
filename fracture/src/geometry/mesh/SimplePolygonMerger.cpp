@@ -81,6 +81,10 @@ Polygon SimplePolygonMerger::mergePolygons(Polygon p1, Polygon p2, std::vector<P
 
 Polygon SimplePolygonMerger::mergePolygons(std::vector<int> polygons, std::vector<Point> points,
                                            BreakableMesh &mesh) {
+    if(polygons.size()==1){
+        return mesh.getPolygon(polygons[0]);
+    }
+
     Polygon merged;
     int i = polygons.size()-1;
     int j = polygons.size()-2;
