@@ -103,9 +103,17 @@ double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
 
     if(kII!=0){
         double r = kI/kII;
+        double theta1 = 2*atan((r + std::sqrt((std::pow(r,2) + 8)))/4);
+        double theta2 = 2*atan((r - std::sqrt((std::pow(r,2) + 8)))/4);
 
-        return utilities::degrees(2*std::atan(r/4 - utilities::sign(kII)/4*std::sqrt((std::pow(r,2) + 8))))
-               + this->crackAngle;
+        double t1 = utilities::degrees(theta1);
+        double t2 = utilities::degrees(theta2);
+
+        if(theta1*kII<0){
+            return utilities::degrees(theta1) + this->crackAngle;
+        }else{
+            return utilities::degrees(theta2) + this->crackAngle;
+        }
     }else{
         return this->crackAngle + 90;
     }
@@ -198,6 +206,7 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     this->crackAngle = PointSegment(mesh.getPoint(previousCrackPoint), tipPoint).cartesianAngle();
     FractureConfig* config = FractureConfig::instance();
 
+    mesh.printInFile("withRing.txt");
     this->usedRadius = radius;
     RosetteGroupGenerator generator(this->getPoint(), config->getRosetteAngle(),radius);
     std::vector<Point> pointsOnSegment = generator.generatePoints(this->crackAngle);

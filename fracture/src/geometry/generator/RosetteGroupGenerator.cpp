@@ -12,20 +12,21 @@ std::vector<Point> RosetteGroupGenerator::generatePoints(double initAngle) {
     std::vector<Point> onSegment;
     this->points.push_back(this->center);
 
+    double startAngle = initAngle + 180;
     double angle = this->angle;
 
-    this->generatePoint(angle / 4 + initAngle, this->innerRadius);
-    this->generatePoint(angle / 4 + initAngle, this->outerRadius);
+    this->generatePoint(angle / 4 + startAngle, this->innerRadius);
+    this->generatePoint(angle / 4 + startAngle, this->outerRadius);
 
-    this->generatePoint(-angle / 4 + initAngle, this->innerRadius);
-    this->generatePoint(-angle / 4 + initAngle, this->outerRadius);
+    this->generatePoint(-angle / 4 + startAngle, this->innerRadius);
+    this->generatePoint(-angle / 4 + startAngle, this->outerRadius);
 
-    this->generatePoint(angle / 2 + initAngle, this->outerRadius);
+    this->generatePoint(angle / 2 + startAngle, this->outerRadius);
 
     while(angle<360){
-        this->generatePoint(angle + initAngle, this->innerRadius);
-        this->generatePoint(angle + initAngle, this->outerRadius);
-        this->generatePoint(angle + this->angle / 2 + initAngle, this->outerRadius);
+        this->generatePoint(angle + startAngle, this->innerRadius);
+        this->generatePoint(angle + startAngle, this->outerRadius);
+        this->generatePoint(angle + this->angle / 2 + startAngle, this->outerRadius);
 
         if(std::abs(angle-180)<FractureConfig::instance()->getTolerance()){
             onSegment.push_back(this->points[this->points.size()-2]);
