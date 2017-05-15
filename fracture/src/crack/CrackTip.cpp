@@ -140,12 +140,10 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem, UniqueList<
     return changeData;
 }
 
-PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadius, std::vector<int> entryToContainer,
-                                       int previousCrackPoint) {
+PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadius, Pair<int> previousCrackPoints) {
     std::vector<int> indexes;
     std::vector<Polygon> oldPolygons;
     std::vector<Polygon> newPolygons;
-    std::vector<PointSegment> restricted;
 
     Polygon poly = mesh.getPolygon(this->container_polygon);
 
@@ -153,19 +151,18 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
 
     if(fitsBox(StandardRadius, poly, mesh.getPoints().getList())){
         oldPolygons.push_back(poly);
-        restricted.push_back(PointSegment(this->getPoint(), mesh.getPoint(entryToContainer[0])));
 
-        remeshAndAdapt(StandardRadius, newPolygons, this->container_polygon, mesh, std::vector<int>(), restricted,
-                       previousCrackPoint, entryToContainer);
+
+        remeshAndAdapt(StandardRadius, newPolygons, this->container_polygon, mesh, std::vector<int>(),
+                       previousCrackPoints);
     } else{
         double candidateRadius = poly.getDiameter()*config->getRatio();
 
         if(fitsBox(candidateRadius, poly, mesh.getPoints().getList())){
             oldPolygons.push_back(poly);
-            restricted.push_back(PointSegment(this->getPoint(), mesh.getPoint(entryToContainer[0])));
 
-            remeshAndAdapt(candidateRadius, newPolygons, this->container_polygon, mesh, std::vector<int>(), restricted,
-                           previousCrackPoint, entryToContainer);
+            remeshAndAdapt(candidateRadius, newPolygons, this->container_polygon, mesh, std::vector<int>(),
+                           previousCrackPoints);
         } else{
             std::vector<int> unusedPoints;
             int ringIndex = this->getRingPolygon(mesh, unusedPoints, oldPolygons);
@@ -176,10 +173,8 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
                             Point(last.getX()+candidateRadius, last.getY()+candidateRadius));
 
             if (box.fitsInsidePolygon(ringRegion, mesh.getPoints().getList())) {
-                restricted.push_back(PointSegment(this->getPoint(), mesh.getPoint(entryToContainer[0])));
-                restricted.push_back(PointSegment(mesh.getPoint(entryToContainer[0]), mesh.getPoint(entryToContainer[1])));
 
-                remeshAndAdapt(candidateRadius, newPolygons, ringIndex, mesh, unusedPoints, restricted, previousCrackPoint, entryToContainer);
+                remeshAndAdapt(candidateRadius, newPolygons, ringIndex, mesh, unusedPoints, previousCrackPoints);
             } else {
                 double radius = candidateRadius;
                 while(!box.fitsInsidePolygon(ringRegion, mesh.getPoints().getList())) {
@@ -188,10 +183,7 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
                                       Point(last.getX()+radius, last.getY()+radius));
                 }
 
-                restricted.push_back(PointSegment(this->getPoint(), mesh.getPoint(entryToContainer[0])));
-                restricted.push_back(PointSegment(mesh.getPoint(entryToContainer[0]), mesh.getPoint(entryToContainer[1])));
-
-                remeshAndAdapt(radius, newPolygons, ringIndex, mesh, unusedPoints, restricted, previousCrackPoint, entryToContainer);
+                remeshAndAdapt(radius, newPolygons, ringIndex, mesh, unusedPoints, previousCrackPoints);
             }
         }
     }
@@ -200,9 +192,9 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
 }
 
 void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, int region, BreakableMesh &mesh,
-                              std::vector<int> oldPoints, int previousCrackPoint, std::vector<int> restrictedPoints) {
+                              std::vector<int> oldPoints, Pair<int> previousCrackPoint) {
     this->tipTriangles.clear();
-    this->crackAngle = PointSegment(mesh.getPoint(previousCrackPoint), tipPoint).cartesianAngle();
+    this->crackAngle = PointSegment(mesh.getPoint(previousCrackPoint.first), tipPoint).cartesianAngle();
     FractureConfig* config = FractureConfig::instance();
 
     this->usedRadius = radius;
@@ -234,7 +226,7 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     pointMap[rosettePoints.size()-1] = meshPoints.size()-1;
 
     this->points = CrackTipPoints(pointMap[0], meshPoints.size()-2, meshPoints.size()-1, pointMap[1], pointMap[2]);
-    remesher.adaptToMesh(t, mesh, pointMap, this->tipTriangles, newPolygons, restrictedPoints);
+    remesher.adaptToMesh(t, mesh, pointMap, this->tipTriangles, newPolygons);
 }
 
 bool CrackTip::isFinished() {

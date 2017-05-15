@@ -216,18 +216,18 @@ void BreakableMesh::breakPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
 
     int p4 = this->points.force_push_back(n2.intersection);
 
-    newPoints.push_back(p1);
-    newPoints.push_back(p3);
+    Pair<int> entryPair = Pair<int>(p1, p3);
+    Pair<int> exitPair = Pair<int>(p2, p4);
 
-    newPoints.push_back(p2);
-    newPoints.push_back(p4);
+    newPoints.push_back(entryPair);
+    newPoints.push_back(exitPair);
 
     //Split the old polygon and generate new ones
     std::vector<int> new1 = {p1, p2};
     std::vector<int> new2 = {p4, p3};
 
     Pair<int> pairs = computeNewPolygons(n1, n2, poly1, newPolygons,
-                                         newPoints, new1, new2, p1, p2, init, p3, p4);
+                                         new1, new2, p1, p2, init, p3, p4);
 
     if(init>=0){
         this->getPolygon(init).insertOnSegment(n1.edge, {p1, p3});
@@ -292,7 +292,7 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
 
     UniqueList<int> newPoints;
     Pair<int> pairs = computeNewPolygons(n1, n2, poly1, newPolygons,
-                                         newPoints, new1, new2, p1, p2, init, -1, -1);
+                                         new1, new2, p1, p2, init, -1, -1);
 
     if(init>=0){
         this->getPolygon(init).insertOnSegment(n1.edge, p1);
@@ -338,8 +338,8 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
 }
 
 Pair<int> BreakableMesh::computeNewPolygons(NeighbourInfo n1, NeighbourInfo &n2, Polygon poly1, std::vector<Polygon> &newPolygons,
-                                            UniqueList<int> &newPoints, std::vector<int> &new1, std::vector<int> &new2, int p1,
-                                            int p2, int init, int p3, int p4) {
+                                            std::vector<int> &new1, std::vector<int> &new2, int p1, int p2, int init, int p3,
+                                            int p4) {
     std::vector<int> poly1_points = poly1.getPoints();
 
     n1.orderCCW(this->points.getList(), poly1.getCentroid());

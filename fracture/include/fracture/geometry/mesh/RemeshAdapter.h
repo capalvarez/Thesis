@@ -22,8 +22,7 @@ public:
                   std::vector<int> &involved);
 
     void adaptToMesh(Triangulation triangulation, BreakableMesh &m, std::unordered_map<int, int> pointMap,
-                         std::vector<int> &tipTriangles, std::vector<Polygon> &newPolygons,
-                         std::vector<int> restrictedPoints);
+                         std::vector<int> &tipTriangles, std::vector<Polygon> &newPolygons);
     void adaptToMesh(Triangulation triangulation, BreakableMesh &m, std::unordered_map<int, int> pointMap,
                          std::vector<Polygon> &newPolygons);
     Triangulation triangulate(std::vector<Point> points, std::vector<Point> meshPoints);

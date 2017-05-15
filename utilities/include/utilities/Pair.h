@@ -54,7 +54,11 @@ Pair<T> Pair<T>::operator+(const Pair &other) const {
 
 template <typename T>
 bool Pair<T>::operator<(const Pair &other) const {
-    return false;
+     if(this->first==other.first){
+        return this->second<other.second;
+    }
+
+    return this->first<other.first;
 }
 
 

@@ -552,3 +552,15 @@ IndexSegment Polygon::getIntersectedSegment(PointSegment direction, Point &inter
 int Polygon::getVertex(int p1, int p2) {
     return isVertex(p1)? p1 : p2;
 }
+
+IndexSegment Polygon::getSurroundingVertices(Pair<int> vertices) {
+    int n = this->numberOfSides();
+
+    int i = utilities::indexOf(this->points, vertices.first);
+    int j = utilities::indexOf(this->points, vertices.second);
+
+    int first = this->points[(i+1)%n]==j? (i-1+n)%n : (i+1)%n;
+    int second = this->points[(j+1)%n]==i? (j-1+n)%n : (j+1)%n;
+
+    return IndexSegment(first, second);
+}

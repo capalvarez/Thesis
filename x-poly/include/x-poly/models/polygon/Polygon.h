@@ -74,6 +74,7 @@ public:
     IndexSegment getIntersectedSegment(PointSegment direction, Point &intersection, std::vector<Point> points);
     bool isValidPolygon();
     int getVertex(int p1, int p2);
+    IndexSegment getSurroundingVertices(Pair<int> vertices);
 };
 
 #endif

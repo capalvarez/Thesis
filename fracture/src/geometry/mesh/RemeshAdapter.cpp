@@ -41,13 +41,13 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &m, std::u
                            std::vector<Polygon> &newPolygons) {
     std::vector<int> t;
 
-    return adaptToMesh(triangulation, m, pointMap, t, newPolygons, std::vector<int>());
+    return adaptToMesh(triangulation, m,
+                       pointMap, t, newPolygons);
 }
 
 void
 RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std::unordered_map<int, int> pointMap,
-                           std::vector<int> &tipTriangles, std::vector<Polygon> &newPolygons,
-                           std::vector<int> restrictedPoints) {
+                           std::vector<int> &tipTriangles, std::vector<Polygon> &newPolygons) {
     std::unordered_map<int,std::unordered_map<IndexSegment,std::vector<IndexSegment>,IndexSegmentHasher>> changesInNeighbours;
     std::unordered_map<int, std::vector<int>> trianglesToMerge;
 
@@ -171,10 +171,6 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &mesh, std
 
     std::unordered_map<int,int> equivalence;
     for (auto value: trianglesToMerge){
-        if(std::find(restrictedPoints.begin(), restrictedPoints.end(), value.first)!=restrictedPoints.end()){
-            continue;
-        }
-
         std::vector<int> toMerge;
         for(int i=0;i<value.second.size();i++){
             toMerge.push_back(getEquivalentIndex(equivalence,value.second[i]));
