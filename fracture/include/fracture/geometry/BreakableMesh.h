@@ -7,6 +7,10 @@
 
 
 class BreakableMesh : public PolygonalMesh{
+private:
+    Pair<int> computeNewPolygons(NeighbourInfo n1, NeighbourInfo &n2, Polygon poly1, std::vector<Polygon> &newPolygons,
+                                     UniqueList<int> &newPoints, std::vector<int> &new1, std::vector<int> &new2, int p1,
+                                     int p2, int init, int p3, int p4);
 public:
     BreakableMesh();
     BreakableMesh(const PolygonalMesh& m);
@@ -14,8 +18,10 @@ public:
     PolygonChangeData breakMesh(int init, PointSegment crack, bool initialCrackTip, UniqueList<int> &newPoints);
     PolygonChangeData breakMesh(int init, PointSegment crack, bool initialCrackTip, UniqueList<int> &newPoints,
                                 std::vector<int> previous);
+    void breakPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init, std::vector<Polygon> &oldPolygons,
+                           std::vector<Polygon> &newPolygons, UniqueList<int> &newPoints, bool firstTime);
     void splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init, std::vector<Polygon> &oldPolygons,
-                           std::vector<Polygon> &newPolygons, UniqueList<int> &newPoints);
+                       std::vector<Polygon> &newPolygons, UniqueList<int> &newPoints);
 
     void swapPolygons(int first, int last, std::unordered_map<IndexSegment,int,SegmentHasher>& toIgnore);
     void mergePolygons(int i1, int i2);

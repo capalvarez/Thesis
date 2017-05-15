@@ -40,12 +40,14 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
         NeighbourInfo n0 = NeighbourInfo(init, container_edge,crack.getFirst() ,false);
         n0.isVertex = container_edge.isEndPoint(crack.getFirst(), this->points.getList());
 
-        splitPolygons(n0, n1, -1, oldPolygons, newPolygons, newPoints);
+        breakPolygons(n0, n1, -1, oldPolygons, newPolygons,
+                      newPoints, false);
         last = this->polygons.size() - 1;
     }
 
-    this->printInFile("meshmesh.txt");
+
     bool oneLastIteration = false;
+    bool firstTime = true;
 
     while(true){
         Polygon& poly1 = getPolygon(n1.neighbour);
@@ -77,7 +79,7 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
             continue;
         }
 
-        splitPolygons(n1, n2, init, oldPolygons, newPolygons, newPoints);
+        breakPolygons(n1, n2, init, oldPolygons, newPolygons, newPoints, firstTime);
         this->printInFile("meshmesh.txt");
 
         // Iterate
@@ -88,6 +90,7 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
         last = this->polygons.size()-1;
         init = n1.neighbour;
         n1 = n2;
+        firstTime = false;
     }
 
 }
@@ -195,20 +198,148 @@ int BreakableMesh::mergePolygons(std::vector<int> &polys) {
 }
 
 
-void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init, std::vector<Polygon> &oldPolygons,
-                                  std::vector<Polygon> &newPolygons, UniqueList<int> &newPoints) {
+void BreakableMesh::breakPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init, std::vector<Polygon> &oldPolygons,
+                                  std::vector<Polygon> &newPolygons, UniqueList<int> &newPoints, bool firstTime) {
     Polygon& poly1 = getPolygon(n1.neighbour);
-    std::vector<int> poly1_points = poly1.getPoints();
+    oldPolygons.push_back(poly1);
 
     //Include new points on the mesh
     int p1 = this->points.push_back(n1.intersection);
     int p2 = this->points.push_back(n2.intersection);
+
+    int p3;
+    if(firstTime){
+        p3 = this->points.force_push_back(n1.intersection);
+    } else{
+        p3 = n1.extraPoint;
+    }
+
+    int p4 = this->points.force_push_back(n2.intersection);
+
+    newPoints.push_back(p1);
+    newPoints.push_back(p2);
+
+    //Split the old polygon and generate new ones
+    std::vector<int> new1 = {p1, p2};
+    std::vector<int> new2 = {p4, p3};
+
+    Pair<int> pairs = computeNewPolygons(n1, n2, poly1, newPolygons,
+                                         newPoints, new1, new2, p1, p2, init, p3, p4);
+
+    if(init>=0){
+        this->getPolygon(init).insertOnSegment(n1.edge, {p1, p3});
+    }
+
+    this->getPolygon(n2.neighbour).insertOnSegment(n2.edge, {p2, p4});
+
+    // Get the edge information for the old polygon and update it
+    if(!n1.isVertex){
+        this->edges.delete_element(n1.edge);
+    }
+    if(!n2.isVertex){
+        this->edges.delete_element(n2.edge);
+    }
+
+    std::vector<IndexSegment> segments1;
+    std::vector<IndexSegment> segments2;
+
+    this->getPolygon(pairs.first).getSegments(segments1);
+    this->getPolygon(pairs.second).getSegments(segments2);
+
+    this->edges.insert(IndexSegment(p1,p2),Neighbours(pairs.first,-1));
+    this->edges.insert(IndexSegment(p3,p4),Neighbours(n1.neighbour,-1));
+
+    for (int i = 0; i < segments1.size() ; ++i) {
+        this->edges.replace_neighbour(segments1[i], n1.neighbour, pairs.first);
+    }
+
+    for (int i = 0; i < segments2.size() ; ++i) {
+        this->edges.replace_neighbour(segments2[i], n1.neighbour, pairs.second);
+    }
+
+    if(!n1.isVertex){
+        this->edges.insert_if_null(IndexSegment(p1, this->getPolygon(pairs.first).getVertex(n1.edge.getFirst(), n1.edge.getSecond())),init);
+        this->edges.insert_if_null(IndexSegment(p3, this->getPolygon(pairs.second).getVertex(n1.edge.getFirst(), n1.edge.getSecond())), init);
+    }
+
+    if(!n2.isVertex){
+        this->edges.insert_if_null(IndexSegment(p2, this->getPolygon(pairs.first).getVertex(n2.edge.getFirst(), n2.edge.getSecond())), n2.neighbour);
+        this->edges.insert_if_null(IndexSegment(p4, this->getPolygon(pairs.second).getVertex(n2.edge.getFirst(), n2.edge.getSecond())), n2.neighbour);
+    }
+
+    n2.extraPoint = p4;
+}
+
+void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init, std::vector<Polygon> &oldPolygons,
+                                  std::vector<Polygon> &newPolygons, UniqueList<int> &newPoints) {
+    Polygon& poly1 = getPolygon(n1.neighbour);
+    std::vector<int> poly1_points = poly1.getPoints();
+    oldPolygons.push_back(poly1);
+
+    //Include new points on the mesh
+    int p1 = this->points.push_back(n1.intersection);
+    int p2 = this->points.push_back(n2.intersection);
+
+    int p3 = this->points.force_push_back(n1.intersection);
+    int p4 = this->points.force_push_back(n2.intersection);
+
     newPoints.push_back(p1);
     newPoints.push_back(p2);
 
     //Split the old polygon and generate new ones
     std::vector<int> new1 = {p1, p2};
     std::vector<int> new2 = {p2, p1};
+
+    Pair<int> pairs = computeNewPolygons(n1, n2, poly1, newPolygons,
+                                         newPoints, new1, new2, p1, p2, init, -1, -1);
+
+    if(init>=0){
+        this->getPolygon(init).insertOnSegment(n1.edge, p1);
+    }
+
+    this->getPolygon(n2.neighbour).insertOnSegment(n2.edge, p2);
+
+    // Get the edge information for the old polygon and update it
+    if(!n1.isVertex){
+        this->edges.delete_element(n1.edge);
+    }
+    if(!n2.isVertex){
+        this->edges.delete_element(n2.edge);
+    }
+
+    std::vector<IndexSegment> segments1;
+    std::vector<IndexSegment> segments2;
+
+    this->getPolygon(pairs.first).getSegments(segments1);
+    this->getPolygon(pairs.second).getSegments(segments2);
+
+    this->edges.insert(IndexSegment(p1,p2),Neighbours(n1.neighbour,n1.neighbour));
+
+    for (int i = 0; i < segments1.size() ; ++i) {
+        this->edges.replace_neighbour(segments1[i], n1.neighbour, pairs.first);
+    }
+
+    for (int i = 0; i < segments2.size() ; ++i) {
+        this->edges.replace_neighbour(segments2[i], n1.neighbour, pairs.second);
+    }
+
+    if(!n1.isVertex){
+        this->edges.insert_if_null(IndexSegment(p1,n1.edge.getFirst()),init);
+        this->edges.insert_if_null(IndexSegment(p1,n1.edge.getSecond()), init);
+    }
+
+    if(!n2.isVertex){
+        this->edges.insert_if_null(IndexSegment(p2,n2.edge.getFirst()), n2.neighbour);
+        this->edges.insert_if_null(IndexSegment(p2,n2.edge.getSecond()), n2.neighbour);
+    }
+
+    n2.extraPoint = p2;
+}
+
+Pair<int> BreakableMesh::computeNewPolygons(NeighbourInfo n1, NeighbourInfo &n2, Polygon poly1, std::vector<Polygon> &newPolygons,
+                                            UniqueList<int> &newPoints, std::vector<int> &new1, std::vector<int> &new2, int p1,
+                                            int p2, int init, int p3, int p4) {
+    std::vector<int> poly1_points = poly1.getPoints();
 
     n1.orderCCW(this->points.getList(), poly1.getCentroid());
     n2.orderCCW(this->points.getList(), poly1.getCentroid());
@@ -237,10 +368,10 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
                 } else{
                     edgePointsPassed = true;
                 }
-            }    
+            }
         }
-        
-        
+
+
 
         if(point!= p1 && point!=p2){
             new1.push_back(point);
@@ -255,7 +386,7 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
 
     while (true){
         if(n2.isVertex){
-            if(point==p2){
+            if(point==p4 || point==p2){
                 break;
             }
         }else{
@@ -265,12 +396,12 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
                 } else{
                     edgePointsPassed = true;
                 }
-            }   
+            }
         }
-        
-        
 
-        if(point!= p1 && point!=p2){
+
+
+        if((point!=p1 || point!=p3) && (point!=p2 || point!=p4)){
             new2.push_back(point);
         }
 
@@ -278,9 +409,6 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
 
         indexOfStart++;
     }
-
-    // Create new polygons and insert them on the mesh
-    oldPolygons.push_back(poly1);
 
     Polygon newPolygon1 (new1, this->points.getList());
     Polygon newPolygon2 (new2, this->points.getList());
@@ -294,48 +422,7 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
     int new_index1 = n1.neighbour;
     int new_index2 = this->polygons.size() - 1;
 
-    if(init>=0){
-        this->getPolygon(init).insertOnSegment(n1.edge, p1);
-    }
-
-    this->getPolygon(n2.neighbour).insertOnSegment(n2.edge, p2);
-
-    // Get the edge information for the old polygon and update it
-    if(!n1.isVertex){
-        this->edges.delete_element(n1.edge);
-    }
-    if(!n2.isVertex){
-        this->edges.delete_element(n2.edge);
-    }
-
-    std::vector<IndexSegment> segments1;
-    std::vector<IndexSegment> segments2;
-
-    newPolygon1.getSegments(segments1);
-    newPolygon2.getSegments(segments2);
-
-    this->edges.insert(IndexSegment(p1,p2),Neighbours(n1.neighbour,n1.neighbour));
-
-    for (int i = 0; i < segments1.size() ; ++i) {
-        this->edges.replace_neighbour(segments1[i], n1.neighbour, new_index1);
-    }
-
-    for (int i = 0; i < segments2.size() ; ++i) {
-        this->edges.replace_neighbour(segments2[i], n1.neighbour, new_index2);
-    }
-
-    if(!n1.isVertex){
-        this->edges.insert_if_null(IndexSegment(p1,n1.edge.getFirst()),init);
-        this->edges.insert_if_null(IndexSegment(p1,n1.edge.getSecond()), init);
-    }
-
-    if(!n2.isVertex){
-        this->edges.insert_if_null(IndexSegment(p2,n2.edge.getFirst()), n2.neighbour);
-        this->edges.insert_if_null(IndexSegment(p2,n2.edge.getSecond()), n2.neighbour);
-    }
-
-    n2.extraPoint = p2;
-
+    return Pair<int>(new_index1, new_index2);
 }
 
 bool BreakableMesh::areMergeable(Polygon poly1, int poly2) {

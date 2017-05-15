@@ -13,6 +13,7 @@ private:
 public:
     UniqueList();
     int push_back(T& item);
+    int force_push_back(T& item);
     int size();
     std::vector<int> push_list(std::vector<T> list);
     std::vector<int> push_list(UniqueList<T> list);
@@ -41,6 +42,13 @@ int UniqueList<T>::push_back(T& item) {
         return iter->second;
 
     map.insert(std::make_pair(item, list.size()));
+    list.push_back(item);
+
+    return (int) list.size()-1;
+}
+
+template <class T>
+int UniqueList<T>::force_push_back(T &item) {
     list.push_back(item);
 
     return (int) list.size()-1;

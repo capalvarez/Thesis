@@ -69,8 +69,10 @@ public:
     int getPoint(int i);
 
     void insertOnSegment(IndexSegment segment, int point);
+    void insertOnSegment(IndexSegment segment, std::vector<int> points);
     IndexSegment getIntersectedSegment(PointSegment direction, Point &intersection, std::vector<Point> points);
     bool isValidPolygon();
+    int getVertex(int p1, int p2);
 };
 
 #endif

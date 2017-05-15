@@ -502,13 +502,24 @@ bool Polygon::containsEdge(IndexSegment s) {
 }
 
 void Polygon::insertOnSegment(IndexSegment segment, int point) {
+    std::vector<int> points = {point};
+
+    insertOnSegment(segment, points);
+}
+
+void Polygon::insertOnSegment(IndexSegment segment, std::vector<int> point) {
     int n = this->numberOfSides();
 
     int i = utilities::indexOf(this->points, segment.getFirst());
     int j = utilities::indexOf(this->points, segment.getSecond());
 
     if(i!=-1 && j!=-1 && (std::abs(i-j)==1 || std::abs(i-j)==(n-1))){
-        this->points.insert(this->points.begin()+i, point);
+        if(i==n-1){
+            this->points.insert(this->points.end(), point.begin(), point.end());
+        }else{
+            this->points.insert(this->points.begin()+i, point.begin(), point.end());
+        }
+
     }
 }
 
@@ -534,4 +545,6 @@ IndexSegment Polygon::getIntersectedSegment(PointSegment direction, Point &inter
     return IndexSegment();
 }
 
-
+int Polygon::getVertex(int p1, int p2) {
+    return isVertex(p1)? p1 : p2;
+}
