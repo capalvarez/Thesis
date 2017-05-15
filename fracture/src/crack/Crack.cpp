@@ -21,7 +21,6 @@ Crack::Crack(const Crack& c) {
 
 Crack::Crack(Point init, Point end) {
     FractureConfig* config = FractureConfig::instance();
-    ;
 
     this->init = CrackTip(init);
     this->end = CrackTip(end);
@@ -148,9 +147,7 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                 }
             }
 
-            this->init.remeshAndAdapt(radius, newP, poly1, m, toPoly1,
-                                      {PointSegment(this->init.getPoint(), m.getPoint(crackPath.first()))},
-                                      crackPath.first(), {crackPath.first(), crackPath.second()});
+            this->init.remeshAndAdapt(radius, newP, poly1, m, toPoly1, crackPath.first(), {crackPath.first(), crackPath.second()});
             crackPath.push_front(this->init.points.center);
 
             this->end.remeshAndAdapt(radius, newP, poly2, m, toPoly2,
@@ -304,7 +301,7 @@ void Crack::printInStream(std::ofstream &file) {
     file << n-1 << std::endl;
 
     for (int i = 0; i < n-1; ++i) {
-        file << crackPath[i] << " " << crackPath[(i+1)%n] << std::endl;
+        file << crackPath[i]  << std::endl;
     }
 }
 

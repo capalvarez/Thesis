@@ -17,12 +17,12 @@ BreakableMesh::BreakableMesh(const PolygonalMesh& m) {
 }
 
 PolygonChangeData
-BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, UniqueList<int> &newPoints) {
+BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, UniqueList<Pair<int>> &newPoints) {
     return breakMesh(init, crack, initialCrackTip, newPoints, std::vector<int>());
 }
 
 PolygonChangeData
-BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, UniqueList<int> &newPoints,
+BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, UniqueList<Pair<int>> &newPoints,
                          std::vector<int> previous) {
     std::vector<Polygon> oldPolygons;
     std::vector<Polygon> newPolygons;
@@ -199,7 +199,7 @@ int BreakableMesh::mergePolygons(std::vector<int> &polys) {
 
 
 void BreakableMesh::breakPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init, std::vector<Polygon> &oldPolygons,
-                                  std::vector<Polygon> &newPolygons, UniqueList<int> &newPoints, bool firstTime) {
+                                  std::vector<Polygon> &newPolygons, UniqueList<Pair<int>> &newPoints, bool firstTime) {
     Polygon& poly1 = getPolygon(n1.neighbour);
     oldPolygons.push_back(poly1);
 
@@ -217,7 +217,10 @@ void BreakableMesh::breakPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
     int p4 = this->points.force_push_back(n2.intersection);
 
     newPoints.push_back(p1);
+    newPoints.push_back(p3);
+
     newPoints.push_back(p2);
+    newPoints.push_back(p4);
 
     //Split the old polygon and generate new ones
     std::vector<int> new1 = {p1, p2};
@@ -271,7 +274,7 @@ void BreakableMesh::breakPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
 }
 
 void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init, std::vector<Polygon> &oldPolygons,
-                                  std::vector<Polygon> &newPolygons, UniqueList<int> &newPoints) {
+                                  std::vector<Polygon> &newPolygons) {
     Polygon& poly1 = getPolygon(n1.neighbour);
     std::vector<int> poly1_points = poly1.getPoints();
     oldPolygons.push_back(poly1);
@@ -283,13 +286,11 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
     int p3 = this->points.force_push_back(n1.intersection);
     int p4 = this->points.force_push_back(n2.intersection);
 
-    newPoints.push_back(p1);
-    newPoints.push_back(p2);
-
     //Split the old polygon and generate new ones
     std::vector<int> new1 = {p1, p2};
     std::vector<int> new2 = {p2, p1};
 
+    UniqueList<int> newPoints;
     Pair<int> pairs = computeNewPolygons(n1, n2, poly1, newPolygons,
                                          newPoints, new1, new2, p1, p2, init, -1, -1);
 

@@ -40,7 +40,7 @@ public:
     bool containsPoint(Point p);
     bool inEdges(Point p);
     void cleanSeedPoints();
-
+    void replaceSegment(PointSegment segment, std::vector<Point> points);
 };
 
 #endif

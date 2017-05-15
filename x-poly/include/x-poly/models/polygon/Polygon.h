@@ -31,6 +31,7 @@ public:
     Polygon(const Polygon &obj);
     Polygon();
 
+    void changePointIndexes(std::vector<int> p);
     double getDiameter();
     double getArea();
     Point getCentroid();

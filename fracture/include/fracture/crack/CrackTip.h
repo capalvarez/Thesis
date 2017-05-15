@@ -28,8 +28,7 @@ private:
 
     void checkIfFinished(Problem problem, PointSegment direction);
     void remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, int region, BreakableMesh &mesh,
-                            std::vector<int> oldPoints, std::vector<PointSegment> restrictedSegments,
-                            int previousCrackPoint, std::vector<int> restrictedPoints);
+                        std::vector<int> oldPoints, int previousCrackPoint, std::vector<int> restrictedPoints);
     void reassignContainer(BreakableMesh& mesh);
     bool fitsBox(double radius, Polygon poly, std::vector<Point> points);
     int getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints, std::vector<Polygon> &oldPolygons);

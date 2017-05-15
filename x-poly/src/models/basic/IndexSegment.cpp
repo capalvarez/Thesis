@@ -100,3 +100,7 @@ IndexSegment IndexSegment::add(int o) {
 bool IndexSegment::isEndPoint(Point p, std::vector<Point> points) {
     return p == points[this->getFirst()] || p == points[this->getSecond()];
 }
+
+PointSegment IndexSegment::toPointSegment(std::vector<Point> points) {
+    return PointSegment(points[this->getFirst()], points[this->getSecond()]);
+}

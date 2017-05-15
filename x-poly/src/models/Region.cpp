@@ -161,3 +161,22 @@ void Region::cleanSeedPoints() {
     this->seedPoints.clear();
 }
 
+void Region::replaceSegment(PointSegment segment, std::vector<Point> points) {
+    int n = this->numberOfSides();
+
+    int i = utilities::indexOf(this->p, segment.getFirst());
+    int j = utilities::indexOf(this->p, segment.getSecond());
+
+    if(i!=-1 && j!=-1 && (std::abs(i-j)==1 || std::abs(i-j)==(n-1))){
+        if(i==n-1){
+            this->p.erase(this->p.begin()+i);
+            this->p.erase(this->p.begin());
+
+            this->p.insert(this->p.end(), points.begin(), points.end());
+        }else{
+            this->p.erase(this->p.begin()+i, this->p.begin()+j);
+            this->p.insert(this->p.begin()+i, points.begin(), points.end());
+        }
+
+    }
+}

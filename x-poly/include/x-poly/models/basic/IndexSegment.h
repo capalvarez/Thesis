@@ -29,6 +29,7 @@ public:
     bool isInCorner(Point p, std::vector<Point> points, int& i);
     IndexSegment add(int o);
     bool isEndPoint(Point p, std::vector<Point> points);
+    PointSegment toPointSegment(std::vector<Point> points);
 };
 
 

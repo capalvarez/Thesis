@@ -116,6 +116,10 @@ double Polygon::calculateArea(std::vector<Point>& p) {
     return geometry_functions::area(p,this->points);
 }
 
+void Polygon::changePointIndexes(std::vector<int> p) {
+    this->points.insert(this->points.begin(), p.begin(), p.end());
+}
+
 double Polygon::getArea(){
     return this->area;
 }

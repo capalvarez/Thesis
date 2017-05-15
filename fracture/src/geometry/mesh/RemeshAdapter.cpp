@@ -199,21 +199,16 @@ Triangulation RemeshAdapter::triangulate(std::vector<Point> points, std::vector<
     return triangulation;
 }
 
-Triangulation RemeshAdapter::triangulate(std::vector<Point> points, std::vector<Point> meshPoints,
-                                         std::vector<PointSegment> restrictedSegments) {
-    Region r (region, meshPoints);
-    TriangleMeshGenerator generator(points, r, restrictedSegments);
-    Triangulation triangulation = generator.getDelaunayTriangulation();
-
-    return triangulation;
+std::unordered_map<int, int> RemeshAdapter::includeNewPoints(UniqueList<Point> &meshPoints, Triangulation triangulation) {
+    std::vector<Point> trianglePoints = triangulation.getPoints();
+    return includeNewPoints(meshPoints, trianglePoints);
 }
 
-std::unordered_map<int, int> RemeshAdapter::includeNewPoints(UniqueList<Point> &meshPoints, Triangulation triangulation) {
+std::unordered_map<int, int> RemeshAdapter::includeNewPoints(UniqueList<Point> &meshPoints, std::vector<Point> points) {
     std::unordered_map<int,int> pointMap;
-    std::vector<Point> trianglePoints = triangulation.getPoints();
 
-    for (int j = 0; j < trianglePoints.size() ; ++j) {
-        int pointIndex = meshPoints.push_back(trianglePoints[j]);
+    for (int j = 0; j < points.size() ; ++j) {
+        int pointIndex = meshPoints.push_back(points[j]);
         pointMap.insert(std::make_pair(j,pointIndex));
     }
 

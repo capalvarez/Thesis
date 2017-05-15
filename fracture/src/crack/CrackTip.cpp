@@ -200,52 +200,40 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
 }
 
 void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, int region, BreakableMesh &mesh,
-                              std::vector<int> oldPoints, std::vector<PointSegment> restrictedSegments,
-                              int previousCrackPoint, std::vector<int> restrictedPoints) {
+                              std::vector<int> oldPoints, int previousCrackPoint, std::vector<int> restrictedPoints) {
     this->tipTriangles.clear();
     this->crackAngle = PointSegment(mesh.getPoint(previousCrackPoint), tipPoint).cartesianAngle();
     FractureConfig* config = FractureConfig::instance();
 
-    mesh.printInFile("withRing.txt");
     this->usedRadius = radius;
     QuarterPointElementsGenerator generator(this->getPoint(), config->getRosetteAngle(),radius);
-    std::vector<Point> pointsOnSegment = generator.generateGroup(this->crackAngle);
-    std::vector<Point> points = generator.getPoints();
+    generator.generateGroup(this->crackAngle);
+    std::vector<Point> rosettePoints = generator.getPoints();
 
+    std::vector<Point> toTriangulate;
     for (int i : oldPoints) {
-        points.push_back(mesh.getPoint(i));
+        toTriangulate.push_back(mesh.getPoint(i));
     }
+
+    Polygon ring = Polygon(mesh.getPolygon(region));
+    Region ringRegion = Region(ring, mesh.getPoints().getList());
+    IndexSegment surroundingVertices = ring.getSurroundingVertices(previousCrackPoint);
+    ringRegion.replaceSegment(surroundingVertices.toPointSegment(mesh.getPoints().getList()), generator.getBorderPoints());
 
     RemeshAdapter remesher(mesh.getPolygon(region), region);
     this->ring = remesher.getRegion();
 
-    int j = restrictedSegments.size()-1;
-    while(pointsOnSegment.size()>0){
-        Point p = pointsOnSegment.back();
+    Triangulation t = remesher.triangulate(toTriangulate, mesh.getPoints().getList());
 
-        PointSegment s = restrictedSegments[j];
-        while(!s.splitSegment(p, restrictedSegments)){
-            s = restrictedSegments[j];
-            if(j<0){
-                j = restrictedSegments.size();
-            }
+    UniqueList<Point>& meshPoints = mesh.getPoints();
+    std::unordered_map<int,int> pointMap = remesher.includeNewPoints(meshPoints, rosettePoints);
 
-            j--;
+    meshPoints.force_push_back(rosettePoints[rosettePoints.size()-2]);
+    meshPoints.force_push_back(rosettePoints[rosettePoints.size()-1]);
+    pointMap[rosettePoints.size()-2] = meshPoints.size()-2;
+    pointMap[rosettePoints.size()-1] = meshPoints.size()-1;
 
-        }
-
-        restrictedSegments.erase(std::remove(restrictedSegments.begin(), restrictedSegments.end(), s), restrictedSegments.end());
-        pointsOnSegment.erase(std::remove(pointsOnSegment.begin(), pointsOnSegment.end(), p), pointsOnSegment.end());
-        j = restrictedSegments.size()-1;
-    }
-
-
-    Triangulation t = remesher.triangulate(points, mesh.getPoints().getList(), restrictedSegments);
-    std::unordered_map<int,int> pointMap = remesher.includeNewPoints(mesh.getPoints(), t);
-
-    mesh.printInFile("beforeAdapt.txt");
-    this->points = CrackTipPoints(pointMap[0], pointMap[1], pointMap[2], pointMap[3], pointMap[4]);
-
+    this->points = CrackTipPoints(pointMap[0], meshPoints.size()-2, meshPoints.size()-1, pointMap[1], pointMap[2]);
     remesher.adaptToMesh(t, mesh, pointMap, this->tipTriangles, newPolygons, restrictedPoints);
 }
 

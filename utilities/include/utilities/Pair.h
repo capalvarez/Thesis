@@ -11,6 +11,7 @@ public:
     Pair(const Pair& other);
     Pair();
     bool operator==(const Pair& other) const;
+    bool operator<(const Pair& other) const;
     T dot(Pair other);
     Pair<T> operator*(const double other);
     Pair<T> operator+(const Pair& other) const;
@@ -51,6 +52,10 @@ Pair<T> Pair<T>::operator+(const Pair &other) const {
     return Pair<T>(this->first + other.first, this->second + other.second);
 }
 
+template <typename T>
+bool Pair<T>::operator<(const Pair &other) const {
+    return false;
+}
 
 
 #endif

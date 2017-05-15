@@ -12,7 +12,7 @@ class Crack {
 private:
     CrackTip init;
     CrackTip end;
-    Deque<int> crackPath;
+    Deque<Pair<int>> crackPath;
     double StandardRadius;
 
     void prepareTip(CrackTip &tip, UniqueList<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh,
