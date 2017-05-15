@@ -7,18 +7,21 @@
 #include <x-poly/models/Region.h>
 #include <fracture/geometry/BreakableMesh.h>
 
-class RosetteGroupGenerator{
+class QuarterPointElementsGenerator{
 private:
     Point center;
     std::vector<Point> points;
+    std::vector<Polygon> elements;
+    std::vector<int> borderPointIndexes;
+
     double angle;
     double innerRadius;
     double outerRadius;
 
-    void generatePoint(double angle, double radius);
+    int generatePoint(double angle, double radius);
 public:
-    RosetteGroupGenerator(Point c, double angle, double radius);
-    std::vector<Point> generatePoints(double initAngle);
+    QuarterPointElementsGenerator(Point c, double angle, double radius);
+    std::vector<Point> generateGroup(double initAngle);
     std::vector<Point> getPoints();
 };
 

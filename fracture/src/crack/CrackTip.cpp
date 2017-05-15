@@ -208,8 +208,8 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
 
     mesh.printInFile("withRing.txt");
     this->usedRadius = radius;
-    RosetteGroupGenerator generator(this->getPoint(), config->getRosetteAngle(),radius);
-    std::vector<Point> pointsOnSegment = generator.generatePoints(this->crackAngle);
+    QuarterPointElementsGenerator generator(this->getPoint(), config->getRosetteAngle(),radius);
+    std::vector<Point> pointsOnSegment = generator.generateGroup(this->crackAngle);
     std::vector<Point> points = generator.getPoints();
 
     for (int i : oldPoints) {

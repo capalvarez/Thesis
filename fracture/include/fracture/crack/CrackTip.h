@@ -9,7 +9,7 @@
 #include <veamy/physics/Material.h>
 #include <fracture/problem/Problem.h>
 #include <fracture/crack/structures/CrackTipPoints.h>
-#include <fracture/geometry/generator/RosetteGroupGenerator.h>
+#include <fracture/geometry/generator/QuarterPointElementsGenerator.h>
 #include <x-poly/models/Region.h>
 #include <x-poly/voronoi/TriangleMeshGenerator.h>
 #include <fracture/utilities/fractureutilities.h>
