@@ -217,6 +217,9 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
 
                     initCrackEntry = initRing.getSurroundingVertices(crackPath.second());
                     endCrackEntry = initRing.getSurroundingVertices(crackPath.secondToLast());
+
+                    initCrackEntry.orderCCW(m.getPoints().getList(), initRing.getCentroid());
+                    endCrackEntry.orderCCW(m.getPoints().getList(), endRing.getCentroid());
                 }
             }
 

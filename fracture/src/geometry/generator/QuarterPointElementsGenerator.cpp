@@ -14,9 +14,9 @@ void QuarterPointElementsGenerator::generateGroup(double initAngle) {
     double startAngle = initAngle + 180;
     double angle = this->angle;
 
-    int p1 = this->generatePoint(angle + startAngle, this->innerRadius);
-    int p2 = this->generatePoint(angle + startAngle, this->outerRadius);
-    int p3 = this->generatePoint(angle + this->angle / 2 + startAngle, this->outerRadius);
+    int p1 = this->generatePoint(startAngle, this->innerRadius);
+    int p2 = this->generatePoint(startAngle, this->outerRadius);
+    int p3 = this->generatePoint(this->angle / 2 + startAngle, this->outerRadius);
 
     borderPoints.insert(borderPoints.begin(), this->points[p3]);
 
@@ -32,7 +32,7 @@ void QuarterPointElementsGenerator::generateGroup(double initAngle) {
 
         elements.push_back(Polygon(quarterPointPoints, this->points));
         borderPoints.insert(borderPoints.begin(), this->points[p2]);
-        borderPoints.insert(borderPoints.begin(), this->points[p2]);
+        borderPoints.insert(borderPoints.begin(), this->points[p3]);
 
         angle+=this->angle;
     }
@@ -60,7 +60,7 @@ int QuarterPointElementsGenerator::generatePoint(double angle, double radius) {
     return this->points.size() - 1;
 }
 
-std::vector<Point> QuarterPointElementsGenerator::getPoints() {
+std::vector<Point> QuarterPointElementsGenerator:: getPoints() {
     return this->points;
 }
 

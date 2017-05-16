@@ -559,10 +559,10 @@ IndexSegment Polygon::getSurroundingVertices(Pair<int> vertices) {
     int i = utilities::indexOf(this->points, vertices.first);
     int j = utilities::indexOf(this->points, vertices.second);
 
-    int first = this->points[(i+1)%n]==j? (i-1+n)%n : (i+1)%n;
-    int second = this->points[(j+1)%n]==i? (j-1+n)%n : (j+1)%n;
+    int first = this->points[(i+1)%n]==vertices.second? (i-1+n)%n : (i+1)%n;
+    int second = this->points[(j+1)%n]==vertices.first? (j-1+n)%n : (j+1)%n;
 
-    return IndexSegment(first, second);
+    return IndexSegment(this->points[first], this->points[second]);
 }
 
 void Polygon::deleteVerticesInRange(int i1, int i2) {

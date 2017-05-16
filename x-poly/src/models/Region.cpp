@@ -167,7 +167,7 @@ void Region::replaceSegment(PointSegment segment, std::vector<Point> points) {
     int i = utilities::indexOf(this->p, segment.getFirst());
     int j = utilities::indexOf(this->p, segment.getSecond());
 
-    if(i!=-1 && j!=-1 && (std::abs(i-j)==1 || std::abs(i-j)==(n-1))){
+    if(i!=-1 && j!=-1){
         if(i==n-1){
             this->p.erase(this->p.begin()+i);
             this->p.erase(this->p.begin());
