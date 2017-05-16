@@ -36,7 +36,7 @@ public:
     bool areNeighbours(int poly1, int poly2);
     bool areNeighbours(Polygon poly, int poly2);
     bool polygonsTouch(int poly1, int poly2);
-    void getAllNeighbours(int poly, UniqueList<int> &neighbours);
+    void getNeighboursBySegments(int poly, UniqueList<int> &neighbours);
 
     int findContainerPolygon(Point p);
     int findContainerPolygon(Point p, int& last);
@@ -51,7 +51,7 @@ public:
     Region getRegion() const;
     bool isInDomain(Point p);
     bool isInBorder(Point p);
-    void getDirectNeighbours(int poly, UniqueList<int> &neighbours);
+    void getNeighboursByPoint(int poly, UniqueList<int> &neighbours);
     int numberOfPolygons();
 };
 

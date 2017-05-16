@@ -20,7 +20,8 @@ TEST(CrackTipTest, PrepareTipTest){
 
     CrackTip tip(crack.getFirst());
     tip.assignLocation(breakableMesh.findContainerPolygon(crack.getFirst()));
-    tip.prepareTip(breakableMesh, 1, 0);
+    Pair<int> pair = Pair<int>(0,0);
+    tip.prepareTip(breakableMesh, 1, {pair});
 
 }
 

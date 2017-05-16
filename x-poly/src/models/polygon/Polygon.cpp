@@ -564,3 +564,53 @@ IndexSegment Polygon::getSurroundingVertices(Pair<int> vertices) {
 
     return IndexSegment(first, second);
 }
+
+void Polygon::deleteVerticesInRange(int i1, int i2) {
+    if(i1<0 || i2<0){
+        return;
+    }
+
+    int i = utilities::indexOf(this->points, i1);
+    int j = utilities::indexOf(this->points, i2);
+
+    if(i<j){
+        this->points.erase(this->points.begin()+i+1, this->points.begin()+j);
+    }else{
+        this->points.erase(this->points.begin()+i+1, this->points.end());
+        this->points.erase(this->points.begin(), this->points.begin()+j);
+    }
+}
+
+void Polygon::fixSegment(Pair<int> &segment, int reference) {
+    int n = this->numberOfSides();
+
+    int i = utilities::indexOf(this->points, segment.first);
+    int j = utilities::indexOf(this->points, segment.second);
+    int k = utilities::indexOf(this->points, reference);
+
+    if(reference==-1){
+        if(std::abs(i-j)==1) {
+            if (i > j) {
+                int aux = segment.second;
+                segment.second = segment.first;
+                segment.first = aux;
+
+            }
+        }
+
+        if(std::abs(i-j)==n-1){
+            if(j==n-1){
+                int aux = segment.second;
+                segment.second = segment.first;
+                segment.first = aux;
+            }
+        }
+    }else{
+        if(!(i<k && k<j) || (j>i && (k<i || j<k))){
+            int aux = segment.second;
+            segment.second = segment.first;
+            segment.first = aux;
+        }
+    }
+
+}

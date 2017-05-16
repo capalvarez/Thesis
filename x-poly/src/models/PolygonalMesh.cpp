@@ -117,7 +117,7 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
             previous.clear();
 
             UniqueList<int> neighbours;
-            this->getDirectNeighbours(poly_index, neighbours);
+            this->getNeighboursByPoint(poly_index, neighbours);
             int neighbour = getNeighbourFromCommonVertexSet(direction, neighbours.getList(), vertexIndex, previous, poly.getCentroid());
 
             NeighbourInfo n(neighbour, polySeg[j], p, false);
@@ -227,7 +227,7 @@ void PolygonalMesh::writeElements(std::ofstream &file) {
     }
 }
 
-void PolygonalMesh::getAllNeighbours(int poly, UniqueList<int> &neighbours) {
+void PolygonalMesh::getNeighboursBySegments(int poly, UniqueList<int> &neighbours) {
     std::vector<IndexSegment> poly_segs;
     this->getPolygon(poly).getSegments(poly_segs);
 
@@ -262,12 +262,12 @@ bool PolygonalMesh::isInBorder(Point p) {
     return this->region.inEdges(p);
 }
 
-void PolygonalMesh::getDirectNeighbours(int poly, UniqueList<int> &neighbours) {
-    this->getAllNeighbours(poly, neighbours);
+void PolygonalMesh::getNeighboursByPoint(int poly, UniqueList<int> &neighbours) {
+    this->getNeighboursBySegments(poly, neighbours);
     UniqueList<int> neighbours_neighbours;
 
     for (int i = 0; i < neighbours.size(); ++i) {
-        this->getAllNeighbours(neighbours[i], neighbours_neighbours);
+        this->getNeighboursBySegments(neighbours[i], neighbours_neighbours);
     }
 
     for (int j = 0; j < neighbours_neighbours.size(); ++j) {

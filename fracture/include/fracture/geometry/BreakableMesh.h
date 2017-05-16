@@ -19,7 +19,7 @@ public:
     PolygonChangeData breakMesh(int init, PointSegment crack, bool initialCrackTip, UniqueList<Pair<int>> &newPoints,
                                 std::vector<int> previous);
     void breakPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init, std::vector<Polygon> &oldPolygons,
-                           std::vector<Polygon> &newPolygons, UniqueList<Pair<int>> &newPoints, bool firstTime);
+                           std::vector<Polygon> &newPolygons, UniqueList<Pair<int>> &newPoints);
     void splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init, std::vector<Polygon> &oldPolygons,
                        std::vector<Polygon> &newPolygons);
 

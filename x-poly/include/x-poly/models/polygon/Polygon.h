@@ -75,6 +75,8 @@ public:
     bool isValidPolygon();
     int getVertex(int p1, int p2);
     IndexSegment getSurroundingVertices(Pair<int> vertices);
+    void deleteVerticesInRange(int i1, int i2);
+    void fixSegment(Pair<int> &segment, int reference);
 };
 
 #endif
