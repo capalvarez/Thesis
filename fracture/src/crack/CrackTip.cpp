@@ -203,6 +203,7 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
                               std::vector<int> oldPoints, double angle, IndexSegment crackEntry) {
     this->tipTriangles.clear();
     this->crackAngle = angle;
+    UniqueList<Point>& meshPoints = mesh.getPoints();
     FractureConfig* config = FractureConfig::instance();
 
     this->usedRadius = radius;
@@ -215,17 +216,7 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
         toTriangulate.push_back(mesh.getPoint(i));
     }
 
-    Polygon ring = Polygon(mesh.getPolygon(region));
-
-    Region ringRegion = Region(ring, mesh.getPoints().getList());
-    ringRegion.replaceSegment(crackEntry.toPointSegment(mesh.getPoints().getList()), generator.getBorderPoints());
-
-    RemeshAdapter remesher(mesh.getPolygon(region), region);
-    this->ring = remesher.getRegion();
-
-    Triangulation t = remesher.triangulate(ringRegion, toTriangulate);
-
-    UniqueList<Point>& meshPoints = mesh.getPoints();
+    RemeshAdapter remesher;
     std::unordered_map<int,int> pointMap = remesher.includeNewPoints(meshPoints, rosettePoints);
 
     meshPoints.force_push_back(rosettePoints[rosettePoints.size()-2]);
@@ -234,8 +225,26 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     pointMap[rosettePoints.size()-1] = meshPoints.size()-1;
 
     mesh.printInFile("beforeAdapting.txt");
+    Polygon ring = Polygon(mesh.getPolygon(region));
+
+    std::vector<int> quarterTipBorder;
+    for (int i: generator.getBorderPoints()){
+        quarterTipBorder.push_back(pointMap[i]);
+    }
+
+    ring.replaceSegment(crackEntry, quarterTipBorder);
+
+    remesher = RemeshAdapter(mesh.getPolygon(region), region);
+    this->ring = remesher.getRegion();
+
+    /*Triangulation t = remesher.triangulate(ringRegion, toTriangulate);
+
+
+
+
+
     this->points = CrackTipPoints(pointMap[0], meshPoints.size()-2, meshPoints.size()-1, pointMap[1], pointMap[2]);
-    remesher.adaptTriangulationToMesh(t, mesh, pointMap, this->tipTriangles, newPolygons);
+    remesher.adaptTriangulationToMesh(t, mesh, pointMap, this->tipTriangles, newPolygons);*/
 }
 
 bool CrackTip::isFinished() {

@@ -12,7 +12,7 @@ private:
     Point center;
     std::vector<Point> points;
     std::vector<Polygon> elements;
-    std::vector<Point> borderPoints;
+    std::vector<int> borderPoints;
 
     double angle;
     double innerRadius;
@@ -23,7 +23,7 @@ public:
     QuarterPointElementsGenerator(Point c, double angle, double radius);
     void generateGroup(double initAngle);
     std::vector<Point> getPoints();
-    std::vector<Point> getBorderPoints();
+    std::vector<int> getBorderPoints();
 };
 
 

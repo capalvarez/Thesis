@@ -13,6 +13,8 @@ RemeshAdapter::RemeshAdapter(Polygon poly, int index) {
     this->regionIndex = index;
 }
 
+RemeshAdapter::RemeshAdapter() {}
+
 RemeshAdapter::RemeshAdapter(std::vector<int> remeshPolygons, std::vector<Point> points, BreakableMesh &mesh) {
     std::vector<int> involved;
 
@@ -185,6 +187,21 @@ RemeshAdapter::adaptTriangulationToMesh(Triangulation triangulation, BreakableMe
             equivalence[index] = toMerge[i];
         }
         mesh.printInFile("iammerging.txt");
+    }
+}
+
+void RemeshAdapter::adaptPolygonsToMesh(std::vector<Polygon> polygons, BreakableMesh &m,
+                                        std::unordered_map<int, int> pointMap, std::vector<Polygon> &newPolygons) {
+    for (Polygon p: polygons) {
+        std::vector<int> newPolygonPoints;
+        std::vector<int> oldPolygonPoints = p.getPoints();
+
+        for(int i: oldPolygonPoints){
+            newPolygonPoints.push_back(pointMap[i]);
+        }
+
+
+
     }
 }
 

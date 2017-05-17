@@ -18,7 +18,7 @@ void QuarterPointElementsGenerator::generateGroup(double initAngle) {
     int p2 = this->generatePoint(startAngle, this->outerRadius);
     int p3 = this->generatePoint(this->angle / 2 + startAngle, this->outerRadius);
 
-    borderPoints.insert(borderPoints.begin(), this->points[p3]);
+    borderPoints.insert(borderPoints.begin(), p3);
 
     while(angle<360){
         std::vector<int> quarterPointPoints = {0, p1, p2, p3};
@@ -31,8 +31,8 @@ void QuarterPointElementsGenerator::generateGroup(double initAngle) {
         quarterPointPoints.push_back(p1);
 
         elements.push_back(Polygon(quarterPointPoints, this->points));
-        borderPoints.insert(borderPoints.begin(), this->points[p2]);
-        borderPoints.insert(borderPoints.begin(), this->points[p3]);
+        borderPoints.insert(borderPoints.begin(), p2);
+        borderPoints.insert(borderPoints.begin(), p3);
 
         angle+=this->angle;
     }
@@ -41,8 +41,6 @@ void QuarterPointElementsGenerator::generateGroup(double initAngle) {
 
     p1 = this->generatePoint(angle + startAngle, this->innerRadius);
     p2 = this->generatePoint(angle + startAngle, this->outerRadius);
-
-    borderPoints.insert(borderPoints.begin(),this->points[p3]);
 
     quarterPointPoints.push_back(p2);
     quarterPointPoints.push_back(p1);
@@ -64,6 +62,6 @@ std::vector<Point> QuarterPointElementsGenerator:: getPoints() {
     return this->points;
 }
 
-std::vector<Point> QuarterPointElementsGenerator::getBorderPoints() {
+std::vector<int> QuarterPointElementsGenerator::getBorderPoints() {
     return this->borderPoints;
 }

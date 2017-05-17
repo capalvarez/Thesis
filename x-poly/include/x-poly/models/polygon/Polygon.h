@@ -77,6 +77,7 @@ public:
     IndexSegment getSurroundingVertices(Pair<int> vertices);
     void deleteVerticesInRange(int i1, int i2);
     void fixSegment(Pair<int> &segment, int reference);
+    void replaceSegment(IndexSegment segment, std::vector<int> points);
 };
 
 #endif

@@ -612,5 +612,24 @@ void Polygon::fixSegment(Pair<int> &segment, int reference) {
             segment.first = aux;
         }
     }
+}
 
+void Polygon::replaceSegment(IndexSegment segment, std::vector<int> points) {
+    int n = this->numberOfSides();
+
+    int i = utilities::indexOf(this->points, segment.getFirst());
+    int j = utilities::indexOf(this->points, segment.getSecond());
+
+    if(i!=-1 && j!=-1){
+        if(i==n-1){
+            this->points.erase(this->points.begin()+i);
+            this->points.erase(this->points.begin());
+
+            this->points.insert(this->points.end(), points.begin(), points.end());
+        }else{
+            this->points.erase(this->points.begin()+i+1, this->points.begin()+j);
+            this->points.insert(this->points.begin()+i+1, points.begin(), points.end());
+        }
+
+    }
 }
