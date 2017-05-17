@@ -29,7 +29,6 @@ public:
     void adaptToMesh(Triangulation triangulation, BreakableMesh &m, std::unordered_map<int, int> pointMap,
                          std::vector<Polygon> &newPolygons);
     Triangulation triangulate(std::vector<Point> points, std::vector<Point> meshPoints);
-    Triangulation triangulate(Region region, std::vector<Point> points);
 
     std::unordered_map<int, int> includeNewPoints(UniqueList<Point> &meshPoints, Triangulation triangulation);
     std::unordered_map<int, int> includeNewPoints(UniqueList<Point> &meshPoints, std::vector<Point> points);

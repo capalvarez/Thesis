@@ -218,9 +218,17 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                     initRing.fixSegment(toDeleteInit, crackPath.first().first);
                     endRing.fixSegment(toDeleteEnd, crackPath.last().first);
 
-                    initRing.deleteVerticesInRange(toDeleteInit.first, toDeleteInit.second);
-                    endRing.deleteVerticesInRange(toDeleteEnd.first, toDeleteEnd.second);
-                    m.printInFile("afterCrack.txt");
+                    std::vector<IndexSegment> toEraseInit = initRing.deleteVerticesInRange(toDeleteInit.first, toDeleteInit.second);
+                    std::vector<IndexSegment> toEraseEnd = endRing.deleteVerticesInRange(toDeleteEnd.first, toDeleteEnd.second);
+                    SegmentMap& edges = m.getSegments();
+
+                    for (IndexSegment s: toEraseInit){
+                        edges.delete_element(s);
+                    }
+
+                    for (IndexSegment s: toEraseEnd){
+                        edges.delete_element(s);
+                    }
 
                     radius = adjustBoxes(initRing, endRing, m.getPoints().getList());
 

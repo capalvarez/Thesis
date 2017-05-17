@@ -565,20 +565,34 @@ IndexSegment Polygon::getSurroundingVertices(Pair<int> vertices) {
     return IndexSegment(this->points[first], this->points[second]);
 }
 
-void Polygon::deleteVerticesInRange(int i1, int i2) {
+std::vector<IndexSegment> Polygon::deleteVerticesInRange(int i1, int i2) {
     if(i1<0 || i2<0){
-        return;
+        return std::vector<IndexSegment>();
     }
 
     int i = utilities::indexOf(this->points, i1);
     int j = utilities::indexOf(this->points, i2);
 
+    std::vector<int> erasedVertices;
     if(i<j){
+        erasedVertices.insert(erasedVertices.begin(), this->points.begin()+i, this->points.begin()+j+1);
+
         this->points.erase(this->points.begin()+i+1, this->points.begin()+j);
     }else{
+        erasedVertices.insert(erasedVertices.begin(), this->points.begin()+i, this->points.end());
+        erasedVertices.insert(erasedVertices.end(), this->points.begin(), this->points.begin()+j+1);
+
         this->points.erase(this->points.begin()+i+1, this->points.end());
         this->points.erase(this->points.begin(), this->points.begin()+j);
     }
+
+    std::vector<IndexSegment> erasedSegments;
+    int n = erasedVertices.size();
+    for(i = 0;i<n-1;i++){
+        erasedSegments.push_back(IndexSegment(erasedVertices[i], erasedVertices[(i+1)%n]));
+    }
+
+    return erasedSegments;
 }
 
 void Polygon::fixSegment(Pair<int> &segment, int reference) {
