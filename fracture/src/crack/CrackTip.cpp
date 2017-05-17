@@ -256,8 +256,9 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
         edges.replace_neighbour(otherPolygonSegments[j], region, otherPolygon_index);
     }
 
+    mesh.getSegments().printInFile("segments.txt");
     for(j = 3; j<otherPolygonSegments.size(); j++){
-        edges.insert(otherPolygonSegments[j], Neighbours(region, otherPolygon_index));
+        edges.insert(otherPolygonSegments[j], Neighbours(otherPolygon_index, region));
     }
 
     mesh.replacePolygon(region, ring);
@@ -279,8 +280,9 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     mesh.getSegments().printInFile("segments.txt");
 
     std::vector<int> crackPolygon1Points, crackPolygon2Points;
+    bool include = false;
     if(previousCrackPoints.size()>1){
-        bool include = otherPolygon.containsPoint(meshPoints.getList(), mesh.getPoint(previousCrackPoints[1].first));
+        include = otherPolygon.containsPoint(meshPoints.getList(), mesh.getPoint(previousCrackPoints[1].first));
 
         if(include){
             crackPolygon1Points.push_back(previousCrackPoints[1].first);
@@ -293,14 +295,39 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     crackPolygon1Points.push_back(quarterTipBorder.back());
     crackPolygon1Points.push_back(newPolygonPoints[5]);
 
-    crackPolygon1Points.push_back(meshPoints.size()-1);
-    crackPolygon1Points.push_back(quarterTipBorder[0]);
-    crackPolygon1Points.push_back(crackEntry.getFirst());
-    crackPolygon1Points.push_back(previousCrackPoints[0].first);
+    crackPolygon2Points.push_back(meshPoints.size()-1);
+    crackPolygon2Points.push_back(quarterTipBorder[0]);
+    crackPolygon2Points.push_back(crackEntry.getFirst());
+    crackPolygon2Points.push_back(previousCrackPoints[0].first);
 
     Polygon crackPolygon1 = Polygon(crackPolygon1Points, meshPoints.getList());
     Polygon crackPolygon2 = Polygon(crackPolygon2Points, meshPoints.getList());
 
+    mesh.replacePolygon(otherPolygon_index, crackPolygon1);
+    mesh.getPolygons().push_back(crackPolygon2);
+    int crackPolygon2_index = mesh.getPolygons().size() - 1;
+
+    std::vector<IndexSegment> crackPolygon1Segments, crackPolygon2Segments;
+    crackPolygon1.getSegments(crackPolygon1Segments);
+    crackPolygon2.getSegments(crackPolygon2Segments);
+
+    edges.insert(crackPolygon1Segments.back(),Neighbours(otherPolygon_index,-1));
+    edges.insert(crackPolygon2Segments.back(),Neighbours(otherPolygon_index,-1));
+    if(previousCrackPoints.size()>1 && include){
+        edges.insert(crackPolygon1Segments[0],Neighbours(otherPolygon_index,-1));
+        edges.insert(crackPolygon2Segments[0],Neighbours(otherPolygon_index,-1));
+    }
+
+    for (int i = 0; i < crackPolygon1Segments.size() ; ++i) {
+        edges.replace_neighbour(crackPolygon1Segments[i], otherPolygon_index, otherPolygon_index);
+    }
+
+    for (int i = 0; i < crackPolygon2Segments.size() ; ++i) {
+        edges.replace_neighbour(crackPolygon2Segments[i], otherPolygon_index, crackPolygon2_index);
+    }
+
+    mesh.printInFile("afterAdapting.txt");
+    mesh.getSegments().printInFile("segments.txt");
 
 }
 
