@@ -206,6 +206,7 @@ void RemeshAdapter::adaptPolygonsToMesh(std::vector<Polygon> polygons, Breakable
 
         Polygon newPolygon = Polygon(newPolygonPoints, meshPoints);
         meshPolygons.push_back(newPolygon);
+        newPolygons.push_back(newPolygon);
 
         std::vector<IndexSegment> newPolygonSegments;
         newPolygon.getSegments(newPolygonSegments);
@@ -213,8 +214,6 @@ void RemeshAdapter::adaptPolygonsToMesh(std::vector<Polygon> polygons, Breakable
         for (IndexSegment s : newPolygonSegments) {
             edges.insert(s, meshPolygons.size()-1);
         }
-
-
     }
 }
 

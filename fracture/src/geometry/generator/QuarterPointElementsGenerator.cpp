@@ -65,3 +65,7 @@ std::vector<Point> QuarterPointElementsGenerator:: getPoints() {
 std::vector<int> QuarterPointElementsGenerator::getBorderPoints() {
     return this->borderPoints;
 }
+
+std::vector<Polygon> QuarterPointElementsGenerator::getElements() {
+    return this->elements;
+}

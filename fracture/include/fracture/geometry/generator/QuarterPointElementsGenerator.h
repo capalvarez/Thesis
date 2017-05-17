@@ -24,6 +24,7 @@ public:
     void generateGroup(double initAngle);
     std::vector<Point> getPoints();
     std::vector<int> getBorderPoints();
+    std::vector<Polygon> getElements();
 };
 
 

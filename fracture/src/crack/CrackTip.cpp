@@ -256,6 +256,8 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     }
 
     mesh.replacePolygon(region, ring);
+    
+    remesher.adaptPolygonsToMesh(generator.getElements(), mesh, pointMap, newPolygons);
 
     mesh.printInFile("beforeAdapting.txt");
     mesh.getSegments().printInFile("segments.txt");
