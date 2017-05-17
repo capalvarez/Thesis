@@ -233,7 +233,7 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                     radius = adjustBoxes(initRing, endRing, m.getPoints().getList());
 
                     initCrackEntry = initRing.getSurroundingVertices(crackPath.second());
-                    endCrackEntry = initRing.getSurroundingVertices(crackPath.secondToLast());
+                    endCrackEntry = endRing.getSurroundingVertices(crackPath.secondToLast());
 
                     initCrackEntry.orderCCW(m.getPoints().getList(), initRing.getCentroid());
                     endCrackEntry.orderCCW(m.getPoints().getList(), endRing.getCentroid());

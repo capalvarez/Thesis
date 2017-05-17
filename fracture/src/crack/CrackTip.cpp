@@ -226,6 +226,7 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
 
     RemeshAdapter remesher;
     std::unordered_map<int,int> pointMap = remesher.includeNewPoints(meshPoints, rosettePoints);
+    mesh.printInFile("beforeAdapting.txt");
 
     meshPoints.force_push_back(rosettePoints[rosettePoints.size()-2]);
     meshPoints.force_push_back(rosettePoints[rosettePoints.size()-1]);
@@ -256,7 +257,6 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
         edges.replace_neighbour(otherPolygonSegments[j], region, otherPolygon_index);
     }
 
-    mesh.getSegments().printInFile("segments.txt");
     for(j = 3; j<otherPolygonSegments.size(); j++){
         edges.insert(otherPolygonSegments[j], Neighbours(otherPolygon_index, region));
     }
