@@ -84,6 +84,10 @@ Polygon PolygonalMesh::getPolygon(int index) const {
     return this->polygons[index];
 }
 
+void PolygonalMesh::replacePolygon(int index, Polygon newPolygon) {
+    this->polygons[index] = newPolygon;
+}
+
 NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction) {
     std::vector<int> p;
     return getNeighbour(poly_index, direction, p);

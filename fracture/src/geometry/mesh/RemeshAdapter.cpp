@@ -192,6 +192,10 @@ RemeshAdapter::adaptTriangulationToMesh(Triangulation triangulation, BreakableMe
 
 void RemeshAdapter::adaptPolygonsToMesh(std::vector<Polygon> polygons, BreakableMesh &m,
                                         std::unordered_map<int, int> pointMap, std::vector<Polygon> &newPolygons) {
+    std::vector<Point> meshPoints = m.getPoints().getList();
+    std::vector<Polygon>& meshPolygons = m.getPolygons();
+    SegmentMap& edges = m.getSegments();
+
     for (Polygon p: polygons) {
         std::vector<int> newPolygonPoints;
         std::vector<int> oldPolygonPoints = p.getPoints();
@@ -200,6 +204,15 @@ void RemeshAdapter::adaptPolygonsToMesh(std::vector<Polygon> polygons, Breakable
             newPolygonPoints.push_back(pointMap[i]);
         }
 
+        Polygon newPolygon = Polygon(newPolygonPoints, meshPoints);
+        meshPolygons.push_back(newPolygon);
+
+        std::vector<IndexSegment> newPolygonSegments;
+        newPolygon.getSegments(newPolygonSegments);
+
+        for (IndexSegment s : newPolygonSegments) {
+            edges.insert(s, meshPolygons.size()-1);
+        }
 
 
     }

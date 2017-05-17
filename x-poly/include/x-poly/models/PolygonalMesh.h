@@ -28,6 +28,7 @@ public:
     std::vector<Polygon> getPolygons() const;
     Polygon& getPolygon(int index);
     Polygon getPolygon(int index) const;
+    void replacePolygon(int index, Polygon newPolygon);
 
     void writeElements(std::ofstream& file);
     void update();
