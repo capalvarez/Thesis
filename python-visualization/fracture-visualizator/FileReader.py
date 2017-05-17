@@ -12,7 +12,8 @@ def read_file(file_name):
     points = []
     segments = []
     polygons = []
-    crack = []
+    crack_upper = []
+    crack_lower = []
 
     min_x = sys.maxsize
     max_x = -sys.maxsize - 1
@@ -79,12 +80,25 @@ def read_file(file_name):
     number_crack_segments = int(readable_file.readline())
     for i in range(number_crack_segments):
         line = readable_file.readline().split()
-        crack.append(Segment(int(line[0]), int(line[1])))
+        crack_upper.append(Segment(int(line[0]), int(line[1])))
+        crack_lower.append(Segment(int(line[2]), int(line[3])))
+
+    line = readable_file.readline().split()
+    points.append(Point(float(line[0]), float(line[1])))
+
+    line = readable_file.readline().split()
+    points.append(Point(float(line[0]), float(line[1])))
+
+    crack_upper.insert(0, Segment(len(points)-2, crack_upper[0].p1))
+    crack_lower.insert(0, Segment(len(points)-2, crack_lower[0].p1))
+
+    crack_upper.append(Segment(crack_upper[-1].p2, len(points)-1))
+    crack_lower.append(Segment(crack_lower[-1].p2, len(points)-1))
 
     return list(map(
         lambda p, inner_limits=limits:
         Point(50 + inner_limits[0] + fixed_width / (inner_limits[1] - inner_limits[0]) * p.x, 50
               + inner_limits[2] + fixed_height / (inner_limits[3] - inner_limits[2]) * p.y, p.index),
-        points)), segments, polygons, crack, limits
+        points)), segments, polygons, crack_upper, crack_lower, limits
 
 

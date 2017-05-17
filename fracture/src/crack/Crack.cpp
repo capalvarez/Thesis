@@ -325,9 +325,12 @@ void Crack::printInStream(std::ofstream &file) {
     file << n-1 << std::endl;
 
     for (int i = 0; i < n-1; ++i) {
-        file << crackPath[i].first << " " << crackPath[(i+1)%n].first  << std::endl;
-        file << crackPath[i].second << " " << crackPath[(i+1)%n].second  << std::endl;
+        file << crackPath[i].first << " " << crackPath[(i+1)%n].first  << " " << 
+             crackPath[i].second << " " << crackPath[(i+1)%n].second  << std::endl;
     }
+
+    file << this->init.tipPoint.getString() << std::endl;
+    file << this->end.tipPoint.getString() << std::endl;
 }
 
 
