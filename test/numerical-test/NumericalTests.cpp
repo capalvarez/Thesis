@@ -32,7 +32,7 @@ NumericalTests::NumericalTests() {
     rectangleUniform.printInFile("ResultadosNumericos\\rectangleUniform.txt");
 
     region.cleanSeedPoints();
-    region.generateSeedPoints(PointGenerator(functions::random_double(0,20), functions::random_double(0,5)), 20, 5);
+    region.generateSeedPoints(PointGenerator(functions::random_double(0,4), functions::random_double(0,1)), 20, 5);
     seeds = region.getSeedPoints();
 
     meshGenerator = TriangleMeshGenerator (seeds, region);
@@ -71,9 +71,9 @@ NumericalTests::NumericalTests() {
     romboidRandom.printInFile("ResultadosNumericos\\romboidRandom.txt");
 
     /*Rectangle with hole*/
-    Hole circular = CircularHole(Point(5,5), 2);
+    Hole circular = CircularHole(Point(4,1), 0.5);
     region.addHole(circular);
-    region.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 5, 5);
+    region.generateSeedPoints(PointGenerator(functions::random_double(0,4), functions::random_double(0,1)), 20, 5);
     seeds = region.getSeedPoints();
 
     meshGenerator = TriangleMeshGenerator(seeds, region);
