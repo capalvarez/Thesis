@@ -19,18 +19,20 @@ class NumericalTests{
 private:
     PolygonalMesh rectangleUniform;
     PolygonalMesh rectangleRandom;
-    PolygonalMesh rectangle4x8Random;
     PolygonalMesh rectangle4x8ConstantAlternating;
 
-    Eigen::VectorXd loadBothSides(PolygonalMesh mesh, std::vector<PointSegment> restrained, std::vector<double> values);
-    Eigen::VectorXd clampedWithLoad(PolygonalMesh mesh, std::vector<PointSegment> restricted, double loadValue);
-    Eigen::VectorXd clampedWithParabolicLoad(PolygonalMesh mesh);
-    Eigen::VectorXd fixedXWithParabolicLoad(PolygonalMesh mesh, std::vector<PointSegment> restricted);
-    Eigen::VectorXd clampedWithBodyForce(PolygonalMesh mesh, PointSegment clamped);
-    Eigen::VectorXd clampedBothSideLoadMiddle(PolygonalMesh mesh);
-    Eigen::VectorXd clampedDisplacement(PolygonalMesh mesh, std::vector<PointSegment> restricted, double displacement);
-    Eigen::VectorXd displacementBothSides(PolygonalMesh mesh, std::vector<PointSegment> restricted,
-                                              std::vector<double> displacements);
+    PolygonalMesh rectangleHoleRandom;
+    PolygonalMesh romboidRandom;
+    PolygonalMesh LRandom;
+
+    Eigen::VectorXd loadBothSides(PolygonalMesh mesh, std::vector<PointSegment> restrained, std::vector<double> values,
+                                      std::string testName);
+    Eigen::VectorXd clampedWithLoad(PolygonalMesh mesh, std::vector<PointSegment> restricted, double loadValue, std::string testName);
+    Eigen::VectorXd clampedWithBodyForce(PolygonalMesh mesh, PointSegment clamped, std::string testName);
+    Eigen::VectorXd clampedDisplacement(PolygonalMesh mesh, std::vector<PointSegment> restricted, double displacement, std::string testName);
+    Eigen::VectorXd fixedXWithParabolicLoad(PolygonalMesh mesh, std::vector<PointSegment> restricted, std::string testName);
+    Eigen::VectorXd clampedBothSideLoadMiddle(PolygonalMesh mesh, std::vector<PointSegment> restricted, PointSegment charged,
+                                              double load, std::string testName);
 public:
     NumericalTests();
     void runTests();

@@ -92,7 +92,7 @@ ProblemConditions Veamer::getConditions() const {
 
 void Veamer::writeDisplacements(std::string fileName, Eigen::VectorXd u) {
     std::string path = utilities::getPath();
-    path +=  fileName;
+    path = path  + "ResultadosNumericos" + "\\" + fileName;
 
     std::ofstream file;
     file.open(path, std::ios::out);
