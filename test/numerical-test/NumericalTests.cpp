@@ -71,7 +71,7 @@ NumericalTests::NumericalTests() {
     romboidRandom.printInFile("ResultadosNumericos\\romboidRandom.txt");
 
     /*Rectangle with hole*/
-    Hole circular = CircularHole(Point(4,1), 0.5);
+    Hole circular = CircularHole(Point(2,1), 0.5);
     region.addHole(circular);
     region.generateSeedPoints(PointGenerator(functions::random_double(0,4), functions::random_double(0,1)), 20, 5);
     seeds = region.getSeedPoints();
@@ -153,6 +153,8 @@ Eigen::VectorXd NumericalTests::clampedWithBodyForce(PolygonalMesh mesh, PointSe
     v.initProblem(mesh, conditions);
 
     Eigen::VectorXd x = v.simulate(mesh);
+    std::string fileName = testName + "ClampedWithBodyForce_displacements.txt";
+    v.writeDisplacements(fileName, x);
 
     return x;
 }
