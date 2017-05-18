@@ -93,7 +93,6 @@ void TriangleMeshGenerator::callTriangle(std::vector<Point> &point_list, std::ve
     out.edgelist = (int *) NULL;
     out.edgemarkerlist = (int *) NULL;
 
-
     triangulate(switches, &in, &out, (struct triangulateio *)NULL);
 
     for(int i=0;i<out.numberofpoints;i++){
