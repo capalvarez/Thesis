@@ -518,10 +518,11 @@ void Polygon::insertOnSegment(IndexSegment segment, std::vector<int> point) {
     int j = utilities::indexOf(this->points, segment.getSecond());
 
     if(i!=-1 && j!=-1 && (std::abs(i-j)==1 || std::abs(i-j)==(n-1))){
-        if(i==n-1){
+        if(i==n-1 || j==n-1){
             this->points.insert(this->points.end(), point.begin(), point.end());
         }else{
-            this->points.insert(this->points.begin()+i, point.begin(), point.end());
+            int start = std::min(i,j);
+            this->points.insert(this->points.begin()+start+1, point.begin(), point.end());
         }
 
     }
@@ -644,4 +645,9 @@ void Polygon::replaceSegment(IndexSegment segment, std::vector<int> points) {
         }
 
     }
+}
+
+void Polygon::insertVertex(int vertex, std::vector<Point> points) {
+    IndexSegment container = this->containerEdge(points, points[vertex]);
+    insertOnSegment(container, vertex);
 }

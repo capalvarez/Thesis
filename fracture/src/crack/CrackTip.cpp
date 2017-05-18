@@ -263,7 +263,10 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
 
     mesh.replacePolygon(region, ring);
 
+    std::vector<int> firstAndLast = {mesh.getPolygons().size()};
     remesher.adaptPolygonsToMesh(generator.getElements(), mesh, pointMap, newPolygons);
+    firstAndLast.push_back(mesh.getPolygons().size()-1);
+
     this->points = CrackTipPoints(pointMap[0], meshPoints.size()-2, meshPoints.size()-1, pointMap[1], pointMap[2]);
 
     mesh.printInFile("beforeAdapting.txt");
@@ -325,6 +328,12 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     for (int i = 0; i < crackPolygon2Segments.size() ; ++i) {
         edges.replace_neighbour(crackPolygon2Segments[i], otherPolygon_index, crackPolygon2_index);
     }
+
+    if(previousCrackPoints.size() && !include){
+        mesh.getPolygon(firstAndLast[0]).insertVertex(previousCrackPoints[1].first, meshPoints.getList());
+        mesh.getPolygon(firstAndLast[1]).insertVertex(previousCrackPoints[1].second, meshPoints.getList());
+    }
+
 
     mesh.printInFile("afterAdapting.txt");
     mesh.getSegments().printInFile("segments.txt");
