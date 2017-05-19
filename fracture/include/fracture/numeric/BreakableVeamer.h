@@ -10,7 +10,8 @@ public:
     BreakableVeamer();
     BreakableVeamer(const Veamer& veamer);
 
-    void createElement(Polygon p);
+    virtual void createElement(Polygon p);
+    void createAndInsertElement(Polygon p, int index);
     void replaceElement(Polygon old, std::vector<Polygon> newPolygons);
     void replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons, UniqueList<Point> points);
 };

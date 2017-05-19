@@ -40,7 +40,6 @@ public:
     bool containsPoint(Point p);
     bool inEdges(Point p);
     void cleanSeedPoints();
-
 };
 
 #endif

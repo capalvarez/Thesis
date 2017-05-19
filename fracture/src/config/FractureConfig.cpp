@@ -7,6 +7,7 @@ FractureConfig::FractureConfig() {
     this->double_comparison_tolerance = 0.001;
     this->crack_growth_speed = 0.1;
     this->crack_size_ratio = 0.75;
+    this->diameter_ratio = 1.0/8;
     this->rosette_angle = 45;
     this->max_iterations = 100;
 }
@@ -24,6 +25,10 @@ void FractureConfig::setCrackRatio(double r) {
         throw std::invalid_argument("Crack ratio has to be in range (0,1)");
     }
     this->crack_size_ratio = r;
+}
+
+void FractureConfig::setDiameterRatio(double r) {
+    this->diameter_ratio = r;
 }
 
 void FractureConfig::setRosetteAngle(double a) {
@@ -44,6 +49,10 @@ double FractureConfig::getSpeed() {
 
 double FractureConfig::getRatio() {
     return this->crack_size_ratio;
+}
+
+double FractureConfig::getDiameterRatio() {
+    return this->diameter_ratio;
 }
 
 double FractureConfig::getRosetteAngle() {

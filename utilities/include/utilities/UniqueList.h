@@ -13,9 +13,11 @@ private:
 public:
     UniqueList();
     int push_back(T& item);
+    int force_push_back(T& item);
     int size();
     std::vector<int> push_list(std::vector<T> list);
     std::vector<int> push_list(UniqueList<T> list);
+    void pop_front();
 
     std::vector<T> getList() const;
     std::vector<T>& getList();
@@ -25,11 +27,6 @@ public:
     bool operator==(const UniqueList<T>& other);
     bool contains(T elem);
     bool hasCommonElement(UniqueList<T> other);
-
-    T first();
-    T second();
-    T secondToLast();
-    T last();
 
     void clear();
 };
@@ -48,6 +45,21 @@ int UniqueList<T>::push_back(T& item) {
     list.push_back(item);
 
     return (int) list.size()-1;
+}
+
+template <class T>
+int UniqueList<T>::force_push_back(T &item) {
+    list.push_back(item);
+
+    return (int) list.size()-1;
+}
+
+template <class T>
+void UniqueList<T>::pop_front() {
+    T elem = this->list[0];
+
+    this->list.erase(this->list.begin());
+    this->map.erase(elem);
 }
 
 template <class T>
@@ -117,34 +129,6 @@ bool UniqueList<T>::hasCommonElement(UniqueList<T> other) {
     }
 
     return false;
-}
-
-template <class T>
-T UniqueList<T>::first() {
-    return this->list[0];
-}
-
-template <class T>
-T UniqueList<T>::second() {
-    if(this->list.size()==1){
-        return this->list[0];
-    }
-
-    return this->list[1];
-}
-
-template <class T>
-T UniqueList<T>::last() {
-    return this->list.back();
-}
-
-template <class T>
-T UniqueList<T>::secondToLast() {
-    if(this->list.size()==1){
-        return this->list.back();
-    }
-
-    return this->list[this->list.size()-2];
 }
 
 template <class T>

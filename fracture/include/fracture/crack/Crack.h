@@ -6,17 +6,19 @@
 #include <veamy/models/Element.h>
 #include <fracture/geometry/BreakableMesh.h>
 #include <fracture/crack/CrackTip.h>
+#include <utilities/Deque.h>
 
 class Crack {
 private:
     CrackTip init;
     CrackTip end;
-    UniqueList<int> pointIndexes;
+    Deque<Pair<int>> crackPath;
     double StandardRadius;
 
-    void prepareTip(CrackTip tip, UniqueList<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh,
-                    std::vector<int> entryToContainer);
-    void grow(CrackTip &tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, Problem problem, Eigen::VectorXd u);
+    void prepareTip(CrackTip &tip, UniqueList<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh,
+                    std::vector<Pair<int>> previousCrackPoints);
+    void grow(CrackTip &tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, Problem problem, Eigen::VectorXd u,
+                  UniqueList<Pair<int>> &crackPoints);
     double adjustBoxes(Polygon initPoly, Polygon endPoly, std::vector<Point> points);
 public:
     Crack();
@@ -30,6 +32,8 @@ public:
 
     void initializeCrack(BreakableMesh &mesh);
     void printInStream(std::ofstream& file);
+
+    friend class CrackTip;
 };
 
 

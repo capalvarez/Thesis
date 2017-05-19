@@ -34,7 +34,9 @@ namespace utilities {
     }
 
     double degrees(double angle){
-        return (angle > 0 ? angle : (2*M_PI + angle)) * 360 / (2*M_PI);
+        double a = (angle > 0 ? angle : (2*M_PI + angle));
+
+        return a* 180/ (M_PI);
     }
 
     int hash32(int key) {

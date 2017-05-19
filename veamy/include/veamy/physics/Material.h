@@ -6,8 +6,8 @@
 
 class Material{
 private:
-    double E;
-    double v;
+    double material_E;
+    double material_v;
 public:
     Material(Materials::material m);
     Material(double young, double poisson);
@@ -16,7 +16,9 @@ public:
     Eigen::MatrixXd getMaterialMatrix();
     double trace();
 
-    double stressIntensityFactor();
+    double k();
+    double v();
+    double E();
     bool operator==(const Material& other) const;
 };
 

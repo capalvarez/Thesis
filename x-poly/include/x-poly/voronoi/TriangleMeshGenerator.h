@@ -33,7 +33,8 @@ private:
     UniqueList<Polygon> voronoiCells;
 
     Point getCircumcenter(int triangle, int edge, std::vector<Point>& points);
-    void callTriangle(std::vector<Point> &point_list, std::vector<PointSegment> restrictedSegments);
+    void callTriangle(std::vector<Point> &point_list, std::vector<PointSegment> restrictedSegments,
+                          char switches[]);
     PolygonalMesh delaunayToVoronoi();
     void writeInputInFile(UniqueList<Point> &point_list, Region region, std::vector<int> regionIndex);
 public:

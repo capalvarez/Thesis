@@ -103,12 +103,13 @@ TEST_F(PolygonTest, CommonEdgeTest){
     std::vector<int> secondSquarePoints = {1,7,8,2};
     Polygon secondSquare(secondSquarePoints, points);
 
-    EXPECT_EQ(secondSquare.commonEdgesBorder(*square, points, <#initializer#>), Pair<int>(2, 1));
+    bool special;
+    EXPECT_EQ(secondSquare.commonEdgesBorder(*square, points, special), Pair<int>(2, 1));
 
     std::vector<int> twoEdgesPoints = {9,10,8,2,1,0};
     Polygon twoEdges(twoEdgesPoints, points);
 
-    EXPECT_EQ(twoEdges.commonEdgesBorder(*square, points, <#initializer#>), Pair<int>(2, 0));
+    EXPECT_EQ(twoEdges.commonEdgesBorder(*square, points, special), Pair<int>(2, 0));
 }
 
 TEST_F(PolygonTest, ReplaceNeighbourBorderTest){

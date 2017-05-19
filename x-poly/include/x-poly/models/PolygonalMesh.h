@@ -27,6 +27,8 @@ public:
     std::vector<Polygon>& getPolygons();
     std::vector<Polygon> getPolygons() const;
     Polygon& getPolygon(int index);
+    Polygon getPolygon(int index) const;
+    void replacePolygon(int index, Polygon newPolygon);
 
     void writeElements(std::ofstream& file);
     void update();
@@ -35,7 +37,7 @@ public:
     bool areNeighbours(int poly1, int poly2);
     bool areNeighbours(Polygon poly, int poly2);
     bool polygonsTouch(int poly1, int poly2);
-    void getAllNeighbours(int poly, UniqueList<int> &neighbours);
+    void getNeighboursBySegments(int poly, UniqueList<int> &neighbours);
 
     int findContainerPolygon(Point p);
     int findContainerPolygon(Point p, int& last);
@@ -43,12 +45,15 @@ public:
 
     NeighbourInfo getNeighbour(int poly_index, PointSegment direction);
     NeighbourInfo getNeighbour(int poly_index, PointSegment direction, std::vector<int> &previous);
-    int getPolygonInDirection(std::vector<int> index, PointSegment direction);
+    int getNeighbourFromCommonVertexSet(PointSegment direction, std::vector<int> vertexSet, int vertexIndex,
+                                        std::vector<int> &previousPolygons, Point reference);
+    int getNeighbourFromCommonVertexSet(PointSegment direction, std::vector<int> vertexSet);
 
     Region getRegion() const;
     bool isInDomain(Point p);
     bool isInBorder(Point p);
-    void getDirectNeighbours(int poly, UniqueList<int> &neighbours);
+    void getNeighboursByPoint(int poly, UniqueList<int> &neighbours);
+    int numberOfPolygons();
 };
 
 

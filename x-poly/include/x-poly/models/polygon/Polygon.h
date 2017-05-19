@@ -8,6 +8,9 @@
 #include <x-poly/utilities/convexHull.h>
 #include <x-poly/models/basic/IndexSegment.h>
 #include <utilities/Pair.h>
+#include <map>
+#include <utilities/UniqueList.h>
+#include <algorithm>
 
 class Polygon {
 protected:
@@ -28,6 +31,7 @@ public:
     Polygon(const Polygon &obj);
     Polygon();
 
+    void changePointIndexes(std::vector<int> p);
     double getDiameter();
     double getArea();
     Point getCentroid();
@@ -66,7 +70,15 @@ public:
     int getPoint(int i);
 
     void insertOnSegment(IndexSegment segment, int point);
+    void insertOnSegment(IndexSegment segment, std::vector<int> points);
+    IndexSegment getIntersectedSegment(PointSegment direction, Point &intersection, std::vector<Point> points);
     bool isValidPolygon();
+    int getVertex(int p1, int p2);
+    IndexSegment getSurroundingVertices(Pair<int> vertices);
+    std::vector<IndexSegment> deleteVerticesInRange(int i1, int i2);
+    void fixSegment(Pair<int> &segment, int reference);
+    void replaceSegment(IndexSegment segment, std::vector<int> points);
+    void insertVertex(int vertex, std::vector<Point> points);
 };
 
 #endif

@@ -1,8 +1,7 @@
-#include <algorithm>
 #include <x-poly/models/polygon/Polygon.h>
 #include <map>
 #include <utilities/UniqueList.h>
-#include "../../../../utilities/include/utilities/Pair.h"
+#include <utilities/Pair.h>
 
 
 Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
@@ -65,7 +64,13 @@ void Polygon::mutate(std::vector<int> points, std::vector<Point> p) {
 void Polygon::update(std::vector<Point> points) {
     this->area = calculateArea(points);
     this->centroid = calculateCentroid(points);
-    this->diameter = calculateDiameter(points);
+
+    std::vector<Point> this_points;
+    for(int i=0;i<this->points.size();i++){
+        this_points.push_back(points[this->points[i]]);
+    }
+
+    this->diameter = calculateDiameter(this_points);
 }
 
 Polygon::Polygon(std::vector<Point> &p) {
@@ -113,6 +118,10 @@ double Polygon::calculateDiameter(std::vector<Point>& p) {
 
 double Polygon::calculateArea(std::vector<Point>& p) {
     return geometry_functions::area(p,this->points);
+}
+
+void Polygon::changePointIndexes(std::vector<int> p) {
+    this->points.insert(this->points.begin(), p.begin(), p.end());
 }
 
 double Polygon::getArea(){
@@ -501,13 +510,25 @@ bool Polygon::containsEdge(IndexSegment s) {
 }
 
 void Polygon::insertOnSegment(IndexSegment segment, int point) {
+    std::vector<int> points = {point};
+
+    insertOnSegment(segment, points);
+}
+
+void Polygon::insertOnSegment(IndexSegment segment, std::vector<int> point) {
     int n = this->numberOfSides();
 
     int i = utilities::indexOf(this->points, segment.getFirst());
     int j = utilities::indexOf(this->points, segment.getSecond());
 
     if(i!=-1 && j!=-1 && (std::abs(i-j)==1 || std::abs(i-j)==(n-1))){
-        this->points.insert(this->points.begin()+i, point);
+        if(i==n-1 || j==n-1){
+            this->points.insert(this->points.end(), point.begin(), point.end());
+        }else{
+            int start = std::min(i,j);
+            this->points.insert(this->points.begin()+start+1, point.begin(), point.end());
+        }
+
     }
 }
 
@@ -515,6 +536,122 @@ bool Polygon::isValidPolygon() {
     UniqueList<int> vertices;
     vertices.push_list(this->points);
 
-    return vertices.size()>2;
+    return vertices.size()>2 && this->area>10e-5;
 }
 
+IndexSegment Polygon::getIntersectedSegment(PointSegment direction, Point &intersection, std::vector<Point> points) {
+    std::vector<IndexSegment> segments;
+    this->getSegments(segments);
+
+    for (IndexSegment s: segments) {
+        bool intersects = s.intersection(points, direction, intersection);
+
+        if(intersects){
+            return s;
+        }
+    }
+
+    return IndexSegment();
+}
+
+int Polygon::getVertex(int p1, int p2) {
+    return isVertex(p1)? p1 : p2;
+}
+
+IndexSegment Polygon::getSurroundingVertices(Pair<int> vertices) {
+    int n = this->numberOfSides();
+
+    int i = utilities::indexOf(this->points, vertices.first);
+    int j = utilities::indexOf(this->points, vertices.second);
+
+    int first = this->points[(i+1)%n]==vertices.second? (i-1+n)%n : (i+1)%n;
+    int second = this->points[(j+1)%n]==vertices.first? (j-1+n)%n : (j+1)%n;
+
+    return IndexSegment(this->points[first], this->points[second]);
+}
+
+std::vector<IndexSegment> Polygon::deleteVerticesInRange(int i1, int i2) {
+    if(i1<0 || i2<0){
+        return std::vector<IndexSegment>();
+    }
+
+    int i = utilities::indexOf(this->points, i1);
+    int j = utilities::indexOf(this->points, i2);
+
+    std::vector<int> erasedVertices;
+    if(i<j){
+        erasedVertices.insert(erasedVertices.begin(), this->points.begin()+i, this->points.begin()+j+1);
+
+        this->points.erase(this->points.begin()+i+1, this->points.begin()+j);
+    }else{
+        erasedVertices.insert(erasedVertices.begin(), this->points.begin()+i, this->points.end());
+        erasedVertices.insert(erasedVertices.end(), this->points.begin(), this->points.begin()+j+1);
+
+        this->points.erase(this->points.begin()+i+1, this->points.end());
+        this->points.erase(this->points.begin(), this->points.begin()+j);
+    }
+
+    std::vector<IndexSegment> erasedSegments;
+    int n = erasedVertices.size();
+    for(i = 0;i<n-1;i++){
+        erasedSegments.push_back(IndexSegment(erasedVertices[i], erasedVertices[(i+1)%n]));
+    }
+
+    return erasedSegments;
+}
+
+void Polygon::fixSegment(Pair<int> &segment, int reference) {
+    int n = this->numberOfSides();
+
+    int i = utilities::indexOf(this->points, segment.first);
+    int j = utilities::indexOf(this->points, segment.second);
+    int k = utilities::indexOf(this->points, reference);
+
+    if(reference==-1){
+        if(std::abs(i-j)==1) {
+            if (i > j) {
+                int aux = segment.second;
+                segment.second = segment.first;
+                segment.first = aux;
+
+            }
+        }
+
+        if(std::abs(i-j)==n-1){
+            if(j==n-1){
+                int aux = segment.second;
+                segment.second = segment.first;
+                segment.first = aux;
+            }
+        }
+    }else{
+        if(!(i<k && k<j) || (j>i && (k<i || j<k))){
+            int aux = segment.second;
+            segment.second = segment.first;
+            segment.first = aux;
+        }
+    }
+}
+
+void Polygon::replaceSegment(IndexSegment segment, std::vector<int> points) {
+    int i = utilities::indexOf(this->points, segment.getFirst());
+    int j = utilities::indexOf(this->points, segment.getSecond());
+
+    if(i!=-1 && j!=-1){
+        if(i>j){
+            this->points.erase(this->points.begin()+i+1, this->points.end());
+            this->points.erase(this->points.begin(), this->points.begin()+j);
+
+            this->points.insert(this->points.begin(), points.begin(), points.end());
+        }else{
+            this->points.erase(this->points.begin()+i+1, this->points.begin()+j);
+            this->points.insert(this->points.begin()+i+1, points.begin(), points.end());
+        }
+
+    }
+}
+
+void Polygon::insertVertex(int vertex, std::vector<Point> points) {
+    IndexSegment container = this->containerEdge(points, points[vertex]);
+    insertOnSegment(container, vertex);
+}

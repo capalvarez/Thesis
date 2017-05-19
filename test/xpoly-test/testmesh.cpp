@@ -46,7 +46,7 @@ TEST(MeshTest, GetAllNeighboursTest){
     m.printInFile("lolo.txt");
 
     UniqueList<int> neighbours;
-    m.getAllNeighbours(24, neighbours);
+    m.getNeighboursBySegments(24, neighbours);
     std::vector<int> expected = {14,12,32,28};
     EXPECT_EQ(neighbours.getList(), expected);
 }

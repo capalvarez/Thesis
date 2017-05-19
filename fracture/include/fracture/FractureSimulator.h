@@ -17,7 +17,9 @@ private:
 
     int step;
     std::string simulationName;
+
     void writeStepInFile();
+    void writeNumberOfSteps();
 public:
     FractureSimulator(std::string simulationName, const PolygonalMesh& mesh, const Crack& initial, const ProblemConditions& conditions);
     void simulate(double crack_growth);

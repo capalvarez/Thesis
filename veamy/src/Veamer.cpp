@@ -20,6 +20,10 @@ void Veamer::createElement(Polygon p) {
     elements.push_back(Element(this->conditions, p, this->points, DOFs));
 }
 
+void Veamer::insertElement(Polygon p, int index) {
+    elements.insert(elements.begin() + index, Element(this->conditions, p, this->points, DOFs));
+}
+
 Eigen::VectorXd Veamer::simulate(PolygonalMesh &mesh) {
     Eigen::MatrixXd K;
     Eigen::VectorXd f;
