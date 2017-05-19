@@ -37,6 +37,8 @@ public:
     UniqueList<Point> getPoints() const;
     UniqueList<Point> getPoints();
     ProblemConditions getConditions() const;
+
+    void writeDisplacements(std::string fileName, Eigen::VectorXd u);
 };
 
 

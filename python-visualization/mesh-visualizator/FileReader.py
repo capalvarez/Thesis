@@ -60,8 +60,8 @@ def read_file(file_name):
     base_x = 50 + limits[0]
     base_y = 50 + limits[2]
 
-    m_x = (fixed_width / (limits[1] - limits[0]))
-    m_y = (fixed_height / (limits[3] - limits[2]))
+    m_x = ((MIN_SCREEN - 100) / (limits[1] - limits[0]))
+    m_y = ((MIN_SCREEN - 100) / (limits[3] - limits[2]))
 
     number_polygons = int(readable_file.readline())
     for i in range(number_polygons):
@@ -77,8 +77,8 @@ def read_file(file_name):
 
     return list(map(
         lambda p, inner_limits=limits:
-        Point(50 + inner_limits[0] + fixed_width / (inner_limits[1] - inner_limits[0]) * p.x, 50
-              + inner_limits[2] + fixed_height / (inner_limits[3] - inner_limits[2]) * p.y, p.index),
+        Point(50 + inner_limits[0] + (MIN_SCREEN - 100) / (inner_limits[1] - inner_limits[0]) * p.x, 50
+              + inner_limits[2] + (MIN_SCREEN - 100) / (inner_limits[3] - inner_limits[2]) * p.y, p.index),
         points)), segments, polygons, limits
 
 

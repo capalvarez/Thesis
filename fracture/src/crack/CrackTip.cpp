@@ -339,7 +339,6 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     mesh.getSegments().printInFile("segments.txt");
     newPolygons.push_back(crackPolygon1);
     newPolygons.push_back(crackPolygon2);
-
 }
 
 bool CrackTip::isFinished() {

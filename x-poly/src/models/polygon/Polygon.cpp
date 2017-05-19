@@ -1,4 +1,8 @@
 #include <x-poly/models/polygon/Polygon.h>
+#include <map>
+#include <utilities/UniqueList.h>
+#include <utilities/Pair.h>
+
 
 Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
     if(isSelfIntersecting(p)){

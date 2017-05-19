@@ -5,6 +5,7 @@
 
 namespace functions {
     Functor* constant();
+    Functor* constantAlternating();
     Functor* uniform(double delta);
     Functor* random_integer(double min, double max);
     Functor* random_double(double min, double max);
