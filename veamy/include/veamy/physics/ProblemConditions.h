@@ -3,6 +3,7 @@
 
 #include <veamy/physics/BodyForce.h>
 #include <veamy/physics/Material.h>
+#include <veamy/physics/body forces/None.h>
 
 struct ProblemConditions{
     ConstraintsContainer constraints;
@@ -12,6 +13,12 @@ struct ProblemConditions{
     ProblemConditions(ConstraintsContainer container, BodyForce* bodyForce, Material mat){
         constraints = container;
         f = bodyForce;
+        material = mat;
+    }
+
+    ProblemConditions(ConstraintsContainer container, Material mat){
+        constraints = container;
+        f = new None();
         material = mat;
     }
 

@@ -1,13 +1,6 @@
 #include <veamy/models/constraints/values/Function.h>
 #include "NumericalTests.h"
 
-class None : public BodyForce{
-private:
-    double apply(double x, double y){
-        return 0;
-    }
-};
-
 class Gravity : public BodyForce{
 private:
     double apply(double x, double y){
@@ -85,8 +78,7 @@ Eigen::VectorXd
 NumericalTests::loadBothSides(PolygonalMesh mesh, std::vector<PointSegment> restrained, std::vector<double> values,
                               std::string testName) {
     Veamer v;
-    BodyForce* f = new None();
-
+    
     NaturalConstraints c;
     Constraint const1 (restrained[0], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(values[0]));
     Constraint const2 (restrained[1], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(values[1]));
@@ -97,7 +89,7 @@ NumericalTests::loadBothSides(PolygonalMesh mesh, std::vector<PointSegment> rest
     ConstraintsContainer container;
     container.addConstraints(c, mesh);
 
-    ProblemConditions conditions(container, f, Material(Materials::material::Steel));
+    ProblemConditions conditions(container, Material(Materials::material::Steel));
 
     v.initProblem(mesh, conditions);
 
@@ -163,8 +155,7 @@ Eigen::VectorXd
 NumericalTests::clampedDisplacement(PolygonalMesh mesh, std::vector<PointSegment> restricted, double displacement,
                                     std::string testName) {
     Veamer v;
-    BodyForce* f = new None();
-
+    
     EssentialConstraints essential;
     Constraint const1 (restricted[0], mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
     essential.addConstraint(const1, mesh.getPoints().getList());
@@ -175,7 +166,7 @@ NumericalTests::clampedDisplacement(PolygonalMesh mesh, std::vector<PointSegment
     ConstraintsContainer container;
     container.addConstraints(essential, mesh);
 
-    ProblemConditions conditions(container, f, Material(Materials::material::Steel));
+    ProblemConditions conditions(container, Material(Materials::material::Steel));
 
     v.initProblem(mesh, conditions);
 
@@ -189,8 +180,7 @@ NumericalTests::clampedDisplacement(PolygonalMesh mesh, std::vector<PointSegment
 
 Eigen::VectorXd NumericalTests::fixedXWithParabolicLoad(PolygonalMesh mesh, std::vector<PointSegment> restricted, std::string testName) {
     Veamer v;
-    BodyForce* f = new None();
-
+    
     EssentialConstraints essential;
     Constraint const1 (restricted[0], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(0));
     essential.addConstraint(const1, mesh.getPoints().getList());
@@ -207,7 +197,7 @@ Eigen::VectorXd NumericalTests::fixedXWithParabolicLoad(PolygonalMesh mesh, std:
     container.addConstraints(natural, mesh);
 
     Material m(1e7, 0.3);
-    ProblemConditions conditions(container, f, m);
+    ProblemConditions conditions(container, m);
 
     v.initProblem(mesh, conditions);
 
@@ -221,8 +211,7 @@ Eigen::VectorXd NumericalTests::fixedXWithParabolicLoad(PolygonalMesh mesh, std:
 Eigen::VectorXd NumericalTests::clampedBothSideLoadMiddle(PolygonalMesh mesh, std::vector<PointSegment> restricted, PointSegment charged,
                                                           double load, std::string testName) {
     Veamer v;
-    BodyForce* f = new None();
-
+    
     EssentialConstraints essential;
     Constraint const1 (restricted[0], mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
     essential.addConstraint(const1, mesh.getPoints().getList());
@@ -238,7 +227,7 @@ Eigen::VectorXd NumericalTests::clampedBothSideLoadMiddle(PolygonalMesh mesh, st
     container.addConstraints(essential, mesh);
     container.addConstraints(natural, mesh);
 
-    ProblemConditions conditions(container, f, Material(Materials::material::Steel));
+    ProblemConditions conditions(container, Material(Materials::material::Steel));
 
     v.initProblem(mesh, conditions);
 
