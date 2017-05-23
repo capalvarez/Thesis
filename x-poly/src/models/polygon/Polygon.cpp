@@ -434,8 +434,11 @@ void Polygon::replace_segment(IndexSegment seg, std::vector<IndexSegment> segs, 
     seg.orderCCW(points, this->getCentroid());
     int indexOfStart = utilities::indexOf(this->points, seg.getFirst());
 
-    this->points.insert(this->points.begin()+indexOfStart+1, orderedSegments.begin()+1, orderedSegments.end()-1);
-    this->mutate(this->points,points);
+    if(indexOfStart==this->numberOfSides()-1){
+        this->points.insert(this->points.end(), orderedSegments.begin()+1, orderedSegments.end()-1);
+    } else{
+        this->points.insert(this->points.begin()+indexOfStart+1, orderedSegments.begin()+1, orderedSegments.end()-1);
+    }
 }
 
 bool Polygon::isSelfIntersecting(std::vector<Point> points) {
@@ -522,10 +525,11 @@ void Polygon::insertOnSegment(IndexSegment segment, std::vector<int> point) {
     int j = utilities::indexOf(this->points, segment.getSecond());
 
     if(i!=-1 && j!=-1 && (std::abs(i-j)==1 || std::abs(i-j)==(n-1))){
-        if(i==n-1 || j==n-1){
+        int start = std::min(i,j);
+
+        if(start==0){
             this->points.insert(this->points.end(), point.begin(), point.end());
         }else{
-            int start = std::min(i,j);
             this->points.insert(this->points.begin()+start+1, point.begin(), point.end());
         }
 

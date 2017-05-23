@@ -288,9 +288,6 @@ void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
     int p1 = this->points.push_back(n1.intersection);
     int p2 = this->points.push_back(n2.intersection);
 
-    int p3 = this->points.force_push_back(n1.intersection);
-    int p4 = this->points.force_push_back(n2.intersection);
-
     //Split the old polygon and generate new ones
     std::vector<int> new1 = {p1, p2};
     std::vector<int> new2 = {p2, p1};
@@ -379,7 +376,7 @@ Pair<int> BreakableMesh::computeNewPolygons(NeighbourInfo n1, NeighbourInfo &n2,
 
 
 
-        if(point!= p1 && point!=p2){
+        if(point!= p1 && point!=p2 && point!=p3 && point!=p4){
             new1.push_back(point);
         }
 
@@ -407,7 +404,7 @@ Pair<int> BreakableMesh::computeNewPolygons(NeighbourInfo n1, NeighbourInfo &n2,
 
 
 
-        if((point!=p1 && point!=p3) && (point!=p2 && point!=p4)){
+        if(point!=p1 && point!=p3 && point!=p2 && point!=p4){
             new2.push_back(point);
         }
 

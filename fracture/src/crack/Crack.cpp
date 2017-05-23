@@ -110,6 +110,8 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                 }
             }
 
+            m.printInFile("withring.txt");
+
             SegmentMap e = m.getSegments();
             Neighbours n_f = e.get(relevantSegments[0]);
             int neighbour1 = utilities::indexOf(initNeighbours.getList(), n_f.getFirst())!=-1? n_f.getSecond() : n_f.getFirst();
@@ -122,6 +124,8 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
 
             m.splitPolygons(n1, n2, neighbour1, oldP.getList(), newP);
 
+            m.printInFile("split.txt");
+
             int poly1 = m.getPolygon(index).containsPoint(m.getPoints().getList(), this->init.getPoint())?
                         index : (int)(m.getPolygons().size())-1;
             int poly2 = poly1==index? (int)(m.getPolygons().size())-1 : index;
@@ -129,6 +133,9 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
             Point crackPoint;
             PointSegment(intersections[0], intersections[1]).intersection(PointSegment(init_last, end_last), crackPoint);
             crackPath.clear();
+
+            int crackPoint1 = m.getPoints().force_push_back(crackPoint);
+            int crackPoint2 = m.getPoints().force_push_back(crackPoint);
 
             Polygon polygon1 = m.getPolygon(poly1);
             Polygon polygon2 = m.getPolygon(poly2);
@@ -147,10 +154,11 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
             double angleInit = PointSegment(this->end.tipPoint, this->init.tipPoint).cartesianAngle();
             double angleEnd = PointSegment(this->init.tipPoint, this->end.tipPoint).cartesianAngle();
 
+            //Optimize this, is pretty obvious
             IndexSegment crackEntry = polygon1.containerEdge(m.getPoints().getList(), crackPoint);
 
-            this->init.remeshAndAdapt(radius, newP, poly1, m, toPoly1, angleInit, crackEntry, std::vector<Pair<int>>());
-            this->end.remeshAndAdapt(radius, newP, poly2, m, toPoly2, angleEnd, crackEntry, std::vector<Pair<int>>());
+            this->init.remeshAndAdapt(radius, newP, poly1, m, toPoly1, angleInit, crackEntry, {Pair<int>(crackPoint2, crackPoint1)});
+            this->end.remeshAndAdapt(radius, newP, poly2, m, toPoly2, angleEnd, crackEntry, {Pair<int>(crackPoint1, crackPoint2)});
 
         }else{
             double radius;
