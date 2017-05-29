@@ -162,6 +162,8 @@ RemeshAdapter::adaptTriangulationToMesh(Triangulation triangulation, BreakableMe
         }
     }
 
+    mesh.printInFile("withTriangles.txt");
+
     for(auto value: changesInNeighbours){
         if(value.first<0)
             continue;

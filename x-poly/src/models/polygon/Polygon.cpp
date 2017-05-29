@@ -541,7 +541,7 @@ bool Polygon::isValidPolygon() {
     UniqueList<int> vertices;
     vertices.push_list(this->points);
 
-    return vertices.size()>2 && this->area>10e-5;
+    return vertices.size()>2;
 }
 
 IndexSegment Polygon::getIntersectedSegment(PointSegment direction, Point &intersection, std::vector<Point> points) {
