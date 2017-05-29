@@ -33,7 +33,7 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
 
     UniqueList<Polygon> oldP;
     std::vector<Polygon> newP;
-    UniqueList<Point> points = m.getPoints();
+    UniqueList<Point>& points = m.getPoints();
 
     bool bothAreGrowing = !this->init.hasFinished && !this->end.hasFinished;
 
@@ -143,7 +143,7 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
             IndexSegment commonSegment = polygon1.containerEdge(m.getPoints().getList(), m.getPoint(crackPoint1));
 
             polygon1.insertOnSegment(commonSegment,{crackPoint1, crackPoint2});
-            polygon2.insertOnSegment(commonSegment,{crackPoint1, crackPoint2});
+            polygon2.insertOnSegment(commonSegment,{crackPoint2, crackPoint1});
 
             SegmentMap& segmentMap = m.getSegments();
             segmentMap.insert(IndexSegment(crackPoint1, crackPoint2), Neighbours(poly1, poly2));

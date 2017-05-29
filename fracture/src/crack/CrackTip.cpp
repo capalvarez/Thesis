@@ -220,7 +220,9 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     std::vector<Point> rosettePoints = generator.getPoints();
 
     std::vector<Point> toTriangulate;
+    std::unordered_map<int,int> ringMap;
     for (int i : oldPoints) {
+        ringMap[i] = 0;
         toTriangulate.push_back(mesh.getPoint(i));
     }
 
@@ -234,7 +236,6 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     pointMap[rosettePoints.size()-1] = meshPoints.size()-1;
 
     Polygon ring = Polygon(mesh.getPolygon(region));
-    std::unordered_map<int,int> ringMap;
     for (int i: ring.getPoints()){
         ringMap[i] = 0;
     }

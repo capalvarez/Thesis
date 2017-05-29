@@ -184,6 +184,10 @@ bool Polygon::containsPoint(std::vector<Point>& p, Point point) {
         Point pI = p[points[i]];
         Point pJ = p[points[j]];
 
+        if(pI == pJ){
+            continue;
+        }
+
         if (pI.getY()<=point.getY() && pJ.getY()>point.getY()
             || pJ.getY()<=point.getY() && pI.getY()>point.getY()) {
 
