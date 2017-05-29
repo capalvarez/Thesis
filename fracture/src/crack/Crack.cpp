@@ -137,8 +137,16 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
             int crackPoint1 = m.getPoints().force_push_back(crackPoint);
             int crackPoint2 = m.getPoints().force_push_back(crackPoint);
 
-            Polygon polygon1 = m.getPolygon(poly1);
-            Polygon polygon2 = m.getPolygon(poly2);
+            Polygon& polygon1 = m.getPolygon(poly1);
+            Polygon& polygon2 = m.getPolygon(poly2);
+
+            IndexSegment commonSegment = polygon1.containerEdge(m.getPoints().getList(), m.getPoint(crackPoint1));
+
+            polygon1.insertOnSegment(commonSegment,{crackPoint1, crackPoint2});
+            polygon2.insertOnSegment(commonSegment,{crackPoint1, crackPoint2});
+
+            SegmentMap& segmentMap = m.getSegments();
+            segmentMap.insert(IndexSegment(crackPoint1, crackPoint2), Neighbours(poly1, poly2));
 
             std::vector<int> toPoly1;
             std::vector<int> toPoly2;
@@ -154,11 +162,11 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
             double angleInit = PointSegment(this->end.tipPoint, this->init.tipPoint).cartesianAngle();
             double angleEnd = PointSegment(this->init.tipPoint, this->end.tipPoint).cartesianAngle();
 
-            //Optimize this, is pretty obvious
-            IndexSegment crackEntry = polygon1.containerEdge(m.getPoints().getList(), crackPoint);
+            commonSegment.orderCCW(m.getPoints().getList(), polygon1.getCentroid());
+            this->init.remeshAndAdapt(radius, newP, poly1, m, toPoly1, angleInit, commonSegment, {Pair<int>(crackPoint2, crackPoint1)});
 
-            this->init.remeshAndAdapt(radius, newP, poly1, m, toPoly1, angleInit, crackEntry, {Pair<int>(crackPoint2, crackPoint1)});
-            this->end.remeshAndAdapt(radius, newP, poly2, m, toPoly2, angleEnd, crackEntry, {Pair<int>(crackPoint1, crackPoint2)});
+            commonSegment.orderCCW(m.getPoints().getList(), m.getPolygon(poly2).getCentroid());
+            this->end.remeshAndAdapt(radius, newP, poly2, m, toPoly2, angleEnd, commonSegment, {Pair<int>(crackPoint1, crackPoint2)});
 
         }else{
             double radius;

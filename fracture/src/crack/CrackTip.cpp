@@ -234,6 +234,10 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     pointMap[rosettePoints.size()-1] = meshPoints.size()-1;
 
     Polygon ring = Polygon(mesh.getPolygon(region));
+    std::unordered_map<int,int> ringMap;
+    for (int i: ring.getPoints()){
+        ringMap[i] = 0;
+    }
 
     std::vector<int> quarterTipBorder;
     for (int i: generator.getBorderPoints()){
@@ -249,12 +253,17 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     int otherPolygon_index = mesh.getPolygons().size() - 1;
 
     SegmentMap& edges = mesh.getSegments();
+    Neighbours crackEntryNeighbours = edges.get(crackEntry);
+    int originalNeighbour = crackEntryNeighbours.getFirst()==region? crackEntryNeighbours.getSecond() : crackEntryNeighbours.getFirst();
+    edges.delete_element(crackEntry);
+
     std::vector<IndexSegment> otherPolygonSegments;
     otherPolygon.getSegments(otherPolygonSegments);
 
     int j;
     for (j = 0; j < 3; ++j) {
-        edges.replace_neighbour(otherPolygonSegments[j], region, otherPolygon_index);
+        //Falla aqui en j=0
+        edges.insert(otherPolygonSegments[j], Neighbours(otherPolygon_index, originalNeighbour));
     }
 
     for(j = 3; j<otherPolygonSegments.size(); j++){
@@ -279,7 +288,7 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     pointMap = remesher.includeNewPoints(meshPoints, t);
 
     mesh.printInFile("afterAdapting.txt");
-    remesher.adaptTriangulationToMesh(t, mesh, pointMap, this->tipTriangles, newPolygons);
+    remesher.adaptTriangulationToMesh(t, mesh, pointMap, this->tipTriangles, newPolygons, ringMap);
     mesh.printInFile("afterAdapting.txt");
     mesh.getSegments().printInFile("segments.txt");
 
@@ -303,24 +312,21 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     std::vector<int> new1 = {newPolygonPoints[5], previousCrackPoints[0].second};
     std::vector<int> new2 = {previousCrackPoints[0].first, newPolygonPoints[6]};
 
-    otherPolygon = mesh.getPolygon(otherPolygon_index);
-    otherPolygon.deleteVerticesInRange(crackEntry.getFirst(), crackEntry.getSecond());
-    Pair<int> pairs = mesh.computeNewPolygons(n1, n2,otherPolygon, newPolygons, new1, new2, new1[0], new1[1], -1,new2[1], new2[0]);
-
+    Polygon& other = mesh.getPolygon(otherPolygon_index);
+    other.deleteVerticesInRange(crackEntry.getFirst(), crackEntry.getSecond());
+    Pair<int> pairs = mesh.computeNewPolygons(n1, n2,other, newPolygons, new1, new2, new1[0], new1[1], -1,new2[1], new2[0]);
 
     Polygon crackPolygon1 = mesh.getPolygon(pairs.first);
     Polygon crackPolygon2 = mesh.getPolygon(pairs.second);
 
     mesh.replacePolygon(otherPolygon_index, crackPolygon1);
-    mesh.getPolygons().push_back(crackPolygon2);
-    int crackPolygon2_index = mesh.getPolygons().size() - 1;
 
     std::vector<IndexSegment> crackPolygon1Segments, crackPolygon2Segments;
     crackPolygon1.getSegments(crackPolygon1Segments);
     crackPolygon2.getSegments(crackPolygon2Segments);
 
-    edges.insert(crackPolygon1Segments.back(),Neighbours(otherPolygon_index,-1));
-    edges.insert(crackPolygon2Segments.back(),Neighbours(otherPolygon_index,-1));
+    edges.insert(crackPolygon1Segments[0],Neighbours(otherPolygon_index,-1));
+    edges.insert(crackPolygon2Segments[0],Neighbours(otherPolygon_index,-1));
     if(previousCrackPoints.size()>1 && include){
         edges.insert(crackPolygon1Segments[0],Neighbours(otherPolygon_index,-1));
         edges.insert(crackPolygon2Segments[0],Neighbours(otherPolygon_index,-1));
@@ -331,7 +337,7 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     }
 
     for (int i = 0; i < crackPolygon2Segments.size() ; ++i) {
-        edges.replace_neighbour(crackPolygon2Segments[i], otherPolygon_index, crackPolygon2_index);
+        edges.replace_neighbour(crackPolygon2Segments[i], otherPolygon_index, pairs.second);
     }
 
     if(previousCrackPoints.size()>1 && !include){

@@ -272,9 +272,9 @@ bool Polygon::operator==(const Polygon &other) const{
 }
 
 std::string Polygon::getString() {
-    std::string base = utilities::toString<double>(this->points[0]);
+    std::string base = utilities::toString<double>(this->points.size());
 
-    for(int i=1;i<this->points.size();i++){
+    for(int i=0;i<this->points.size();i++){
         base += " " + utilities::toString<double>(this->points[i]);
     }
 
@@ -526,8 +526,9 @@ void Polygon::insertOnSegment(IndexSegment segment, std::vector<int> point) {
 
     if(i!=-1 && j!=-1 && (std::abs(i-j)==1 || std::abs(i-j)==(n-1))){
         int start = std::min(i,j);
+        int end = std::max(i,j);
 
-        if(start==0){
+        if(start==0 && end==n-1){
             this->points.insert(this->points.end(), point.begin(), point.end());
         }else{
             this->points.insert(this->points.begin()+start+1, point.begin(), point.end());

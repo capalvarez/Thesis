@@ -44,13 +44,14 @@ RemeshAdapter::adaptToMesh(Triangulation triangulation, BreakableMesh &m, std::u
     std::vector<int> t;
 
     return adaptTriangulationToMesh(triangulation, m,
-                                    pointMap, t, newPolygons);
+                                    pointMap, t, newPolygons,
+                                    std::unordered_map<int, int>());
 }
 
 void
 RemeshAdapter::adaptTriangulationToMesh(Triangulation triangulation, BreakableMesh &mesh,
-                                        std::unordered_map<int, int> pointMap,
-                                        std::vector<int> &tipTriangles, std::vector<Polygon> &newPolygons) {
+                                        std::unordered_map<int, int> pointMap, std::vector<int> &tipTriangles,
+                                        std::vector<Polygon> &newPolygons, std::unordered_map<int, int> boundary) {
     std::unordered_map<int,std::unordered_map<IndexSegment,std::vector<IndexSegment>,IndexSegmentHasher>> changesInNeighbours;
     std::unordered_map<int, std::vector<int>> trianglesToMerge;
 
@@ -89,7 +90,7 @@ RemeshAdapter::adaptTriangulationToMesh(Triangulation triangulation, BreakableMe
 
             int newPoint = pointMap[oldTrianglePoints[k]];
 
-            if(triangulationPoints[oldTrianglePoints[k]].isInBoundary()) {
+            if(boundary.find(newPoint)!=boundary.end()) {
                 toMerge++;
                 boundaryPointIndex = newPoint;
             }
