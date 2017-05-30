@@ -301,17 +301,6 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
     mesh.printInFile("afterAdapting.txt");
     mesh.getSegments().printInFile("segments.txt");
 
-    std::vector<int> crackPolygon1Points, crackPolygon2Points;
-    bool include = false;
-
-    if(previousCrackPoints.size()>1){
-        include = otherPolygon.containsPoint(meshPoints.getList(), mesh.getPoint(previousCrackPoints[1].first));
-
-        if(include){
-            crackPolygon1Points.push_back(previousCrackPoints[1].first);
-            crackPolygon2Points.push_back(previousCrackPoints[1].second);
-        }
-    }
 
     NeighbourInfo n1 = NeighbourInfo(otherPolygon_index, IndexSegment(quarterTipBorder.back(), quarterTipBorder[0]), Point(),
                                      false);
@@ -320,6 +309,17 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
 
     std::vector<int> new1 = {firstQuarterPointCrack, previousCrackPoints[0].second};
     std::vector<int> new2 = {previousCrackPoints[0].first, secondQuarterPointCrack};
+
+    bool include = false;
+
+    if(previousCrackPoints.size()>1){
+        include = otherPolygon.containsPoint(meshPoints.getList(), mesh.getPoint(previousCrackPoints[1].first));
+
+        if(include){
+            new1.insert(new1.begin()+1, previousCrackPoints[1].first);
+            new2.insert(new2.begin()+1, previousCrackPoints[1].second);
+        }
+    }
 
     Polygon& other = mesh.getPolygon(otherPolygon_index);
     other.deleteVerticesInRange(surroundingCrack.getFirst(), surroundingCrack.getSecond());
