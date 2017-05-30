@@ -36,7 +36,7 @@ TEST(FractureSimulatorTest, SimulateTest){
     std::vector<Point> squarePoints = {Point(0,0),Point(3,0),Point(3,3),Point(0,3)};
     Region square (squarePoints);
 
-    PointGenerator generator (functions::constant(), functions::constant());
+    PointGenerator generator (functions::random_double(0,3), functions::random_double(0,3));
 
     square.generateSeedPoints(generator, 8, 8);
     std::vector<Point> seeds = square.getSeedPoints();

@@ -4,7 +4,7 @@ XPolyConfig* XPolyConfig::s_instance = nullptr;
 
 XPolyConfig::XPolyConfig() {
     this->circle_discretization_grade = 12;
-    this->double_comparison_tolerance = 0.0001;
+    this->double_comparison_tolerance = 0.0000001;
     this->scale_for_clipper = 100000;
 }
 

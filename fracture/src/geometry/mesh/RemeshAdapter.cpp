@@ -185,7 +185,7 @@ RemeshAdapter::adaptTriangulationToMesh(Triangulation triangulation, BreakableMe
         int n = mesh.numberOfPolygons() - 1;
         mesh.mergePolygons(toMerge);
 
-        for(int i=0; i < toMerge.size()-1; i++){
+        for(int i=0; i < toMerge.size(); i++){
             int index = n - i;
             equivalence[index] = toMerge[i];
         }

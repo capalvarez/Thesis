@@ -175,6 +175,8 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
             int ringIndex = this->getRingPolygon(mesh, unusedPoints, oldPolygons);
             Polygon& ringRegion = mesh.getPolygon(ringIndex);
             ringRegion.fixSegment(previousCrackPoints[1], previousCrackPoints[0].first);
+
+            mesh.printInFile("afterMerging.txt");
             std::vector<IndexSegment> toErase = ringRegion.deleteVerticesInRange(previousCrackPoints[1].first, previousCrackPoints[1].second);
             SegmentMap& edges = mesh.getSegments();
 

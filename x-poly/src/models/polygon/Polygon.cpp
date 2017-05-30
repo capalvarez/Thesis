@@ -666,7 +666,13 @@ void Polygon::fixSegment(Pair<int> &segment, int reference) {
             }
         }
     }else{
-        if(!(i<k && k<j) || (j>i && (k<i || j<k))){
+        bool cond1 = (i<j && i<k && k<j);
+        bool cond2 = (j<i && (i<k || k<j));
+
+        if(cond1 || cond2){
+            return;
+        }
+        else{
             int aux = segment.second;
             segment.second = segment.first;
             segment.first = aux;
