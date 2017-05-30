@@ -21,8 +21,6 @@ TEST(CrackTipTest, PrepareTipTest){
     CrackTip tip(crack.getFirst());
     tip.assignLocation(breakableMesh.findContainerPolygon(crack.getFirst()));
     Pair<int> pair = Pair<int>(0,0);
-    tip.prepareTip(breakableMesh, 1, {pair});
-
 }
 
 TEST(CrackTipTest, AddPointToPathTest){
