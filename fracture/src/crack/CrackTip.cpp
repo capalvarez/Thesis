@@ -147,6 +147,7 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
 
     Polygon poly = mesh.getPolygon(this->container_polygon);
     double angle = PointSegment(mesh.getPoint(previousCrackPoints[0].first),this->tipPoint).cartesianAngle();
+    mesh.printInFile("before.txt");
 
     FractureConfig* config = FractureConfig::instance();
 
@@ -155,22 +156,24 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
 
         mesh.getPolygon(this->container_polygon).fixSegment(previousCrackPoints[0], -1);
 
-        IndexSegment crackEntry = mesh.getPolygon(this->container_polygon).getSurroundingVertices(previousCrackPoints[0]);
+        IndexSegment crackEntry = mesh.getPolygon(this->container_polygon).getSurroundingVertices(
+                previousCrackPoints[0], std::vector<Point>());
         remeshAndAdapt(StandardRadius, newPolygons, this->container_polygon, mesh, std::vector<int>(), angle,
-                       crackEntry, std::vector<Pair<int>>());
+                       crackEntry, {previousCrackPoints[0]});
     } else{
         double candidateRadius = poly.getDiameter()*config->getRatio();
 
         if(fitsBox(candidateRadius, poly, mesh.getPoints().getList())){
             oldPolygons.push_back(poly);
 
-            IndexSegment crackEntry = mesh.getPolygon(this->container_polygon).getSurroundingVertices(previousCrackPoints[0]);
+            IndexSegment crackEntry = mesh.getPolygon(this->container_polygon).getSurroundingVertices(previousCrackPoints[0],
+                                                                                                      mesh.getPoints().getList());
             remeshAndAdapt(candidateRadius, newPolygons, this->container_polygon, mesh, std::vector<int>(), angle,
-                           crackEntry, std::vector<Pair<int>>());
+                           crackEntry, {previousCrackPoints[0]});
         } else{
             std::vector<int> unusedPoints;
             int ringIndex = this->getRingPolygon(mesh, unusedPoints, oldPolygons);
-            Polygon ringRegion = mesh.getPolygon(ringIndex);
+            Polygon& ringRegion = mesh.getPolygon(ringIndex);
             ringRegion.fixSegment(previousCrackPoints[1], previousCrackPoints[0].first);
             std::vector<IndexSegment> toErase = ringRegion.deleteVerticesInRange(previousCrackPoints[1].first, previousCrackPoints[1].second);
             SegmentMap& edges = mesh.getSegments();
@@ -179,7 +182,7 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
                 edges.delete_element(s);
             }
 
-            IndexSegment crackEntry = ringRegion.getSurroundingVertices(previousCrackPoints[1]);
+            IndexSegment crackEntry = ringRegion.getSurroundingVertices(previousCrackPoints[1], mesh.getPoints().getList());
             
             Point last = getPoint();
             BoundingBox box(Point(last.getX()-candidateRadius, last.getY()-candidateRadius),
@@ -187,7 +190,7 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
 
             if (box.fitsInsidePolygon(ringRegion, mesh.getPoints().getList())) {
                 remeshAndAdapt(candidateRadius, newPolygons, ringIndex, mesh, unusedPoints, angle, crackEntry,
-                               std::vector<Pair<int>>());
+                               {previousCrackPoints[1], previousCrackPoints[0]});
             } else {
                 double radius = candidateRadius;
                 while(!box.fitsInsidePolygon(ringRegion, mesh.getPoints().getList())) {
@@ -196,9 +199,8 @@ PolygonChangeData CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadiu
                                       Point(last.getX()+radius, last.getY()+radius));
                 }
 
-                ringRegion.fixSegment(previousCrackPoints[1], previousCrackPoints[0].first);
                 remeshAndAdapt(radius, newPolygons, ringIndex, mesh, unusedPoints, angle, crackEntry,
-                               std::vector<Pair<int>>());
+                               {previousCrackPoints[1], previousCrackPoints[0]});
             }
         }
     }
@@ -245,10 +247,14 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
         quarterTipBorder.push_back(pointMap[i]);
     }
 
+    std::vector<int> newPolygonPoints = ring.getVerticesInRange(crackEntry.getFirst(), crackEntry.getSecond());
+    std::vector<int> closingPoints = {quarterTipBorder.back(), pointMap[2], meshPoints.size()-1, quarterTipBorder[0]};
+    newPolygonPoints.insert(newPolygonPoints.end(), closingPoints.begin(), closingPoints.end());
+    int firstQuarterPointCrack = pointMap[2], secondQuarterPointCrack = meshPoints.size() -1;
+    IndexSegment surroundingCrack = ring.getSurroundingVertices(previousCrackPoints[0]);
+
     ring.replaceSegment(crackEntry, quarterTipBorder);
-    std::vector<int> newPolygonPoints = {crackEntry.getFirst(), previousCrackPoints[0].first,
-                                         previousCrackPoints[0].second, crackEntry.getSecond(), quarterTipBorder.back(),
-                                         pointMap[2], meshPoints.size()-1, quarterTipBorder[0]};
+
     Polygon otherPolygon = Polygon(newPolygonPoints, meshPoints.getList());
     mesh.getPolygons().push_back(otherPolygon);
     int otherPolygon_index = mesh.getPolygons().size() - 1;
@@ -307,14 +313,14 @@ void CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, 
 
     NeighbourInfo n1 = NeighbourInfo(otherPolygon_index, IndexSegment(quarterTipBorder.back(), quarterTipBorder[0]), Point(),
                                      false);
-    NeighbourInfo n2 = NeighbourInfo(-1, crackEntry, Point(),
+    NeighbourInfo n2 = NeighbourInfo(-1, surroundingCrack, Point(),
                                      false);
 
-    std::vector<int> new1 = {newPolygonPoints[5], previousCrackPoints[0].second};
-    std::vector<int> new2 = {previousCrackPoints[0].first, newPolygonPoints[6]};
+    std::vector<int> new1 = {firstQuarterPointCrack, previousCrackPoints[0].second};
+    std::vector<int> new2 = {previousCrackPoints[0].first, secondQuarterPointCrack};
 
     Polygon& other = mesh.getPolygon(otherPolygon_index);
-    other.deleteVerticesInRange(crackEntry.getFirst(), crackEntry.getSecond());
+    other.deleteVerticesInRange(surroundingCrack.getFirst(), surroundingCrack.getSecond());
     Pair<int> pairs = mesh.computeNewPolygons(n1, n2,other, newPolygons, new1, new2, new1[0], new1[1], -1,new2[1], new2[0]);
 
     Polygon crackPolygon1 = mesh.getPolygon(pairs.first);

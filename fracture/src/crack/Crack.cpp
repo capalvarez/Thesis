@@ -187,8 +187,8 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                 oldP.push_back(m.getPolygon(initPoly_index));
                 oldP.push_back(m.getPolygon(endPoly_index));
 
-                initCrackEntry = m.getPolygon(initPoly_index).getSurroundingVertices(crackPath.first());
-                endCrackEntry = m.getPolygon(endPoly_index).getSurroundingVertices(crackPath.last());
+                initCrackEntry = m.getPolygon(initPoly_index).getSurroundingVertices(crackPath.first(), points.getList());
+                endCrackEntry = m.getPolygon(endPoly_index).getSurroundingVertices(crackPath.last(), points.getList());
 
                 initCrackPoints = {crackPath.first()};
                 endCrackPoints = {crackPath.last()};
@@ -202,8 +202,8 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                     oldP.push_back(m.getPolygon(initPoly_index));
                     oldP.push_back(m.getPolygon(endPoly_index));
 
-                    initCrackEntry = m.getPolygon(initPoly_index).getSurroundingVertices(crackPath.first());
-                    endCrackEntry = m.getPolygon(endPoly_index).getSurroundingVertices(crackPath.last());
+                    initCrackEntry = m.getPolygon(initPoly_index).getSurroundingVertices(crackPath.first(),points.getList());
+                    endCrackEntry = m.getPolygon(endPoly_index).getSurroundingVertices(crackPath.last(),points.getList());
 
                     initCrackPoints = {crackPath.first()};
                     endCrackPoints = {crackPath.last()};
@@ -249,8 +249,8 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
 
                     radius = adjustBoxes(initRing, endRing, m.getPoints().getList());
 
-                    initCrackEntry = initRing.getSurroundingVertices(crackPath.second());
-                    endCrackEntry = endRing.getSurroundingVertices(crackPath.secondToLast());
+                    initCrackEntry = initRing.getSurroundingVertices(crackPath.second(), points.getList());
+                    endCrackEntry = endRing.getSurroundingVertices(crackPath.secondToLast(), points.getList());
 
                     initCrackEntry.orderCCW(m.getPoints().getList(), initRing.getCentroid());
                     endCrackEntry.orderCCW(m.getPoints().getList(), endRing.getCentroid());

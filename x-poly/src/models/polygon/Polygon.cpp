@@ -567,6 +567,24 @@ int Polygon::getVertex(int p1, int p2) {
     return isVertex(p1)? p1 : p2;
 }
 
+IndexSegment Polygon::getSurroundingVertices(Pair<int> vertices, std::vector<Point> points) {
+    int n = this->numberOfSides();
+
+    int i = utilities::indexOf(this->points, vertices.first);
+    int j = utilities::indexOf(this->points, vertices.second);
+
+    int first = this->points[(i+1)%n]==vertices.second? (i-1+n)%n : (i+1)%n;
+    int second = this->points[(j+1)%n]==vertices.first? (j-1+n)%n : (j+1)%n;
+
+
+    //TODO: THIS GOES SOMEWHERE ELSE, PLS MOVE
+    if(!geometry_functions::collinear(points[i], points[j], points[vertices.first])){
+        return IndexSegment(this->points[first-1], this->points[second+1]);
+    }
+
+    return IndexSegment(this->points[first], this->points[second]);
+}
+
 IndexSegment Polygon::getSurroundingVertices(Pair<int> vertices) {
     int n = this->numberOfSides();
 
@@ -577,6 +595,20 @@ IndexSegment Polygon::getSurroundingVertices(Pair<int> vertices) {
     int second = this->points[(j+1)%n]==vertices.first? (j-1+n)%n : (j+1)%n;
 
     return IndexSegment(this->points[first], this->points[second]);
+}
+
+std::vector<int> Polygon::getVerticesInRange(int i1, int i2) {
+    std::vector<int> vertices;
+    int n = this->numberOfSides(), i = utilities::indexOf(this->points, i1), j= utilities::indexOf(this->points, i2);
+
+    while(i!=j) {
+        vertices.push_back(this->points[i]);
+        i = (i+1)%n;
+    }
+
+    vertices.push_back(this->points[i]);
+
+    return vertices;
 }
 
 std::vector<IndexSegment> Polygon::deleteVerticesInRange(int i1, int i2) {
