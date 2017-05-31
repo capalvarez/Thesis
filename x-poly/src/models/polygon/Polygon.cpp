@@ -576,9 +576,8 @@ IndexSegment Polygon::getSurroundingVertices(Pair<int> vertices, std::vector<Poi
     int first = this->points[(i+1)%n]==vertices.second? (i-1+n)%n : (i+1)%n;
     int second = this->points[(j+1)%n]==vertices.first? (j-1+n)%n : (j+1)%n;
 
-
     //TODO: THIS GOES SOMEWHERE ELSE, PLS MOVE
-    if(!geometry_functions::collinear(points[i], points[j], points[vertices.first])){
+    if(!geometry_functions::collinear(points[this->points[first]], points[this->points[second]], points[vertices.first])){
         return IndexSegment(this->points[first-1], this->points[second+1]);
     }
 

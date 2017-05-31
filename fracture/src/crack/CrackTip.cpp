@@ -98,10 +98,10 @@ double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
 
     double factor = (m.E()*std::sqrt(M_PI/(2*this->usedRadius))/((1 + m.v())*(1 + m.k())));
 
-    Pair<double> dPB = changeCoordinateSystem(u[dofD.first], u[dofD.second]);
-    Pair<double> dPC = changeCoordinateSystem(u[dofE.first], u[dofE.second]);
-    Pair<double> dPD = changeCoordinateSystem(u[dofB.first], u[dofB.second]);
-    Pair<double> dPE = changeCoordinateSystem(u[dofC.first], u[dofC.second]);
+    Pair<double> dPB = changeCoordinateSystem(u[dofB.first], u[dofB.second]);
+    Pair<double> dPC = changeCoordinateSystem(u[dofC.first], u[dofC.second]);
+    Pair<double> dPD = changeCoordinateSystem(u[dofD.first], u[dofD.second]);
+    Pair<double> dPE = changeCoordinateSystem(u[dofE.first], u[dofE.second]);
 
     double kI = factor * (4*(dPB.second - dPD.second) - (dPC.second - dPE.second));
     double kII = factor * (4*(dPB.first - dPD.first) - (dPC.first - dPE.first));
@@ -109,8 +109,8 @@ double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
     if(kII!=0){
         double r = kI/kII;
         double theta = 2*atan((r - utilities::sign(kII)*std::sqrt((std::pow(r,2) + 8)))/4);
-
-        double t = utilities::degrees(theta);
+        //double theta =  -utilities::sign(kII)*acos((3*std::pow(kII,2) + std::sqrt(std::pow(kI,4) + 8*std::pow(kI,2)*std::pow(kII,2))) /
+                                     //(std::pow(kI,2) + 9*std::pow(kII,2)));
 
         return this->crackAngle + utilities::degrees(theta);
     }else{
@@ -294,7 +294,11 @@ Pair<int> CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolyg
     remesher.adaptPolygonsToMesh(generator.getElements(), mesh, pointMap, newPolygons);
     firstAndLast.push_back(mesh.getPolygons().size()-1);
 
-    this->points = CrackTipPoints(pointMap[0], meshPoints.size()-2, meshPoints.size()-1, pointMap[1], pointMap[2]);
+    if(crackAngle<90 || crackAngle>270){
+        this->points = CrackTipPoints(pointMap[0], meshPoints.size()-2, meshPoints.size()-1, pointMap[1], pointMap[2]);
+    }else{
+        this->points = CrackTipPoints(pointMap[0],  pointMap[1], pointMap[2], meshPoints.size()-2, meshPoints.size()-1);
+    }
 
     mesh.printInFile("beforeAdapting.txt");
     mesh.getSegments().printInFile("segments.txt");
