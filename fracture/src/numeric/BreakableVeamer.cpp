@@ -71,8 +71,6 @@ void BreakableVeamer::replaceElements(std::vector<Polygon> old, std::vector<Poly
         polygon_to_element.erase(this->elements[l].getAssociatedPolygon());
         polygon_to_element.insert(std::make_pair(this->elements[l].getAssociatedPolygon(), l));
     }
-
-    printInFile("afterChanging.txt");
 }
 
 void BreakableVeamer::printInFile(std::string fileName) {

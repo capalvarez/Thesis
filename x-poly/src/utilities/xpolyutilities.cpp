@@ -16,8 +16,12 @@ namespace xpoly_utilities {
         return a.getX()*b.getY() - a.getY()*b.getX();
     }
 
+    double squareNorm(Point p){
+        return pow(p.getX(),2) + pow(p.getY(),2);
+    }
+
     double norm(Point p){
-        return sqrt(pow(p.getX(),2) + pow(p.getY(),2));
+        return sqrt(squareNorm(p));
     }
 
     double orientation(Point p, Point q, Point r){

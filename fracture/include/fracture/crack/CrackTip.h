@@ -35,6 +35,7 @@ private:
     int getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints, std::vector<Polygon> &oldPolygons);
     int getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints, UniqueList<int> neighbours);
     Point generateNextPoint(Polygon poly, Point intersection, double angle, std::vector<Point> points, bool border);
+    Pair<double> changeCoordinateSystem(double dX, double dY);
 public:
     CrackTip();
     CrackTip(Point crack);

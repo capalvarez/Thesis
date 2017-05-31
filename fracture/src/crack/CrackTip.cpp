@@ -96,27 +96,36 @@ double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
     Pair<int> dofD = problem.veamer->pointToDOFS(this->points.d);
     Pair<int> dofE = problem.veamer->pointToDOFS(this->points.e);
 
-    double factor = (m.E()*std::sqrt(2*M_PI/this->usedRadius)) / (3*(1 + m.v())*(1 + m.k()));
+    double factor = (m.E()*std::sqrt(M_PI/(2*this->usedRadius))/((1 + m.v())*(1 + m.k())));
 
-    double kI = factor * (4*(u[dofB.second] - u[dofD.second]) - (u[dofC.second] - u[dofE.second])/2)*std::cos(utilities::radian(this->crackAngle));
-    double kII = factor * (4*(u[dofB.first] - u[dofD.first]) - (u[dofC.first] - u[dofE.first])/2)*std::cos(utilities::radian(this->crackAngle));
+    Pair<double> dPB = changeCoordinateSystem(u[dofD.first], u[dofD.second]);
+    Pair<double> dPC = changeCoordinateSystem(u[dofE.first], u[dofE.second]);
+    Pair<double> dPD = changeCoordinateSystem(u[dofB.first], u[dofB.second]);
+    Pair<double> dPE = changeCoordinateSystem(u[dofC.first], u[dofC.second]);
+
+    double kI = factor * (4*(dPB.second - dPD.second) - (dPC.second - dPE.second));
+    double kII = factor * (4*(dPB.first - dPD.first) - (dPC.first - dPE.first));
 
     if(kII!=0){
         double r = kI/kII;
-        double theta1 = 2*atan((r + std::sqrt((std::pow(r,2) + 8)))/4);
-        double theta2 = 2*atan((r - std::sqrt((std::pow(r,2) + 8)))/4);
+        double theta = 2*atan((r - utilities::sign(kII)*std::sqrt((std::pow(r,2) + 8)))/4);
 
-        double t1 = utilities::degrees(theta1);
-        double t2 = utilities::degrees(theta2);
+        double t = utilities::degrees(theta);
 
-        if(theta1*kII<0){
-            return utilities::degrees(theta1) + this->crackAngle;
-        }else{
-            return utilities::degrees(theta2) + this->crackAngle;
-        }
+        return this->crackAngle + utilities::degrees(theta);
     }else{
         return this->crackAngle + 90;
     }
+}
+
+Pair<double> CrackTip::changeCoordinateSystem(double dX, double dY) {
+    double crackRadian = utilities::radian(crackAngle);
+
+    double magnitude = xpoly_utilities::norm(Point(dX, dY));
+    double alpha = atan2(dY, dX);
+    double diff = std::abs(crackRadian - alpha);
+
+    return Pair<double>(magnitude*std::cos(diff), magnitude*std::sin(diff));
 }
 
 PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem, UniqueList<Pair<int>> &newPoints) {
