@@ -19,6 +19,10 @@ Element::Element(ProblemConditions &conditions, Polygon &p, UniqueList<Point> &p
     this->p = p;
 }
 
+Polygon Element::getAssociatedPolygon() {
+    return this->p;
+}
+
 void Element::computeK(DOFS d, UniqueList<Point> points, ProblemConditions &conditions) {
     std::vector<int> polygonPoints = p.getPoints();
     int n = (int) polygonPoints.size();

@@ -293,6 +293,14 @@ Pair<int> CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolyg
     remesher = RemeshAdapter(mesh.getPolygon(region), region);
     this->ring = remesher.getRegion();
 
+    j = oldPoints.size()-1;
+    while(j>=0){
+        if(this->ring.containsPoint(meshPoints.getList(), mesh.getPoint(oldPoints[j]))){
+            oldPoints.erase(oldPoints.begin()+j);
+        }
+        j--;
+    }
+
     Triangulation t = remesher.triangulate(toTriangulate, meshPoints.getList());
     pointMap = remesher.includeNewPoints(meshPoints, t);
 
@@ -300,7 +308,6 @@ Pair<int> CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolyg
     remesher.adaptTriangulationToMesh(t, mesh, pointMap, this->tipTriangles, newPolygons, ringMap);
     mesh.printInFile("afterAdapting.txt");
     mesh.getSegments().printInFile("segments.txt");
-
 
     NeighbourInfo n1 = NeighbourInfo(otherPolygon_index, IndexSegment(quarterTipBorder.back(), quarterTipBorder[0]), Point(),
                                      false);
@@ -327,6 +334,24 @@ Pair<int> CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolyg
 
     Polygon crackPolygon1 = mesh.getPolygon(pairs.first);
     Polygon crackPolygon2 = mesh.getPolygon(pairs.second);
+
+    j = oldPoints.size()-1;
+    while (j>=0){
+        if(crackPolygon1.containsPoint(meshPoints.getList(), mesh.getPoint(oldPoints[j]))){
+            new1.insert(new1.begin()+1, oldPoints[j]);
+
+        } else{
+            if(crackPolygon2.containsPoint(meshPoints.getList(), mesh.getPoint(oldPoints[j]))){
+
+            }
+        }
+
+        j--;
+
+    }
+
+
+
 
     mesh.replacePolygon(otherPolygon_index, crackPolygon1);
 

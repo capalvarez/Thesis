@@ -46,14 +46,45 @@ void BreakableVeamer::replaceElements(std::vector<Polygon> old, std::vector<Poly
         toRemoveIndexes.push_back(to_remove);
     }
 
-    std::sort(toRemoveIndexes.begin(), toRemoveIndexes.end(), greater());
-    for (int r: toRemoveIndexes) {
+    std::sort(toRemoveIndexes.begin(), toRemoveIndexes.end());
+    int i = 0, j = 0, k;
+    for (;j<toRemoveIndexes.size();j++) {
+        int r = toRemoveIndexes[j];
+        if(i>=newPolygons.size()){
+            break;
+        }
+
         this->elements.erase(this->elements.begin()+ r);
+        createAndInsertElement(newPolygons[i], r);
+        i++;
     }
 
-    createAndInsertElement(newPolygons[0], toRemoveIndexes.back());
-
-    for (int i = 1; i < newPolygons.size(); ++i) {
+    for (;i < newPolygons.size(); ++i) {
         createElement(newPolygons[i]);
     }
+
+    for(k = toRemoveIndexes.size()-1;k>j;k--){
+        this->elements.erase(this->elements.begin() + toRemoveIndexes[k]);
+    }
+
+    for (int l = k+1; l < this->elements.size(); ++l) {
+        polygon_to_element.erase(this->elements[l].getAssociatedPolygon());
+        polygon_to_element.insert(std::make_pair(this->elements[l].getAssociatedPolygon(), l));
+    }
+
+    printInFile("afterChanging.txt");
+}
+
+void BreakableVeamer::printInFile(std::string fileName) {
+    std::string path = utilities::getPath();
+    path +=  fileName;
+
+    std::ofstream file;
+    file.open(path, std::ios::out);
+
+    for (int i = 0; i < this->elements.size(); ++i) {
+        file << utilities::toString<int>(i) << "    " << utilities::toString(polygon_to_element[this->elements[i].getAssociatedPolygon()]) << std::endl;
+    }
+
+    file.close();
 }

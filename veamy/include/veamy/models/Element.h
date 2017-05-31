@@ -23,6 +23,7 @@ public:
     void assemble(DOFS out, Eigen::MatrixXd& Kglobal,  Eigen::VectorXd& Fglobal);
     void computeK(DOFS d, UniqueList<Point> points, ProblemConditions &conditions);
     void computeF(DOFS d, UniqueList<Point> points, ProblemConditions &conditions);
+    Polygon getAssociatedPolygon();
 };
 
 

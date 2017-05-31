@@ -14,6 +14,7 @@ public:
     void createAndInsertElement(Polygon p, int index);
     void replaceElement(Polygon old, std::vector<Polygon> newPolygons);
     void replaceElements(std::vector<Polygon> old, std::vector<Polygon> newPolygons, UniqueList<Point> points);
+    void printInFile(std::string fileName);
 };
 
 #endif
