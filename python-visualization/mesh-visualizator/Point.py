@@ -6,4 +6,5 @@ class Point:
 
     def draw(self, canvas, limits, color):
         y = float(canvas['height'])
+        #if self.index==258 or self.index==254:
         canvas.create_text(self.x, y-self.y,text=self.index, fill=color)

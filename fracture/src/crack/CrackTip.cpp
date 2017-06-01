@@ -128,7 +128,10 @@ Pair<double> CrackTip::changeCoordinateSystem(double dX, double dY) {
     return Pair<double>(magnitude*std::cos(diff), magnitude*std::sin(diff));
 }
 
-PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem, UniqueList<Pair<int>> &newPoints) {
+PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem, UniqueList<Pair<int>> &newPoints, PointSegment previousCrackSegment) {
+    std::vector<Polygon> newPolygons;
+    std::vector<Polygon> oldPolygons;
+
     double angle = calculateAngle(problem, u);
     Point lastPoint = problem.mesh->getPoint(points.center);
 
@@ -138,8 +141,39 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem, UniqueList<
     PointSegment direction(lastPoint, this->getPoint());
 
     problem.mesh->printInFile("changed.txt");
-    std::vector<int> previous;
+    UniqueList<Point>& meshPoints = problem.mesh->getPoints();
     int startTriangleIndex = problem.mesh->getNeighbourFromCommonVertexSet(direction, this->tipTriangles);
+    IndexSegment containerSegment = problem.mesh->getPolygon(startTriangleIndex).containerEdge(meshPoints.getList(), lastPoint);
+    NeighbourInfo n1 = NeighbourInfo(startTriangleIndex, containerSegment, lastPoint, false);
+    n1.isVertex = true;
+
+    NeighbourInfo n2 = problem.mesh->getNeighbour(startTriangleIndex, direction);
+    int p1 = meshPoints.push_back(n2.intersection);
+    int p2 = meshPoints.force_push_back(n2.intersection);
+
+    std::vector<int> new1 = {points.center, p1};
+    std::vector<int> new2 = {p2, points.center};
+
+    bool include = false;
+
+    Polygon& other = problem.mesh->getPolygon(startTriangleIndex);
+    Pair<int> pairs = problem.mesh->computeNewPolygons(n1, n2, other, newPolygons, new1, new2, new1[0], new1[1], -1, new2[1], new2[0]);
+
+
+
+    int duplicatedCenter = meshPoints.force_push_back(lastPoint);
+
+    for (int t: this->tipTriangles) {
+        Polygon& polygon = problem.mesh->getPolygon(t);
+
+        if(fracture_utilities::orientation(previousCrackSegment, polygon.getCentroid())<0 &&
+           fracture_utilities::orientation(direction, polygon.getCentroid())<0){
+                polygon.replaceVertex(points.center, duplicatedCenter);
+        }
+    }
+
+    std::vector<int> previous;
+
 
     PolygonChangeData changeData = problem.mesh->breakMesh(startTriangleIndex, direction, true, newPoints, previous);
     newPoints.pop_front();
@@ -271,19 +305,19 @@ Pair<int> CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolyg
     int otherPolygon_index = mesh.getPolygons().size() - 1;
 
     SegmentMap& edges = mesh.getSegments();
-    Neighbours crackEntryNeighbours = edges.get(crackEntry);
-    int originalNeighbour = crackEntryNeighbours.getFirst()==region? crackEntryNeighbours.getSecond() : crackEntryNeighbours.getFirst();
-    edges.delete_element(crackEntry);
+    Neighbours crackEntryNeighbours1 = edges.get(IndexSegment(surroundingCrack.getFirst(), previousCrackPoints[0].first));
+    Neighbours crackEntryNeighbours2 = edges.get(IndexSegment(surroundingCrack.getSecond(), previousCrackPoints[0].second));
+    int originalNeighbour1 = crackEntryNeighbours1.getFirst()==region? crackEntryNeighbours1.getSecond() : crackEntryNeighbours1.getFirst();
+    int originalNeighbour2 = crackEntryNeighbours2.getFirst()==region? crackEntryNeighbours2.getSecond() : crackEntryNeighbours2.getFirst();
 
     std::vector<IndexSegment> otherPolygonSegments;
     otherPolygon.getSegments(otherPolygonSegments);
 
-    int j;
-    for (j = 0; j < 3; ++j) {
-        //Falla aqui en j=0
-        edges.insert(otherPolygonSegments[j], Neighbours(otherPolygon_index, originalNeighbour));
-    }
+    edges.insert(otherPolygonSegments[0], Neighbours(otherPolygon_index, originalNeighbour1));
+    edges.insert(otherPolygonSegments[1], Neighbours(otherPolygon_index, -1));
+    edges.insert(otherPolygonSegments[2], Neighbours(otherPolygon_index, originalNeighbour2));
 
+    int j;
     for(j = 3; j<otherPolygonSegments.size(); j++){
         edges.insert(otherPolygonSegments[j], Neighbours(otherPolygon_index, region));
     }
@@ -291,7 +325,7 @@ Pair<int> CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolyg
     mesh.replacePolygon(region, ring);
 
     std::vector<int> firstAndLast = {(int)mesh.getPolygons().size()};
-    remesher.adaptPolygonsToMesh(generator.getElements(), mesh, pointMap, newPolygons);
+    remesher.adaptPolygonsToMesh(generator.getElements(), mesh, pointMap, newPolygons, this->tipTriangles);
     firstAndLast.push_back(mesh.getPolygons().size()-1);
 
     if(crackAngle<90 || crackAngle>270){
@@ -318,7 +352,7 @@ Pair<int> CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolyg
     pointMap = remesher.includeNewPoints(meshPoints, t);
 
     mesh.printInFile("afterAdapting.txt");
-    remesher.adaptTriangulationToMesh(t, mesh, pointMap, this->tipTriangles, newPolygons, ringMap);
+    remesher.adaptTriangulationToMesh(t, mesh, pointMap, newPolygons, ringMap);
     mesh.printInFile("afterAdapting.txt");
     mesh.getSegments().printInFile("segments.txt");
 

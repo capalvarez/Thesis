@@ -24,4 +24,8 @@ namespace fracture_utilities{
 
         } while (std::prev_permutation(bitmask.begin(), bitmask.end()));
     }
+
+    double orientation(PointSegment segment, Point p){
+        return xpoly_utilities::orientation(segment.getFirst(), segment.getSecond(), p);
+    }
 }

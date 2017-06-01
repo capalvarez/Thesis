@@ -7,6 +7,7 @@
 
 namespace fracture_utilities{
     extern void allPairs(std::vector<Pair<int>>& pairs, std::vector<int> numbers);
+    extern double orientation(PointSegment segment, Point p);
 }
 
 #endif 

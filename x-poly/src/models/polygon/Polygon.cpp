@@ -701,3 +701,12 @@ void Polygon::insertVertex(int vertex, std::vector<Point> points) {
     IndexSegment container = this->containerEdge(points, points[vertex]);
     insertOnSegment(container, vertex);
 }
+
+void Polygon::replaceVertex(int oldVertex, int newVertex) {
+    int i = utilities::indexOf(this->points, oldVertex);
+
+    if(i>=0){
+        this->points[i] = newVertex;
+    }
+
+}

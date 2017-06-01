@@ -145,8 +145,12 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
             polygon1.insertOnSegment(commonSegment,{crackPoint1, crackPoint2});
             polygon2.insertOnSegment(commonSegment,{crackPoint2, crackPoint1});
 
+            commonSegment.orderCCW(m.getPoints().getList(), polygon1.getCentroid());
+
             SegmentMap& segmentMap = m.getSegments();
+            segmentMap.insert(IndexSegment(commonSegment.getFirst(), crackPoint1), Neighbours(poly1, poly2));
             segmentMap.insert(IndexSegment(crackPoint1, crackPoint2), Neighbours(poly1, poly2));
+            segmentMap.insert(IndexSegment(commonSegment.getSecond(), crackPoint2), Neighbours(poly1, poly2));
 
             std::vector<int> toPoly1;
             std::vector<int> toPoly2;
@@ -162,7 +166,6 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
             double angleInit = PointSegment(this->end.tipPoint, this->init.tipPoint).cartesianAngle();
             double angleEnd = PointSegment(this->init.tipPoint, this->end.tipPoint).cartesianAngle();
 
-            commonSegment.orderCCW(m.getPoints().getList(), polygon1.getCentroid());
             this->init.remeshAndAdapt(radius, newP, poly1, m, toPoly1, angleInit, commonSegment, {Pair<int>(crackPoint2, crackPoint1)});
 
             commonSegment.orderCCW(m.getPoints().getList(), m.getPolygon(poly2).getCentroid());
@@ -333,7 +336,7 @@ PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
 void Crack::grow(CrackTip &tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, Problem problem, Eigen::VectorXd u,
                  UniqueList<Pair<int>> &crackPoints) {
     if(!tip.isFinished()){
-        PolygonChangeData data = tip.grow(u, problem, crackPoints);
+        PolygonChangeData data = tip.grow(u, problem, crackPoints, PointSegment());
 
         oldP.insert(oldP.end(), data.oldPolygons.begin(), data.oldPolygons.end());
         newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());

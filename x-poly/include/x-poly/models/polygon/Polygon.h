@@ -81,6 +81,7 @@ public:
     void fixSegment(Pair<int> &segment, int reference);
     void replaceSegment(IndexSegment segment, std::vector<int> points);
     void insertVertex(int vertex, std::vector<Point> points);
+    void replaceVertex(int oldVertex, int newVertex);
 };
 
 #endif

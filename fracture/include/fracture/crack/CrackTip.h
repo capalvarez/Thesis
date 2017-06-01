@@ -44,7 +44,8 @@ public:
     void addPointToPath(double angle, BreakableMesh mesh);
     double calculateAngle(Problem problem, Eigen::VectorXd u);
 
-    PolygonChangeData grow(Eigen::VectorXd u, Problem problem, UniqueList<Pair<int>> &newPoints);
+    PolygonChangeData
+    grow(Eigen::VectorXd u, Problem problem, UniqueList<Pair<int>> &newPoints, PointSegment previousCrackSegment);
     Pair<int> prepareTip(BreakableMesh &mesh, double StandardRadius, std::vector<Pair<int>> previousCrackPoints,
                          std::vector<Polygon> &oldPolygons, std::vector<Polygon> &newPolygons);
     bool isFinished();
