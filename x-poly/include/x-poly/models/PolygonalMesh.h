@@ -42,12 +42,13 @@ public:
     int findContainerPolygon(Point p);
     int findContainerPolygon(Point p, int& last);
     int findContainerPolygon(Point p, int init_polygon, int &last);
+    int findContainerPolygonLinear(Point p);
 
     NeighbourInfo getNeighbour(int poly_index, PointSegment direction);
     NeighbourInfo getNeighbour(int poly_index, PointSegment direction, std::vector<int> &previous);
     int getNeighbourFromCommonVertexSet(PointSegment direction, std::vector<int> vertexSet, int vertexIndex,
                                         std::vector<int> &previousPolygons, Point reference);
-    int getNeighbourFromCommonVertexSet(PointSegment direction, std::vector<int> vertexSet);
+    int getNeighbourFromCommonVertexSet(PointSegment direction, std::vector<int> vertexSet, NeighbourInfo& n);
 
     Region getRegion() const;
     bool isInDomain(Point p);

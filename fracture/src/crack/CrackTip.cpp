@@ -36,35 +36,26 @@ void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
 
     Neighbours possibleNeighbours = mesh.getNeighbours(intersected);
     std::vector<Polygon> polygons;
-    int index = -1, otherIndex = -1;
+    int otherIndex = -1;
     bool border = false;
 
     if(possibleNeighbours.isNeighbour(-1)){
         int notNull = possibleNeighbours.getFirst()==-1? possibleNeighbours.getSecond() : possibleNeighbours.getFirst();
         polygons = {mesh.getPolygon(notNull)};
         otherIndex = 0;
-        index = 0;
         border = true;
     }else{
         polygons = {mesh.getPolygon(possibleNeighbours.getFirst()), mesh.getPolygon(possibleNeighbours.getSecond())};
 
-        if (ring.containsPoint(mesh.getPoints().getList(), polygons[1].getCentroid())) {
+        if (std::abs(polygons[1].getCentroid().distance(last)) < std::abs(polygons[0].getCentroid().distance(last))) {
             otherIndex = 0;
-            index = 1;
         } else {
-            if (ring.containsPoint(mesh.getPoints().getList(), polygons[0].getCentroid())) {
-                otherIndex = 1;
-                index = 0;
-            }
+            otherIndex = 1;
         }
     }
 
-    if(polygons[index].containsPoint(mesh.getPoints().getList(), standardPoint)) {
-        useSecondChoice = true;
-    }
-
     if(!useSecondChoice){
-       this->tipPoint = standardPoint;
+        this->tipPoint = standardPoint;
     }else{
         this->tipPoint = this->generateNextPoint(polygons[otherIndex], exitRing, angle, mesh.getPoints().getList(), border);
     }
@@ -132,51 +123,83 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem, UniqueList<
     std::vector<Polygon> newPolygons;
     std::vector<Polygon> oldPolygons;
 
+    problem.mesh->getSegments().printInFile("segmentsBeforeReassign.txt");
     double angle = calculateAngle(problem, u);
     Point lastPoint = problem.mesh->getPoint(points.center);
 
     addPointToPath(angle, *problem.mesh);
 
     reassignContainer(*problem.mesh);
+
+    problem.mesh->getSegments().printInFile("segmentsAfterReassign.txt");
     PointSegment direction(lastPoint, this->getPoint());
 
     problem.mesh->printInFile("changed.txt");
     UniqueList<Point>& meshPoints = problem.mesh->getPoints();
-    int startTriangleIndex = problem.mesh->getNeighbourFromCommonVertexSet(direction, this->tipTriangles);
+    SegmentMap& edges = problem.mesh->getSegments();
+    NeighbourInfo n2;
+
+    int startTriangleIndex = problem.mesh->getNeighbourFromCommonVertexSet(direction, this->tipTriangles, n2);
     IndexSegment containerSegment = problem.mesh->getPolygon(startTriangleIndex).containerEdge(meshPoints.getList(), lastPoint);
     NeighbourInfo n1 = NeighbourInfo(startTriangleIndex, containerSegment, lastPoint, false);
     n1.isVertex = true;
 
-    NeighbourInfo n2 = problem.mesh->getNeighbour(startTriangleIndex, direction);
+    int duplicatedCenter = meshPoints.force_push_back(lastPoint);
+
     int p1 = meshPoints.push_back(n2.intersection);
     int p2 = meshPoints.force_push_back(n2.intersection);
+
+    Pair<int> newCrackPoints1(this->points.center,duplicatedCenter);
+    Pair<int> newCrackPoints2(p1,p2);
+
+    newPoints.push_back(newCrackPoints1);
+    newPoints.push_back(newCrackPoints2);
 
     std::vector<int> new1 = {points.center, p1};
     std::vector<int> new2 = {p2, points.center};
 
-    bool include = false;
-
     Polygon& other = problem.mesh->getPolygon(startTriangleIndex);
-    Pair<int> pairs = problem.mesh->computeNewPolygons(n1, n2, other, newPolygons, new1, new2, new1[0], new1[1], -1, new2[1], new2[0]);
+    Pair<int> pairs = problem.mesh->computeNewPolygons(n1, n2, other, newPolygons, new1, new2, new1[0], new1[1], -1, p1, p2);
+    tipTriangles.push_back(pairs.second);
+    Polygon polygon1 = problem.mesh->getPolygon(pairs.first);
+    Polygon polygon2 = problem.mesh->getPolygon(pairs.second);
 
+    std::vector<IndexSegment> polygon1Segments, polygon2Segments;
+    polygon1.getSegments(polygon1Segments);
+    polygon2.getSegments(polygon2Segments);
 
+    for (int i = 0; i < polygon1Segments.size() ; ++i) {
+        edges.replace_neighbour(polygon1Segments[i], n1.neighbour, pairs.first);
+    }
 
-    int duplicatedCenter = meshPoints.force_push_back(lastPoint);
+    for (int i = 0; i < polygon2Segments.size() ; ++i) {
+        edges.replace_neighbour(polygon2Segments[i], n1.neighbour, pairs.second);
+    }
+
+    Polygon& nextNeighbour = problem.mesh->getPolygon(n2.neighbour);
+    nextNeighbour.insertOnSegment(n2.edge, {p1,p2});
+
+    edges.insert(IndexSegment(p1,p2), Neighbours(n2.neighbour,-1));
+    edges.insert(IndexSegment(n2.edge.getSecond(),p1), n2.neighbour);
+    edges.insert(IndexSegment(n2.edge.getFirst(),p2), n2.neighbour);
+
+    problem.mesh->printInFile("afterFirstBreak.txt");
+
+    edges.printInFile("beforeDeleting.txt");
 
     for (int t: this->tipTriangles) {
         Polygon& polygon = problem.mesh->getPolygon(t);
 
         if(fracture_utilities::orientation(previousCrackSegment, polygon.getCentroid())<0 &&
            fracture_utilities::orientation(direction, polygon.getCentroid())<0){
-                polygon.replaceVertex(points.center, duplicatedCenter);
+            polygon.replaceVertex(points.center, duplicatedCenter, edges);
         }
     }
 
-    std::vector<int> previous;
+    edges.printInFile("afterDeleting.txt");
 
-
-    PolygonChangeData changeData = problem.mesh->breakMesh(startTriangleIndex, direction, true, newPoints, previous);
-    newPoints.pop_front();
+    std::vector<int> previous = {pairs.first, pairs.second};
+    PolygonChangeData changeData = problem.mesh->breakMesh(n2.neighbour, direction, false, newPoints, previous);
 
     checkIfFinished(problem, direction);
 
@@ -428,7 +451,7 @@ Pair<int> CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolyg
 
 
     mesh.printInFile("afterAdapting.txt");
-    mesh.getSegments().printInFile("segments.txt");
+    mesh.getSegments().printInFile("segmentsAtEnd.txt");
     newPolygons.push_back(crackPolygon1);
     newPolygons.push_back(crackPolygon2);
 

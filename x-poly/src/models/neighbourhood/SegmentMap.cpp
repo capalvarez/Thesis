@@ -91,3 +91,7 @@ void SegmentMap::insert_if_null(IndexSegment s, int index) {
         }
     }
 }
+
+bool SegmentMap::containsSegment(IndexSegment s) {
+    return this->map.find(s)!= this->map.end();
+}

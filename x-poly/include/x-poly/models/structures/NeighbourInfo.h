@@ -12,6 +12,8 @@ struct NeighbourInfo {
     bool isVertex;
     int extraPoint;
 
+    NeighbourInfo(){}
+
     NeighbourInfo(int n, IndexSegment e, Point i, bool is){
         neighbour = n;
         edge = e;

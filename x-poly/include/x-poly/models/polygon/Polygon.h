@@ -11,6 +11,7 @@
 #include <map>
 #include <utilities/UniqueList.h>
 #include <algorithm>
+#include <x-poly/models/neighbourhood/SegmentMap.h>
 
 class Polygon {
 protected:
@@ -81,7 +82,7 @@ public:
     void fixSegment(Pair<int> &segment, int reference);
     void replaceSegment(IndexSegment segment, std::vector<int> points);
     void insertVertex(int vertex, std::vector<Point> points);
-    void replaceVertex(int oldVertex, int newVertex);
+    void replaceVertex(int oldVertex, int newVertex, SegmentMap &edges);
 };
 
 #endif

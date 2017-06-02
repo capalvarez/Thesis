@@ -323,10 +323,10 @@ PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
     std::vector<Polygon> newP;
 
     UniqueList<Pair<int>> initCrackPoints, endCrackPoints;
-    this->grow(this->init, oldP, newP, problem, u, initCrackPoints);
+    this->grow(this->init, oldP, newP, problem, u, initCrackPoints, PointSegment(problem.mesh->getPoint(crackPath.first().first), this->init.tipPoint));
     this->crackPath.insert_front(initCrackPoints.getList());
 
-    this->grow(this->end, oldP, newP, problem, u, endCrackPoints);
+    this->grow(this->end, oldP, newP, problem, u, endCrackPoints, PointSegment(problem.mesh->getPoint(crackPath.last().first), this->end.tipPoint));
     this->crackPath.insert(endCrackPoints.getList());
 
     return PolygonChangeData(oldP, newP);
@@ -334,9 +334,9 @@ PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
 
 
 void Crack::grow(CrackTip &tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, Problem problem, Eigen::VectorXd u,
-                 UniqueList<Pair<int>> &crackPoints) {
+                 UniqueList<Pair<int>> &crackPoints, PointSegment previousCrackSegment) {
     if(!tip.isFinished()){
-        PolygonChangeData data = tip.grow(u, problem, crackPoints, PointSegment());
+        PolygonChangeData data = tip.grow(u, problem, crackPoints, previousCrackSegment);
 
         oldP.insert(oldP.end(), data.oldPolygons.begin(), data.oldPolygons.end());
         newP.insert(newP.end(), data.newPolygons.begin(), data.newPolygons.end());

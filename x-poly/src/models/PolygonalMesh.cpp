@@ -59,9 +59,19 @@ int PolygonalMesh::findContainerPolygon(Point p, int i, int &last) {
 
         if (!found) {
             last = i;
-            return -1;
+            return findContainerPolygonLinear(p);
         }
     }
+}
+
+int PolygonalMesh::findContainerPolygonLinear(Point p) {
+    for (int i = 0; i < this->polygons.size(); ++i) {
+        if(this->polygons[i].containsPoint(this->points.getList(), p)){
+            return i;
+        }
+    }
+
+    return -1;
 }
 
 void PolygonalMesh::update() {
@@ -185,9 +195,9 @@ int PolygonalMesh::getNeighbourFromCommonVertexSet(PointSegment direction, std::
     return neighbour;
 }
 
-int PolygonalMesh::getNeighbourFromCommonVertexSet(PointSegment direction, std::vector<int> vertexSet) {
+int PolygonalMesh::getNeighbourFromCommonVertexSet(PointSegment direction, std::vector<int> vertexSet, NeighbourInfo& n) {
     for (int i = 0; i < vertexSet.size(); ++i) {
-        NeighbourInfo n = getNeighbour(vertexSet[i], direction);
+        n = getNeighbour(vertexSet[i], direction, vertexSet);
         if(n.neighbour>=0){
             auto find = std::find(vertexSet.begin(), vertexSet.end(), n.neighbour);
             if(find!=vertexSet.end()){
@@ -234,6 +244,8 @@ void PolygonalMesh::writeElements(std::ofstream &file) {
 void PolygonalMesh::getNeighboursBySegments(int poly, UniqueList<int> &neighbours) {
     std::vector<IndexSegment> poly_segs;
     this->getPolygon(poly).getSegments(poly_segs);
+
+    this->edges.printInFile("segmentsSecond.txt");
 
     for (IndexSegment s: poly_segs){
         Neighbours n = edges.get(s);

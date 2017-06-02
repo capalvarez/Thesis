@@ -18,7 +18,7 @@ private:
     Pair<int> prepareTip(CrackTip &tip, UniqueList<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh,
                          std::vector<Pair<int>> previousCrackPoints);
     void grow(CrackTip &tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, Problem problem, Eigen::VectorXd u,
-                  UniqueList<Pair<int>> &crackPoints);
+                  UniqueList<Pair<int>> &crackPoints, PointSegment previousCrackSegment);
     double adjustBoxes(Polygon initPoly, Polygon endPoly, std::vector<Point> points);
 public:
     Crack();

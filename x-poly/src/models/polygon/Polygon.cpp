@@ -2,6 +2,7 @@
 #include <map>
 #include <utilities/UniqueList.h>
 #include <utilities/Pair.h>
+#include <include/x-poly/models/neighbourhood/SegmentMap.h>
 
 
 Polygon::Polygon(std::vector<int>& points, std::vector<Point>& p) {
@@ -702,11 +703,40 @@ void Polygon::insertVertex(int vertex, std::vector<Point> points) {
     insertOnSegment(container, vertex);
 }
 
-void Polygon::replaceVertex(int oldVertex, int newVertex) {
+void Polygon::replaceVertex(int oldVertex, int newVertex, SegmentMap &edges) {
+    bool changePrev = false, changeNext = false;
+    Neighbours nPrev, nNext;
+
+    int n = this->numberOfSides();
     int i = utilities::indexOf(this->points, oldVertex);
+
+    IndexSegment prev(this->points[(n+i-1)%n], this->points[i]);
+    IndexSegment next(this->points[i], this->points[(n+i+1)%n]);
+
+    if(edges.containsSegment(prev)){
+        nPrev = edges.get(prev);
+        edges.delete_element(prev);
+        changePrev = true;
+    }
+
+    if(edges.containsSegment(next)){
+        nNext = edges.get(next);
+        edges.delete_element(next);
+        changeNext = true;
+    }
 
     if(i>=0){
         this->points[i] = newVertex;
     }
 
+    if(changePrev){
+        prev = IndexSegment(this->points[(n+i-1)%n], this->points[i]);
+        edges.insert(prev, nPrev);
+    }
+
+
+    if(changeNext){
+        next = IndexSegment(this->points[i], this->points[(n+i+1)%n]);
+        edges.insert(next, nNext);
+    }
 }

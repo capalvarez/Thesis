@@ -3,7 +3,7 @@
 
 
 #include <x-poly/voronoi/structures/mapdata.h>
-#include "utilities/Pair.h"
+#include <utilities/Pair.h>
 #include <unordered_map>
 #include "Neighbours.h"
 #include <fstream>
@@ -32,6 +32,7 @@ public:
     int size();
     void delete_element(IndexSegment key);
     void printInFile(std::string fileName);
+    bool containsSegment(IndexSegment s);
 
 };
 
