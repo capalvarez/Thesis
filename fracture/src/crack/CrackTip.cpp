@@ -36,7 +36,7 @@ void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
 
     Neighbours possibleNeighbours = mesh.getNeighbours(intersected);
     std::vector<Polygon> polygons;
-    int otherIndex = -1;
+    int otherIndex = -1, firstNeighbour = 0;
     bool border = false;
 
     if(possibleNeighbours.isNeighbour(-1)){
@@ -48,8 +48,10 @@ void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
         polygons = {mesh.getPolygon(possibleNeighbours.getFirst()), mesh.getPolygon(possibleNeighbours.getSecond())};
 
         if (std::abs(polygons[1].getCentroid().distance(last)) < std::abs(polygons[0].getCentroid().distance(last))) {
+            firstNeighbour = possibleNeighbours.getFirst();
             otherIndex = 0;
         } else {
+            firstNeighbour = possibleNeighbours.getSecond();
             otherIndex = 1;
         }
     }
@@ -57,7 +59,14 @@ void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
     if(!useSecondChoice){
         this->tipPoint = standardPoint;
     }else{
-        this->tipPoint = this->generateNextPoint(polygons[otherIndex], exitRing, angle, mesh.getPoints().getList(), border);
+        std::vector<int> previous = {possibleNeighbours.getFirst(), possibleNeighbours.getSecond()};
+        Point advanceDirection(exitRing.getX() + 2*polygons[otherIndex].getDiameter() * std::cos(utilities::radian(angle)),
+                               exitRing.getY() + 2*polygons[otherIndex].getDiameter() * std::sin(utilities::radian(angle)));
+
+        NeighbourInfo finalPolygonInfo = mesh.getNeighbour(firstNeighbour, PointSegment(last, advanceDirection), previous);
+        Polygon finalPolygon = mesh.getPolygon(finalPolygonInfo.neighbour);
+
+        this->tipPoint = this->generateNextPoint(finalPolygon, finalPolygonInfo.intersection, angle, mesh.getPoints().getList(), border);
     }
 }
 
@@ -223,7 +232,7 @@ Pair<int> CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadius, std::
         mesh.getPolygon(this->container_polygon).fixSegment(previousCrackPoints[0], -1);
 
         IndexSegment crackEntry = mesh.getPolygon(this->container_polygon).getSurroundingVertices(
-                previousCrackPoints[0], std::vector<Point>());
+                previousCrackPoints[0], mesh.getPoints().getList());
         newCrackPoints = remeshAndAdapt(StandardRadius, newPolygons, this->container_polygon, mesh, std::vector<int>(), angle,
                        crackEntry, {previousCrackPoints[0]});
     } else{
@@ -250,6 +259,7 @@ Pair<int> CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadius, std::
                 edges.delete_element(s);
             }
 
+            //El probema esta aqui en la segunda vuelta, probablemente porque no guardo bien los pares del centro
             IndexSegment crackEntry = ringRegion.getSurroundingVertices(previousCrackPoints[1], mesh.getPoints().getList());
             
             Point last = getPoint();
