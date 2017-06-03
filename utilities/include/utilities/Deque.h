@@ -47,7 +47,7 @@ void Deque<T>::push_back(T &item) {
     this->firstToLast.push_back(item);
 
     if(this->lastToFirst.size()==0){
-        this->lastToFirst.insert(this->lastToFirst.end(), item);
+        this->lastToFirst.push_back(item);
     }else{
         this->lastToFirst.insert(this->lastToFirst.begin(), item);
     }
@@ -58,7 +58,9 @@ void Deque<T>::insert(std::vector<T> elems) {
     this->firstToLast.insert(firstToLast.end(), elems.begin(), elems.end());
 
     if(this->lastToFirst.size()==0){
-        this->lastToFirst.insert(lastToFirst.end(), elems.rend(), elems.rbegin());
+        for(int i = elems.size()-1; i>=0; i--){
+            this->lastToFirst.push_back(elems[i]);
+        }
     }else{
         this->lastToFirst.insert(lastToFirst.begin(), elems.rend(), elems.rbegin());
     }

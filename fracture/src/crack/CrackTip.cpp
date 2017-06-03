@@ -275,7 +275,7 @@ std::vector<Pair<int>> CrackTip::prepareTip(BreakableMesh &mesh, double Standard
             IndexSegment crackEntry = ringRegion.getSurroundingVertices(previousCrackPoints[1], mesh.getPoints().getList());
 
             mesh.printInFile("afterMerging.txt");
-            std::vector<Pair<int>> relevantCrackPoints(previousCrackPoints.begin(), previousCrackPoints.begin()+i);
+            std::vector<Pair<int>> relevantCrackPoints(previousCrackPoints.begin(), previousCrackPoints.begin()+i+1);
             newCrackPoints = remeshAndAdapt(secondRadius, newPolygons, ringIndex, mesh, unusedPoints, angle, crackEntry,
                                             relevantCrackPoints);
         }
@@ -327,7 +327,7 @@ std::vector<Pair<int>> CrackTip::remeshAndAdapt(double radius, std::vector<Polyg
     std::vector<int> closingPoints = {quarterTipBorder.back(), pointMap[2], meshPoints.size()-1, quarterTipBorder[0]};
     newPolygonPoints.insert(newPolygonPoints.end(), closingPoints.begin(), closingPoints.end());
     int firstQuarterPointCrack = pointMap[2], secondQuarterPointCrack = meshPoints.size() -1;
-    IndexSegment surroundingCrack = ring.getSurroundingVertices(previousCrackPoints[0]);
+    IndexSegment surroundingCrack = ring.getSurroundingVertices(previousCrackPoints.back());
 
     ring.replaceSegment(crackEntry, quarterTipBorder);
 
@@ -336,8 +336,8 @@ std::vector<Pair<int>> CrackTip::remeshAndAdapt(double radius, std::vector<Polyg
     int otherPolygon_index = mesh.getPolygons().size() - 1;
 
     SegmentMap& edges = mesh.getSegments();
-    Neighbours crackEntryNeighbours1 = edges.get(IndexSegment(surroundingCrack.getFirst(), previousCrackPoints[0].first));
-    Neighbours crackEntryNeighbours2 = edges.get(IndexSegment(surroundingCrack.getSecond(), previousCrackPoints[0].second));
+    Neighbours crackEntryNeighbours1 = edges.get(IndexSegment(surroundingCrack.getFirst(), previousCrackPoints.back().first));
+    Neighbours crackEntryNeighbours2 = edges.get(IndexSegment(surroundingCrack.getSecond(), previousCrackPoints.back().second));
     int originalNeighbour1 = crackEntryNeighbours1.getFirst()==region? crackEntryNeighbours1.getSecond() : crackEntryNeighbours1.getFirst();
     int originalNeighbour2 = crackEntryNeighbours2.getFirst()==region? crackEntryNeighbours2.getSecond() : crackEntryNeighbours2.getFirst();
 
@@ -392,23 +392,25 @@ std::vector<Pair<int>> CrackTip::remeshAndAdapt(double radius, std::vector<Polyg
     NeighbourInfo n2 = NeighbourInfo(-1, surroundingCrack, Point(),
                                      false);
 
-    std::vector<int> new1 = {firstQuarterPointCrack, previousCrackPoints[0].second};
-    std::vector<int> new2 = {previousCrackPoints[0].first, secondQuarterPointCrack};
+    std::vector<int> new1 = {firstQuarterPointCrack, previousCrackPoints.back().second};
+    std::vector<int> new2 = {previousCrackPoints.back().first, secondQuarterPointCrack};
 
-    bool include = false;
+    std::vector<bool> include(previousCrackPoints.size()-2, false);
 
     if(previousCrackPoints.size()>1){
-        include = otherPolygon.containsPoint(meshPoints.getList(), mesh.getPoint(previousCrackPoints[1].first));
+        for (int i = 0; i < previousCrackPoints.size()-1; ++i) {
+            include[i] = otherPolygon.containsPoint(meshPoints.getList(), mesh.getPoint(previousCrackPoints[i].first));
 
-        if(include){
-            new1.insert(new1.begin()+1, previousCrackPoints[1].first);
-            new2.insert(new2.begin()+1, previousCrackPoints[1].second);
+            if(include[i]){
+                new1.insert(new1.begin()+i+1, previousCrackPoints[i].first);
+                new2.insert(new2.begin()+i+1, previousCrackPoints[i].second);
+            }
         }
     }
 
     Polygon& other = mesh.getPolygon(otherPolygon_index);
     other.deleteVerticesInRange(surroundingCrack.getFirst(), surroundingCrack.getSecond());
-    Pair<int> pairs = mesh.computeNewPolygons(n1, n2,other, newPolygons, new1, new2, new1[0], new1[1], -1,new2[1], new2[0]);
+    Pair<int> pairs = mesh.computeNewPolygons(n1, n2,other, newPolygons, new1, new2, new1[0], new1.back(), -1, new2.back(), new2[0]);
 
     Polygon crackPolygon1 = mesh.getPolygon(pairs.first);
     Polygon crackPolygon2 = mesh.getPolygon(pairs.second);
@@ -439,9 +441,14 @@ std::vector<Pair<int>> CrackTip::remeshAndAdapt(double radius, std::vector<Polyg
 
     edges.insert(crackPolygon1Segments[0],Neighbours(otherPolygon_index,-1));
     edges.insert(crackPolygon2Segments[0],Neighbours(otherPolygon_index,-1));
-    if(previousCrackPoints.size()>1 && include){
-        edges.insert(crackPolygon1Segments[0],Neighbours(otherPolygon_index,-1));
-        edges.insert(crackPolygon2Segments[0],Neighbours(otherPolygon_index,-1));
+
+    if(previousCrackPoints.size()>1){
+        for (int i = 0; i < previousCrackPoints.size()-1; ++i) {
+            if(include[i]){
+                edges.insert(crackPolygon1Segments[i+1],Neighbours(otherPolygon_index,-1));
+                edges.insert(crackPolygon2Segments[i+1],Neighbours(otherPolygon_index,-1));
+            }
+        }
     }
 
     for (int i = 0; i < crackPolygon1Segments.size() ; ++i) {
@@ -452,11 +459,14 @@ std::vector<Pair<int>> CrackTip::remeshAndAdapt(double radius, std::vector<Polyg
         edges.replace_neighbour(crackPolygon2Segments[i], otherPolygon_index, pairs.second);
     }
 
-    if(previousCrackPoints.size()>1 && !include){
-        mesh.getPolygon(firstAndLast[0]).insertVertex(previousCrackPoints[1].first, meshPoints.getList());
-        mesh.getPolygon(firstAndLast[1]).insertVertex(previousCrackPoints[1].second, meshPoints.getList());
+    if(previousCrackPoints.size()>1){
+        for (int i = 0; i < previousCrackPoints.size()-1; ++i) {
+            if(!include[i]){
+                mesh.getPolygon(firstAndLast[0]).insertVertex(previousCrackPoints[i].first, meshPoints.getList());
+                mesh.getPolygon(firstAndLast[1]).insertVertex(previousCrackPoints[i].second, meshPoints.getList());
+            }
+        }
     }
-
 
     mesh.printInFile("afterAdapting.txt");
     mesh.getSegments().printInFile("segmentsAtEnd.txt");
