@@ -45,6 +45,23 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
         m.getNeighboursByPoint(this->end.container_polygon, endNeighbours);
 
         if(initNeighbours.hasCommonElement(endNeighbours)){
+
+            if(this->init.container_polygon == this->end.container_polygon){
+
+            }
+
+            if(this->init.fitsBox(StandardRadius, m.getPolygon(this->init.container_polygon), points.getList()) &&
+               this->init.fitsBox(StandardRadius, m.getPolygon(this->init.container_polygon), points.getList()))
+
+
+
+
+
+
+
+
+
+
             initNeighbours.push_list(endNeighbours.getList());
 
             initNeighbours.push_back(this->init.container_polygon);

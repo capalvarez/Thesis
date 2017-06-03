@@ -222,7 +222,6 @@ Pair<int> CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadius, std::
 
     Polygon poly = mesh.getPolygon(this->container_polygon);
     double angle = PointSegment(mesh.getPoint(previousCrackPoints[0].first),this->tipPoint).cartesianAngle();
-    mesh.printInFile("before.txt");
 
     FractureConfig* config = FractureConfig::instance();
 
@@ -266,20 +265,14 @@ Pair<int> CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadius, std::
             BoundingBox box(Point(last.getX()-candidateRadius, last.getY()-candidateRadius),
                             Point(last.getX()+candidateRadius, last.getY()+candidateRadius));
 
-            if (box.fitsInsidePolygon(ringRegion, mesh.getPoints().getList())) {
-                newCrackPoints = remeshAndAdapt(candidateRadius, newPolygons, ringIndex, mesh, unusedPoints, angle, crackEntry,
-                                           {previousCrackPoints[1], previousCrackPoints[0]});
-            } else {
-                double radius = candidateRadius;
-                while(!box.fitsInsidePolygon(ringRegion, mesh.getPoints().getList())) {
-                    radius = config->getRatio()*radius;
-                    box = BoundingBox(Point(last.getX()-radius, last.getY()-radius),
-                                      Point(last.getX()+radius, last.getY()+radius));
-                }
+            while (!box.fitsInsidePolygon(ringRegion, mesh.getPoints().getList())) {
 
-                newCrackPoints = remeshAndAdapt(radius, newPolygons, ringIndex, mesh, unusedPoints, angle, crackEntry,
-                               {previousCrackPoints[1], previousCrackPoints[0]});
             }
+
+            newCrackPoints = remeshAndAdapt(candidateRadius, newPolygons, ringIndex, mesh, unusedPoints, angle, crackEntry,
+                                            {previousCrackPoints[1], previousCrackPoints[0]});
+
+
         }
     }
 

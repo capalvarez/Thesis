@@ -6,7 +6,8 @@
 template <class T>
 class Deque{
 private:
-    std::deque<T> deque;
+    std::vector<T> firstToLast;
+    std::vector<T> lastToFirst;
 public:
     Deque();
     void push_front(T& item);
@@ -20,6 +21,9 @@ public:
     T& secondToLast();
     T& last();
 
+    std::vector<T> getFirstToLast();
+    std::vector<T> getLastToFirst();
+
     int size();
     void clear();
 };
@@ -29,65 +33,80 @@ Deque<T>::Deque() {}
 
 template <class T>
 void Deque<T>::push_front(T &item) {
-    this->deque.push_front(item);
+    this->lastToFirst.push_back(item);
+    this->firstToLast.insert(this->firstToLast.begin(), item);
 }
 
 template <class T>
 void Deque<T>::push_back(T &item) {
-    this->deque.push_back(item);
+    this->firstToLast.push_back(item);
+    this->lastToFirst.insert(this->lastToFirst.begin(), item);
 }
 
 template <class T>
 void Deque<T>::insert(std::vector<T> elems) {
-    this->deque.insert(deque.end(), elems.begin(), elems.end());
+    this->firstToLast.insert(firstToLast.end(), elems.begin(), elems.end());
+    this->lastToFirst.insert(lastToFirst.begin(), elems.rend(), elems.rbegin());
 }
 
 template <class T>
 void Deque<T>::insert_front(std::vector<T> elems) {
-    this->deque.insert(deque.begin(), elems.rend(), elems.rbegin());
+    this->firstToLast.insert(this->firstToLast.begin(), elems.rend(), elems.rbegin());
+    this->lastToFirst.insert(lastToFirst.begin(), elems.begin(), elems.end());
 }
 
 template <class T>
 T &Deque<T>::operator[](int i) {
-    return this->deque[i];
+    return this->firstToLast[i];
 }
 
 template <class T>
 T& Deque<T>::first() {
-    return this->deque.front();
+    return this->firstToLast.front();
 }
 
 template <class T>
 T& Deque<T>::second() {
-    if(this->deque.size()==1){
-        return this->deque[0];
+    if(this->firstToLast.size()==1){
+        return this->firstToLast[0];
     }
 
-    return this->deque[1];
+    return this->firstToLast[1];
 }
 
 template <class T>
 T& Deque<T>::secondToLast() {
-    if(this->deque.size()==1){
-        return this->deque.back();
+    if(this->firstToLast.size()==1){
+        return this->firstToLast.back();
     }
 
-    return this->deque[this->deque.size()-2];
+    return this->firstToLast[this->firstToLast.size()-2];
 }
 
 template <class T>
 T& Deque<T>::last() {
-    return this->deque.back();
+    return this->firstToLast.back();
 }
 
 template <class T>
 int Deque<T>::size() {
-    return this->deque.size();
+    return this->firstToLast.size();
 }
 
 template <class T>
 void Deque<T>::clear() {
-    this->deque.clear();
+    this->firstToLast.clear();
+    this->lastToFirst.clear();
+}
+
+template <class T>
+std::vector<T> Deque::getFirstToLast() {
+    return this->firstToLast;
+}
+
+template <class T>
+std::vector<T> Deque::getLastToFirst() {
+    return this->lastToFirst;
 }
 
 #endif
