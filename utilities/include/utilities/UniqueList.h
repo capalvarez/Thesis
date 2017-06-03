@@ -29,6 +29,7 @@ public:
     bool hasCommonElement(UniqueList<T> other);
 
     void clear();
+    void delete_element(T item);
 };
 
 template <class T>
@@ -135,6 +136,22 @@ template <class T>
 void UniqueList<T>::clear() {
     this->list.clear();
     this->map.clear();
+}
+
+template <class T>
+void UniqueList<T>::delete_element(T item) {
+    if(!this->contains(item)){
+        return;
+    }
+
+    auto iter = map.find(item);
+    this->list.erase(this->list.begin() + iter->second);
+    this->map.clear();
+
+    for (int i=0;i<this->list.size();i++){
+        T e = this->list[i];
+        map.insert(std::make_pair(e, i));
+    }
 }
 
 

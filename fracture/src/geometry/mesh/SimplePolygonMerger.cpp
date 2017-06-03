@@ -107,7 +107,7 @@ Polygon SimplePolygonMerger::mergePolygons(std::vector<int> polygons, std::vecto
     j = polygons.size()-1;
 
     while(polygons.size()!=0){
-        while(!mesh.areMergeable(merged, polygons[j])){
+        while(j>=0 && !mesh.areMergeable(merged, polygons[j])){
             if(j<0){
                 throw std::invalid_argument("Impossible to merge polygons");
             }

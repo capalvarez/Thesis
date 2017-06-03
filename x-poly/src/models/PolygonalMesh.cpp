@@ -132,7 +132,8 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
 
             UniqueList<int> neighbours;
             this->getNeighboursByPoint(poly_index, neighbours);
-            int neighbour = getNeighbourFromCommonVertexSet(direction, neighbours.getList(), vertexIndex, previous, poly.getCentroid());
+            neighbours.delete_element(poly_index);
+            int neighbour = getNeighbourFromCommonVertexSet(direction, neighbours.getList(), previous, vertexIndex);
 
             NeighbourInfo n(neighbour, polySeg[j], p, false);
             n.isVertex = true;
@@ -162,37 +163,24 @@ NeighbourInfo PolygonalMesh::getNeighbour(int poly_index, PointSegment direction
     return NeighbourInfo(-1,IndexSegment(),Point(), false);
 }
 
-int PolygonalMesh::getNeighbourFromCommonVertexSet(PointSegment direction, std::vector<int> vertexSet, int vertexIndex,
-                                                   std::vector<int> &previousPolygons, Point reference) {
-    double diff = DBL_MAX;
-    int neighbour = 0;
+int PolygonalMesh::getNeighbourFromCommonVertexSet(PointSegment direction, std::vector<int> vertexSet,
+                                                   std::vector<int> &previousPolygons, int vertexIndex) {
+    int correctNeighbour = 0;
+    for(int p: vertexSet){
+        Polygon candidate = this->getPolygon(p);
 
-    double tolerance = XPolyConfig::instance()->getTolerance();
-    Pair<double> slopeDirection = direction.getSlope();
-
-    for (int i = 0; i < vertexSet.size(); ++i) {
-        if(!getPolygon(vertexSet[i]).isVertex(vertexIndex)){
+        if(!candidate.isVertex(vertexIndex)){
             continue;
         }
 
-        previousPolygons.push_back(vertexSet[i]);
-        Pair<double> slopeNeighbour = PointSegment(reference, getPolygon(vertexSet[i]).getCentroid()).getSlope();
+        previousPolygons.push_back(p);
 
-        if(std::abs(slopeNeighbour.first)<tolerance && std::abs(slopeDirection.first)<tolerance){
-
-        }else{
-            double sD = slopeDirection.second/slopeDirection.first;
-            double sN = slopeNeighbour.second/slopeNeighbour.first;
-
-            double newDiff = std::abs(sD-sN);
-
-            if(newDiff < diff && sD*sN>0){
-                diff = newDiff;
-                neighbour = vertexSet[i];
-            }
+        if(candidate.numberOfInteresectedSegments(direction, this->points.getList())==2){
+            correctNeighbour = p;
         }
     }
-    return neighbour;
+
+    return correctNeighbour;
 }
 
 int PolygonalMesh::getNeighbourFromCommonVertexSet(PointSegment direction, std::vector<int> vertexSet, NeighbourInfo& n) {

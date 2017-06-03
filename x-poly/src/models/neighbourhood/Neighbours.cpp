@@ -31,7 +31,7 @@ void Neighbours::changeNeighbour(int oldN, int newN) {
         return;
     }
 
-    throw std::invalid_argument("Please assign an existant neighbour");
+    return;
 }
 
 bool Neighbours::isNeighbour(int i) {
@@ -64,5 +64,5 @@ int Neighbours::getOther(int n) {
         return this->n1;
     }
 
-    throw std::invalid_argument("Nonexistant neighbour");
+    return -1;
 }

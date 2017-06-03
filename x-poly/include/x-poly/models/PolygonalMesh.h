@@ -46,8 +46,8 @@ public:
 
     NeighbourInfo getNeighbour(int poly_index, PointSegment direction);
     NeighbourInfo getNeighbour(int poly_index, PointSegment direction, std::vector<int> &previous);
-    int getNeighbourFromCommonVertexSet(PointSegment direction, std::vector<int> vertexSet, int vertexIndex,
-                                        std::vector<int> &previousPolygons, Point reference);
+    int getNeighbourFromCommonVertexSet(PointSegment direction, std::vector<int> vertexSet,
+                                            std::vector<int> &previousPolygons, int vertexIndex);
     int getNeighbourFromCommonVertexSet(PointSegment direction, std::vector<int> vertexSet, NeighbourInfo& n);
 
     Region getRegion() const;

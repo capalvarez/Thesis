@@ -83,6 +83,7 @@ public:
     void replaceSegment(IndexSegment segment, std::vector<int> points);
     void insertVertex(int vertex, std::vector<Point> points);
     void replaceVertex(int oldVertex, int newVertex, SegmentMap &edges);
+    int numberOfInteresectedSegments(PointSegment direction, std::vector<Point> points);
 };
 
 #endif

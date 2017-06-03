@@ -55,25 +55,15 @@ void Deque<T>::push_back(T &item) {
 
 template <class T>
 void Deque<T>::insert(std::vector<T> elems) {
-    this->firstToLast.insert(firstToLast.end(), elems.begin(), elems.end());
-
-    if(this->lastToFirst.size()==0){
-        for(int i = elems.size()-1; i>=0; i--){
-            this->lastToFirst.push_back(elems[i]);
-        }
-    }else{
-        this->lastToFirst.insert(lastToFirst.begin(), elems.rend(), elems.rbegin());
+    for(int i = 0; i<elems.size(); i++){
+        this->push_back(elems[i]);
     }
 }
 
 template <class T>
 void Deque<T>::insert_front(std::vector<T> elems) {
-    this->lastToFirst.insert(lastToFirst.end(), elems.begin(), elems.end());
-
-    if(this->firstToLast.size()==0){
-        this->firstToLast.insert(this->firstToLast.end(), elems.rend(), elems.rbegin());
-    } else{
-        this->firstToLast.insert(this->firstToLast.begin(), elems.rend(), elems.rbegin());
+    for(int i = 0; i<elems.size(); i++){
+        this->push_front(elems[i]);
     }
 }
 

@@ -619,6 +619,10 @@ std::vector<IndexSegment> Polygon::deleteVerticesInRange(int i1, int i2) {
     int i = utilities::indexOf(this->points, i1);
     int j = utilities::indexOf(this->points, i2);
 
+    if(i==-1 || j==-1){
+        return std::vector<IndexSegment>();
+    }
+
     std::vector<int> erasedVertices;
     if(i<j){
         erasedVertices.insert(erasedVertices.begin(), this->points.begin()+i, this->points.begin()+j+1);
@@ -739,4 +743,19 @@ void Polygon::replaceVertex(int oldVertex, int newVertex, SegmentMap &edges) {
         next = IndexSegment(this->points[i], this->points[(n+i+1)%n]);
         edges.insert(next, nNext);
     }
+}
+
+int Polygon::numberOfInteresectedSegments(PointSegment direction, std::vector<Point> points) {
+    int count = 0;
+    std::vector<IndexSegment> segments;
+    this->getSegments(segments);
+
+    for(IndexSegment s: segments){
+        Point p;
+        if(direction.intersectionInfinite(points[s.getFirst()], points[s.getSecond()], p)){
+            count++;
+        }
+    }
+
+    return count;
 }
