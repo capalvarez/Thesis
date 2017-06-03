@@ -280,39 +280,34 @@ PolygonChangeData Crack::prepareTip(BreakableMesh &m) {
                 }
             }
 
-            Pair<int> newCrackPointsInit =
+            std::vector<Pair<int>> newCrackPointsInit =
                     this->init.remeshAndAdapt(radius, newP, initPoly_index, m, unusedInit, initAngle, initCrackEntry, initCrackPoints);
-            crackPath.push_front(newCrackPointsInit);
+            crackPath.insert_front(newCrackPointsInit);
 
             m.printInFile("firstTip.txt");
-            Pair<int> newCrackPointsEnd =
+            std::vector<Pair<int>> newCrackPointsEnd =
                     this->end.remeshAndAdapt(radius, newP, endPoly_index, m, unusedEnd, endAngle, endCrackEntry, endCrackPoints);
-            crackPath.push_back(newCrackPointsEnd);
+            crackPath.insert(newCrackPointsEnd);
         }
     }else{
-        Pair<int> init = this->prepareTip(this->init, oldP, newP, m, {crackPath.first(), crackPath.second()});
-        if(init.first>=0){
-            crackPath.push_front(init);
-        }
+        std::vector<Pair<int>> init = this->prepareTip(this->init, oldP, newP, m, this->crackPath.getFirstToLast());
+        crackPath.insert_front(init);
 
-        Pair<int> end = this->prepareTip(this->end, oldP, newP, m,  {crackPath.last(), crackPath.secondToLast()});
-        if(end.first>=0){
-            crackPath.push_back(end);
-        }
+        std::vector<Pair<int>> end = this->prepareTip(this->end, oldP, newP, m, this->crackPath.getLastToFirst());
+        crackPath.insert(end);
     }
 
     return PolygonChangeData(oldP.getList(), newP);
 }
 
-Pair<int> Crack::prepareTip(CrackTip &tip, UniqueList<Polygon> &oldP, std::vector<Polygon> &newP, BreakableMesh &mesh,
-                            std::vector<Pair<int>> previousCrackPoints) {
+std::vector<Pair<int>> Crack::prepareTip(CrackTip &tip, UniqueList<Polygon> &oldP, std::vector<Polygon> &newP,
+                                         BreakableMesh &mesh, std::vector<Pair<int>> previousCrackPoints) {
     if(!tip.isFinished()){
-        Pair<int> data = tip.prepareTip(mesh, StandardRadius, previousCrackPoints, oldP.getList(), newP);
-
+        std::vector<Pair<int>> data = tip.prepareTip(mesh, StandardRadius, previousCrackPoints, oldP.getList(), newP);
         return data;
     }
 
-    return Pair<int>(-1,-1);
+    return std::vector<Pair<int>>();
 }
 
 bool Crack::isFinished() {

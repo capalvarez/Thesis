@@ -34,25 +34,45 @@ Deque<T>::Deque() {}
 template <class T>
 void Deque<T>::push_front(T &item) {
     this->lastToFirst.push_back(item);
-    this->firstToLast.insert(this->firstToLast.begin(), item);
+
+    if(this->firstToLast.size()==0){
+        this->firstToLast.push_back(item);
+    } else{
+        this->firstToLast.insert(this->firstToLast.begin(), item);
+    }
 }
 
 template <class T>
 void Deque<T>::push_back(T &item) {
     this->firstToLast.push_back(item);
-    this->lastToFirst.insert(this->lastToFirst.begin(), item);
+
+    if(this->lastToFirst.size()==0){
+        this->lastToFirst.insert(this->lastToFirst.end(), item);
+    }else{
+        this->lastToFirst.insert(this->lastToFirst.begin(), item);
+    }
 }
 
 template <class T>
 void Deque<T>::insert(std::vector<T> elems) {
     this->firstToLast.insert(firstToLast.end(), elems.begin(), elems.end());
-    this->lastToFirst.insert(lastToFirst.begin(), elems.rend(), elems.rbegin());
+
+    if(this->lastToFirst.size()==0){
+        this->lastToFirst.insert(lastToFirst.end(), elems.rend(), elems.rbegin());
+    }else{
+        this->lastToFirst.insert(lastToFirst.begin(), elems.rend(), elems.rbegin());
+    }
 }
 
 template <class T>
 void Deque<T>::insert_front(std::vector<T> elems) {
-    this->firstToLast.insert(this->firstToLast.begin(), elems.rend(), elems.rbegin());
-    this->lastToFirst.insert(lastToFirst.begin(), elems.begin(), elems.end());
+    this->lastToFirst.insert(lastToFirst.end(), elems.begin(), elems.end());
+
+    if(this->firstToLast.size()==0){
+        this->firstToLast.insert(this->firstToLast.end(), elems.rend(), elems.rbegin());
+    } else{
+        this->firstToLast.insert(this->firstToLast.begin(), elems.rend(), elems.rbegin());
+    }
 }
 
 template <class T>
@@ -100,12 +120,12 @@ void Deque<T>::clear() {
 }
 
 template <class T>
-std::vector<T> Deque::getFirstToLast() {
+std::vector<T> Deque<T>::getFirstToLast() {
     return this->firstToLast;
 }
 
 template <class T>
-std::vector<T> Deque::getLastToFirst() {
+std::vector<T> Deque<T>::getLastToFirst() {
     return this->lastToFirst;
 }
 

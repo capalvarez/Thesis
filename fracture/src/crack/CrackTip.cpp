@@ -215,10 +215,10 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem, UniqueList<
     return changeData;
 }
 
-Pair<int> CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadius, std::vector<Pair<int>> previousCrackPoints,
-                               std::vector<Polygon> &oldPolygons, std::vector<Polygon> &newPolygons) {
+std::vector<Pair<int>> CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadius, std::vector<Pair<int>> previousCrackPoints,
+                                            std::vector<Polygon> &oldPolygons, std::vector<Polygon> &newPolygons) {
     std::vector<int> indexes;
-    Pair<int> newCrackPoints;
+    std::vector<Pair<int>> newCrackPoints;
 
     Polygon poly = mesh.getPolygon(this->container_polygon);
     double angle = PointSegment(mesh.getPoint(previousCrackPoints[0].first),this->tipPoint).cartesianAngle();
@@ -227,7 +227,6 @@ Pair<int> CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadius, std::
 
     if(fitsBox(StandardRadius, poly, mesh.getPoints().getList())){
         oldPolygons.push_back(poly);
-
         mesh.getPolygon(this->container_polygon).fixSegment(previousCrackPoints[0], -1);
 
         IndexSegment crackEntry = mesh.getPolygon(this->container_polygon).getSurroundingVertices(
@@ -235,14 +234,14 @@ Pair<int> CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadius, std::
         newCrackPoints = remeshAndAdapt(StandardRadius, newPolygons, this->container_polygon, mesh, std::vector<int>(), angle,
                        crackEntry, {previousCrackPoints[0]});
     } else{
-        double candidateRadius = poly.getDiameter()*config->getRatio();
+        double secondRadius = StandardRadius*config->getRatio();
 
-        if(fitsBox(candidateRadius, poly, mesh.getPoints().getList())){
+        if(fitsBox(secondRadius, poly, mesh.getPoints().getList())){
             oldPolygons.push_back(poly);
 
             IndexSegment crackEntry = mesh.getPolygon(this->container_polygon).getSurroundingVertices(previousCrackPoints[0],
                                                                                                       mesh.getPoints().getList());
-            newCrackPoints = remeshAndAdapt(candidateRadius, newPolygons, this->container_polygon, mesh, std::vector<int>(), angle,
+            newCrackPoints = remeshAndAdapt(secondRadius, newPolygons, this->container_polygon, mesh, std::vector<int>(), angle,
                            crackEntry, {previousCrackPoints[0]});
         } else{
             std::vector<int> unusedPoints;
@@ -252,36 +251,42 @@ Pair<int> CrackTip::prepareTip(BreakableMesh &mesh, double StandardRadius, std::
 
             mesh.printInFile("afterMerging.txt");
             std::vector<IndexSegment> toErase = ringRegion.deleteVerticesInRange(previousCrackPoints[1].first, previousCrackPoints[1].second);
+
+            Point last = getPoint();
+            BoundingBox box(Point(last.getX()-secondRadius, last.getY()-secondRadius),
+                            Point(last.getX()+secondRadius, last.getY()+secondRadius));
+
+            int i = 1;
+            while (!box.fitsInsidePolygon(ringRegion, mesh.getPoints().getList())) {
+                ringIndex = this->getRingPolygon(mesh, unusedPoints, oldPolygons);
+                ringRegion = mesh.getPolygon(ringIndex);
+                ringRegion.fixSegment(previousCrackPoints[i+1], previousCrackPoints[i].first);
+
+                toErase = ringRegion.deleteVerticesInRange(previousCrackPoints[i+1].first, previousCrackPoints[i+1].second);
+                i++;
+            }
+
             SegmentMap& edges = mesh.getSegments();
 
             for (IndexSegment s: toErase){
                 edges.delete_element(s);
             }
 
-            //El probema esta aqui en la segunda vuelta, probablemente porque no guardo bien los pares del centro
             IndexSegment crackEntry = ringRegion.getSurroundingVertices(previousCrackPoints[1], mesh.getPoints().getList());
-            
-            Point last = getPoint();
-            BoundingBox box(Point(last.getX()-candidateRadius, last.getY()-candidateRadius),
-                            Point(last.getX()+candidateRadius, last.getY()+candidateRadius));
 
-            while (!box.fitsInsidePolygon(ringRegion, mesh.getPoints().getList())) {
-
-            }
-
-            newCrackPoints = remeshAndAdapt(candidateRadius, newPolygons, ringIndex, mesh, unusedPoints, angle, crackEntry,
-                                            {previousCrackPoints[1], previousCrackPoints[0]});
-
-
+            mesh.printInFile("afterMerging.txt");
+            std::vector<Pair<int>> relevantCrackPoints(previousCrackPoints.begin(), previousCrackPoints.begin()+i);
+            newCrackPoints = remeshAndAdapt(secondRadius, newPolygons, ringIndex, mesh, unusedPoints, angle, crackEntry,
+                                            relevantCrackPoints);
         }
     }
 
     return newCrackPoints;
 }
 
-Pair<int> CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, int region, BreakableMesh &mesh,
-                                   std::vector<int> oldPoints, double angle, IndexSegment crackEntry,
-                                   std::vector<Pair<int>> previousCrackPoints) {
+std::vector<Pair<int>> CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolygons, int region,
+                                                BreakableMesh &mesh, std::vector<int> oldPoints, double angle,
+                                                IndexSegment crackEntry, std::vector<Pair<int>> previousCrackPoints) {
     this->tipTriangles.clear();
     this->crackAngle = angle;
     UniqueList<Point>& meshPoints = mesh.getPoints();
@@ -458,7 +463,10 @@ Pair<int> CrackTip::remeshAndAdapt(double radius, std::vector<Polygon> &newPolyg
     newPolygons.push_back(crackPolygon1);
     newPolygons.push_back(crackPolygon2);
 
-    return Pair<int>(firstQuarterPointCrack, secondQuarterPointCrack);
+    Pair<int> outerCrackPoints = Pair<int>(this->points.c, this->points.e);
+    Pair<int> innerCrackPoints = Pair<int>(this->points.b, this->points.d);
+
+    return {outerCrackPoints, innerCrackPoints};
 }
 
 bool CrackTip::isFinished() {
