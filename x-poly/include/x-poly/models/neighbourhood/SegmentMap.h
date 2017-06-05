@@ -25,7 +25,8 @@ public:
     void replace_neighbour(IndexSegment s, int oldNeighbour, int newNeighbour);
     void replace_or_delete(IndexSegment s, int oldNeighbour_current, int oldNeighbour_old, int newNeighbour,
                                std::unordered_map<Neighbours, int, NeighboursHasher> map,
-                               std::unordered_map<IndexSegment, int, SegmentHasher> &erased);
+                               std::unordered_map<IndexSegment, int, SegmentHasher> &erased,
+                               std::unordered_map<int, int> newEquivalence);
     void insert_if_null(IndexSegment s, int index);
     Neighbours& get(IndexSegment s);
     std::unordered_map<IndexSegment,Neighbours,SegmentHasher>& getMap();

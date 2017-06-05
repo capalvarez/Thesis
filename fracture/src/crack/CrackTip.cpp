@@ -59,8 +59,8 @@ void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
     if(!useSecondChoice){
         this->tipPoint = standardPoint;
     }else{
-        this->tipPoint = Point (last.getX() + 2*usedRadius*std::cos(utilities::radian(angle)),
-                                last.getY() + 2*usedRadius*std::sin(utilities::radian(angle)));
+        this->tipPoint = Point (last.getX() + 2*usedRadius/config->getRatio()*std::cos(utilities::radian(angle)),
+                                last.getY() + 2*usedRadius/config->getRatio()*std::sin(utilities::radian(angle)));
     }
 }
 
@@ -199,11 +199,10 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem, UniqueList<
         }
     }
 
-    edges.printInFile("afterDeleting.txt");
-
     std::vector<int> previous = {pairs.first, pairs.second};
     PolygonChangeData changeData = problem.mesh->breakMesh(n1.neighbour, direction, false, newPoints, previous);
 
+    problem.mesh->printInFile("afterSecondBreak.txt");
     checkIfFinished(problem, direction);
 
     return changeData;
@@ -256,7 +255,7 @@ std::vector<Pair<int>> CrackTip::prepareTip(BreakableMesh &mesh, double Standard
             while (!box.fitsInsidePolygon(mesh.getPolygon(ringIndex), mesh.getPoints().getList())) {
                 ringIndex = this->getRingPolygon(mesh, unusedPoints, oldPolygons);
                 this->container_polygon = ringIndex;
-                mesh.printInFile("afterMerging.txt");
+
                 Polygon& ringRegion = mesh.getPolygon(ringIndex);
                 ringRegion.fixSegment(previousCrackPoints[i+1], previousCrackPoints[i].first);
 

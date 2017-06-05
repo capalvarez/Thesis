@@ -151,7 +151,8 @@ void BreakableMesh::mergePolygons(int i1, int i2) {
     map[n] = 0;
 
     for(IndexSegment s: poly2Segments){
-        edges.replace_or_delete(s, this->polygons.size() - 1, i2, i1, map, toIgnore);
+        edges.replace_or_delete(s, this->polygons.size() - 1, i2, i1, map, toIgnore,
+                                std::unordered_map<int, int>());
     }
 
     this->polygons.pop_back();
@@ -170,6 +171,7 @@ int BreakableMesh::mergePolygons(std::vector<int> &polys) {
 
     std::unordered_map<Neighbours,int,NeighboursHasher> map;
     std::unordered_map<IndexSegment, int,SegmentHasher> toIgnore;
+    std::unordered_map<int,int> swappedIndexes;
     std::vector<Pair<int>> pairs;
     fracture_utilities::allPairs(pairs, polys);
 
@@ -178,20 +180,26 @@ int BreakableMesh::mergePolygons(std::vector<int> &polys) {
         map[n] = 0;
     }
 
+    this->printInFile("beforeMerging.txt");
+
     for (int i = 0; i < polys.size()-1; ++i) {
         int i2 = polys[i];
 
         swapPolygons(i2, this->polygons.size() - 1, toIgnore);
+        swappedIndexes[i2] = this->polygons.size()-1;
+
+        this->printInFile("afterSwapping.txt");
         Polygon poly2 = getPolygon(this->polygons.size() - 1);
 
         std::vector<IndexSegment> poly2Segments;
         poly2.getSegments(poly2Segments);
 
         for(IndexSegment s: poly2Segments){
-            edges.replace_or_delete(s, this->polygons.size() - 1, i2, polys.back(), map, toIgnore);
+            edges.replace_or_delete(s, this->polygons.size() - 1, i2, polys.back(), map, toIgnore, swappedIndexes);
         }
 
         this->polygons.pop_back();
+        this->printInFile("afterOneDelete.txt");
     }
 
     return polys.back();
@@ -436,6 +444,8 @@ bool BreakableMesh::areMergeable(Polygon poly1, int poly2) {
 
     bool last_was_neighbour = edges.get(poly1_segments.back()).isNeighbour(poly2);
     bool exited_once = false;
+
+    this->edges.printInFile("segmentsInMesh.txt");
     
     for(IndexSegment s: poly1_segments){
         Neighbours n = edges.get(s);
