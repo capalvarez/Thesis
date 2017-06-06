@@ -16,3 +16,4 @@ class Point:
         #    or self.index==260 or self.index==259 or self.index==281 or self.index==285 or self.index==284 or self.index==139 \
         #    or self.index==120 or self.index==119 or self.index==118 or self.index==106 or self.index==46 or self.index==47:
             #canvas.create_text(self.x, y-self.y,text=self.index, fill="blue")
+        canvas.create_oval(self.x-1, y-self.y-1, self.x+1, y-self.y+1, fill="red")

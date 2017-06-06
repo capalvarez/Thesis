@@ -7,7 +7,7 @@
 void generateTest(std::string testName, Region r, std::vector<Point> points){
     TriangleMeshGenerator g(points, r);
     Triangulation t = g.getDelaunayTriangulation();
-    t.printInFile(testName + "_triangles.txt");
+    t.print(testName + "_triangles.txt");
 
     PolygonalMesh m = g.getMesh();
     m.printInFile(testName + ".txt");
@@ -80,6 +80,7 @@ int main(){
 
     unicorn.generateSeedPoints(PointGenerator(functions::random_double(0,15), functions::random_double(0,20)), 10, 10);
     generateTest("unicornRandom10", unicorn, unicorn.getSeedPoints());
+    unicorn.printInFile("unicorn.txt");
     unicorn.cleanSeedPoints();
 
     /*-----------------------------------------------Uniform generation-------------------------------------------------*/

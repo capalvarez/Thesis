@@ -20,7 +20,8 @@ void FractureSimulator::simulate(double crack_growth) {
 
     while(this->step<config->getMaxIterations() && !this->crack.isFinished()){
         PolygonChangeData refinedPolygons = this->crack.prepareTip(this->mesh);
-        this->mesh.printInFile("prepared.txt");
+        this->step++;
+        this->writeStepInFile();
 
         this->veamer.replaceElements(refinedPolygons.oldPolygons, refinedPolygons.newPolygons, this->mesh.getPoints());
 

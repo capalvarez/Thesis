@@ -74,7 +74,7 @@ def read_file(file_name):
         cxP = base_x + m_x * cx
         cyP = base_y + m_y * cy
 
-        polygons_points = line[0:len(line)-2]
+        polygons_points = line[1:len(line)-2]
         polygons.append(Polygon(list(map(lambda x: int(x), polygons_points)), Point(cxP, cyP), i))
 
     number_crack_segments = int(readable_file.readline())

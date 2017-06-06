@@ -55,12 +55,11 @@ void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
             otherIndex = 1;
         }
     }
-
     if(!useSecondChoice){
         this->tipPoint = standardPoint;
     }else{
-        this->tipPoint = Point (last.getX() + 2*usedRadius/config->getRatio()*std::cos(utilities::radian(angle)),
-                                last.getY() + 2*usedRadius/config->getRatio()*std::sin(utilities::radian(angle)));
+        this->tipPoint = Point (last.getX() + 4*(usedRadius/config->getRatio())*std::cos(utilities::radian(angle)),
+                                last.getY() + 4*(usedRadius/config->getRatio())*std::sin(utilities::radian(angle)));
     }
 }
 
@@ -255,11 +254,12 @@ std::vector<Pair<int>> CrackTip::prepareTip(BreakableMesh &mesh, double Standard
             while (!box.fitsInsidePolygon(mesh.getPolygon(ringIndex), mesh.getPoints().getList())) {
                 ringIndex = this->getRingPolygon(mesh, unusedPoints, oldPolygons);
                 this->container_polygon = ringIndex;
-
+                mesh.printInFile("afterMerging.txt");
                 Polygon& ringRegion = mesh.getPolygon(ringIndex);
                 ringRegion.fixSegment(previousCrackPoints[i+1], previousCrackPoints[i].first);
 
                 toErase = ringRegion.deleteVerticesInRange(previousCrackPoints[i+1].first, previousCrackPoints[i+1].second);
+                mesh.printInFile("afterDeleting.txt");
                 i++;
             }
 

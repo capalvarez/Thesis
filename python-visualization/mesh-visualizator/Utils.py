@@ -14,4 +14,4 @@ def draw_polygons(polygons, canvas, points):
 
 
 def draw_segments(segments, canvas, points):
-    draw_list(segments, canvas, points, "blue")
+    draw_list(segments, canvas, points, "black")

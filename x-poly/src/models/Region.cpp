@@ -160,3 +160,33 @@ bool Region::inEdges(Point p) {
 void Region::cleanSeedPoints() {
     this->seedPoints.clear();
 }
+
+void Region::printInFile(std::string fileName) {
+    std::string path = utilities::getPath();
+    path +=  fileName;
+
+    std::ofstream file;
+    file.open(path, std::ios::out);
+
+    file << (points.size() + seedPoints.size()) << std::endl;
+    for(int i=0;i<points.size();i++){
+        file << p[i].getString() << std::endl;
+    }
+
+    for(int i=0;i<seedPoints.size();i++){
+        file << seedPoints[i].getString() << std::endl;
+    }
+
+    std::vector<IndexSegment> segments;
+    this->getSegments(segments);
+
+    file << segments.size() << std::endl;
+    for(IndexSegment s: segments){
+        file << s.getString() << std::endl;
+    }
+
+    file << 0 << std::endl;
+
+    file.close();
+
+}
