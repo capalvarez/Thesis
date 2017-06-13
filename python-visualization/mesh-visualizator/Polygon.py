@@ -7,7 +7,7 @@ class Polygon:
     def draw(self, canvas, points, color):
         y = float(canvas['height'])
 
-        if self.index == 134:
+        if self.index == 128:
             color = "green"
 
         for i in range(len(self.p)):
@@ -18,5 +18,5 @@ class Polygon:
             #if self.index == 118 :
                 #canvas.create_text(self.centroid.x, y-self.centroid.y, text=self.index, fill="red")
 
-            #canvas.create_text(self.centroid.x, y-self.centroid.y, text=self.index)
+            canvas.create_text(self.centroid.x, y-self.centroid.y, text=self.index)
 

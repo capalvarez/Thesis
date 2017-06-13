@@ -244,7 +244,7 @@ std::vector<Pair<int>> CrackTip::remeshAndAdapt(double radius, std::vector<Polyg
     FractureConfig* config = FractureConfig::instance();
 
     this->usedRadius = radius;
-    QuarterPointElementsGenerator generator(this->getPoint(), config->getRosetteAngle(),radius);
+    QPEGenerator generator(this->getPoint(), config->getRosetteAngle(),radius);
     generator.generateGroup(this->crackAngle);
     std::vector<Point> rosettePoints = generator.getPoints();
 

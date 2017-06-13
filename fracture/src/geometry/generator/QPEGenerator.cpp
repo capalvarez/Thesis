@@ -1,14 +1,14 @@
-#include <fracture/geometry/generator/QuarterPointElementsGenerator.h>
+#include <fracture/geometry/generator/QPEGenerator.h>
 #include <fracture/config/FractureConfig.h>
 
-QuarterPointElementsGenerator::QuarterPointElementsGenerator(Point c, double angle, double radius) {
+QPEGenerator::QPEGenerator(Point c, double angle, double radius) {
     this->center = c;
     this->angle = angle;
     this->innerRadius = radius/4;
     this->outerRadius = radius;
 }
 
-void QuarterPointElementsGenerator::generateGroup(double initAngle) {
+void QPEGenerator::generateGroup(double initAngle) {
     this->points.push_back(this->center);
 
     double startAngle = initAngle + 180;
@@ -47,7 +47,7 @@ void QuarterPointElementsGenerator::generateGroup(double initAngle) {
     elements.push_back(Polygon(quarterPointPoints, this->points));
 }
 
-int QuarterPointElementsGenerator::generatePoint(double angle, double radius) {
+int QPEGenerator::generatePoint(double angle, double radius) {
     double x = center.getX() + radius*std::cos(utilities::radian(angle));
     double y = center.getY() + radius*std::sin(utilities::radian(angle));
 
@@ -58,14 +58,14 @@ int QuarterPointElementsGenerator::generatePoint(double angle, double radius) {
     return this->points.size() - 1;
 }
 
-std::vector<Point> QuarterPointElementsGenerator:: getPoints() {
+std::vector<Point> QPEGenerator:: getPoints() {
     return this->points;
 }
 
-std::vector<int> QuarterPointElementsGenerator::getBorderPoints() {
+std::vector<int> QPEGenerator::getBorderPoints() {
     return this->borderPoints;
 }
 
-std::vector<Polygon> QuarterPointElementsGenerator::getElements() {
+std::vector<Polygon> QPEGenerator::getElements() {
     return this->elements;
 }

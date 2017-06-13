@@ -7,7 +7,7 @@
 #include <x-poly/models/Region.h>
 #include <fracture/geometry/BreakableMesh.h>
 
-class QuarterPointElementsGenerator{
+class QPEGenerator{
 private:
     Point center;
     std::vector<Point> points;
@@ -20,7 +20,7 @@ private:
 
     int generatePoint(double angle, double radius);
 public:
-    QuarterPointElementsGenerator(Point c, double angle, double radius);
+    QPEGenerator(Point c, double angle, double radius);
     void generateGroup(double initAngle);
     std::vector<Point> getPoints();
     std::vector<int> getBorderPoints();

@@ -51,13 +51,6 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
     while(true){
         Polygon& poly1 = getPolygon(n1.neighbour);
 
-        if(firstTime){
-            merged = getPolygon(n1.neighbour);
-            firstTime = false;
-        }else{
-            merged = merger.mergePolygons(merged, this->polygons[n1.neighbour], this->points.getList());
-        }
-
         if(poly1.containsPoint(this->points.getList(), crack.getSecond())){
             if(poly1.inEdges(this->points.getList(), crack.getSecond())){
                 if(!oneLastIteration){
@@ -67,6 +60,13 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
                 mergedPolygon = merged;
                 return PolygonChangeData(oldPolygons, newPolygons, n1.neighbour);
             }
+        }
+
+        if(firstTime){
+            merged = getPolygon(n1.neighbour);
+            firstTime = false;
+        }else{
+            merged = merger.mergePolygons(merged, this->polygons[n1.neighbour], this->points.getList());
         }
 
         std::vector<int> poly1_points = poly1.getPoints();
