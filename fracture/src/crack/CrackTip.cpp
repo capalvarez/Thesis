@@ -1,6 +1,7 @@
 #include <fracture/crack/CrackTip.h>
 #include <fracture/geometry/mesh/RemeshAdapter.h>
 #include <fracture/config/FractureConfig.h>
+#include <fracture/utilities/greater.h>
 
 CrackTip::CrackTip() {}
 
@@ -26,61 +27,15 @@ void CrackTip::addPointToPath(double angle, BreakableMesh mesh) {
     Point standardPoint(last.getX() + config->getSpeed()*std::cos(utilities::radian(angle)),
                         last.getY() + config->getSpeed()*std::sin(utilities::radian(angle)));
 
-    bool useSecondChoice = std::abs(standardPoint.distance(last)) < usedRadius;
+    bool useSecondChoice = std::abs(standardPoint.distance(last)) < usedRadius/config->getRatio();
 
-    Point alwaysOutside(last.getX() + ring.getDiameter() * std::cos(utilities::radian(angle)),
-                        last.getY() + ring.getDiameter() * std::sin(utilities::radian(angle)));
-    Point exitRing;
-    IndexSegment intersected = ring.getIntersectedSegment(PointSegment(last, alwaysOutside), exitRing,
-                                                          mesh.getPoints().getList());
-
-    Neighbours possibleNeighbours = mesh.getNeighbours(intersected);
-    std::vector<Polygon> polygons;
-    int otherIndex = -1, firstNeighbour = 0;
-    bool border = false;
-
-    if(possibleNeighbours.isNeighbour(-1)){
-        int notNull = possibleNeighbours.getFirst()==-1? possibleNeighbours.getSecond() : possibleNeighbours.getFirst();
-        polygons = {mesh.getPolygon(notNull)};
-        otherIndex = 0;
-        border = true;
-    }else{
-        polygons = {mesh.getPolygon(possibleNeighbours.getFirst()), mesh.getPolygon(possibleNeighbours.getSecond())};
-
-        if (std::abs(polygons[1].getCentroid().distance(last)) < std::abs(polygons[0].getCentroid().distance(last))) {
-            firstNeighbour = possibleNeighbours.getFirst();
-            otherIndex = 0;
-        } else {
-            firstNeighbour = possibleNeighbours.getSecond();
-            otherIndex = 1;
-        }
-    }
     if(!useSecondChoice){
         this->tipPoint = standardPoint;
     }else{
-        this->tipPoint = Point (last.getX() + 4*(usedRadius/config->getRatio())*std::cos(utilities::radian(angle)),
-                                last.getY() + 4*(usedRadius/config->getRatio())*std::sin(utilities::radian(angle)));
+        this->tipPoint = Point (last.getX() + 2*(usedRadius/std::pow(config->getRatio(),2))*std::cos(utilities::radian(angle)),
+                                last.getY() + 2*(usedRadius/std::pow(config->getRatio(),2))*std::sin(utilities::radian(angle)));
     }
 }
-
-Point
-CrackTip::generateNextPoint(Polygon poly, Point intersection, double angle, std::vector<Point> points, bool border) {
-    if(border){
-        return intersection;
-    }
-
-    double length = poly.getDiameter()/2;
-    Point finalPoint(intersection.getX() + length * std::cos(utilities::radian(angle)),
-                     intersection.getY() + length * std::sin(utilities::radian(angle)));
-    while(!poly.containsPoint(points, finalPoint)){
-        length = length/2;
-        finalPoint = Point(intersection.getX() + length * std::cos(utilities::radian(angle)),
-                           intersection.getY() + length * std::sin(utilities::radian(angle)));
-    }
-
-    return finalPoint;
-}
-
 
 double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
     Material m = problem.veamer->getMaterial();
@@ -102,8 +57,6 @@ double CrackTip::calculateAngle(Problem problem, Eigen::VectorXd u) {
     if(kII!=0){
         double r = kI/kII;
         double theta = 2*atan((r - utilities::sign(kII)*std::sqrt((std::pow(r,2) + 8)))/4);
-        //double theta =  -utilities::sign(kII)*acos((3*std::pow(kII,2) + std::sqrt(std::pow(kI,4) + 8*std::pow(kI,2)*std::pow(kII,2))) /
-                                     //(std::pow(kI,2) + 9*std::pow(kII,2)));
 
         return this->crackAngle + utilities::degrees(theta);
     }else{
@@ -199,7 +152,8 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem, UniqueList<
     }
 
     std::vector<int> previous = {pairs.first, pairs.second};
-    PolygonChangeData changeData = problem.mesh->breakMesh(n1.neighbour, direction, false, newPoints, previous);
+    PolygonChangeData changeData = problem.mesh->breakMesh(n1.neighbour, direction, false, newPoints, previous,
+                                                           this->previouslyBroken, this->mergedBroken);
 
     problem.mesh->printInFile("afterSecondBreak.txt");
     checkIfFinished(problem, direction);
@@ -585,6 +539,26 @@ int CrackTip::getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints
 
 int CrackTip::getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints, UniqueList<int> neighbours) {
     std::vector<int> mergedPoints;
+    if(previouslyBroken.size()>0){
+        std::vector<int> neighboursVector = neighbours.getList();
+
+        std::sort(neighboursVector.begin(), neighboursVector.end(), greater());
+        std::sort(previouslyBroken.begin(), previouslyBroken.end(), greater());
+
+        std::vector<int> common;
+        std::set_intersection(neighboursVector.begin(), neighboursVector.end(), previouslyBroken.begin(), previouslyBroken.end(), std::back_inserter(common));
+
+        if(common.size()>0){
+            std::vector<Polygon>& polygons = mesh.getPolygons();
+            polygons[previouslyBroken.back()] = mergedBroken;
+            mesh.replacePolygonsForMerged(previouslyBroken);
+            mesh.getSegments().printInFile("segments.txt");
+        }
+
+        neighbours.clear();
+        mesh.getNeighboursByPoint(this->container_polygon, neighbours);
+    }
+
     std::vector<int> ringPolygonPoints = mesh.getAllPoints(neighbours.getList());
     RemeshAdapter remesher(neighbours.getList(), mesh.getPoints().getList(), mesh, mergedPoints);
 

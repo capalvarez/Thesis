@@ -1,11 +1,7 @@
 #include <fracture/geometry/BreakableMesh.h>
 #include <fracture/geometry/mesh/SimplePolygonMerger.h>
 #include <fracture/utilities/fractureutilities.h>
-
-struct greater{
-    template<class T>
-    bool operator()(T const &a, T const &b) const { return a > b; }
-};
+#include <fracture/utilities/greater.h>
 
 BreakableMesh::BreakableMesh() {}
 
@@ -23,11 +19,15 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
 
 PolygonChangeData
 BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, UniqueList<Pair<int>> &newPoints,
-                         std::vector<int> previous) {
+                         std::vector<int> previous, std::vector<int> &createdPolygonIndexes, Polygon &mergedPolygon) {
     std::vector<Polygon> oldPolygons;
     std::vector<Polygon> newPolygons;
 
+    SimplePolygonMerger merger;
     NeighbourInfo n1 = getNeighbour(init, crack, previous);
+    bool firstTime = true;
+    Polygon merged;
+
 
     if(n1.neighbour<0){
         //If the crack is in one element, return the same element
@@ -51,12 +51,20 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
     while(true){
         Polygon& poly1 = getPolygon(n1.neighbour);
 
+        if(firstTime){
+            merged = getPolygon(n1.neighbour);
+            firstTime = false;
+        }else{
+            merged = merger.mergePolygons(merged, this->polygons[n1.neighbour], this->points.getList());
+        }
+
         if(poly1.containsPoint(this->points.getList(), crack.getSecond())){
             if(poly1.inEdges(this->points.getList(), crack.getSecond())){
                 if(!oneLastIteration){
                     oneLastIteration = true;
                 }
             }else{
+                mergedPolygon = merged;
                 return PolygonChangeData(oldPolygons, newPolygons, n1.neighbour);
             }
         }
@@ -71,6 +79,7 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
 
         NeighbourInfo n2 = getNeighbour(n1.neighbour, crack, previous);
 
+
         if(n1.isEdge){
             init = n1.neighbour;
             n1 = n2;
@@ -78,21 +87,33 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
             continue;
         }
 
-        breakPolygons(n1, n2, init, oldPolygons, newPolygons,
+        Pair<int> exit = breakPolygons(n1, n2, init, oldPolygons, newPolygons,
                       newPoints);
-        this->printInFile("meshmesh.txt");
-        this->edges.printInFile("edges.txt");
+        createdPolygonIndexes.push_back(n1.neighbour);
+        createdPolygonIndexes.push_back(this->polygons.size()-1);
 
         // Iterate
         if(oneLastIteration){
             return PolygonChangeData(oldPolygons, newPolygons, n1.neighbour);
         }
 
+        IndexSegment edge = n2.edge;
+        edge.orderCCW(this->points.getList(), merged.getCentroid());
+        merged.insertOnSegment(n2.edge, {exit.second, exit.first});
+
         last = this->polygons.size()-1;
         init = n1.neighbour;
         n1 = n2;
     }
+}
 
+
+PolygonChangeData
+BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, UniqueList<Pair<int>> &newPoints,
+                         std::vector<int> previous) {
+    std::vector<int> indexes;
+    Polygon poly;
+    return breakMesh(init, crack, initialCrackTip, newPoints, previous, indexes, poly);
 }
 
 void BreakableMesh::swapPolygons(int first, int last, std::unordered_map<IndexSegment,int,SegmentHasher> &toIgnore) {
@@ -169,6 +190,10 @@ int BreakableMesh::mergePolygons(std::vector<int> &polys) {
     std::sort(polys.begin(), polys.end(), greater());
     this->polygons[polys.back()] = merged;
 
+    return replacePolygonsForMerged(polys);
+}
+
+int BreakableMesh::replacePolygonsForMerged(std::vector<int> &polys) {
     std::unordered_map<Neighbours,int,NeighboursHasher> map;
     std::unordered_map<IndexSegment, int,SegmentHasher> toIgnore;
     std::unordered_map<int,int> swappedIndexes;
@@ -179,8 +204,6 @@ int BreakableMesh::mergePolygons(std::vector<int> &polys) {
         Neighbours n (p);
         map[n] = 0;
     }
-
-    this->printInFile("beforeMerging.txt");
 
     for (int i = 0; i < polys.size()-1; ++i) {
         int i2 = polys[i];
@@ -206,8 +229,8 @@ int BreakableMesh::mergePolygons(std::vector<int> &polys) {
 }
 
 
-void BreakableMesh::breakPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init, std::vector<Polygon> &oldPolygons,
-                                  std::vector<Polygon> &newPolygons, UniqueList<Pair<int>> &newPoints) {
+Pair<int> BreakableMesh::breakPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init, std::vector<Polygon> &oldPolygons,
+                                       std::vector<Polygon> &newPolygons, UniqueList<Pair<int>> &newPoints) {
     Polygon& poly1 = getPolygon(n1.neighbour);
     oldPolygons.push_back(poly1);
 
@@ -284,6 +307,8 @@ void BreakableMesh::breakPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init,
     }
 
     n2.extraPoint = p4;
+
+    return exitPair;
 }
 
 void BreakableMesh::splitPolygons(NeighbourInfo n1, NeighbourInfo &n2, int init, std::vector<Polygon> &oldPolygons,

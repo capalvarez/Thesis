@@ -7,8 +7,8 @@ class Polygon:
     def draw(self, canvas, points, color):
         y = float(canvas['height'])
 
-        #if self.index == 140:
-        #    color = "green"
+        if self.index == 134:
+            color = "green"
 
         for i in range(len(self.p)):
             p1 = points[self.p[i]]

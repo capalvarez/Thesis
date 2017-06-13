@@ -23,6 +23,8 @@ private:
     double crackAngle;
     std::vector<int> tipTriangles;
     Polygon ring;
+    std::vector<int> previouslyBroken;
+    Polygon mergedBroken;
 
     bool hasFinished = false;
 
@@ -35,7 +37,6 @@ private:
     bool fitsBox(double radius, Polygon poly, std::vector<Point> points);
     int getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints, std::vector<Polygon> &oldPolygons);
     int getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints, UniqueList<int> neighbours);
-    Point generateNextPoint(Polygon poly, Point intersection, double angle, std::vector<Point> points, bool border);
     Pair<double> changeCoordinateSystem(double dX, double dY);
 public:
     CrackTip();

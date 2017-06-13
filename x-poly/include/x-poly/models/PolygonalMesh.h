@@ -55,6 +55,7 @@ public:
     bool isInBorder(Point p);
     void getNeighboursByPoint(int poly, UniqueList<int> &neighbours);
     int numberOfPolygons();
+    std::vector<NeighbourInfo> getAllNeighboursInPath(PointSegment direction);
 };
 
 

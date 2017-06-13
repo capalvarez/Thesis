@@ -9,6 +9,7 @@ public:
     Polygon mergePolygons(Polygon p1, Polygon p2, std::vector<Point> points);
     Polygon mergePolygons(std::vector<int> polygons, std::vector<Point> points, BreakableMesh &mesh);
 
+
 };
 
 #endif 

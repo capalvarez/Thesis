@@ -48,8 +48,8 @@ TEST(FractureSimulatorTest, SimulateTest){
     //Crack crack(Point(0.0, 3.0), Point(1.5, 1.5));
     //Crack crack(Point(0.5, 2.0), Point(2.0, 2.3));
     //Crack crack(Point(1.2, 1.8), Point(1.6, 1.8));
-    //Crack crack(Point(0.3,3.0), Point(0.7,2.8));
-    Crack crack(Point(1.6,0), Point(1.6,0.75));
+    Crack crack(Point(0.3,3.0), Point(1.6,1.8));
+    //Crack crack(Point(1.6,0), Point(1.6,0.75));
 
     class Sum : public BodyForce{
     private:
