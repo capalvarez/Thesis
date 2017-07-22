@@ -10,9 +10,9 @@ TEST_F(PolygonalHoleTest, PointsTest){
 }
 
 TEST_F(PolygonalHoleTest, SegmentsTest){
-    std::vector<Segment> expected = {Segment(0,1),Segment(1,2),Segment(2,3),Segment(3,0),Segment(4,5),Segment(5,6),
-                                     Segment(6,7),Segment(7,4)};
-    std::vector<Segment> segments;
+    std::vector<IndexSegment> expected = {IndexSegment(0,1),IndexSegment(1,2),IndexSegment(2,3),IndexSegment(3,0),IndexSegment(4,5),
+                                          IndexSegment(5,6),IndexSegment(6,7),IndexSegment(7,4)};
+    std::vector<IndexSegment> segments;
     square->getSegments(segments);
 
     EXPECT_EQ(segments, expected);

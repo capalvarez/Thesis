@@ -7,7 +7,7 @@
 
 class PointGeneratorTest : public ::testing::Test {
 protected:
-    Rectangle* box = new Rectangle(Point(0,0), Point(10,10));
+    BoundingBox* box = new BoundingBox(Point(0,0), Point(10,10));
     PointGenerator* const_const = new PointGenerator(functions::constant(), functions::constant());
 };
 

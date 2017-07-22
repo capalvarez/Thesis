@@ -5,37 +5,44 @@
 #include <vector>
 #include <x-poly/voronoi/lib/triangle.h>
 #include <unordered_map>
-#include <x-poly/voronoi/structures/EdgeData.h>
+#include <x-poly/models/neighbourhood/EdgeData.h>
 #include <x-poly/voronoi/structures/PointData.h>
-#include <x-poly/utilities/List.h>
+#include <utilities/UniqueList.h>
 #include <x-poly/models/Region.h>
 #include <x-poly/voronoi/structures/mapdata.h>
 #include <x-poly/models/Triangulation.h>
-#include <x-poly/models/Triangulation.h>
+#include <x-poly/models/neighbourhood/Neighbours.h>
+#include <x-poly/models/neighbourhood/SegmentMap.h>
 
 class TriangleMeshGenerator : public MeshGenerator{
 private:
-    Mesh mesh;
-    std::vector<PointData> points;
-    std::vector<EdgeData> edges;
+    Region region;
+    PolygonalMesh mesh;
+
     std::vector<Triangle> triangles;
     std::vector<Point> meshPoints;
-    List<int> realPoints;
+    SegmentMap delaunayEdges;
 
+    std::vector<PointData> points;
+    UniqueList<int> realPoints;
+    std::vector<EdgeData> edges;
     std::unordered_map<Key, int, KeyHasher> edgeMap;
 
-    List<Point> voronoiPoints;
-    List<Segment> voronoiEdges;
-    List<Polygon> voronoiCells;
+    UniqueList<Point> voronoiPoints;
+    SegmentMap voronoiEdges;
+    UniqueList<Polygon> voronoiCells;
 
     Point getCircumcenter(int triangle, int edge, std::vector<Point>& points);
-    void callTriangle(std::vector<Point>& point_list, Region region);
-    Mesh delaunayToVoronoi();
+    void callTriangle(std::vector<Point> &point_list, std::vector<PointSegment> restrictedSegments,
+                          char switches[]);
+    PolygonalMesh delaunayToVoronoi();
+    void writeInputInFile(UniqueList<Point> &point_list, Region region, std::vector<int> regionIndex);
 public:
     TriangleMeshGenerator(std::vector<Point>& point_list, Region region);
-    Mesh getMesh();
+    TriangleMeshGenerator(std::vector<Point>& point_list, Region region, std::vector<PointSegment> restrictedSegments);
+    ~TriangleMeshGenerator();
+    PolygonalMesh getMesh();
     Triangulation getDelaunayTriangulation();
 };
-
 
 #endif

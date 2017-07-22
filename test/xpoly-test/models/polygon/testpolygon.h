@@ -7,8 +7,8 @@
 class PolygonTest: public ::testing::Test{
 protected:
     virtual void SetUp(){
-        points = {Point(0,0), Point(1,0), Point(1,1), Point(0.5,1),
-                  Point(0,1), Point(0,2), Point(1,2)};
+        points = {Point(0,0), Point(1,0), Point(1,1), Point(0.5,1),Point(0,1),Point(0,2), Point(1,2), Point(2,0),
+                  Point(2,1), Point(0,-1), Point(2,-1), Point(1,0.5), Point(1,1.5)};
 
         std::vector<int> t = {0,1,4};
         triangle = new Polygon(t,points);
@@ -21,6 +21,7 @@ protected:
 
         std::vector<int> ncw = {0,2,1};
         nonclockwise = new Polygon(ncw,points);
+
     }
 
     std::vector<Point> points;
@@ -29,4 +30,5 @@ protected:
     Polygon* square;
     Polygon* nonconvex;
     Polygon* nonclockwise;
+
 };

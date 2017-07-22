@@ -1,32 +1,44 @@
 #ifndef THESIS_VEAMER_H
 #define THESIS_VEAMER_H
 
-#include <x-poly/models/Mesh.h>
-#include <x-poly/utilities/List.h>
-#include <veamy/models/dof/OuterDOF.h>
+#include <x-poly/models/PolygonalMesh.h>
 #include <veamy/models/dof/DOFS.h>
 #include <veamy/models/constraints/EssentialConstraints.h>
-#include <veamy/matrix/matrixOps.h>
-#include <veamy/physics/BodyForce.h>
-#include <veamy/models/constraints/ConstraintsContainer.h>
 #include <veamy/models/Element.h>
+#include <veamy/lib/Eigen/Dense>
+#include <veamy/physics/ProblemConditions.h>
+
+struct PolygonHasher {
+    std::size_t operator()(const Polygon &k) const {
+        using std::size_t;
+        using std::hash;
+
+        return k.hash;
+    }
+};
 
 class Veamer {
-private:
-    //TODO: Check for inconsistencies (cannot have natural and essential conditions on the same segments)
-    ConstraintsContainer constraints;
-    std::vector<Element> elements;
-    List<Point> points;
+protected:
+    ProblemConditions conditions;
+    UniqueList<Point> points;
 
-    int k;
+    virtual void createElement(Polygon p);
+    void insertElement(Polygon p, int index);
 public:
     DOFS DOFs;
-    Veamer(int k);
+    std::vector<Element> elements;
+    Veamer();
 
-    void loadGeometry(Mesh m, ConstraintsContainer c, BodyForce* f);
-    Eigen::VectorXd simulate();
-    std::vector<Element> getElements();
+    void initProblem(PolygonalMesh m, ProblemConditions conditions);
+    Eigen::VectorXd simulate(PolygonalMesh &mesh);
 
+    Pair<int> pointToDOFS(int point_index);
+    Material getMaterial();
+    UniqueList<Point> getPoints() const;
+    UniqueList<Point> getPoints();
+    ProblemConditions getConditions() const;
+
+    void writeDisplacements(std::string fileName, Eigen::VectorXd u);
 };
 
 

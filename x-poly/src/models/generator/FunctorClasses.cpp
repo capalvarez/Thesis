@@ -1,12 +1,15 @@
-#include <x-poly/utilities/utilities.h>
+#include <x-poly/utilities/xpolyutilities.h>
 #include <cmath>
 #include <random>
 #include <x-poly/models/generator/Functor.h>
+#include <time.h>
+#include <ctime>
+#include <utilities/UniqueList.h>
 
 class Constant : public Functor {
 public:
     Constant() {}
-    inline double operator()(double x){ return x;}
+    inline double apply(double x){ return x;}
 };
 
 class Uniform : public Functor {
@@ -14,7 +17,7 @@ private:
     double delta;
 public:
     Uniform(double delta){ this->delta = delta;}
-    inline double operator()(double x){ return x*delta;}
+    inline double apply(double x){ return x*delta;}
 };
 
 class Sine : public Functor {
@@ -29,7 +32,7 @@ public:
         this->phase = p;
     }
 
-    inline double operator()(double x){
+    inline double apply(double x){
         return amplitude*std::sin(frecuency*utilities::radian(x) + utilities::radian(phase));
     };
 };
@@ -46,55 +49,36 @@ public:
         this->phase = p;
     }
 
-    inline double operator()(double x){
+    inline double apply(double x){
         return amplitude*std::cos(frecuency*utilities::radian(x) + utilities::radian(phase));
     };
 };
 
-class Random_Integer : public Functor {
+class ConstantAlternating: public Functor{
 private:
-    double min;
-    double max;
-    std::random_device rd;
-    std::mt19937* rng;
-    std::uniform_int_distribution<int>* uni;
+    UniqueList<double> visitedPlaces;
+    double delta;
+    bool alternating = false;
 public:
-    Random_Integer(double min, double max){
-        this->min = min;
-        this->max = max;
-        this->rng = new std::mt19937(rd());
-        this->uni = new std::uniform_int_distribution<int>(min,max);
+    ConstantAlternating(){}
+    inline double apply(double x){
+        if(visitedPlaces.size()==1){
+            delta = std::abs(visitedPlaces[0] - x);
+        }
+
+        int index = visitedPlaces.push_back(x);
+
+        if(index<visitedPlaces.size()-1){
+            alternating = !alternating;
+            visitedPlaces.clear();
+        }
+
+        if(alternating){
+            return x + delta/2;
+        }else{
+            return x;
+        }
     }
 
-    ~Random_Integer(){
-        delete(rng);
-        delete(uni);
-    }
-
-    inline double operator()(double x){return (*uni)(*this->rng);}
 };
-
-class Random_Double : public Functor {
-private:
-    double min;
-    double max;
-    std::random_device rd;
-    std::mt19937* rng;
-    std::uniform_real_distribution<double>* uni;
-public:
-    Random_Double(double min, double max){
-        this->min = min;
-        this->max = max;
-        this->rng = new std::mt19937(rd());
-        this->uni = new std::uniform_real_distribution<double>(min,max);
-    }
-
-    ~Random_Double(){
-        delete(rng);
-        delete(uni);
-    }
-
-    inline double operator()(double x){return (*uni)(*this->rng);}
-};
-
 

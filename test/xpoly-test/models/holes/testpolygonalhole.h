@@ -10,7 +10,7 @@ class PolygonalHoleTest : public ::testing::Test {
 protected:
     virtual void SetUp(){
         square = new Region(squarePoints);
-        hole = new PolygonalHole(holePoints);
+        hole = PolygonalHole(holePoints);
 
         square->addHole(hole);
     }
@@ -20,7 +20,7 @@ protected:
 
     std::vector<Point> holePoints = {Point(0.25,0.25), Point(0.75,0.25), Point(0.75,0.75), Point(0.25,0.75)};
 
-    Hole* hole;
+    Hole hole;
 };
 
 

@@ -1,20 +1,17 @@
 #ifndef THESIS_SEGMENTPAIR_H
 #define THESIS_SEGMENTPAIR_H
 
-struct SegmentPair{
-    Segment s1;
-    Segment s2;
-    int number = 0;
+#include <x-poly/models/basic/IndexSegment.h>
 
-    SegmentPair(Segment seg1, Segment seg2){
+struct SegmentPair{
+    IndexSegment s1;
+    IndexSegment s2;
+
+    SegmentPair(IndexSegment seg1, IndexSegment seg2){
         s1 = seg1;
         s2 = seg2;
     }
 
-    SegmentPair(Segment seg){
-        s1 = seg;
-        number = 1;
-    }
 };
 
 #endif

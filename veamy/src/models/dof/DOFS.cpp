@@ -1,52 +1,32 @@
 #include <veamy/models/dof/DOFS.h>
 
-Pair<int> DOFS::addOuterDOF(ConstraintsContainer& constraints, std::vector<Point> points, int point_index, int type,
-                            SegmentPair pair) {
-    typename std::vector<int>::iterator it;
-    it = std::find(occupied_point_indexes.begin(), occupied_point_indexes.end(), point_index);
+Pair<int> DOFS::addDOF(ConstraintsContainer &constraints, std::vector<Point> points, int point_index,
+                       SegmentPair pair) {
+
+    std::unordered_map<int,int>::iterator it = occupied_point_indexes.find(point_index);
 
     if(it!=occupied_point_indexes.end()){
-        int outerDOF_index = (int) std::distance(occupied_point_indexes.begin(),it);
+        int outerDOF_index = it->second;
 
-        return Pair<int>(outer_indexes[outerDOF_index], outer_indexes[outerDOF_index]+1);
+        return Pair<int>(outerDOF_index, outerDOF_index+1);
     }
 
-    int newIndex;
-    if(type==0){
-        newIndex = list.push_back(new VertexDOF(list.size(),point_index, DOF::Axis::x));
+    DOF newDOF = DOF(list.size(),point_index, DOF::Axis::x);
+    DOF newDOF2 = DOF(list.size()+1,point_index, DOF::Axis::y);
 
-        list.push_back(new VertexDOF(list.size(), point_index, DOF::Axis::y));
-    }else{
-        newIndex = list.push_back(new EdgeDOF(list.size(),point_index, DOF::Axis::x));
-        list.push_back(new EdgeDOF(list.size(), point_index, DOF::Axis::y));
-    }
+    int newIndex = list.push_back(newDOF);
+    list.push_back(newDOF2);
 
-    constraints.addConstrainedDOF(newIndex,DOF::Axis::x, pair);
-    constraints.addConstrainedDOF(newIndex+1,DOF::Axis::y, pair);
+    constraints.addConstrainedDOF(points, newIndex, DOF::Axis::x, pair);
+    constraints.addConstrainedDOF(points, newIndex+1, DOF::Axis::y, pair);
 
-    occupied_point_indexes.push_back(point_index);
-    outer_indexes.push_back(newIndex);
+    occupied_point_indexes[point_index] = newIndex;
+    Pair<int> dofPair(newIndex, newIndex+1);
 
-    return Pair<int>(newIndex, newIndex+1);
+    return dofPair;
 }
 
-
-Pair<int> DOFS::addVertexDOF(ConstraintsContainer& constraints, std::vector<Point> points, int index, SegmentPair pair) {
-    return addOuterDOF(constraints, points, index, 0, pair);
-}
-
-Pair<int> DOFS::addEdgeDOF(ConstraintsContainer& constraints, std::vector<Point> points, int index, SegmentPair pair) {
-    return addOuterDOF(constraints, points, index, 1, pair);
-}
-
-Pair<int> DOFS::addInnerDOF(Pair<int> poly) {
-    list.push_back(new InnerDOF(poly, list.size(), DOF::Axis::x));
-    list.push_back(new InnerDOF(poly, list.size(), DOF::Axis::y));
-
-    return Pair<int>(list.size() - 2, list.size() - 1);
-}
-
-VeamyList<DOF *> DOFS::getDOFS() {
+UniqueList<DOF> DOFS:: getDOFS() {
     return this->list;
 }
 
@@ -54,11 +34,15 @@ int DOFS::size() {
     return list.size();
 }
 
-DOF *DOFS::get(int i) {
-    return list.get(i);
+DOF DOFS::get(int i) {
+    return list[i];
 }
 
+Pair<int> DOFS::pointToDOFS(int point) {
+    int dofIndex = occupied_point_indexes[point];
 
+    return Pair<int>(dofIndex, dofIndex+1);
+}
 
 
 

@@ -1,9 +1,15 @@
 #include <x-poly/models/generator/Functor.h>
+#include <x-poly/models/generator/RandomDouble.h>
+#include <x-poly/models/generator/RandomInteger.h>
 #include "FunctorClasses.cpp"
 
 namespace functions {
     Functor *constant() {
-        return new Constant();
+        return new Uniform(1.0);
+    }
+
+    Functor *constantAlternating() {
+        return new ConstantAlternating();
     }
 
     Functor *uniform(double delta) {

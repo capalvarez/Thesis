@@ -1,50 +1,30 @@
 #include <veamy/models/constraints/NaturalConstraints.h>
 
-NaturalConstraints::NaturalConstraints() {
+NaturalConstraints::NaturalConstraints() {}
 
-}
-
-double NaturalConstraints::lineIntegral(std::vector<Point> points, Polygon p, int DOF_index, int local_index, int k, Eigen::MatrixXd PiZS) {
-    //TODO: Represent constraints in neighbour segments
-
+double NaturalConstraints::lineIntegral(std::vector<Point> points, Polygon p, int point, int DOF_index) {
     if(isConstrained(DOF_index)){
-        Constraint c = constraints_map[DOF_index];
-        List<Segment> constrained = c.getSegments();
-
-        std::vector<double> quadrature;
-        std::vector<double> weights;
-        lobatto::lobatto_set(k+1,quadrature,weights);
-
-        BasePolinomials b(k);
-
         double integral = 0;
-        int n = constrained.size();
 
-        for (int j = 0; j < n; ++j){
-            Segment s = constrained.get(j);
+        std::vector<int> polygonPoints = p.getPoints();
+        int n = (int) polygonPoints.size();
 
-            if(p.containsEdge(s)){
-                Point p1 = points[s.getFirst()];
-                Point p2 = points[s.getSecond()];
+        IndexSegment prev (polygonPoints[(n + point -1)%n], polygonPoints[point]);
+        IndexSegment next (polygonPoints[point], polygonPoints[(n + point + 1)%n]);
 
-                for (int i = 0; i < weights.size(); ++i) {
-                    double x = p1.getX() + (p2.getX() - p1.getX()) * quadrature[i];
-                    double y = p1.getY() + (p2.getY() - p1.getY()) * quadrature[i];
+        isConstrainedInfo prevConst = isConstrained(points, prev);
+        isConstrainedInfo nextConst = isConstrained(points, next);
 
-                    double xFactor = ((x - p.getCentroid().getX()) / p.getDiameter());
-                    double yFactor = ((y - p.getCentroid().getY()) / p.getDiameter());
+        if(prevConst.isConstrained){
+            Constraint c = segment_map[prevConst.container];
 
-                    double PiSPhi = 0;
+            integral += (0.5*c.getValue(points[prev.getFirst()]) + 0.5*c.getValue(points[prev.getSecond()]))*prev.length(points);
+        }
 
-                    for (int alpha = 0; alpha < b.nOfPolinomials(); ++alpha) {
-                        Pair<int> a = b.getPolinomial(alpha);
+        if(nextConst.isConstrained){
+            Constraint c = segment_map[nextConst.container];
 
-                        PiSPhi += PiZS(alpha, local_index) * operations::power(xFactor, a.first) * operations::power(yFactor, a.second);
-                    }
-
-                    integral+=weights[i]*c.getValue(Point(x,y))*PiSPhi;
-                }
-            }
+            integral += (0.5*c.getValue(points[next.getFirst()]) + 0.5*c.getValue(points[next.getSecond()]))*next.length(points);
         }
 
         return integral;

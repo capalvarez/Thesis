@@ -2,7 +2,7 @@
 #define THESIS_POINTGENERATOR_H
 
 #include <x-poly/models/basic/Point.h>
-#include <x-poly/models/polygon/Rectangle.h>
+#include <x-poly/models/polygon/BoundingBox.h>
 #include "Functor.h"
 #include <vector>
 
@@ -12,7 +12,7 @@ private:
     Functor* lY;
 public:
     PointGenerator(Functor* lX, Functor* lY);
-    void generate(std::vector<Point>& vector, Rectangle box, int nX, int nY);
+    void generate(std::vector<Point>& vector, BoundingBox box, int nX, int nY);
 };
 
 #endif

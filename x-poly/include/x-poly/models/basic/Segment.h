@@ -3,23 +3,32 @@
 
 #include <vector>
 #include <x-poly/models/basic/Point.h>
+#include <x-poly/utilities/xpolyutilities.h>
+#include <x-poly/config/XPolyConfig.h>
 
+template <class T>
 class Segment {
-private:
-    int p1;
-    int p2;
+protected:
+    T p1;
+    T p2;
+
+    double length(Point p1, Point p2);
+    bool intersects(Point p1, Point p2, Point o1, Point o2, Point& inter);
+    double cartesianAngle(Point p1, Point p2);
+    bool intersectionInfinite(Point p1, Point p2, Point o1, Point o2, Point &inter);
+    bool contains(Point point, Point p1, Point p2);
 public:
-    Segment(int p1, int p2);
     Segment();
-    Segment(const Segment& other);
+    Segment(T p1, T p2);
+    ~Segment();
 
-    int getFirst() const;
-    int getSecond() const;
-    bool operator==(const Segment other) const;
-    std::string getString();
+    T getFirst() const;
+    T getSecond() const;
 
-    bool contains(std::vector<Point>& p, Point point);
-    Point middlePoint(std::vector<Point> p);
+    virtual std::string getString() const = 0;
+    virtual bool isBoundary(std::vector<Point> p) = 0;
+    bool isVertex(T p);
+
 };
 
 #endif

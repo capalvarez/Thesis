@@ -1,28 +1,31 @@
 #ifndef THESIS_MESH_H
 #define THESIS_MESH_H
 
-#include <x-poly/models/polygon/Polygon.h>
-#include <x-poly/models/basic/Point.h>
-#include <x-poly/models/basic/Segment.h>
-#include <algorithm>
+#include <x-poly/models/neighbourhood/SegmentMap.h>
+#include <utilities/UniqueList.h>
+#include <fstream>
 
-class Mesh {
-private:
-    std::vector<Point> points;
-    std::vector<Polygon> elements;
-    std::vector<Segment> edges;
+class Mesh{
+protected:
+    SegmentMap edges;
+    UniqueList<Point> points;
 public:
-    Mesh(std::vector<Point>& p, std::vector<Polygon>& e, std::vector<Segment>& s);
-    Mesh();
-    ~Mesh();
-
-    std::vector<Point> getPoints();
-    std::vector<Segment> getEdges();
-    std::vector<Polygon> getElements();
-
+    void printInStream(std::ofstream& file);
     void printInFile(std::string fileName);
+    virtual void writeElements(std::ofstream& file) = 0;
+
+    SegmentMap& getSegments();
+    SegmentMap getSegments() const ;
+
+    UniqueList<Point>& getPoints();
+    UniqueList<Point> getPoints() const;
+
+    bool isFull();
+
+    Point getPoint(int i);
+    IndexSegment convertSegment(PointSegment s);
+    Neighbours getNeighbours(IndexSegment s);
 };
 
 
 #endif
-

@@ -1,7 +1,7 @@
 #ifndef THESIS_TESTS_H
 #define THESIS_TESTS_H
 
-#include <x-poly/models/Mesh.h>
+#include <x-poly/models/PolygonalMesh.h>
 #include <veamy/lib/Eigen/Dense>
 #include <x-poly/models/Region.h>
 #include <x-poly/models/generator/functions.h>
@@ -17,39 +17,26 @@
 
 class NumericalTests{
 private:
-    int order;
+    PolygonalMesh rectangleUniform;
+    PolygonalMesh rectangleRandom;
+    PolygonalMesh rectangle4x8ConstantAlternating;
 
-    Mesh two_squares;
-    Mesh hundred_square;
-    Mesh random_voronoi_square;
-    Mesh rectangle_hole;
-    Mesh trapezoid;
-    Mesh L;
+    PolygonalMesh rectangleHoleRandom;
+    PolygonalMesh rectangleHoleUniform;
+    PolygonalMesh romboidRandom;
+    PolygonalMesh LRandom;
+    PolygonalMesh LUniform;
 
-    Eigen::VectorXd two_squares_rightforceX();
-    Eigen::VectorXd two_squares_rightforceY();
-    Eigen::VectorXd two_squares_noforces();
-
-    Eigen::VectorXd hundredsquare_rightforceX();
-    Eigen::VectorXd hundredsquare_rightforceY();
-    Eigen::VectorXd hundredsquare_noforces();
-
-    Eigen::VectorXd hundredsquare_twoforcesX();
-
-    Eigen::VectorXd voronoi_rightforceX();
-    Eigen::VectorXd voronoi_rightforceY();
-
-    Eigen::VectorXd hole_rightforceX();
-    Eigen::VectorXd hole_twoforceX();
-
-
-    void loadRightForceX(Mesh m, Veamer& v, Segment leftSide, Segment rightSide);
-    void loadRightForceY(Mesh m, Veamer& v, Segment leftSide, Segment rightSide);
-    void loadNoForces(Mesh m, Veamer& v, Segment leftSide, Segment rightSide);
-    void loadTwoForcesX(Mesh m, Veamer& v, Segment leftSide, Segment rightSide);
+    Eigen::VectorXd loadBothSides(PolygonalMesh mesh, std::vector<PointSegment> restrained, std::vector<double> values,
+                                      std::string testName);
+    Eigen::VectorXd clampedWithLoad(PolygonalMesh mesh, std::vector<PointSegment> restricted, double loadValue, std::string testName);
+    Eigen::VectorXd clampedWithBodyForce(PolygonalMesh mesh, PointSegment clamped, std::string testName);
+    Eigen::VectorXd clampedDisplacement(PolygonalMesh mesh, std::vector<PointSegment> restricted, double displacement, std::string testName);
+    Eigen::VectorXd fixedXWithParabolicLoad(PolygonalMesh mesh, std::vector<PointSegment> restricted, std::string testName);
+    Eigen::VectorXd clampedBothSideLoadMiddle(PolygonalMesh mesh, std::vector<PointSegment> restricted, PointSegment charged,
+                                              double load, std::string testName);
 public:
-    NumericalTests(int order);
-
+    NumericalTests();
     void runTests();
 };
 

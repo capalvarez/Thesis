@@ -9,12 +9,10 @@
 #include <x-poly/models/polygon/Polygon.h>
 
 class CircularHole: public Hole, public Circle {
+private:
+    void computeSegments();
 public:
-    CircularHole(Point p, double r, int grade);
-
-    Point getCenter();
-    void getSegments(std::vector<Segment>& segments, int offset);
-    std::vector<Point> getPoints();
+    CircularHole(Point p, double r);
 };
 
 

@@ -2,15 +2,16 @@
 #define THESIS_POINT_H
 
 #include <string>
-#include "Point3D.h"
 #include <math.h>
 #include <cmath>
-#include <x-poly/utilities/utilities.h>
+#include <sstream>
+#include <utilities/utilities.h>
 
 class Point {
 private:
     double x;
     double y;
+    bool isBoundaryPoint = false;
 public:
     Point(double x, double y);
     Point();
@@ -19,11 +20,19 @@ public:
     double getY() const;
 
     double squareNorm();
-    std::string getString();
+    std::string getString() const;
     bool operator==(const Point& other) const;
-    Vector operator-(Point& other);
+    bool operator<(const Point& other) const;
+    Point operator-(const Point& other);
+    double distance(Point p);
 
-    Point3D get3DPoint();
+    bool isInBoundary();
+    void setBoundary();
+
+    void setX(double newX);
+    void setY(double newY);
+
+    void deform(double dX, double dY);
 };
 
 #endif

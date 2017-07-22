@@ -2,6 +2,8 @@
 #define MAPDATA_H
 
 #include <functional>
+#include <x-poly/models/basic/IndexSegment.h>
+
 
 struct Key {
     int first;
@@ -20,7 +22,16 @@ struct KeyHasher {
         using std::size_t;
         using std::hash;
 
-        return hash<int>()(k.first) + hash<int>()(k.second);
+        return utilities::hash32(k.first) + utilities::hash32(k.second);
+    }
+};
+
+struct SegmentHasher {
+    std::size_t operator()(const IndexSegment &k) const {
+        using std::size_t;
+        using std::hash;
+
+        return utilities::hash32(k.getFirst()) + utilities::hash32(k.getSecond());
     }
 };
 
