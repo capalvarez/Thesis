@@ -20,7 +20,8 @@ private:
                                       std::vector<Pair<int>> previousCrackPoints);
     void grow(CrackTip &tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, Problem problem, Eigen::VectorXd u,
                   UniqueList<Pair<int>> &crackPoints, PointSegment previousCrackSegment);
-    double adjustBoxes(Polygon initPoly, Polygon endPoly, std::vector<Point> points);
+    std::vector<Pair<int>> adjustBoxes(CrackTip &tip, BreakableMesh &mesh, std::vector<Pair<int>> previousCrackPoints,
+                                              UniqueList<Polygon> &oldPolygons, std::vector<int> &unusedPoints, IndexSegment& crackEntry);
 public:
     Crack();
     Crack(Point init, Point end);

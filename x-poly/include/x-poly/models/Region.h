@@ -33,6 +33,7 @@ public:
     std::vector<Point> getRegionPoints();
     std::vector<Hole>& getHoles();
     void addHole(Hole h);
+    void cleanInternalHoles();
     void generateSeedPoints(PointGenerator p, int nX, int nY);
     void addSeedPoints(std::vector<Point> seeds);
     BoundingBox getBox();

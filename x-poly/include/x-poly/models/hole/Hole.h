@@ -32,6 +32,16 @@ public:
     virtual std::vector<Point> getPoints(){
         return this->HolePoints;
     };
+
+    std::string getString(){
+        std::string result;
+
+        for (Point p: HolePoints) {
+            result += p.getString() + "\n";
+        }
+
+        return result;
+    }
 };
 
 #endif

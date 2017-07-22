@@ -12,4 +12,4 @@ class Segment:
         #if (self.p1 == 144 and self.p2 ==86) or (self.p2 == 144 and self.p1 ==86):
         #    canvas.create_line(point_1.x, y-point_1.y, point_2.x, y-point_2.y, fill="red")
         #else:
-        canvas.create_line(point_1.x, y-point_1.y, point_2.x, y-point_2.y, fill=color)
+        canvas.create_line(point_1.x, y-point_1.y, point_2.x, y-point_2.y, fill=color, width=3)

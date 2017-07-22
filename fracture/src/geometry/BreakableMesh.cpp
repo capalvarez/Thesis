@@ -24,6 +24,7 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
     std::vector<Polygon> newPolygons;
 
     SimplePolygonMerger merger;
+    int last = previous.size()==0? -1: (previous[0]==init? previous[1] : previous[0]);
     NeighbourInfo n1 = getNeighbour(init, crack, previous);
     bool firstTime = true;
     Polygon merged;
@@ -31,10 +32,9 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
 
     if(n1.neighbour<0){
         //If the crack is in one element, return the same element
-        return PolygonChangeData(oldPolygons, newPolygons, init);
+        return PolygonChangeData(oldPolygons, newPolygons);
     }
 
-    int last = -1;
     if(initialCrackTip){
         IndexSegment container_edge = this->getPolygon(init).containerEdge(getPoints().getList(), crack.getFirst());
         NeighbourInfo n0 = NeighbourInfo(init, container_edge,crack.getFirst() ,false);
@@ -58,7 +58,7 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
                 }
             }else{
                 mergedPolygon = merged;
-                return PolygonChangeData(oldPolygons, newPolygons, n1.neighbour);
+                return PolygonChangeData(oldPolygons, newPolygons);
             }
         }
 
@@ -74,7 +74,12 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
         if(!n1.isVertex){
             previous = {init, last};
         }else{
-            previous.push_back(last);
+            if(last==-1){
+                previous.push_back(last);
+            }else{
+                previous = {init, last};
+            }
+
         }
 
         NeighbourInfo n2 = getNeighbour(n1.neighbour, crack, previous);
@@ -94,7 +99,7 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
 
         // Iterate
         if(oneLastIteration){
-            return PolygonChangeData(oldPolygons, newPolygons, n1.neighbour);
+            return PolygonChangeData(oldPolygons, newPolygons);
         }
 
         IndexSegment edge = n2.edge;
@@ -104,6 +109,8 @@ BreakableMesh::breakMesh(int init, PointSegment crack, bool initialCrackTip, Uni
         last = this->polygons.size()-1;
         init = n1.neighbour;
         n1 = n2;
+
+        this->printInFile("afterBreaking.txt");
     }
 }
 

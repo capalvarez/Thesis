@@ -5,12 +5,13 @@ class FractureConfig {
 private:
     double double_comparison_tolerance;
 
+    double rosette_angle;
+    int max_iterations;
     double crack_growth_speed;
+
     double crack_size_ratio;
     double diameter_ratio;
 
-    double rosette_angle;
-    int max_iterations;
 
     static FractureConfig* s_instance;
 

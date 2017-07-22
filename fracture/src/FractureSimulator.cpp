@@ -8,6 +8,7 @@ FractureSimulator::FractureSimulator(std::string simulationName, const Polygonal
     this->crack = initial;
     this->veamer = BreakableVeamer();
 
+    this->mesh.printInFile("initial.txt");
     this->crack.initializeCrack(this->mesh);
     this->veamer.initProblem(this->mesh, conditions);
 }

@@ -36,7 +36,7 @@ TEST(FractureSimulatorTest, SimulateTest){
     std::vector<Point> squarePoints = {Point(0,0),Point(3,0),Point(3,3),Point(0,3)};
     Region square (squarePoints);
 
-    PointGenerator generator (functions::random_double(0,3), functions::random_double(0,3));
+    PointGenerator generator (functions::constant(), functions::constant());
 
     square.generateSeedPoints(generator, 8, 8);
     std::vector<Point> seeds = square.getSeedPoints();
@@ -46,10 +46,11 @@ TEST(FractureSimulatorTest, SimulateTest){
     mesh.printInFile("previous.txt");
 
     //Crack crack(Point(0.0, 3.0), Point(1.5, 1.5));
-    //Crack crack(Point(0.5, 2.0), Point(2.0, 2.3));
-    //Crack crack(Point(1.2, 1.8), Point(1.6, 1.8));
-    Crack crack(Point(0.3,3.0), Point(1.6,1.8));
+    //Crack crack(Point(0.8, 0.8), Point(2.0, 1.8));
+    Crack crack(Point(1.3, 1.8), Point(1.8, 1.8));
+    //Crack crack(Point(0.3,3.0), Point(1.6,1.8));
     //Crack crack(Point(1.6,0), Point(1.6,0.75));
+    //Crack crack(Point(0,1.6), Point(0.75,1.6));
 
     class Sum : public BodyForce{
     private:
@@ -66,7 +67,7 @@ TEST(FractureSimulatorTest, SimulateTest){
 
     NaturalConstraints natural;
     PointSegment constrained2 (Point(3,0),Point(3,3));
-    Constraint const2 (constrained2, mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(100));
+    Constraint const2 (constrained2, mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(1000));
     natural.addConstraint(const2,  mesh.getPoints().getList());
 
     ConstraintsContainer container;

@@ -52,6 +52,7 @@ int main(){
 
     square.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 10, 10);
     generateTest("squareRandom10", square, square.getSeedPoints());
+    square.printInFile("square.txt");
     square.cleanSeedPoints();
 
     square.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 20, 20);
@@ -60,6 +61,7 @@ int main(){
 
     romboid.generateSeedPoints(PointGenerator(functions::random_double(0,15), functions::random_double(0,15)), 5, 5);
     generateTest("romboidRandom5", romboid, romboid.getSeedPoints());
+    romboid.printInFile("romboid.txt");
     romboid.cleanSeedPoints();
 
     romboid.generateSeedPoints(PointGenerator(functions::random_double(0,15), functions::random_double(0,15)), 10, 10);
@@ -68,6 +70,7 @@ int main(){
 
     quarter_circle.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 5, 5);
     generateTest("quarter_circleRandom5", quarter_circle, quarter_circle.getSeedPoints());
+    quarter_circle.printInFile("quarter_circle.txt");
     quarter_circle.cleanSeedPoints();
 
     quarter_circle.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 10, 10);
@@ -96,6 +99,10 @@ int main(){
     generateTest("quarter_circleUniform10", quarter_circle, quarter_circle.getSeedPoints());
     quarter_circle.cleanSeedPoints();
 
+    unicorn.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 10, 10);
+    generateTest("unicornUniform10", unicorn, unicorn.getSeedPoints());
+    unicorn.cleanSeedPoints();
+
     /*---------------------------------------Generation with holes------------------------------------*/
     Hole circular = CircularHole(Point(5,5), 2);
     square.addHole(circular);
@@ -110,6 +117,7 @@ int main(){
     square.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 10, 10);
     generateTest("squareHoleCenterUniform10", square, square.getSeedPoints());
     square.cleanSeedPoints();
+    square.printInFile("SquareHole.txt");
 
     square = Region(square_points);
 
@@ -142,4 +150,19 @@ int main(){
     quarter_circle.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 10, 10);
     generateTest("quarter_circleHoleRandom10", quarter_circle, quarter_circle.getSeedPoints());
     quarter_circle.cleanSeedPoints();
+
+    Hole circle = CircularHole(Point(8,8), 2);
+    unicorn.addHole(circle);
+    unicorn.generateSeedPoints(PointGenerator(functions::random_double(0,15), functions::random_double(0,20)), 10, 10);
+    generateTest("unicornHoleInsideRandom10", unicorn, unicorn.getSeedPoints());
+    unicorn.cleanSeedPoints();
+
+    unicorn.cleanInternalHoles();
+    circle = CircularHole(Point(5,5), 2);
+    unicorn.addHole(circle);
+    unicorn.generateSeedPoints(PointGenerator(functions::random_double(0,15), functions::random_double(0,20)), 10, 10);
+    generateTest("unicornHoleBorderRandom10", unicorn, unicorn.getSeedPoints());
+    unicorn.cleanSeedPoints();
+
+
 }

@@ -273,7 +273,7 @@ bool Polygon::isClockwise(std::vector<Point> &p) {
 }
 
 bool Polygon::operator==(const Polygon &other) const{
-    return std::is_permutation(this->points.begin(), this->points.end(), other.getPoints().begin());
+    return this->hash==other.hash;
 }
 
 std::string Polygon::getString() {

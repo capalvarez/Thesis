@@ -1,8 +1,11 @@
+#define _USE_MATH_DEFINES
+
 #include <algorithm>
 #include <utilities/Pair.h>
 #include <iostream>
 #include <sstream>
 #include <ctime>
+#include <random>
 
 namespace utilities {
     int random_integer(int min, int max){

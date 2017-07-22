@@ -16,6 +16,7 @@ NumericalTests::NumericalTests() {
     /*Rectangle*/
     std::vector<Point> rectangle_points = {Point(0, 0), Point(4, 0), Point(4, 1), Point(0, 1)};
     Region region(rectangle_points);
+    region.printInFile("square.txt");
 
     region.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 20, 5);
     std::vector<Point> seeds = region.getSeedPoints();
@@ -45,6 +46,7 @@ NumericalTests::NumericalTests() {
     /*L-shape*/
     std::vector<Point> l_points = {Point(10,0), Point(20,0), Point(20,20), Point(0,20), Point(0,10), Point(10,10)};
     Region l_region(l_points);
+    l_region.printInFile("l_shape.txt");
 
     l_region.generateSeedPoints(PointGenerator(functions::random_double(0,20), functions::random_double(0,20)), 10, 10);
     seeds = l_region.getSeedPoints();
@@ -52,6 +54,13 @@ NumericalTests::NumericalTests() {
     meshGenerator = TriangleMeshGenerator(seeds, l_region);
     LRandom = meshGenerator.getMesh();
     LRandom.printInFile("ResultadosNumericos\\LRandom.txt");
+
+    l_region.cleanSeedPoints();
+    l_region.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 10,10);
+    seeds = l_region.getSeedPoints();
+    meshGenerator = TriangleMeshGenerator(seeds, l_region);
+    LUniform = meshGenerator.getMesh();
+    LUniform.printInFile("ResultadosNumericos\\LUniform.txt");
 
     /*Romboide*/
     std::vector<Point> romboid_points = {Point(0,0), Point(10,0), Point(15,10), Point(5,10)};
@@ -66,12 +75,21 @@ NumericalTests::NumericalTests() {
     /*Rectangle with hole*/
     Hole circular = CircularHole(Point(2,1), 0.5);
     region.addHole(circular);
+    region.printInFile("squareHole.txt");
     region.generateSeedPoints(PointGenerator(functions::random_double(0,4), functions::random_double(0,1)), 20, 5);
     seeds = region.getSeedPoints();
 
     meshGenerator = TriangleMeshGenerator(seeds, region);
     rectangleHoleRandom = meshGenerator.getMesh();
     rectangleHoleRandom.printInFile("ResultadosNumericos\\rectangleHoleRandom.txt");
+    region.cleanSeedPoints();
+    region.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 20, 5);
+    seeds = region.getSeedPoints();
+
+    meshGenerator = TriangleMeshGenerator(seeds, region);
+    rectangleHoleUniform = meshGenerator.getMesh();
+    rectangleHoleUniform.printInFile("ResultadosNumericos\\rectangleHoleUniform.txt");
+
 }
 
 Eigen::VectorXd
@@ -80,7 +98,7 @@ NumericalTests::loadBothSides(PolygonalMesh mesh, std::vector<PointSegment> rest
     Veamer v;
     
     NaturalConstraints c;
-    Constraint const1 (restrained[0], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(values[0]));
+    Constraint const1 (restrained[0], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(-values[0]));
     Constraint const2 (restrained[1], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(values[1]));
 
     c.addConstraint(const1, mesh.getPoints().getList());
@@ -242,18 +260,22 @@ void NumericalTests::runTests() {
     double load = 1000;
     double displacement = 1;
 
-    loadBothSides(rectangleUniform, {PointSegment(Point(0,0), Point(0,1)), PointSegment(Point(4,0), Point(4,1))},
+    /*loadBothSides(rectangleUniform, {PointSegment(Point(0,0), Point(0,1)), PointSegment(Point(4,0), Point(4,1))},
                   {load,load}, "rectangleUniform");
     loadBothSides(rectangleRandom, {PointSegment(Point(0,0), Point(0,1)), PointSegment(Point(4,0), Point(4,1))},
                   {load,load}, "rectangleRandom");
     loadBothSides(rectangleHoleRandom, {PointSegment(Point(0,0), Point(0,1)), PointSegment(Point(4,0), Point(4,1))},
                   {load,load}, "rectangleHoleRandom");
+    loadBothSides(rectangleHoleUniform, {PointSegment(Point(0,0), Point(0,1)), PointSegment(Point(4,0), Point(4,1))},
+                  {load,load}, "rectangleHoleUniform");
     loadBothSides(rectangle4x8ConstantAlternating, {PointSegment(Point(0,0), Point(0,4)), PointSegment(Point(8,0), Point(8,4))},
                   {load,load} ,"rectangle4x8ConstantAlternating");
     loadBothSides(romboidRandom, {PointSegment(Point(0,0), Point(5,10)), PointSegment(Point(10,0), Point(15,10))},
                   {load,load} ,"romboidRandom");
     loadBothSides(LRandom, {PointSegment(Point(0,10), Point(0,20)), PointSegment(Point(20,0), Point(20,20))},
                   {load,load} ,"LRandom");
+    loadBothSides(LUniform, {PointSegment(Point(0,10), Point(0,20)), PointSegment(Point(20,0), Point(20,20))},
+                  {load,load} ,"LUniform");
 
     clampedWithLoad(rectangleUniform, {PointSegment(Point(0,0), Point(0,1)), PointSegment(Point(4,0), Point(4,1))},
                     load,"rectangleUniform");
@@ -261,32 +283,42 @@ void NumericalTests::runTests() {
                     load,"rectangleRandom");
     clampedWithLoad(rectangleHoleRandom, {PointSegment(Point(0,0), Point(0,1)), PointSegment(Point(4,0), Point(4,1))},
                     load,"rectangleHoleRandom");
+    clampedWithLoad(rectangleHoleUniform, {PointSegment(Point(0,0), Point(0,1)), PointSegment(Point(4,0), Point(4,1))},
+                    load,"rectangleHoleUniform");
     clampedWithLoad(rectangle4x8ConstantAlternating, {PointSegment(Point(0,0), Point(0,4)), PointSegment(Point(8,0), Point(8,4))},
                     load,"rectangle4x8ConstantAlternating");
     clampedWithLoad(romboidRandom, {PointSegment(Point(0,0), Point(5,10)), PointSegment(Point(10,0), Point(15,10))},
-                    load,"romboidRandom");
-    clampedWithLoad(LRandom, {PointSegment(Point(20,0), Point(20,20)), PointSegment(Point(0,10), Point(0,20))},
+                    load,"romboidRandom");*/
+    clampedWithLoad(LRandom, {PointSegment(Point(0,10), Point(0,20)), PointSegment(Point(20,0), Point(20,20))},
                     load,"LRandom");
+    clampedWithLoad(LUniform, {PointSegment(Point(0,10), Point(0,20)), PointSegment(Point(20,0), Point(20,20))},
+                    load,"LUniform");
 
-    clampedDisplacement(rectangleUniform, {PointSegment(Point(0,0), Point(0,1)), PointSegment(Point(4,0), Point(4,1))},
+    /*clampedDisplacement(rectangleUniform, {PointSegment(Point(0,0), Point(0,1)), PointSegment(Point(4,0), Point(4,1))},
                         displacement, "rectangleUniform");
     clampedDisplacement(rectangleRandom, {PointSegment(Point(0,0), Point(0,1)), PointSegment(Point(4,0), Point(4,1))},
                         displacement, "rectangleRandom");
     clampedDisplacement(rectangleHoleRandom, {PointSegment(Point(0,0), Point(0,1)), PointSegment(Point(4,0), Point(4,1))},
                         displacement, "rectangleHoleRandom");
+    clampedDisplacement(rectangleHoleUniform, {PointSegment(Point(0,0), Point(0,1)), PointSegment(Point(4,0), Point(4,1))},
+                        displacement, "rectangleHoleUniform");
     clampedDisplacement(rectangle4x8ConstantAlternating, {PointSegment(Point(0,0), Point(0,4)), PointSegment(Point(8,0), Point(8,4))},
                         displacement, "rectangle4x8ConstantAlternating");
     clampedDisplacement(romboidRandom, {PointSegment(Point(0,0), Point(5,10)), PointSegment(Point(10,0), Point(15,10))},
                         displacement, "romboidRandom");
     clampedDisplacement(LRandom, {PointSegment(Point(20,0), Point(20,20)), PointSegment(Point(0,10), Point(0,20))},
                         displacement, "LRandom");
+    clampedDisplacement(LUniform, {PointSegment(Point(20,0), Point(20,20)), PointSegment(Point(0,10), Point(0,20))},
+                        displacement, "LUniform");
 
     clampedWithBodyForce(rectangleUniform, PointSegment(Point(0,0), Point(0,1)), "rectangleUniform");
     clampedWithBodyForce(rectangleRandom, PointSegment(Point(0,0), Point(0,1)), "rectangleRandom");
     clampedWithBodyForce(rectangleHoleRandom, PointSegment(Point(0,0), Point(0,1)), "rectangleHoleRandom");
+    clampedWithBodyForce(rectangleHoleUniform, PointSegment(Point(0,0), Point(0,1)), "rectangleHoleUniform");
     clampedWithBodyForce(rectangle4x8ConstantAlternating, PointSegment(Point(0,0), Point(0,4)), "rectangle4x8ConstantAlternating");
     clampedWithBodyForce(romboidRandom, PointSegment(Point(0,0), Point(5,10)), "romboidRandom");
     clampedWithBodyForce(LRandom, PointSegment(Point(20,0), Point(20,20)), "LRandom");
+    clampedWithBodyForce(LUniform, PointSegment(Point(20,0), Point(20,20)), "LUniform");
 
     fixedXWithParabolicLoad(rectangleUniform, {PointSegment(Point(0,0), Point(0,1)), PointSegment(Point(4,0), Point(4,1))},
                             "rectangleUniform");
@@ -294,12 +326,16 @@ void NumericalTests::runTests() {
                             "rectangleRandom");
     fixedXWithParabolicLoad(rectangleHoleRandom, {PointSegment(Point(0,0), Point(0,1)), PointSegment(Point(4,0), Point(4,1))},
                             "rectangleHoleRandom");
+    fixedXWithParabolicLoad(rectangleHoleUniform, {PointSegment(Point(0,0), Point(0,1)), PointSegment(Point(4,0), Point(4,1))},
+                            "rectangleHoleUniform");
     fixedXWithParabolicLoad(rectangle4x8ConstantAlternating, {PointSegment(Point(0,0), Point(0,4)), PointSegment(Point(8,0), Point(8,4))},
                             "rectangle4x8ConstantAlternating");
     fixedXWithParabolicLoad(romboidRandom, {PointSegment(Point(0,0), Point(5,10)), PointSegment(Point(10,0), Point(15,10))},
                             "romboidRandom");
     fixedXWithParabolicLoad(LRandom, {PointSegment(Point(20,0), Point(20,20)), PointSegment(Point(0,10), Point(0,20))},
                             "LRandom");
+    fixedXWithParabolicLoad(LUniform, {PointSegment(Point(20,0), Point(20,20)), PointSegment(Point(0,10), Point(0,20))},
+                            "LUniform");
 
     clampedBothSideLoadMiddle(rectangleUniform, {PointSegment(Point(0,0), Point(0,1)), PointSegment(Point(4,0), Point(4,1))},
                               PointSegment(Point(0,1), Point(4,1)), load, "rectangleUniform");
@@ -312,7 +348,7 @@ void NumericalTests::runTests() {
     clampedBothSideLoadMiddle(romboidRandom, {PointSegment(Point(0,0), Point(5,10)), PointSegment(Point(10,0), Point(15,10))},
                               PointSegment(Point(5,10), Point(15,10)), load, "romboidRandom");
     clampedBothSideLoadMiddle(LRandom, {PointSegment(Point(20,0), Point(20,20)), PointSegment(Point(0,10), Point(0,20))},
-                              PointSegment(Point(0,20), Point(20,20)), load, "LRandom");
+                              PointSegment(Point(0,20), Point(20,20)), load, "LRandom");*/
 }
 
 

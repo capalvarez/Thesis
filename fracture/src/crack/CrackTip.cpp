@@ -156,7 +156,6 @@ PolygonChangeData CrackTip::grow(Eigen::VectorXd u, Problem problem, UniqueList<
                                                            this->previouslyBroken, this->mergedBroken);
 
     problem.mesh->printInFile("afterSecondBreak.txt");
-    checkIfFinished(problem, direction);
 
     return changeData;
 }
@@ -360,8 +359,10 @@ std::vector<Pair<int>> CrackTip::remeshAndAdapt(double radius, std::vector<Polyg
     }
 
     Polygon& other = mesh.getPolygon(otherPolygon_index);
-    other.deleteVerticesInRange(surroundingCrack.getFirst(), surroundingCrack.getSecond());
-    Pair<int> pairs = mesh.computeNewPolygons(n1, n2,other, newPolygons, new1, new2, new1[0], new1.back(), -1, new2.back(), new2[0]);
+    Pair<int> surroundingPair = Pair<int>(surroundingCrack.getFirst(), surroundingCrack.getSecond());
+    other.fixSegment(surroundingPair, previousCrackPoints[0].first);
+    other.deleteVerticesInRange(surroundingPair.first, surroundingPair.second);
+    Pair<int> pairs = mesh.computeNewPolygons(n1, n2, other, newPolygons, new1, new2, new1[0], new1.back(), -1, new2.back(), new2[0]);
 
     Polygon crackPolygon1 = mesh.getPolygon(pairs.first);
     Polygon crackPolygon2 = mesh.getPolygon(pairs.second);
@@ -380,9 +381,6 @@ std::vector<Pair<int>> CrackTip::remeshAndAdapt(double radius, std::vector<Polyg
         j--;
 
     }
-
-
-
 
     mesh.replacePolygon(otherPolygon_index, crackPolygon1);
 
@@ -539,26 +537,6 @@ int CrackTip::getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints
 
 int CrackTip::getRingPolygon(BreakableMesh &mesh, std::vector<int> &unusedPoints, UniqueList<int> neighbours) {
     std::vector<int> mergedPoints;
-    if(previouslyBroken.size()>0){
-        std::vector<int> neighboursVector = neighbours.getList();
-
-        std::sort(neighboursVector.begin(), neighboursVector.end(), greater());
-        std::sort(previouslyBroken.begin(), previouslyBroken.end(), greater());
-
-        std::vector<int> common;
-        std::set_intersection(neighboursVector.begin(), neighboursVector.end(), previouslyBroken.begin(), previouslyBroken.end(), std::back_inserter(common));
-
-        if(common.size()>0){
-            std::vector<Polygon>& polygons = mesh.getPolygons();
-            polygons[previouslyBroken.back()] = mergedBroken;
-            mesh.replacePolygonsForMerged(previouslyBroken);
-            mesh.getSegments().printInFile("segments.txt");
-        }
-
-        neighbours.clear();
-        mesh.getNeighboursByPoint(this->container_polygon, neighbours);
-    }
-
     std::vector<int> ringPolygonPoints = mesh.getAllPoints(neighbours.getList());
     RemeshAdapter remesher(neighbours.getList(), mesh.getPoints().getList(), mesh, mergedPoints);
 

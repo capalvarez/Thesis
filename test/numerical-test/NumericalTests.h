@@ -22,8 +22,10 @@ private:
     PolygonalMesh rectangle4x8ConstantAlternating;
 
     PolygonalMesh rectangleHoleRandom;
+    PolygonalMesh rectangleHoleUniform;
     PolygonalMesh romboidRandom;
     PolygonalMesh LRandom;
+    PolygonalMesh LUniform;
 
     Eigen::VectorXd loadBothSides(PolygonalMesh mesh, std::vector<PointSegment> restrained, std::vector<double> values,
                                       std::string testName);
