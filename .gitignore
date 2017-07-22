@@ -5,7 +5,9 @@ x-poly/src/models/hole/clipper/lib/clipper.cpp
 x-poly/src/voronoi/lib/triangle.o
 x-poly/src/voronoi/lib/triangle.c
 veamy/include/veamy/lib
-python-visualization/.idea/
+python-visualizer/.idea/
+python-visualizer/__pycache__
+
 test/dealii-test/
 test/libmesh-test/
 x-poly/include/x-poly/models/hole/lib/
