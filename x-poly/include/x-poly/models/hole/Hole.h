@@ -36,8 +36,16 @@ public:
     std::string getString(){
         std::string result;
 
+        result += center.getString() + "\n";
+
+        result += utilities::toString(HolePoints.size()) + "\n";
         for (Point p: HolePoints) {
             result += p.getString() + "\n";
+        }
+
+        result += utilities::toString(segments.size()) + "\n";
+        for (IndexSegment s: segments){
+            result += s.getString() + "\n";
         }
 
         return result;

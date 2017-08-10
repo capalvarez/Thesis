@@ -1,8 +1,8 @@
-#ifndef THESIS_EDGE_H
-#define THESIS_EDGE_H
+#ifndef VEAMY_EDGE_H
+#define VEAMY_EDGE_H
 
 #include <x-poly/models/basic/Point.h>
-#include "../../../../utilities/include/utilities/Pair.h"
+#include <utilities/Pair.h>
 #include <vector>
 #include <veamy/models/dof/DOF.h>
 
@@ -15,6 +15,7 @@ public:
 
     Pair<double> getNormal(std::vector<Point> points);
     double getLength(std::vector<Point> points);
+    Point middlePoint(std::vector<Point> points);
 };
 
 

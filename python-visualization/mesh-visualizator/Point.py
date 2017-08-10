@@ -8,7 +8,7 @@ class Point:
         y = float(canvas['height'])
         #if self.index==250 or self.index==251:
         #        or self.index==87:
-        #    canvas.create_text(self.x, y-self.y,text=self.index, fill=color)
+        canvas.create_text(self.x, y-self.y,text=self.index, fill=color)
 
         #if self.index==86:
         #    canvas.create_text(self.x, y-self.y,text=self.index, fill="blue")

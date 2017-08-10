@@ -1,7 +1,7 @@
-#ifndef THESIS_SEGMENTPAIR_H
-#define THESIS_SEGMENTPAIR_H
+#ifndef VEAMY_SEGMENTPAIR_H
+#define VEAMY_SEGMENTPAIR_H
 
-#include <x-poly/models/basic/IndexSegment.h>
+#include <mesher/models/basic/IndexSegment.h>
 
 struct SegmentPair{
     IndexSegment s1;

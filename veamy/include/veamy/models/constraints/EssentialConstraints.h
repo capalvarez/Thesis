@@ -1,7 +1,7 @@
-#ifndef THESIS_ESSENTIALCONSTRAINTS_H
-#define THESIS_ESSENTIALCONSTRAINTS_H
+#ifndef VEAMY_ESSENTIALCONSTRAINTS_H
+#define VEAMY_ESSENTIALCONSTRAINTS_H
 
-#include <x-poly/models/basic/Point.h>
+#include <mesher/models/basic/Point.h>
 #include <unordered_map>
 #include <vector>
 #include <veamy/lib/Eigen/Dense>

@@ -1,7 +1,7 @@
-#ifndef THESIS_FUNCTION_H
-#define THESIS_FUNCTION_H
+#ifndef VEAMY_FUNCTION_H
+#define VEAMY_FUNCTION_H
 
-#include <x-poly/models/basic/Point.h>
+#include <mesher/models/basic/Point.h>
 #include "ConstraintValue.h"
 
 typedef double(*func_t)(double, double);

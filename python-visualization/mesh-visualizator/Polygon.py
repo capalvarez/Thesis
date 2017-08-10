@@ -17,7 +17,7 @@ class Polygon:
 
             canvas.create_line(p1.x, y-p1.y, p2.x, y-p2.y, fill=color)
 
-            #canvas.create_text(self.centroid.x, y-self.centroid.y, text=self.index)
+            canvas.create_text(self.centroid.x, y-self.centroid.y, text=self.index)
             #if self.index == 192 or self.index==163:
             #    canvas.create_text(self.centroid.x, y-self.centroid.y, text=self.index)
 

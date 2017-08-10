@@ -1,12 +1,14 @@
-#ifndef THESIS_VEAMER_H
-#define THESIS_VEAMER_H
+#ifndef VEAMY_VEAMER_H
+#define VEAMY_VEAMER_H
 
-#include <x-poly/models/PolygonalMesh.h>
+#include <mesher/models/PolygonalMesh.h>
 #include <veamy/models/dof/DOFS.h>
 #include <veamy/models/constraints/EssentialConstraints.h>
 #include <veamy/models/Element.h>
 #include <veamy/lib/Eigen/Dense>
 #include <veamy/physics/ProblemConditions.h>
+#include <iostream>
+
 
 struct PolygonHasher {
     std::size_t operator()(const Polygon &k) const {
@@ -29,6 +31,8 @@ public:
     std::vector<Element> elements;
     Veamer();
 
+    PolygonalMesh initProblemFromFile(std::string fileName, Material material);
+    PolygonalMesh initProblemFromFile(std::string fileName, Material material, BodyForce *force);
     void initProblem(PolygonalMesh m, ProblemConditions conditions);
     Eigen::VectorXd simulate(PolygonalMesh &mesh);
 

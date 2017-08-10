@@ -10,7 +10,7 @@ frame.pack()
 canvas = Canvas(window, width=WIDTH, height=HEIGHT, bg="white")
 
 #r_points, r_segments, r_polygons, r_limits  = read_file("l_shape.txt")
-points, segments, polygons, limits = read_file("afterAdapting.txt")
+points, segments, polygons, limits = read_file("rectangle4x8ConstantAlternating.txt")
 #t_points, triangles, t_limits = read_triangulation("unicornRandom10_triangles.txt")
 
 button = Button(frame, text="Draw Polygons", command=lambda p=polygons, c=canvas, ps=points: draw_polygons(p, c, ps))

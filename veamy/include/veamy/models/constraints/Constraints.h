@@ -1,5 +1,5 @@
-#ifndef THESIS_CONSTRAINTS_H
-#define THESIS_CONSTRAINTS_H
+#ifndef VEAMY_CONSTRAINTS_H
+#define VEAMY_CONSTRAINTS_H
 
 #include <x-poly/models/basic/Segment.h>
 #include <veamy/models/dof/DOF.h>
@@ -11,23 +11,34 @@
 #include <x-poly/voronoi/structures/mapdata.h>
 #include <veamy/models/constraints/structures/Angle.h>
 #include <map>
+#include "SegmentConstraint.h"
+#include "PointConstraint.h"
 
 class Constraints {
 protected:
     std::map<Angle, std::vector<IndexSegment>> constrained_segments;
 
-    std::unordered_map<IndexSegment, Constraint, SegmentHasher> segment_map;
-    std::unordered_map<int, Constraint, intHasher> constraints_map;
+    std::unordered_map<IndexSegment, std::vector<SegmentConstraint>, SegmentHasher> segment_map;
+    std::unordered_map<int, SegmentConstraint, intHasher> segment_constraints_map;
+    std::unordered_map<Point, std::vector<PointConstraint>, PointHasher> point_map;
+    std::unordered_map<int, PointConstraint, intHasher> point_constraints_map;
     UniqueList<int> constrained_dofs;
 public:
-    void addConstraint(Constraint c, std::vector<Point> p);
-    isConstrainedInfo isConstrained(std::vector<Point> points, IndexSegment p);
+    void addConstraint(SegmentConstraint c, std::vector<Point> p);
+    void addConstraint(SegmentConstraint c, UniqueList<Point> p);
+    void addConstraint(PointConstraint c);
+
+    isConstrainedInfo isConstrainedBySegment(std::vector<Point> points, IndexSegment p);
+    isConstrainedInfo isConstrainedByPoint(Point p);
     bool isConstrained(int dof);
 
     std::vector<int> getConstrainedDOF();
-    void addConstrainedDOF(std::vector<Point> points, int DOF_index, DOF::Axis axis, SegmentPair pair);
-    void addConstrainedDOFBySegment(std::vector<Point> points, int DOF_index, DOF::Axis axis, IndexSegment s);
-    std::unordered_map<IndexSegment, Constraint, SegmentHasher> getConstrainedSegments();
+    void addConstrainedDOF(std::vector<Point> points, int DOF_index, DOF::Axis axis, SegmentPair pair,
+                           int dof_point);
+    bool addConstrainedDOFBySegment(std::vector<Point> points, int DOF_index, DOF::Axis axis, IndexSegment s);
+    bool addConstrainedDOFByPoint(int DOF_index, DOF::Axis axis, Point p);
+    std::unordered_map<IndexSegment, std::vector<SegmentConstraint>, SegmentHasher> getConstrainedSegments();
+    Constraint getAssociatedConstraint(int dof_index);
 };
 
 

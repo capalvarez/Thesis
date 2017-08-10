@@ -1,7 +1,7 @@
 #ifndef THESIS_PROBLEMCONDITIONS_H
 #define THESIS_PROBLEMCONDITIONS_H
 
-#include <veamy/physics/BodyForce.h>
+#include <veamy/physics/VariableBodyForce.h>
 #include <veamy/physics/Material.h>
 #include <veamy/physics/body forces/None.h>
 

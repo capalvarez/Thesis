@@ -1,5 +1,5 @@
-#ifndef THESIS_CONSTRAINTSCONTAINER_H
-#define THESIS_CONSTRAINTSCONTAINER_H
+#ifndef VEAMY_CONSTRAINTSCONTAINER_H
+#define VEAMY_CONSTRAINTSCONTAINER_H
 
 #include <x-poly/models/PolygonalMesh.h>
 #include "EssentialConstraints.h"
@@ -16,7 +16,8 @@ public:
     void addConstraints(NaturalConstraints c, PolygonalMesh mesh);
     void addConstraints(EssentialConstraints c, PolygonalMesh mesh);
 
-    void addConstrainedDOF(std::vector<Point> points, int DOF_index,DOF::Axis axis, SegmentPair pair);
+    void addConstrainedDOF(std::vector<Point> points, int DOF_index, DOF::Axis axis, SegmentPair pair,
+                               int point_index);
 
     EssentialConstraints getEssentialConstraints();
     NaturalConstraints getNaturalConstraints();

@@ -20,10 +20,10 @@ TEST(VeamerTest, OnlyEssentialTest){
     EssentialConstraints c;
     PointSegment constrained(Point(0,0),Point(0,1));
     PointSegment constrained2 (Point(2,0),Point(2,1));
-    Constraint const1 (constrained, m.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
+    SegmentConstraint const1 (constrained, m.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
 
     c.addConstraint(const1, m.getPoints().getList());
-    Constraint const2 (constrained2, m.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(1));
+    SegmentConstraint const2 (constrained2, m.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(1));
     c.addConstraint(const2, m.getPoints().getList());
 
    /* NaturalConstraints n;
@@ -56,13 +56,13 @@ TEST(VeamerTest, OnlyNaturalTest){
 
     EssentialConstraints c;
     PointSegment constrained(Point(0,0),Point(0,1));
-    Constraint const1 (constrained, m.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
+    SegmentConstraint const1 (constrained, m.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
 
     c.addConstraint(const1, m.getPoints().getList());
 
     NaturalConstraints n;
     PointSegment const3(Point(2,0),Point(2,1));
-    Constraint constraint3(const3,m.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(1000));
+    SegmentConstraint constraint3(const3,m.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(1000));
     n.addConstraint(constraint3, m.getPoints().getList());
 
     ConstraintsContainer container;
@@ -108,7 +108,7 @@ TEST(VeamerTest, OnlyBodyForceTest){
 
     EssentialConstraints c;
     PointSegment constrained(Point(0,0),Point(0,1));
-    Constraint const1 (constrained, m.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
+    SegmentConstraint const1 (constrained, m.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
 
     c.addConstraint(const1, m.getPoints().getList());
 
@@ -122,4 +122,15 @@ TEST(VeamerTest, OnlyBodyForceTest){
     Eigen::VectorXd x = v.simulate(m);
     std::cout << x << std::endl;
     m.printInFile("second.txt");
+}
+
+TEST(VeamerTest, EquilibriumPatchTest){
+    std::vector<Point> points = {Point(0,0), Point(1,0), Point(1,1), Point(0,1)};
+    Region region(points);
+    region.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 5, 5);
+    std::vector<Point> seeds = region.getSeedPoints();
+    
+    TriangleMeshGenerator generator(seeds, region);
+    PolygonalMesh mesh = generator.getMesh();
+    mesh.printInFile("equilibrium.txt");
 }

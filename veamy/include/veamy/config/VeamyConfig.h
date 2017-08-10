@@ -1,5 +1,5 @@
-#ifndef THESIS_VEAMYCONFIG_H
-#define THESIS_VEAMYCONFIG_H
+#ifndef VEAMY_VEAMYCONFIG_H
+#define VEAMY_VEAMYCONFIG_H
 
 class VeamyConfig{
 private:

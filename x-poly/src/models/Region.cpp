@@ -171,7 +171,7 @@ void Region::printInFile(std::string fileName) {
     std::ofstream file;
     file.open(path, std::ios::out);
 
-    file << (points.size() + seedPoints.size()) << std::endl;
+    file << points.size() << std::endl;
     for(int i=0;i<points.size();i++){
         file << p[i].getString() << std::endl;
     }

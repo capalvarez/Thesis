@@ -1,7 +1,7 @@
-#ifndef THESIS_CONSTANT_H
-#define THESIS_CONSTANT_H
+#ifndef VEAMY_CONSTANT_H
+#define VEAMY_CONSTANT_H
 
-#include <x-poly/models/basic/Point.h>
+#include <mesher/models/basic/Point.h>
 #include "ConstraintValue.h"
 
 class Constant : public ConstraintValue{
@@ -12,6 +12,5 @@ public:
 
     double getValue(Point p);
 };
-
 
 #endif

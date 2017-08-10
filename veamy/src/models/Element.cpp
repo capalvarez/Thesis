@@ -1,7 +1,5 @@
 #include <veamy/models/Element.h>
-#include <veamy/models/Edge.h>
-#include <veamy/physics/Material.h>
-#include <veamy/quadrature/QuadraturePolygon.h>
+#include <iomanip>
 
 Element::Element(ProblemConditions &conditions, Polygon &p, UniqueList<Point> &points, DOFS &out) {
     std::vector<int> vertex = p.getPoints();
@@ -19,6 +17,10 @@ Element::Element(ProblemConditions &conditions, Polygon &p, UniqueList<Point> &p
     this->p = p;
 }
 
+Element::Element(Polygon &p) {
+    this->p = p;
+}
+
 Polygon Element::getAssociatedPolygon() {
     return this->p;
 }
@@ -26,18 +28,18 @@ Polygon Element::getAssociatedPolygon() {
 void Element::computeK(DOFS d, UniqueList<Point> points, ProblemConditions &conditions) {
     std::vector<int> polygonPoints = p.getPoints();
     int n = (int) polygonPoints.size();
-    Point average = p.getCentroid();
+    Point average = p.getAverage(points.getList());
 
     double area = p.getArea();
 
-    Eigen::MatrixXd Nr;
+    Eigen::MatrixXd Hr;
     Eigen::MatrixXd Wr;
-    Eigen::MatrixXd Nc;
+    Eigen::MatrixXd Hc;
     Eigen::MatrixXd Wc;
 
-    Nr = Eigen::MatrixXd::Zero(2*n, 3);
+    Hr = Eigen::MatrixXd::Zero(2*n, 3);
     Wr = Eigen::MatrixXd::Zero(2*n, 3);
-    Nc = Eigen::MatrixXd::Zero(2*n, 3);
+    Hc = Eigen::MatrixXd::Zero(2*n, 3);
     Wc = Eigen::MatrixXd::Zero(2*n, 3);
 
     for(int vertex_id=0; vertex_id<n; vertex_id++){
@@ -49,6 +51,12 @@ void Element::computeK(DOFS d, UniqueList<Point> points, ProblemConditions &cond
         Pair<double> prevNormal = utilities::normalize(prev.getNormal(points.getList()));
         Pair<double> nextNormal = utilities::normalize(next.getNormal(points.getList()));
 
+        Point middleP = prev.middlePoint(points.getList());
+        Point middleN = next.middlePoint(points.getList());
+
+        double p = xpoly_utilities::crossProduct(middleP, Point(prevNormal.first, prevNormal.second));
+        double ne = xpoly_utilities::crossProduct(middleN, Point(nextNormal.first, nextNormal.second));
+
         double prevLength = prev.getLength(points.getList());
         double nextLength = next.getLength(points.getList());
 
@@ -58,20 +66,20 @@ void Element::computeK(DOFS d, UniqueList<Point> points, ProblemConditions &cond
         double Qi_x = (prevNormal.first*prevLength + nextNormal.first*nextLength)/(4*area);
         double Qi_y = (prevNormal.second*prevLength + nextNormal.second*nextLength)/(4*area);
 
-        Nr(2*vertex_id, 0) = 1;
-        Nr(2*vertex_id, 2) = yDiff;
-        Nr(2*vertex_id+1, 1) = 1;
-        Nr(2*vertex_id+1, 2) = -xDiff;
+        Hr(2*vertex_id, 0) = 1;
+        Hr(2*vertex_id, 2) = yDiff;
+        Hr(2*vertex_id+1, 1) = 1;
+        Hr(2*vertex_id+1, 2) = -xDiff;
 
         Wr(2*vertex_id, 0) = 1.0/n;
         Wr(2*vertex_id, 2) = Qi_y;
         Wr(2*vertex_id+1, 1) = 1.0/n;
         Wr(2*vertex_id+1, 2) = -Qi_x;
 
-        Nc(2*vertex_id, 0) = xDiff;
-        Nc(2*vertex_id, 2) = yDiff;
-        Nc(2*vertex_id+1, 1) = yDiff;
-        Nc(2*vertex_id+1, 2) = xDiff;
+        Hc(2*vertex_id, 0) = xDiff;
+        Hc(2*vertex_id, 2) = yDiff;
+        Hc(2*vertex_id+1, 1) = yDiff;
+        Hc(2*vertex_id+1, 2) = xDiff;
 
         Wc(2*vertex_id, 0) = 2*Qi_x;
         Wc(2*vertex_id, 2) = Qi_y;
@@ -87,16 +95,17 @@ void Element::computeK(DOFS d, UniqueList<Point> points, ProblemConditions &cond
 
     I = Eigen::MatrixXd::Identity(2*n, 2*n);
 
-    Pr = Nr*(Wr.transpose());
-    Pc = Nc*(Wc.transpose());
+    Pr = Hr*(Wr.transpose());
+    Pc = Hc*(Wc.transpose());
 
     Pp = Pc + Pr;
 
     Eigen::MatrixXd D = conditions.material.getMaterialMatrix();
 
     VeamyConfig* config = VeamyConfig::instance();
-    double c = (Nc.transpose()*Nc).trace();
+    double c = (Hc.transpose()*Hc).trace();
     double alphaS = area*conditions.material.trace()/c;
+
     Eigen::MatrixXd Se;
     Se = config->getGamma()*alphaS*I;
 
@@ -104,18 +113,27 @@ void Element::computeK(DOFS d, UniqueList<Point> points, ProblemConditions &cond
 }
 
 void Element::computeF(DOFS d, UniqueList<Point> points, ProblemConditions &conditions) {
-    this->f = Eigen::VectorXd::Zero(this->dofs.size());
+    int n = this->p.numberOfSides();
+    int m = this->dofs.size();
+    std::vector<IndexSegment> segments;
+    this->p.getSegments(segments);
+
+    this->f = Eigen::VectorXd::Zero(m);
+    Eigen::VectorXd bodyForce = conditions.f->computeVector(p, points.getList());
+
     NaturalConstraints natural = conditions.constraints.getNaturalConstraints();
 
-    double bodyIntegral = QuadraturePolygon(p).integrate(conditions.f, points.getList());
+    for (int i = 0; i < n; ++i) {
+        Eigen::VectorXd naturalConditions = natural.boundaryVector(points.getList(), this->p, segments[i]);
 
-    for (int i = 0; i < this->dofs.size(); ++i) {
-        this->f(i) = conditions.f->isApplicable(bodyIntegral, d.get(this->dofs[i]).getAxis()) +
-                natural.lineIntegral(points.getList(),p,i/2,this->dofs[i]);
+        this->f(2*i) = this->f(2*i) + bodyForce(2*i) + naturalConditions(0);
+        this->f((2*i + 1)%m) = this->f((2*i + 1)%m) + bodyForce(2*i+1) + naturalConditions(1);
+        this->f((2*(i+1))%m) =  this->f((2*(i+1))%m) + naturalConditions(2);
+        this->f((2*(i+1) + 1)%m) =  this->f((2*(i+1) + 1)%m) + naturalConditions(3);
     }
 }
 
-void Element::assemble(DOFS out, Eigen::MatrixXd& Kglobal, Eigen::VectorXd& Fglobal) {
+void Element::assemble(DOFS out, Eigen::MatrixXd &Kglobal, Eigen::VectorXd &Fglobal) {
     for (int i = 0; i < this->K.rows(); i++) {
         int globalI = out.get(this->dofs[i]).globalIndex();
 
@@ -128,6 +146,7 @@ void Element::assemble(DOFS out, Eigen::MatrixXd& Kglobal, Eigen::VectorXd& Fglo
         Fglobal(globalI) = Fglobal(globalI) + this->f(i);
     }
 }
+
 
 
 

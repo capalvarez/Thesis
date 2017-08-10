@@ -1,8 +1,8 @@
-#ifndef THESIS_DOF_H
-#define THESIS_DOF_H
+#ifndef VEAMY_DOF_H
+#define VEAMY_DOF_H
 
 #include <utilities/Pair.h>
-#include <x-poly/models/polygon/Polygon.h>
+#include <mesher/models/polygon/Polygon.h>
 
 class DOF {
 public:

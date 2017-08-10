@@ -1,7 +1,7 @@
-#ifndef THESIS_ISCONSTRAINEDINFO_H
-#define THESIS_ISCONSTRAINEDINFO_H
+#ifndef VEAMY_ISCONSTRAINEDINFO_H
+#define VEAMY_ISCONSTRAINEDINFO_H
 
-#include <x-poly/models/basic/IndexSegment.h>
+#include <mesher/models/basic/IndexSegment.h>
 
 struct isConstrainedInfo{
     bool isConstrained;
@@ -14,6 +14,10 @@ struct isConstrainedInfo{
 
     isConstrainedInfo(){
         isConstrained = false;
+    }
+
+    isConstrainedInfo(bool i){
+        isConstrained = true;
     }
 };
 

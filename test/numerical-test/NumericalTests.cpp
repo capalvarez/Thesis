@@ -9,7 +9,34 @@ private:
 };
 
 double tangencial(double x, double y){
-    return 1000*12/(2*64)*(4-std::pow(y,2));
+    double P = -1000;
+    double D =  4;
+    double I = std::pow(D,3)/12;
+
+    return P/(2*I)*(std::pow(D,2)/4-std::pow(y,2));
+}
+
+double uX(double x, double y){
+    double P = -1000;
+    double Ebar = 1e7/(1 - std::pow(0.3,2));
+    double vBar = 0.3/(1 - 0.3);
+    double D = 4;
+    double L = 8;
+    double I = std::pow(D,3)/12;
+
+
+    return -P*y/(6*Ebar*I)*((6*L - 3*x)*x + (2+vBar)*std::pow(y,2) - 3*std::pow(D,2)/2*(1+vBar));
+}
+
+double uY(double x, double y){
+    double P = -1000;
+    double Ebar = 1e7/(1 - std::pow(0.3,2));
+    double vBar = 0.3/(1 - 0.3);
+    double D = 4;
+    double L = 8;
+    double I = std::pow(D,3)/12;
+
+    return P/(6*Ebar*I)*(3*vBar*std::pow(y,2)*(L-x) + (3*L-x)*std::pow(x,2));
 }
 
 NumericalTests::NumericalTests() {
@@ -34,7 +61,7 @@ NumericalTests::NumericalTests() {
     rectangleRandom.printInFile("ResultadosNumericos\\rectangleRandom.txt");
 
     /*Rectangle 4x8*/
-    std::vector<Point> rectangle4x8_points = {Point(0, 0), Point(8, 0), Point(8, 4), Point(0, 4)};
+    std::vector<Point> rectangle4x8_points = {Point(0, -2), Point(8, -2), Point(8, 2), Point(0, 2)};
     Region rectangle4x8(rectangle4x8_points);
     rectangle4x8.generateSeedPoints(PointGenerator(functions::constantAlternating(), functions::constant()), 12, 6);
     seeds = rectangle4x8.getSeedPoints();
@@ -98,8 +125,8 @@ NumericalTests::loadBothSides(PolygonalMesh mesh, std::vector<PointSegment> rest
     Veamer v;
     
     NaturalConstraints c;
-    Constraint const1 (restrained[0], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(-values[0]));
-    Constraint const2 (restrained[1], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(values[1]));
+    SegmentConstraint const1 (restrained[0], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(-values[0]));
+    SegmentConstraint const2 (restrained[1], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(values[1]));
 
     c.addConstraint(const1, mesh.getPoints().getList());
     c.addConstraint(const2, mesh.getPoints().getList());
@@ -125,11 +152,11 @@ NumericalTests::clampedWithLoad(PolygonalMesh mesh, std::vector<PointSegment> re
     BodyForce* f = new None();
 
     EssentialConstraints essential;
-    Constraint const1 (restricted[0], mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
+    SegmentConstraint const1 (restricted[0], mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
     essential.addConstraint(const1, mesh.getPoints().getList());
 
     NaturalConstraints natural;
-    Constraint const2 (restricted[1], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(loadValue));
+    SegmentConstraint const2 (restricted[1], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(loadValue));
     natural.addConstraint(const2, mesh.getPoints().getList());
 
     ConstraintsContainer container;
@@ -152,7 +179,7 @@ Eigen::VectorXd NumericalTests::clampedWithBodyForce(PolygonalMesh mesh, PointSe
     BodyForce* f = new Gravity();
 
     EssentialConstraints essential;
-    Constraint const1 (clamped, mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
+    SegmentConstraint const1 (clamped, mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
     essential.addConstraint(const1, mesh.getPoints().getList());
 
     ConstraintsContainer container;
@@ -175,10 +202,10 @@ NumericalTests::clampedDisplacement(PolygonalMesh mesh, std::vector<PointSegment
     Veamer v;
     
     EssentialConstraints essential;
-    Constraint const1 (restricted[0], mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
+    SegmentConstraint const1 (restricted[0], mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
     essential.addConstraint(const1, mesh.getPoints().getList());
 
-    Constraint const2 (restricted[1], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(displacement));
+    SegmentConstraint const2 (restricted[1], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(displacement));
     essential.addConstraint(const2, mesh.getPoints().getList());
 
     ConstraintsContainer container;
@@ -200,15 +227,21 @@ Eigen::VectorXd NumericalTests::fixedXWithParabolicLoad(PolygonalMesh mesh, std:
     Veamer v;
     
     EssentialConstraints essential;
-    Constraint const1 (restricted[0], mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(0));
+    Function* uXConstraint = new Function(uX);
+    Function* uYConstraint = new Function(uY);
+
+    SegmentConstraint const1 (restricted[0], mesh.getPoints().getList(), Constraint::Direction::Horizontal, uXConstraint);
     essential.addConstraint(const1, mesh.getPoints().getList());
+
+    SegmentConstraint const2 (restricted[0], mesh.getPoints().getList(), Constraint::Direction::Vertical, uYConstraint);
+    essential.addConstraint(const2, mesh.getPoints().getList());
 
     NaturalConstraints natural;
 
     Function* tangencialLoad = new Function(tangencial);
 
-    Constraint const2 (restricted[1], mesh.getPoints().getList(), Constraint::Direction::Vertical, tangencialLoad);
-    natural.addConstraint(const2, mesh.getPoints().getList());
+    SegmentConstraint const3 (restricted[1], mesh.getPoints().getList(), Constraint::Direction::Vertical, tangencialLoad);
+    natural.addConstraint(const3, mesh.getPoints().getList());
 
     ConstraintsContainer container;
     container.addConstraints(essential, mesh);
@@ -231,14 +264,14 @@ Eigen::VectorXd NumericalTests::clampedBothSideLoadMiddle(PolygonalMesh mesh, st
     Veamer v;
     
     EssentialConstraints essential;
-    Constraint const1 (restricted[0], mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
+    SegmentConstraint const1 (restricted[0], mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
     essential.addConstraint(const1, mesh.getPoints().getList());
 
-    Constraint const2 (restricted[1], mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
+    SegmentConstraint const2 (restricted[1], mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
     essential.addConstraint(const2, mesh.getPoints().getList());
 
     NaturalConstraints natural;
-    Constraint const3 (charged, mesh.getPoints().getList(), Constraint::Direction::Vertical, new Constant(load));
+    SegmentConstraint const3 (charged, mesh.getPoints().getList(), Constraint::Direction::Vertical, new Constant(load));
     natural.addConstraint(const3, mesh.getPoints().getList());
 
     ConstraintsContainer container;
@@ -259,6 +292,11 @@ Eigen::VectorXd NumericalTests::clampedBothSideLoadMiddle(PolygonalMesh mesh, st
 void NumericalTests::runTests() {
     double load = 1000;
     double displacement = 1;
+
+
+
+    fixedXWithParabolicLoad(rectangle4x8ConstantAlternating, {PointSegment(Point(0,-2), Point(0,2)),
+                                                              PointSegment(Point(8,-2), Point(8,2))}, "rectangle4x8");
 
     /*loadBothSides(rectangleUniform, {PointSegment(Point(0,0), Point(0,1)), PointSegment(Point(4,0), Point(4,1))},
                   {load,load}, "rectangleUniform");

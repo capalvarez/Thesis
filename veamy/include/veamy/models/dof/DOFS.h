@@ -1,5 +1,5 @@
-#ifndef THESIS_DOFS_H
-#define THESIS_DOFS_H
+#ifndef VEAMY_DOFS_H
+#define VEAMY_DOFS_H
 
 #include <array>
 #include <algorithm>

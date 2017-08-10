@@ -1,5 +1,5 @@
-#ifndef THESIS_ANGLE_H
-#define THESIS_ANGLE_H
+#ifndef VEAMY_ANGLE_H
+#define VEAMY_ANGLE_H
 
 #include <cmath>
 #include <veamy/config/VeamyConfig.h>
@@ -8,6 +8,7 @@ struct Angle{
     double angle;
 
     Angle(double a){
+        a = a - 360.0*(a/360);
         if(a>=0 && a<180) {
             angle = a;
         }else{

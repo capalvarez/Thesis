@@ -1,14 +1,14 @@
-#ifndef THESIS_NATURALCONSTRAINTS_H
-#define THESIS_NATURALCONSTRAINTS_H
+#ifndef VEAMY_NATURALCONSTRAINTS_H
+#define VEAMY_NATURALCONSTRAINTS_H
 
-#include <x-poly/models/polygon/Polygon.h>
+#include <mesher/models/polygon/Polygon.h>
 #include <veamy/lib/Eigen/Dense>
 #include <veamy/models/constraints/Constraints.h>
 
 class NaturalConstraints : public Constraints{
 public:
     NaturalConstraints();
-    double lineIntegral(std::vector<Point> points, Polygon p, int point, int DOF_index);
+    Eigen::VectorXd boundaryVector(std::vector<Point> points, Polygon p, IndexSegment segment);
 };
 
 
