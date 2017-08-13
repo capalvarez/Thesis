@@ -23,6 +23,8 @@ public:
     PolygonalMesh(const PolygonalMesh& m);
     PolygonalMesh();
     ~PolygonalMesh();
+    void createFromFile(std::string fileName);
+    void createFromStream(std::ifstream& ofstream);
 
     std::vector<Polygon>& getPolygons();
     std::vector<Polygon> getPolygons() const;

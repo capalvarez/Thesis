@@ -1,6 +1,6 @@
 FILE_PATH = "C:\\Users\\Catalina\\"
 HEIGHT = 700
-WIDTH = 1000
+WIDTH = 700
 MIN_SCREEN = HEIGHT if HEIGHT < WIDTH else WIDTH
 
 

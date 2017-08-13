@@ -17,14 +17,6 @@ TEST(ElementTest, KMatrixTest){
     std::vector<Polygon> polygons = {Polygon(p1,points)};
     SegmentMap segments;
 
-    class Sum : public BodyForce{
-    private:
-        double apply(double x, double y){
-            return 0;
-        }
-    };
-
-    BodyForce* f = new Sum();
     PolygonalMesh m(points, polygons, segments, region);
 
     ConstraintsContainer container;
@@ -32,7 +24,7 @@ TEST(ElementTest, KMatrixTest){
     UniqueList<Point> p;
     p.push_list(points);
 
-    ProblemConditions conditions(container, f, Material());
+    ProblemConditions conditions(container, Material(1, 0.3));
 
     Element e (conditions, polygons[0], p, dofs);
 

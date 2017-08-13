@@ -1,7 +1,7 @@
 #ifndef VEAMY_VEAMER_H
 #define VEAMY_VEAMER_H
 
-#include <mesher/models/PolygonalMesh.h>
+#include <x-poly/models/PolygonalMesh.h>
 #include <veamy/models/dof/DOFS.h>
 #include <veamy/models/constraints/EssentialConstraints.h>
 #include <veamy/models/Element.h>

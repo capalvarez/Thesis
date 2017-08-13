@@ -51,6 +51,18 @@ namespace utilities {
         key = key ^ (key >> 15);
         return key;
     }
+
+    std::vector<std::string> split(std::string s, char d) {
+        std::vector<std::string> result;
+        std::stringstream stream(s);
+        std::string segment;
+
+        while(std::getline(stream, segment, d)){
+            result.push_back(segment);
+        }
+
+        return result;
+    }
 }
 
 
