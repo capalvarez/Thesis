@@ -19,7 +19,7 @@ TEST(VeamerTest, OnlyEssentialTest){
     Veamer v;
     std::vector<Point> points = {Point(0,0), Point(2,0), Point(2,1), Point(0,1)};
     Region region(points);
-    region.generateSeedPoints(PointGenerator(functions::constant(), functions::constant()), 10, 10);
+    region.generateSeedPoints(PointGenerator(functions::random_double(0,1), functions::constant()), 10, 10);
 
     std::vector<Point> seeds = region.getSeedPoints();
     TriangleMeshGenerator g(seeds, region);
@@ -143,25 +143,25 @@ TEST(VeamerTest, PatchTest){
     Function* uXConstraint = new Function(uXPatch);
     Function* uYConstraint = new Function(uYPatch);
 
-    PointSegment leftSide(Point(0,-2), Point(0,2));
+    PointSegment leftSide(Point(0,0), Point(0,1));
     SegmentConstraint leftX (leftSide, mesh.getPoints(), Constraint::Direction::Horizontal, uXConstraint);
     essential.addConstraint(leftX, mesh.getPoints());
     SegmentConstraint  leftY (leftSide, mesh.getPoints(), Constraint::Direction::Vertical, uYConstraint);
     essential.addConstraint(leftY, mesh.getPoints());
 
-    PointSegment downSide(Point(0,-2), Point(8,-2));
+    PointSegment downSide(Point(0,0), Point(1,0));
     SegmentConstraint downX (downSide, mesh.getPoints(), Constraint::Direction::Horizontal, uXConstraint);
     essential.addConstraint(downX, mesh.getPoints());
     SegmentConstraint  downY (downSide, mesh.getPoints(), Constraint::Direction::Vertical, uYConstraint);
     essential.addConstraint(downY, mesh.getPoints());
 
-    PointSegment rightSide(Point(8,-2), Point(8, 2));
+    PointSegment rightSide(Point(1,0), Point(1, 1));
     SegmentConstraint rightX (rightSide, mesh.getPoints(), Constraint::Direction::Horizontal, uXConstraint);
     essential.addConstraint(rightX, mesh.getPoints());
     SegmentConstraint  rightY (rightSide, mesh.getPoints(), Constraint::Direction::Vertical, uYConstraint);
     essential.addConstraint(rightY, mesh.getPoints());
 
-    PointSegment topSide(Point(0, 2), Point(8, 2));
+    PointSegment topSide(Point(0, 1), Point(1, 1));
     SegmentConstraint topX (topSide, mesh.getPoints(), Constraint::Direction::Horizontal, uXConstraint);
     essential.addConstraint(topX, mesh.getPoints());
     SegmentConstraint  topY (topSide, mesh.getPoints(), Constraint::Direction::Vertical, uYConstraint);

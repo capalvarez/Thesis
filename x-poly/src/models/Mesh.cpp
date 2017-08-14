@@ -1,10 +1,12 @@
 #include <x-poly/models/Mesh.h>
+#include <iomanip>
 
 void Mesh::printInFile(std::string fileName) {
     std::string path = utilities::getPath();
     path +=  fileName;
 
     std::ofstream file;
+    file << std::fixed << std::setprecision(20);
     file.open(path, std::ios::out);
 
     printInStream(file);

@@ -6,11 +6,13 @@
 #include <vector>
 #include <algorithm>
 #include "Pair.h"
+#include <iomanip>
 
 namespace utilities{
     template <typename T>
     std::string toString(T a){
         std::stringstream sstream;
+        sstream << std::fixed << std::setprecision(20);
         sstream << a;
         std::string s = sstream.str();
 
