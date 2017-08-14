@@ -17,18 +17,10 @@ TEST(FractureSimulatorTest, InitTest){
 
     Crack crack(Point(0.3,1.5), Point(2.75,1.5), 0.1, 0.3);
 
-    class Sum : public BodyForce{
-    private:
-        double apply(double x, double y){
-            return 0;
-        }
-    };
-
-    BodyForce* f = new Sum();
     ConstraintsContainer container;
     Material m;
 
-    ProblemConditions conditions(container, f, m);
+    ProblemConditions conditions(container,  m);
     FractureSimulator simulator("test", mesh, crack, conditions);
 }
 
@@ -47,34 +39,27 @@ TEST(FractureSimulatorTest, SimulateTest){
 
     //Crack crack(Point(0.0, 3.0), Point(1.5, 1.5));
     //Crack crack(Point(0.8, 0.8), Point(2.0, 1.8));
-    Crack crack(Point(1.3, 1.8), Point(1.8, 1.8));
+    //Crack crack(Point(1.3, 1.8), Point(1.8, 1.8));
     //Crack crack(Point(0.3,3.0), Point(1.6,1.8));
-    //Crack crack(Point(1.6,0), Point(1.6,0.75));
+    Crack crack(Point(1.6,0), Point(1.6,0.75));
     //Crack crack(Point(0,1.6), Point(0.75,1.6));
 
-    class Sum : public BodyForce{
-    private:
-        double apply(double x, double y){
-            return 0;
-        }
-    };
 
-    BodyForce* f = new Sum();
     EssentialConstraints essential;
     PointSegment constrained(Point(0,0),Point(0,3));
-    Constraint const1 (constrained, mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
+    SegmentConstraint const1 (constrained, mesh.getPoints().getList(), Constraint::Direction::Total, new Constant(0));
     essential.addConstraint(const1,  mesh.getPoints().getList());
 
     NaturalConstraints natural;
     PointSegment constrained2 (Point(3,0),Point(3,3));
-    Constraint const2 (constrained2, mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(1000));
+    SegmentConstraint const2 (constrained2, mesh.getPoints().getList(), Constraint::Direction::Horizontal, new Constant(1000));
     natural.addConstraint(const2,  mesh.getPoints().getList());
 
     ConstraintsContainer container;
     container.addConstraints(essential, mesh);
     container.addConstraints(natural, mesh);
 
-    ProblemConditions conditions(container, f, Material(Materials::material::Steel));
+    ProblemConditions conditions(container, Material(Materials::material::Steel));
 
     FractureSimulator simulator("squareUniform", mesh, crack, conditions);
     simulator.simulate(0.1);
