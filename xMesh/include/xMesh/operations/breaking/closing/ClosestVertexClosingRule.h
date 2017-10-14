@@ -1,0 +1,8 @@
+#ifndef THESIS_CLOSESTVERTEXCLOSINGRULE_H
+#define THESIS_CLOSESTVERTEXCLOSINGRULE_H
+
+class ClosestVertexClosingRule {
+
+};
+
+#endif

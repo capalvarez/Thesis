@@ -33,7 +33,7 @@ public:
     }
 
     inline double apply(double x){
-        return amplitude*std::sin(frecuency*utilities::radian(x) + utilities::radian(phase));
+        return amplitude*std::sin(utilities::radian(2*M_PI*x*frecuency) + utilities::radian(phase));
     };
 };
 
@@ -50,9 +50,10 @@ public:
     }
 
     inline double apply(double x){
-        return amplitude*std::cos(frecuency*utilities::radian(x) + utilities::radian(phase));
+        return amplitude*std::cos(utilities::radian(2*M_PI*x*frecuency) + utilities::radian(phase));;
     };
 };
+
 
 class ConstantAlternating: public Functor{
 private:

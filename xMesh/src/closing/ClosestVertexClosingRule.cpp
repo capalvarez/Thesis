@@ -1,0 +1,1 @@
+#include "include/xMesh/closing/ClosestVertexClosingRule.h"

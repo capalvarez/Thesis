@@ -1,0 +1,1 @@
+#include <xMesh/closing/TriangulateClosingRule.h>

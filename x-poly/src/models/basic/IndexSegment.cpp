@@ -55,7 +55,7 @@ bool IndexSegment::isCCW(std::vector<Point> points, Point center) {
 }
 
 std::string IndexSegment::getString() const {
-    return utilities::toString<double>(this->getFirst()) + " " + utilities::toString<double>(this->getSecond());
+    return utilities::toString<int>(this->getFirst()) + " " + utilities::toString<int>(this->getSecond());
 }
 
 bool IndexSegment::operator==(const IndexSegment& other) const {

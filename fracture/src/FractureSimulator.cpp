@@ -1,16 +1,14 @@
 #include <fracture/FractureSimulator.h>
 #include <fracture/config/FractureConfig.h>
 
-FractureSimulator::FractureSimulator(std::string simulationName, const PolygonalMesh& mesh, const Crack& initial, const ProblemConditions& conditions) {
+FractureSimulator::FractureSimulator(std::string simulationName, const PolygonalMesh& mesh, const Crack& initial) {
     this->step = 0;
     this->simulationName = simulationName;
     this->mesh = BreakableMesh(mesh);
     this->crack = initial;
-    this->veamer = BreakableVeamer();
 
     this->mesh.printInFile("initial.txt");
     this->crack.initializeCrack(this->mesh);
-    this->veamer.initProblem(this->mesh, conditions);
 }
 
 void FractureSimulator::simulate(double crack_growth) {
@@ -24,11 +22,8 @@ void FractureSimulator::simulate(double crack_growth) {
         this->step++;
         this->writeStepInFile();
 
-        this->veamer.replaceElements(refinedPolygons.oldPolygons, refinedPolygons.newPolygons, this->mesh.getPoints());
-
-        Eigen::VectorXd u = this->veamer.simulate(this->mesh);
         PolygonChangeData affectedPolygons = this->crack.grow(Problem(&this->veamer, &this->mesh), u);
-        this->veamer.replaceElements(affectedPolygons.oldPolygons, affectedPolygons.newPolygons, this->mesh.getPoints());
+
         this->mesh.printInFile("after.txt");
 
         this->step++;

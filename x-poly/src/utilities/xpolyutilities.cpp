@@ -4,6 +4,7 @@
 #include <math.h>
 #include <x-poly/models/basic/Point.h>
 #include <utilities/Pair.h>
+#include <include/x-poly/config/XPolyConfig.h>
 
 namespace xpoly_utilities {
     void TrivialIndexVector(std::vector<int>& index_vector, int n){
@@ -26,6 +27,26 @@ namespace xpoly_utilities {
 
     double orientation(Point p, Point q, Point r){
         return xpoly_utilities::crossProduct((q-p),(r-p));
+    }
+
+
+    std::vector<Point> generateArcPoints(Point center, double radius, double initAngle, double endAngle){
+        std::vector<Point> arcPoints;
+
+        int steps = XPolyConfig::instance()->getDiscretizationGrade();
+        double delta = (endAngle - initAngle)/steps;
+
+        for(int i=0; i<steps;i++){
+            double angle = initAngle + delta*i;
+
+            double x = center.getX() + radius*std::cos(utilities::radian(angle));
+            double y = center.getY() + radius*std::sin(utilities::radian(angle));
+
+            Point point (x, y);
+            arcPoints.push_back(point);
+        }
+
+        return arcPoints;
     }
 }
 

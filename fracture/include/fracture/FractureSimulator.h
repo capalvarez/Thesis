@@ -11,7 +11,6 @@
 
 class FractureSimulator {
 private:
-    BreakableVeamer veamer;
     BreakableMesh mesh;
     Crack crack;
 
@@ -21,7 +20,7 @@ private:
     void writeStepInFile();
     void writeNumberOfSteps();
 public:
-    FractureSimulator(std::string simulationName, const PolygonalMesh& mesh, const Crack& initial, const ProblemConditions& conditions);
+    FractureSimulator(std::string simulationName, const PolygonalMesh& mesh, const Crack& initial);
     void simulate(double crack_growth);
 };
 

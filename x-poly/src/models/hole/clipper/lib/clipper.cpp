@@ -2379,14 +2379,14 @@ void Clipper::AppendPolygon(TEdge *e1, TEdge *e2)
     holeStateRec = GetLowermostRec(outRec1, outRec2);
 
   //get the start and ends of both output polygons and
-  //join e2 poly onto e1 poly and delete pointers to e2 ...
+  //join e2 poly onto e1 poly and erasing pointers to e2 ...
 
   OutPt* p1_lft = outRec1->Pts;
   OutPt* p1_rt = p1_lft->Prev;
   OutPt* p2_lft = outRec2->Pts;
   OutPt* p2_rt = p2_lft->Prev;
 
-  //join e2 poly onto e1 poly and delete pointers to e2 ...
+  //join e2 poly onto e1 poly and erasing pointers to e2 ...
   if(  e1->Side == esLeft )
   {
     if(  e2->Side == esLeft )

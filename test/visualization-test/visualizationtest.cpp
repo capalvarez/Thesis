@@ -21,18 +21,8 @@ int main(){
     Region romboid(romboid_points);
 
     std::vector<Point> quarter_circle_points = {Point(0,0), Point(10,0), Point(10,10)};
-
-    double max = 10.0;
-    for(int i=0; i<max;i++){
-        double angle = 90 - (90/max)*i;
-
-        double x = 10 - 10*std::cos(utilities::radian(angle));
-        double y = 10*std::sin(utilities::radian(angle));
-
-        Point point (x, y);
-
-        quarter_circle_points.push_back(point);
-    }
+    std::vector<Point> quarter = xpoly_utilities::generateArcPoints(Point(10,0), 10, 90.0, 180.0);
+    quarter_circle_points.insert(quarter_circle_points.end(), quarter.begin(), quarter.end());
 
     Region quarter_circle(quarter_circle_points);
 
@@ -50,7 +40,7 @@ int main(){
     generateTest("squareRandom5", square, square.getSeedPoints());
     square.cleanSeedPoints();
 
-    square.generateSeedPoints(PointGenerator(functions::random_double(0,10), functions::random_double(0,10)), 10, 10);
+    square.generateSeedPoints(PointGenerator(functions::constant(), functions::sine(0.03,2,0)), 10, 10);
     generateTest("squareRandom10", square, square.getSeedPoints());
     square.printInFile("square.txt");
     square.cleanSeedPoints();
@@ -77,8 +67,8 @@ int main(){
     generateTest("quarter_circleRandom10", quarter_circle, quarter_circle.getSeedPoints());
     quarter_circle.cleanSeedPoints();
 
-    unicorn.generateSeedPoints(PointGenerator(functions::random_double(0,15), functions::random_double(0,20)), 5, 5);
-    generateTest("unicornRandom5", unicorn, unicorn.getSeedPoints());
+    unicorn.generateSeedPoints(PointGenerator(functions::constantAlternating(), functions::constant()), 5, 5);
+    generateTest("unicornNotSoRandom5", unicorn, unicorn.getSeedPoints());
     unicorn.cleanSeedPoints();
 
     unicorn.generateSeedPoints(PointGenerator(functions::random_double(0,15), functions::random_double(0,20)), 10, 10);

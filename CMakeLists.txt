@@ -9,6 +9,7 @@ add_subdirectory(x-poly)
 add_subdirectory(fracture)
 add_subdirectory(utilities)
 add_subdirectory(test)
+add_subdirectory(xMesh)
 
 
 add_subdirectory(test/visualization-test)

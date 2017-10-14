@@ -15,9 +15,6 @@ private:
     Deque<Pair<int>> crackPath;
     double StandardRadius;
 
-    std::vector<Pair<int>> prepareTip(CrackTip &tip, UniqueList<Polygon> &oldP, std::vector<Polygon> &newP,
-                                      BreakableMesh &mesh,
-                                      std::vector<Pair<int>> previousCrackPoints);
     void grow(CrackTip &tip, std::vector<Polygon> &oldP, std::vector<Polygon> &newP, Problem problem, Eigen::VectorXd u,
                   UniqueList<Pair<int>> &crackPoints, PointSegment previousCrackSegment);
     std::vector<Pair<int>> adjustBoxes(CrackTip &tip, BreakableMesh &mesh, std::vector<Pair<int>> previousCrackPoints,
@@ -29,7 +26,6 @@ public:
     Crack(const Crack& c);
 
     PolygonChangeData grow(Problem problem, Eigen::VectorXd u);
-    PolygonChangeData prepareTip(BreakableMesh &m);
     bool isFinished();
 
     void initializeCrack(BreakableMesh &mesh);

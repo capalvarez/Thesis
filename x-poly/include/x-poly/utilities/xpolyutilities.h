@@ -12,5 +12,6 @@ namespace xpoly_utilities {
     extern double norm(Point p);
     extern double squareNorm(Point p);
     extern double orientation(Point p, Point q, Point r);
+    extern std::vector<Point> generateArcPoints(Point center, double radius, double initAngle, double endAngle);
 }
 #endif

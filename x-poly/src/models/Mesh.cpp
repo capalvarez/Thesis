@@ -6,7 +6,6 @@ void Mesh::printInFile(std::string fileName) {
     path +=  fileName;
 
     std::ofstream file;
-    file << std::fixed << std::setprecision(20);
     file.open(path, std::ios::out);
 
     printInStream(file);

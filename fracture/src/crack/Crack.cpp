@@ -262,7 +262,6 @@ bool Crack::isFinished() {
 }
 
 void Crack::initializeCrack(BreakableMesh &mesh) {
-    mesh.printInFile("init1.txt");
     if(!mesh.isInDomain(this->init.getPoint()) || !mesh.isInDomain(this->end.getPoint())){
         throw std::invalid_argument("Invalid input. Crack lies outside the domain!");
     }
@@ -274,7 +273,6 @@ void Crack::initializeCrack(BreakableMesh &mesh) {
     mesh.breakMesh(this->init.container_polygon, PointSegment(this->init.getPoint(), this->end.getPoint()),
                    this->init.isFinished(), newPoints);
     this->crackPath.insert(newPoints.getList());
-    mesh.printInFile("init.txt");
 }
 
 PolygonChangeData Crack::grow(Problem problem, Eigen::VectorXd u) {
